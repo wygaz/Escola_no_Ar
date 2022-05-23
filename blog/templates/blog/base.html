@@ -1,0 +1,23 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+        <title>{% block title %} {% endblock %}</title>
+        <link href="{% static ´css/blog.css' %}" rel=""stylesheet">:
+</head>
+
+<body>
+    <header>
+        <h1>Escola no Ar</h1>
+    </header>
+
+    <main>
+        {% block content %} {% endblock %}        
+    </main>
+    
+</body>
+
+</html>
