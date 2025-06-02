@@ -1,0 +1,46 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load form_extras %}
+
+{% block title %}Cadastro - Escola no Ar{% endblock %}
+
+{% block content %}
+<h2>Cadastro de Usuário</h2>
+
+{% if form.errors %}
+    <div class="alerta erro">
+        Por favor, corrija os erros abaixo.
+    </div>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    {% for field in form %}
+        <div class="campo">
+            {{ field.label_tag }}
+            {% if field.errors %}
+                {{ field|add_class:"error" }}
+            {% else %}
+                {{ field }}
+            {% endif %}
+            {% if field.errors %}
+                <div class="erro-campo">{{ field.errors.0 }}</div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    {% if form.non_field_errors %}
+        <div class="alerta erro">
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <button type="submit" class="btn">Cadastrar</button>
+
+    <p style="margin-top: 15px;">Já tem uma conta? <a href="{% url 'login' %}">Faça login aqui</a>.</p>
+</form>
+{% endblock %}

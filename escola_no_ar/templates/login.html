@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Login - Escola no Ar{% endblock %}
+{% block content %}
+<h2>Login na Plataforma</h2>
+{% if messages %}
+    {% for message in messages %}
+        <p class="mensagem-erro">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="username">E-mail</label>
+        <input type="email" name="username" id="username" autocomplete="off" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Senha</label>
+        <input type="password" name="password" id="password" required>
+    </div>
+    <script>
+        window.onload = function() {
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+        };
+    </script>
+    <button type="submit">Entrar</button>
+</form>
+<p><a href="{% url 'password_reset' %}">Esqueci minha senha</a> | <a href="{% url 'cadastro' %}">Cadastre-se</a></p>
+{% endblock %}

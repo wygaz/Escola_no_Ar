@@ -1,0 +1,34 @@
+{% extends "usuarios/base.html" %}
+{% block title %}Perfil - Escola no Ar{% endblock %}
+{% block content %}
+<h2>Meu Perfil</h2>
+<img src="{{ user.foto_perfil.url }}" alt="Foto de Perfil" class="perfil-img">
+<p><strong>Nome:</strong> {{ user.nome_completo }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>Tipo:</strong> {{ user.tipo }}</p>
+<p><strong>Pontuação:</strong> {{ user.pontuacao }}</p>
+<p><strong>Nível:</strong> {{ user.nivel }}</p>
+
+<!-- Botões de Ações -->
+<button onclick="abrirModalImagem()">Alterar Imagem</button>
+<button onclick="abrirModalSenha()">Alterar Senha</button>
+
+<!-- Modal Imagem -->
+<div id="modalImagem" class="modal" style="display:none;">
+  <form method="POST" enctype="multipart/form-data" action="{% url 'alterar_imagem' %}">
+    {% csrf_token %}
+    <input type="file" name="nova_imagem" required>
+    <button type="submit">Salvar</button>
+  </form>
+</div>
+
+<!-- Modal Senha -->
+<div id="modalSenha" class="modal" style="display:none;">
+  <form method="POST" action="{% url 'alterar_senha' %}">
+    {% csrf_token %}
+    <input type="password" name="senha_atual" placeholder="Senha atual" required>
+    <input type="password" name="nova_senha" placeholder="Nova senha" required>
+    <button type="submit">Atualizar Senha</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Perfil do Usuário - Escola no Ar{% endblock %}
+{% block content %}
+<style>
+    .perfil-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+    }
+    .foto-perfil {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #ccc;
+        margin-bottom: 15px;
+    }
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 1em;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 400px;
+    }
+    .close {
+        float: right;
+        font-size: 1.2em;
+        cursor: pointer;
+        color: red;
+    }
+</style>
+<script src="{% static 'perfil.js' %}"></script>
+
+<div class="perfil-container">
+    <img src="{{ user.foto_perfil.url }}" alt="Foto de perfil" class="foto-perfil">
+    <h2>{{ user.nome_completo }}</h2>
+    <p>{{ user.email }}</p>
+    <button class="btn" onclick="abrirModalImagem()">Alterar Imagem</button>
+    <button class="btn" onclick="abrirModalSenha()">Alterar Senha</button>
+</div>
+
+<!-- Modal Imagem -->
+<div id="modalImagem" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="document.getElementById('modalImagem').style.display='none'">&times;</span>
+        <h3>Alterar Foto de Perfil</h3>
+        <form method="post" enctype="multipart/form-data" action="{% url 'alterar_imagem' %}">
+            {% csrf_token %}
+            <input type="file" name="foto_perfil" required>
+            <button type="submit" class="btn">Salvar</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Modal Senha -->
+<div id="modalSenha" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModais()">&times;</span>
+        <h3>Alterar Senha</h3>
+        <form method="post" action="{% url 'alterar_senha' %}">
+            {% csrf_token %}
+            <input type="password" name="senha_atual" placeholder="Senha atual" required>
+            <input type="password" name="nova_senha1" placeholder="Nova senha" required>
+            <input type="password" name="nova_senha2" placeholder="Confirme a nova senha" required>
+            <button type="submit" class="btn">Atualizar Senha</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel com Relógio</title>
+    <!-- Carrega Vue.js da CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+    <!-- Div principal controlada pelo Vue -->
+    <div id="app">
+        <!-- Saudação personalizada com o nome do usuário -->
+        <h1>Bem-vindo, {{ usuario }}!</h1>
+
+        <!-- Relógio em tempo real -->
+        <p>Horário atual: <strong>{{ horaAtual }}</strong></p>
+
+        <!-- Link para logout -->
+        <p><a href="/logout/">Sair</a></p>
+    </div>
+
+    <!-- Script Vue.js responsável pela lógica reativa -->
+    <script>
+        new Vue({
+            el: '#app',  // Define o elemento HTML que será controlado pelo Vue
+            data: {
+                // Dados iniciais: usuário vem do Django e hora começa vazia
+                usuario: '{{ request.user.username }}',
+                horaAtual: ''
+            },
+            methods: {
+                // Função para atualizar a hora a cada segundo
+                atualizarHora() {
+                    const agora = new Date();
+                    const horas = agora.getHours().toString().padStart(2, '0');
+                    const minutos = agora.getMinutes().toString().padStart(2, '0');
+                    const segundos = agora.getSeconds().toString().padStart(2, '0');
+                    this.horaAtual = `${horas}:${minutos}:${segundos}`;
+                }
+            },
+            mounted() {
+                // Inicializa o relógio assim que o componente é montado
+                this.atualizarHora();
+                setInterval(this.atualizarHora, 1000);  // Atualiza a cada segundo
+            }
+        });
+    </script>
+</body>
+</html>
