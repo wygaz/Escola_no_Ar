@@ -1,16 +1,19 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from .models import (
-    Usuario, Curso, Modulo, Aula, Turma, Matricula,
+    Curso, Modulo, Aula, Turma, Matricula,
     Atividade, NivelEvolucao, Conteudo, Comentario,
     ProgressoAula, RespostaAtividade, Notificacao,
     PontuacaoHistorico
 )
+from contas.models import Usuario
 
 @admin.register(Usuario)
-class UsuarioAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'tipo', 'pontuacao', 'nivel')
-    list_filter = ('tipo', 'nivel')
-    search_fields = ('username', 'email')
+class UsuarioAdmin(UserAdmin):
+    model = Usuario
+    list_display = ('email', 'nome', 'is_active', 'is_staff')
+    search_fields = ('email', 'nome')
+    ordering = ('email',)
 
 @admin.register(Curso)
 class CursoAdmin(admin.ModelAdmin):

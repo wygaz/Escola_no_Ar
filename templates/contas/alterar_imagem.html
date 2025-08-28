@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Alterar Imagem</title>
+</head>
+<body>
+    <h2>Alterar Imagem de Perfil</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+    <p><a href="{% url 'perfil' %}">Voltar</a></p>
+</body>
+</html>
