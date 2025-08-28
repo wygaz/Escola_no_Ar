@@ -1,32 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
 from .models_auxiliares import NivelEvolucao
 
-
-# Usuário com perfis personalizados
-class Usuario(AbstractUser):
-    nome_completo = models.CharField(max_length=150, verbose_name="Nome completo")
-    email = models.EmailField(unique=True, verbose_name="E-mail")
-
-    tipo = models.CharField(max_length=20, choices=[
-        ('visitante', 'Visitante'),
-        ('aluno', 'Aluno'),
-        ('professor', 'Professor'),
-        ('autor', 'Autor'),
-        ('admin', 'Administrador'),
-    ], default='visitante')
-
-    pontuacao = models.IntegerField(default=0)
-    nivel = models.ForeignKey('NivelEvolucao', null=True, blank=True, on_delete=models.SET_NULL)
-    foto_perfil = models.ImageField(upload_to='usuarios/fotos/', blank=True, null=True)
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['nome_completo']  # username continua necessário internamente
-
-    def __str__(self):
-        return self.nome_completo or self.email
 
 # Curso e Estrutura
 class Curso(models.Model):
@@ -38,6 +13,7 @@ class Curso(models.Model):
     def __str__(self):
         return f"{self.titulo} ({self.versao})"
 
+
 class Modulo(models.Model):
     curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     titulo = models.CharField(max_length=100)
@@ -46,6 +22,7 @@ class Modulo(models.Model):
 
     def __str__(self):
         return f"{self.titulo} - {self.curso.codigo}"
+
 
 class Aula(models.Model):
     modulo = models.ForeignKey(Modulo, on_delete=models.CASCADE)
@@ -57,6 +34,7 @@ class Aula(models.Model):
 
     def __str__(self):
         return f"{self.titulo} (Módulo {self.modulo.ordem})"
+
 
 # Turma e Matrícula
 class Turma(models.Model):
@@ -73,19 +51,52 @@ class Turma(models.Model):
     def __str__(self):
         return f"{self.nome} ({self.codigo})"
 
+
+from django.db import models
+from django.conf import settings
+
 class Matricula(models.Model):
-    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    turma = models.ForeignKey(Turma, on_delete=models.CASCADE)
-    papel = models.CharField(max_length=20, choices=[
-        ('aluno', 'Aluno'),
-        ('professor', 'Professor'),
-        ('autor', 'Autor'),
-    ])
+    class Papel(models.TextChoices):
+        ALUNO = "aluno", "Aluno"
+        PROFESSOR = "professor", "Professor"
+        AUTOR = "autor", "Autor"
+
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="matriculas",
+    )
+    turma = models.ForeignKey(
+        "Turma",  # se estiver em outro app: "app.Turma"
+        on_delete=models.CASCADE,
+        related_name="matriculas",
+    )
+    papel = models.CharField(max_length=20, choices=Papel.choices)
     data_matricula = models.DateTimeField(auto_now_add=True)
-    pontuacao = models.IntegerField(default=0)
+    pontuacao = models.PositiveIntegerField(default=0)
 
     class Meta:
-        unique_together = ('usuario', 'turma')
+        constraints = [
+            models.UniqueConstraint(
+                fields=["usuario", "turma"], name="uniq_usuario_turma"
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["turma", "papel"], name="idx_turma_papel"),
+        ]
+
+    def __str__(self):
+        return f"{self.usuario} em {self.turma} ({self.get_papel_display()})"
+
+    @property
+    def is_professor(self) -> bool:
+        return self.papel == self.Papel.PROFESSOR
+
+    @property
+    def is_aluno(self) -> bool:
+        return self.papel == self.Papel.ALUNO
+
+
 
 # Atividades
 class Atividade(models.Model):
@@ -95,6 +106,7 @@ class Atividade(models.Model):
     descricao = models.TextField()
     prazo = models.DateField()
     autor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+
 
 # Conteúdo didático e colaborativo
 class Conteudo(models.Model):
@@ -112,6 +124,7 @@ class Conteudo(models.Model):
     def __str__(self):
         return self.titulo
 
+
 # Comentários com encadeamento e controle
 class Comentario(models.Model):
     conteudo = models.ForeignKey(Conteudo, on_delete=models.CASCADE, related_name='comentarios')
@@ -127,7 +140,8 @@ class Comentario(models.Model):
         ordering = ['-data_comentario']
 
     def __str__(self):
-        return f"{self.autor.username}: {self.texto[:50]}..."
+        return f"{self.autor.email}: {self.texto[:50]}..."
+
 
 # Progresso por aula
 class ProgressoAula(models.Model):
@@ -138,6 +152,7 @@ class ProgressoAula(models.Model):
 
     class Meta:
         unique_together = ('matricula', 'aula')
+
 
 # Respostas de atividades
 class RespostaAtividade(models.Model):
@@ -150,6 +165,7 @@ class RespostaAtividade(models.Model):
     class Meta:
         unique_together = ('atividade', 'matricula')
 
+
 # Notificações
 class Notificacao(models.Model):
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -157,6 +173,7 @@ class Notificacao(models.Model):
     link = models.URLField(blank=True, null=True)
     lida = models.BooleanField(default=False)
     data_envio = models.DateTimeField(auto_now_add=True)
+
 
 # Histórico de pontuação
 class PontuacaoHistorico(models.Model):

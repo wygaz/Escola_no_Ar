@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Perfil</title>
+</head>
+<body>
+    <h2>Bem-vindo, {{ usuario.nome }}</h2>
+    
+    {% if user.imagem %}
+        <img src="{{ user.imagem.url }}" alt="Foto de perfil" width="150">
+    {% endif %}
+   
+    <p>Email: {{ usuario.email }}</p>
+    <p>Profissão: {{ usuario.profissao }}</p>
+    <p>Pontuação: {{ usuario.pontuacao }}</p>
+
+
+    <p><a href="{% url 'editar_perfil' %}">Editar Perfil</a></p>
+    <p><a href="{% url 'alterar_senha' %}">Alterar Senha</a></p>
+    <p><a href="{% url 'logout' %}">Sair</a></p>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Alterar Senha</title>
+</head>
+<body>
+    <h2>Alterar Senha</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Atualizar Senha</button>
+    </form>
+    <p><a href="{% url 'perfil' %}">Voltar ao Perfil</a></p>
+</body>
+</html>
