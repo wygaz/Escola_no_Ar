@@ -1,0 +1,12 @@
+<nav>
+  <a href="/">Início</a>
+  <a href="/sonhodeser/">sonho_de_ser</a>
+  <a href="/cursos/">Cursos</a>
+  <a href="/atividades/">Atividades</a>
+  {% if request.user.is_authenticated %}
+    <span>Olá, {{ request.user.nome|default:request.user.username }}</span>
+    <a href="{% url 'logout' %}">Sair</a>
+  {% else %}
+    <a href="{% url 'login' %}">Entrar</a>
+  {% endif %}
+</nav>
