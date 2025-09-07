@@ -50,11 +50,6 @@ class Turma(models.Model):
 
     def __str__(self):
         return f"{self.nome} ({self.codigo})"
-
-
-from django.db import models
-from django.conf import settings
-
 class Matricula(models.Model):
     class Papel(models.TextChoices):
         ALUNO = "aluno", "Aluno"

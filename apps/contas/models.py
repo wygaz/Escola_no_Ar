@@ -1,88 +1,74 @@
 from django.db import models
-
-# Create your models here.
-# apps/contas/models.py
-
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
-class NivelEvolucao(models.Model):
-    nome_do_nivel = models.CharField(max_length=255)
-    pontuacao_minima = models.IntegerField()
-    pontuacao_maxima = models.IntegerField()
-
-    def __str__(self):
-        return self.nome_do_nivel
-
-
 class UsuarioManager(BaseUserManager):
-    def create_user(self, email, nome, senha=None, **extra_fields):
+    def create_user(self, email, first_name="", last_name="", senha=None, **extra_fields):
         if not email:
-            raise ValueError('O e-mail é obrigatório')
+            raise ValueError("O e-mail é obrigatório")
         email = self.normalize_email(email)
-        usuario = self.model(email=email, nome=nome, **extra_fields)
+        usuario = self.model(
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            **extra_fields,
+        )
         usuario.set_password(senha)
         usuario.save(using=self._db)
         return usuario
 
-    def create_superuser(self, email, nome, senha=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, nome, senha, **extra_fields)
+    def create_superuser(self, email, first_name="", last_name="", senha=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        return self.create_user(email, first_name, last_name, senha, **extra_fields)
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
-    nome = models.CharField(max_length=255)
-    pais = models.CharField(max_length=100, blank=True, null=True)
-    estado = models.CharField(max_length=100, blank=True, null=True)
-    cidade = models.CharField(max_length=100, blank=True, null=True)
-    profissao = models.CharField(max_length=100, blank=True, null=True)
-    cargo_igreja = models.CharField(max_length=100, blank=True, null=True)
+
+    # novos campos separados
+    first_name = models.CharField("Nome", max_length=150, blank=True)
+    last_name  = models.CharField("Sobrenome", max_length=150, blank=True)
+
+    # LEGADO: mantém o 'nome' para não quebrar formulários/temas antigos
+    nome = models.CharField("Nome completo", max_length=255, blank=True)
+
+    cep = models.CharField(max_length=8, blank=True, null=True)
+    numero_endereco = models.CharField(max_length=5, blank=True, null=True)
+
     pontuacao = models.IntegerField(default=0)
-    nivel_evolucao = models.ForeignKey(NivelEvolucao, on_delete=models.SET_NULL, null=True, blank=True)
-        # Foto de perfil (opcional)
-    imagem = models.ImageField(
-        upload_to="profiles/",  # vai salvar em MEDIA_ROOT/profiles/
+
+    nivel_evolucao = models.ForeignKey(
+        "core.NivelEvolucao",   # <- referência por app_label.Model
+        on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
     )
+    imagem = models.ImageField(upload_to="profiles/", null=True, blank=True)
+
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-
-
+    is_staff  = models.BooleanField(default=False)
 
     objects = UsuarioManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['nome']
+    USERNAME_FIELD  = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name"]
 
     def __str__(self):
-        return self.email
+        full = self.get_full_name()
+        return full or self.email
 
+    def get_full_name(self):
+        full = f"{self.first_name} {self.last_name}".strip()
+        return full
 
-class Aluno(models.Model):
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
-    outras_infos = models.CharField(max_length=255, blank=True, null=True)
-    pontuacao = models.IntegerField(default=0)
-    nivel_evolucao = models.ForeignKey(NivelEvolucao, on_delete=models.SET_NULL, null=True, blank=True)
+    def get_short_name(self):
+        return (self.first_name or "").strip()
 
-    def __str__(self):
-        return f"Aluno: {self.usuario.nome}"
+    def save(self, *args, **kwargs):
+        # Preenche 'nome' automaticamente se estiver vazio
+        if not self.nome:
+            full = self.get_full_name()
+            if full:
+                self.nome = full
+        super().save(*args, **kwargs)
 
-
-class Professor(models.Model):
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
-    outras_infos = models.CharField(max_length=255, blank=True, null=True)
-    pontuacao = models.IntegerField(default=0)
-    nivel_evolucao = models.ForeignKey(NivelEvolucao, on_delete=models.SET_NULL, null=True, blank=True)
-
-    def __str__(self):
-        return f"Professor: {self.usuario.nome}"
-
-
-class Autor(models.Model):
-    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"Autor: {self.usuario.nome}"

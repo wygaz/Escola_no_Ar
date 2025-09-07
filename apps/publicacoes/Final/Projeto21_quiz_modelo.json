@@ -1,0 +1,492 @@
+{
+  "meta": {
+    "version": 1,
+    "escala": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "labels": [
+      "Discordo totalmente",
+      "Discordo",
+      "Neutro",
+      "Concordo",
+      "Concordo totalmente"
+    ],
+    "pares": true
+  },
+  "dims": {
+    "Dimensão 1": {
+      "peso": 1
+    },
+    "Dimensão 2": {
+      "peso": 1
+    },
+    "Dimensão 3": {
+      "peso": 1
+    },
+    "Dimensão 4": {
+      "peso": 1
+    },
+    "Dimensão 5": {
+      "peso": 1
+    },
+    "Dimensão 6": {
+      "peso": 1
+    }
+  },
+  "grupos": [
+    {
+      "id": 1,
+      "descricao": "Grupo 1",
+      "itens": [
+        {
+          "id": "G1-Q01",
+          "texto": "Exemplo (G1) — questão 1. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 1",
+          "par": 1,
+          "invert": false
+        },
+        {
+          "id": "G1-Q02",
+          "texto": "Exemplo (G1) — questão 2. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 2",
+          "par": 1,
+          "invert": false
+        },
+        {
+          "id": "G1-Q03",
+          "texto": "Exemplo (G1) — questão 3. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 3",
+          "par": 2,
+          "invert": false
+        },
+        {
+          "id": "G1-Q04",
+          "texto": "Exemplo (G1) — questão 4. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 4",
+          "par": 2,
+          "invert": false
+        },
+        {
+          "id": "G1-Q05",
+          "texto": "Exemplo (G1) — questão 5. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 5",
+          "par": 3,
+          "invert": false
+        },
+        {
+          "id": "G1-Q06",
+          "texto": "Exemplo (G1) — questão 6. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 6",
+          "par": 3,
+          "invert": false
+        },
+        {
+          "id": "G1-Q07",
+          "texto": "Exemplo (G1) — questão 7. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 1",
+          "par": 4,
+          "invert": false
+        },
+        {
+          "id": "G1-Q08",
+          "texto": "Exemplo (G1) — questão 8. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 2",
+          "par": 4,
+          "invert": false
+        },
+        {
+          "id": "G1-Q09",
+          "texto": "Exemplo (G1) — questão 9. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 3",
+          "par": 5,
+          "invert": false
+        },
+        {
+          "id": "G1-Q10",
+          "texto": "Exemplo (G1) — questão 10. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 4",
+          "par": 5,
+          "invert": false
+        },
+        {
+          "id": "G1-Q11",
+          "texto": "Exemplo (G1) — questão 11. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 5",
+          "par": 6,
+          "invert": false
+        },
+        {
+          "id": "G1-Q12",
+          "texto": "Exemplo (G1) — questão 12. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 6",
+          "par": 6,
+          "invert": false
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "descricao": "Grupo 2",
+      "itens": [
+        {
+          "id": "G2-Q01",
+          "texto": "Exemplo (G2) — questão 1. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 1",
+          "par": 1,
+          "invert": false
+        },
+        {
+          "id": "G2-Q02",
+          "texto": "Exemplo (G2) — questão 2. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 2",
+          "par": 1,
+          "invert": false
+        },
+        {
+          "id": "G2-Q03",
+          "texto": "Exemplo (G2) — questão 3. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 3",
+          "par": 2,
+          "invert": false
+        },
+        {
+          "id": "G2-Q04",
+          "texto": "Exemplo (G2) — questão 4. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 4",
+          "par": 2,
+          "invert": false
+        },
+        {
+          "id": "G2-Q05",
+          "texto": "Exemplo (G2) — questão 5. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 5",
+          "par": 3,
+          "invert": false
+        },
+        {
+          "id": "G2-Q06",
+          "texto": "Exemplo (G2) — questão 6. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 6",
+          "par": 3,
+          "invert": false
+        },
+        {
+          "id": "G2-Q07",
+          "texto": "Exemplo (G2) — questão 7. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 1",
+          "par": 4,
+          "invert": false
+        },
+        {
+          "id": "G2-Q08",
+          "texto": "Exemplo (G2) — questão 8. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 2",
+          "par": 4,
+          "invert": false
+        },
+        {
+          "id": "G2-Q09",
+          "texto": "Exemplo (G2) — questão 9. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 3",
+          "par": 5,
+          "invert": false
+        },
+        {
+          "id": "G2-Q10",
+          "texto": "Exemplo (G2) — questão 10. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 4",
+          "par": 5,
+          "invert": false
+        },
+        {
+          "id": "G2-Q11",
+          "texto": "Exemplo (G2) — questão 11. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 5",
+          "par": 6,
+          "invert": false
+        },
+        {
+          "id": "G2-Q12",
+          "texto": "Exemplo (G2) — questão 12. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 6",
+          "par": 6,
+          "invert": false
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "descricao": "Grupo 3",
+      "itens": [
+        {
+          "id": "G3-Q01",
+          "texto": "Exemplo (G3) — questão 1. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 1",
+          "par": 1,
+          "invert": false
+        },
+        {
+          "id": "G3-Q02",
+          "texto": "Exemplo (G3) — questão 2. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 2",
+          "par": 1,
+          "invert": false
+        },
+        {
+          "id": "G3-Q03",
+          "texto": "Exemplo (G3) — questão 3. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 3",
+          "par": 2,
+          "invert": false
+        },
+        {
+          "id": "G3-Q04",
+          "texto": "Exemplo (G3) — questão 4. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 4",
+          "par": 2,
+          "invert": false
+        },
+        {
+          "id": "G3-Q05",
+          "texto": "Exemplo (G3) — questão 5. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 5",
+          "par": 3,
+          "invert": false
+        },
+        {
+          "id": "G3-Q06",
+          "texto": "Exemplo (G3) — questão 6. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 6",
+          "par": 3,
+          "invert": false
+        },
+        {
+          "id": "G3-Q07",
+          "texto": "Exemplo (G3) — questão 7. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 1",
+          "par": 4,
+          "invert": false
+        },
+        {
+          "id": "G3-Q08",
+          "texto": "Exemplo (G3) — questão 8. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 2",
+          "par": 4,
+          "invert": false
+        },
+        {
+          "id": "G3-Q09",
+          "texto": "Exemplo (G3) — questão 9. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 3",
+          "par": 5,
+          "invert": false
+        },
+        {
+          "id": "G3-Q10",
+          "texto": "Exemplo (G3) — questão 10. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 4",
+          "par": 5,
+          "invert": false
+        },
+        {
+          "id": "G3-Q11",
+          "texto": "Exemplo (G3) — questão 11. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 5",
+          "par": 6,
+          "invert": false
+        },
+        {
+          "id": "G3-Q12",
+          "texto": "Exemplo (G3) — questão 12. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 6",
+          "par": 6,
+          "invert": false
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "descricao": "Grupo 4",
+      "itens": [
+        {
+          "id": "G4-Q01",
+          "texto": "Exemplo (G4) — questão 1. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 1",
+          "par": 1,
+          "invert": false
+        },
+        {
+          "id": "G4-Q02",
+          "texto": "Exemplo (G4) — questão 2. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 2",
+          "par": 1,
+          "invert": false
+        },
+        {
+          "id": "G4-Q03",
+          "texto": "Exemplo (G4) — questão 3. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 3",
+          "par": 2,
+          "invert": false
+        },
+        {
+          "id": "G4-Q04",
+          "texto": "Exemplo (G4) — questão 4. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 4",
+          "par": 2,
+          "invert": false
+        },
+        {
+          "id": "G4-Q05",
+          "texto": "Exemplo (G4) — questão 5. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 5",
+          "par": 3,
+          "invert": false
+        },
+        {
+          "id": "G4-Q06",
+          "texto": "Exemplo (G4) — questão 6. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 6",
+          "par": 3,
+          "invert": false
+        },
+        {
+          "id": "G4-Q07",
+          "texto": "Exemplo (G4) — questão 7. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 1",
+          "par": 4,
+          "invert": false
+        },
+        {
+          "id": "G4-Q08",
+          "texto": "Exemplo (G4) — questão 8. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 2",
+          "par": 4,
+          "invert": false
+        },
+        {
+          "id": "G4-Q09",
+          "texto": "Exemplo (G4) — questão 9. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 3",
+          "par": 5,
+          "invert": false
+        },
+        {
+          "id": "G4-Q10",
+          "texto": "Exemplo (G4) — questão 10. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 4",
+          "par": 5,
+          "invert": false
+        },
+        {
+          "id": "G4-Q11",
+          "texto": "Exemplo (G4) — questão 11. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 5",
+          "par": 6,
+          "invert": false
+        },
+        {
+          "id": "G4-Q12",
+          "texto": "Exemplo (G4) — questão 12. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 6",
+          "par": 6,
+          "invert": false
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "descricao": "Grupo 5",
+      "itens": [
+        {
+          "id": "G5-Q01",
+          "texto": "Exemplo (G5) — questão 1. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 1",
+          "par": 1,
+          "invert": false
+        },
+        {
+          "id": "G5-Q02",
+          "texto": "Exemplo (G5) — questão 2. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 2",
+          "par": 1,
+          "invert": false
+        },
+        {
+          "id": "G5-Q03",
+          "texto": "Exemplo (G5) — questão 3. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 3",
+          "par": 2,
+          "invert": false
+        },
+        {
+          "id": "G5-Q04",
+          "texto": "Exemplo (G5) — questão 4. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 4",
+          "par": 2,
+          "invert": false
+        },
+        {
+          "id": "G5-Q05",
+          "texto": "Exemplo (G5) — questão 5. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 5",
+          "par": 3,
+          "invert": false
+        },
+        {
+          "id": "G5-Q06",
+          "texto": "Exemplo (G5) — questão 6. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 6",
+          "par": 3,
+          "invert": false
+        },
+        {
+          "id": "G5-Q07",
+          "texto": "Exemplo (G5) — questão 7. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 1",
+          "par": 4,
+          "invert": false
+        },
+        {
+          "id": "G5-Q08",
+          "texto": "Exemplo (G5) — questão 8. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 2",
+          "par": 4,
+          "invert": false
+        },
+        {
+          "id": "G5-Q09",
+          "texto": "Exemplo (G5) — questão 9. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 3",
+          "par": 5,
+          "invert": false
+        },
+        {
+          "id": "G5-Q10",
+          "texto": "Exemplo (G5) — questão 10. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 4",
+          "par": 5,
+          "invert": false
+        },
+        {
+          "id": "G5-Q11",
+          "texto": "Exemplo (G5) — questão 11. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 5",
+          "par": 6,
+          "invert": false
+        },
+        {
+          "id": "G5-Q12",
+          "texto": "Exemplo (G5) — questão 12. Edite este texto no seu arquivo JSON final.",
+          "dim": "Dimensão 6",
+          "par": 6,
+          "invert": false
+        }
+      ]
+    }
+  ]
+}

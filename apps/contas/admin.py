@@ -1,25 +1,19 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import Usuario, NivelEvolucao, Aluno, Professor, Autor
+from .models import Usuario  # mantenha só o que existe aqui
 
-class UsuarioAdmin(UserAdmin):
-    model = Usuario
-    list_display = ('email', 'nome', 'is_staff', 'is_superuser')
-    fieldsets = (
-        (None, {'fields': ('email', 'nome', 'senha')}),
-        ('Informações pessoais', {'fields': ('pais', 'estado', 'cidade', 'profissao', 'cargo_igreja', 'pontuacao', 'nivel_evolucao')}),
-        ('Permissões', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-    )
-    add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'nome', 'senha1', 'senha2')}
-        ),
-    )
-    search_fields = ('email',)
-    ordering = ('email',)
+@admin.register(Usuario)
+class UsuarioAdmin(admin.ModelAdmin):
+    list_display = ("id", "email", "first_name", "last_name", "is_active")
+    search_fields = ("email", "first_name", "last_name")
+    list_filter = ("is_active",)
 
-admin.site.register(NivelEvolucao)
-admin.site.register(Aluno)
-admin.site.register(Professor)
-admin.site.register(Autor)
+# Se Aluno/Professor/Autor existirem em contas.models, registramos.
+# Caso não existam (ou você ainda não migrou), isso não quebra o admin.
+try:
+    from .models import Aluno, Professor, Autor  # opcional
+except Exception:
+    Aluno = Professor = Autor = None
+
+for mdl in (Aluno, Professor, Autor):
+    if mdl is not None:
+        admin.site.register(mdl)

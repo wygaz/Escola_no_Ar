@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Quiz Vocacional - 60 Itens</title>
+<style>
+body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; padding: 0 16px; line-height: 1.5; }
+h1, h2 { text-align: center; }
+.section { margin: 20px 0; padding: 16px; border: 1px solid #ddd; border-radius: 8px; }
+.q { margin-bottom: 14px; }
+.scale { display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap;}
+.scale label { border: 1px solid #ccc; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
+.legend { font-size: 0.9em; color: #555; margin: 8px 0; }
+.results { background: #f7f7f7; padding: 16px; border-radius: 8px; }
+.btn { margin: 12px 0; padding: 10px 18px; border: 0; border-radius: 8px; cursor: pointer; }
+.btn-primary { background: #1f6feb; color: white; }
+.btn-secondary { background: #e0e0e0; }
+small { color: #666; }
+footer { margin: 24px 0; text-align: center; font-size: 0.85em; color: #666; }
+</style>
+</head>
+<body>
+<h1>Quiz Vocacional (60 itens)</h1>
+<p class="legend">Marque de 0 a 4, onde 0 = Nada a ver comigo e 4 = Muito a ver comigo.</p>
+<div id="quiz"></div>
+<div class="section">
+  <button class="btn btn-primary" onclick="calcular()">Calcular resultado</button>
+  <button class="btn btn-secondary" onclick="limpar()">Limpar respostas</button>
+</div>
+<div id="resultado" class="results"></div>
+<footer>Protótipo para validação pedagógica – Projeto 21</footer>
+<script>
+const questions = ['1. Gosto de resolver problemas de matemática ou lógica.', '2. Prefiro atividades que envolvam ajudar pessoas em dificuldades.', '3. Tenho facilidade em liderar grupos ou organizar tarefas.', '4. Sinto prazer em criar coisas novas, como desenhos, músicas ou textos.', '5. Gosto de mexer em computadores, softwares ou tecnologias.', '6. Prefiro aprender por meio de experiências práticas.', '7. Me sinto confortável falando em público.', '8. Tenho curiosidade em entender como funcionam máquinas ou equipamentos.', '9. Gosto de ouvir e aconselhar amigos.', '10. Prefiro atividades ao ar livre e em contato com a natureza.', '11. Tenho disciplina para cumprir prazos e regras.', '12. Gosto de observar detalhes que passam despercebidos para outros.', '13. Gosto de atividades que envolvem cálculos financeiros ou planilhas.', '14. Prefiro trabalhos que exijam cooperação em equipe.', '15. Tenho iniciativa para começar projetos sem que me peçam.', '16. Adoro expressar minhas ideias por meio da arte.', '17. Gosto de desmontar e montar coisas para ver como funcionam.', '18. Aprendo mais rápido quando posso aplicar na prática.', '19. Consigo convencer pessoas a apoiarem minhas ideias.', '20. Tenho interesse em pesquisar novas descobertas científicas.', '21. Sinto satisfação em cuidar de crianças, idosos ou doentes.', '22. Gosto de planejar viagens, eventos ou cronogramas.', '23. Tenho paciência para repetir tarefas até ficarem perfeitas.', '24. Gosto de analisar gráficos, estatísticas ou dados.', '25. Prefiro escrever textos criativos ou contar histórias.', '26. Gosto de debater ideias e defender pontos de vista.', '27. Tenho habilidade em esportes ou atividades físicas.', '28. Gosto de planejar metas e estabelecer estratégias para alcançá-las.', '29. Tenho curiosidade em aprender novos idiomas.', '30. Gosto de ajudar em causas sociais ou voluntariado.', '31. Me sinto bem organizando informações ou documentos.', '32. Gosto de imaginar invenções que poderiam facilitar a vida das pessoas.', '33. Prefiro trabalhos em que eu possa seguir regras bem definidas.', '34. Tenho facilidade em lidar com situações de emergência ou pressão.', '35. Gosto de observar e analisar o comportamento humano.', '36. Prefiro resolver exercícios de matemática a escrever redações.', '37. Gosto de desenhar, pintar ou criar artes visuais.', '38. Me sinto realizado ao ensinar algo para outra pessoa.', '39. Prefiro resolver problemas práticos em vez de discutir teorias.', '40. Tenho interesse em estudar o funcionamento do corpo humano.', '41. Gosto de cuidar de animais.', '42. Prefiro desafios intelectuais, como xadrez ou quebra-cabeças.', '43. Me sinto motivado ao participar de competições.', '44. Gosto de elaborar planos detalhados para atingir objetivos.', '45. Tenho sensibilidade para perceber os sentimentos dos outros.', '46. Gosto de acompanhar notícias sobre ciência e tecnologia.', '47. Prefiro profissões que me permitam viajar ou conhecer novos lugares.', '48. Tenho interesse em política, justiça ou leis.', '49. Prefiro ambientes organizados e previsíveis.', '50. Gosto de improvisar soluções criativas diante de imprevistos.', '51. Me sinto confortável trabalhando em grupo.', '52. Prefiro profissões em que eu tenha autonomia e liberdade.', '53. Tenho interesse em aprender sobre investimentos ou negócios.', '54. Gosto de tocar instrumentos musicais ou cantar.', '55. Prefiro atividades que exijam concentração e paciência.', '56. Me sinto motivado em trabalhos que tenham impacto social.', '57. Tenho curiosidade em explorar o espaço, a natureza ou o desconhecido.', '58. Prefiro trabalhos em que eu possa ajudar a manter a ordem e a segurança.', '59. Tenho interesse em empreender e abrir meu próprio negócio.', '60. Gosto de refletir sobre o sentido da vida e questões espirituais.'];
+const mapping = ['CONSTRUTOR', 'CUIDADOR', 'ORGANIZADOR', 'CRIADOR', 'CONSTRUTOR', 'CONSTRUTOR', 'ORGANIZADOR', 'CONSTRUTOR', 'CUIDADOR', 'VISIONARIO', 'ORGANIZADOR', 'CONSTRUTOR', 'ORGANIZADOR', 'ORGANIZADOR', 'ORGANIZADOR', 'CRIADOR', 'CONSTRUTOR', 'CONSTRUTOR', 'ORGANIZADOR', 'VISIONARIO', 'CUIDADOR', 'ORGANIZADOR', 'CONSTRUTOR', 'CONSTRUTOR', 'CRIADOR', 'ORGANIZADOR', 'VISIONARIO', 'ORGANIZADOR', 'VISIONARIO', 'CUIDADOR', 'ORGANIZADOR', 'CRIADOR', 'ORGANIZADOR', 'CONSTRUTOR', 'CUIDADOR', 'CONSTRUTOR', 'CRIADOR', 'CUIDADOR', 'CONSTRUTOR', 'CUIDADOR', 'CUIDADOR', 'VISIONARIO', 'VISIONARIO', 'ORGANIZADOR', 'CUIDADOR', 'VISIONARIO', 'VISIONARIO', 'ORGANIZADOR', 'ORGANIZADOR', 'CRIADOR', 'ORGANIZADOR', 'VISIONARIO', 'ORGANIZADOR', 'CRIADOR', 'CONSTRUTOR', 'CUIDADOR', 'VISIONARIO', 'ORGANIZADOR', 'ORGANIZADOR', 'VISIONARIO']; // perfil por questão
+const profiles = ["CRIADOR","CUIDADOR","CONSTRUTOR","ORGANIZADOR","VISIONARIO"];
+
+function createQuiz(){
+  const root = document.getElementById('quiz');
+  let i = 0;
+  for(const q of questions){
+    const wrap = document.createElement('div');
+    wrap.className = 'section q';
+    const p = document.createElement('p');
+    p.textContent = q;
+    wrap.appendChild(p);
+    const scale = document.createElement('div');
+    scale.className = 'scale';
+    for(let val=0; val<=4; val++){
+      const id = `q${i}_v${val}`;
+      const lab = document.createElement('label');
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = `q${i}`;
+      radio.value = val;
+      radio.id = id;
+      lab.htmlFor = id;
+      lab.appendChild(radio);
+      lab.appendChild(document.createTextNode(' ' + val));
+      scale.appendChild(lab);
+    }
+    wrap.appendChild(scale);
+    const hint = document.createElement('div');
+    hint.innerHTML = `<small>Dimensão: <b>${mapping[i]}</b></small>`;
+    wrap.appendChild(hint);
+    root.appendChild(wrap);
+    i++;
+  }
+}
+
+function calcular(){
+  const sums = { "CRIADOR":0, "CUIDADOR":0, "CONSTRUTOR":0, "ORGANIZADOR":0, "VISIONARIO":0 };
+  for(let i=0;i<questions.length;i++){
+    const radios = document.getElementsByName('q'+i);
+    let v = null;
+    for(const r of radios){ if(r.checked){ v = parseInt(r.value); break; } }
+    if(v !== null){
+      sums[mapping[i]] += v;
+    }
+  }
+  const entries = Object.entries(sums).sort((a,b)=>b[1]-a[1]);
+  let html = "<h2>Resultado</h2>";
+  html += "<p><b>Perfis por pontuação:</b></p><ol>";
+  for(const [k,v] of entries){
+    html += `<li><b>${k}</b>: ${v} pontos</li>`;
+  }
+  html += "</ol>";
+  html += "<p><b>Tendência principal:</b> " + entries[0][0] + ".</p>";
+  html += `<p><small>Interpretação rápida: combine o 1º com o 2º perfil para entender nuances do seu estilo.</small></p>`;
+  document.getElementById('resultado').innerHTML = html;
+  window.scrollTo({top: document.getElementById('resultado').offsetTop, behavior:'smooth'});
+}
+
+function limpar(){
+  for(let i=0;i<questions.length;i++){
+    const radios = document.getElementsByName('q'+i);
+    for(const r of radios){ r.checked = false; }
+  }
+  document.getElementById('resultado').innerHTML = "";
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+createQuiz();
+</script>
+</body>
+</html>
