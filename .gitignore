@@ -27,6 +27,7 @@ media/
 
 # Arquivos de ambiente e segredos
 .env
+Apenas_Local
 
 */migrations/*.py
 !*/migrations/__init__.py
