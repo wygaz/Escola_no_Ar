@@ -1,0 +1,60 @@
+# Escola no Ar — Visão Geral
+Plataforma Django com apps modulares (contas, core, vocacional, ...).
+Objetivos: unificar autenticação, entitlements leves, e experiências educacionais.
+
+## Pilares
+- Única base de usuários (apps.contas.Usuario)
+- Permissões por "Acesso/Produto"
+- Fluxos com gating determinístico (sem loops)
+- Integridade e manutenção (docs + padrões)
+
+docs/
+├─ 00-overview.md
+├─ 01-apps.md
+├─ 02-data-model.mmd         # Mermaid (ER)
+├─ 03-flows/
+│   └─ vocacional-flow.mmd   # Mermaid (gating completo)
+├─ 04-urls.md
+├─ 05-settings.md
+├─ 06-integrations.md        # Hotmart, PendingAccess, signals
+├─ 07-adr/
+│   ├─ ADR-0001-entitlement-unico.md
+│   ├─ ADR-0002-feature-flags-vocacional.md
+│   └─ ...
+└─ 08-maintenance-checklist.md
+
+Inventário global — o que vamos mapear
+
+Apps principais
+apps.contas – modelo Usuario (email como USERNAME), Produto, Acesso, helpers (tem_acesso), admin.
+apps.core – portal, webhooks (Hotmart), PendingAccess + signals, infra comum.
+apps.vocacional – avaliação, guia, consentimento, gating, templates.
+
+(Demais apps ficam congelados no inventário, sem mexer.)
+
+Rotas contratuais (fixas)
+vocacional:index → entrada única
+vocacional:avaliacao_gate → orquestra próximo passo
+vocacional:avaliacao_form → formulário do teste
+vocacional:resultado (com pk)
+vocacional:guia_avaliacao
+vocacional:consentimento_check, vocacional:consentimento_aceitar
+vocacional:bonus (mantida, mas “pausada” pelo flag)
+
+Modelos canônicos
+contas.Usuario
+contas.Produto(slug)
+contas.Acesso(user, produto, origem, [expires_at?])
+core.PendingAccess(email, produto_slug, origem, processed_at)
+vocacional.Pergunta, Resposta, Avaliacao (teste)
+vocacional.AvaliacaoGuia (usa aceite_termos, status)
+
+Integrações
+Webhook Hotmart (core) → Acesso ou PendingAccess
+Signal login → concilia pendentes
+
+Pontos de atenção
+Imports: padronizar sempre from apps.contas...
+Remover arquivos obsoletos/typos (ex.: admin_acesoos.py)
+Unificar bases de template (uma base global + includes)
+Duplicatas de rotas/URLs e nomes inconsistentes

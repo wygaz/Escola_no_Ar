@@ -1,0 +1,68 @@
+/* ---- tokens de cor (ajuste à vontade) ---- */
+:root{
+  --pill-bg: #111827;              /* fundo pílula */
+  --pill-bg-active: #2563eb;       /* pílula selecionada */
+  --pill-border: #374151;
+  --pill-text: #e5e7eb;
+  --pill-text-active: #fff;
+
+  --btn-prev-bg: #374151;
+  --btn-prev-text: #e5e7eb;
+  --btn-next-bg: #2563eb;
+  --btn-next-text: #fff;
+
+  --btn-save-bg: transparent;
+  --btn-save-border: #9ca3af;
+  --btn-save-text: #e5e7eb;
+
+  --btn-finish-bg: #059669;        /* “ok” verde */
+  --btn-finish-text: #fff;
+
+  --warn: #f59e0b;
+}
+
+/* ---- bloco de botões (esq/dir) ---- */
+.quiz-buttons{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.75rem;
+  margin-top:.75rem;
+}
+.quiz-buttons .left,
+.quiz-buttons .right{
+  display:flex;
+  gap:.5rem;
+}
+
+/* ---- pílulas Likert ---- */
+.likert{
+  display:flex; gap:.5rem; flex-wrap:wrap; margin:.5rem 0 .25rem;
+}
+.likert .pill{
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:var(--pill-bg); color:var(--pill-text);
+  border:1px solid var(--pill-border);
+  border-radius:999px; padding:.4rem .75rem; cursor:pointer;
+  user-select:none; transition:transform .06s ease, background .15s;
+}
+.likert .pill:hover{ transform:translateY(-1px); }
+.likert .pill.active{
+  background:var(--pill-bg-active); color:var(--pill-text-active);
+  border-color:transparent;
+}
+.likert .pill input{ position:absolute; opacity:0; pointer-events:none; }
+.pill-num{ font-weight:700; min-width:1ch; text-align:center; }
+.pill-text{ opacity:.9; font-size:.9rem; }
+
+/* ---- aviso “escolha uma opção” ---- */
+.warn-msg{
+  display:none; color:var(--warn); margin-top:.25rem; font-size:.9rem;
+}
+
+/* ---- botões ---- */
+.btn{ border-radius:.75rem; padding:.5rem .9rem; font-weight:600; }
+.btn-prev{ background:var(--btn-prev-bg); color:var(--btn-prev-text); border:0; }
+.btn-next{ background:var(--btn-next-bg); color:var(--btn-next-text); border:0; }
+.btn-save{ background:var(--btn-save-bg); color:var(--btn-save-text); border:1px solid var(--btn-save-border); }
+.btn-finish{ background:var(--btn-finish-bg); color:var(--btn-finish-text); border:0; }

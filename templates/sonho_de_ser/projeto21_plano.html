@@ -1,0 +1,56 @@
+{% extends "sonho_de_ser/base_projeto21.html" %}
+{% block p21_content %}
+
+<h1>Projeto 21 — Meu Plano</h1>
+<p>Selecione as estratégias que deseja trabalhar nos próximos 21 dias.</p>
+
+<form method="post">
+  {% csrf_token %}
+
+  <div class="grid">
+    {% for area, itens in grupos.items %}
+      <section class="card">
+        <header class="card__header flex">
+          <span>{{ area.nome }}</span>
+          <span class="spacer"></span>
+          <button type="button" class="btn btn-link" data-area="{{ area.id }}" onclick="toggleArea(this,true)">Selecionar área</button>
+          <button type="button" class="btn btn-link" data-area="{{ area.id }}" onclick="toggleArea(this,false)">Limpar</button>
+        </header>
+        <div class="card__body">
+          <ul class="checklist">
+            {% for e in itens %}
+              <li>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="estrategias"
+                    value="{{ e.id }}"
+                    data-area="{{ area.id }}"
+                    {% if e.id in sel %}checked{% endif %}>
+                  {{ e.titulo }}
+                  <small class="muted">· {{ e.area.inicial }} · N{{ e.nivel }}</small>
+                </label>
+              </li>
+            {% empty %}
+              <li class="muted">Nenhuma estratégia nesta área.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+    {% endfor %}
+  </div>
+
+  <div class="actions mt">
+    <button class="btn btn-primary" type="submit">Salvar plano</button>
+    <a class="btn" href="/projeto21/">Voltar</a>
+  </div>
+</form>
+
+<script>
+function toggleArea(btn, mark) {
+  const id = btn.getAttribute('data-area');
+  document.querySelectorAll('input[type=checkbox][data-area="'+id+'"]').forEach(ch => ch.checked = !!mark);
+}
+</script>
+
+{% endblock %}

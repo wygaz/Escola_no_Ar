@@ -1,0 +1,42 @@
+{% extends "contas/base.html" %}
+{% block content %}
+<h2>Criar conta</h2>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div>
+    <label for="{{ form.first_name.id_for_label }}">Nome</label>
+    {{ form.first_name }}
+  </div>
+  <div>
+    <label for="{{ form.last_name.id_for_label }}">Sobrenome</label>
+    {{ form.last_name }}
+  </div>
+  <div>
+    <label for="{{ form.email.id_for_label }}">E-mail</label>
+    {{ form.email }}
+  </div>
+  <div>
+    <label for="{{ form.password1.id_for_label }}">Senha</label>
+    {{ form.password1 }}
+  </div>
+  <div>
+    <label for="{{ form.password2.id_for_label }}">Confirmar senha</label>
+    {{ form.password2 }}
+  </div>
+
+  {% if request.GET.next %}
+    <input type="hidden" name="next" value="{{ request.GET.next }}">
+  {% endif %}
+
+  <button type="submit">Criar conta</button>
+</form>
+
+<p>Já tem conta? <a href="{% url 'contas:login' %}">Já tenho conta</a></p>
+
+{# linha ~36 #}
+<a href="{% url 'contas:login' %}">Já tenho conta</a>
+
+
+{% endblock %}

@@ -1,0 +1,44 @@
+/* Paleta (global) */
+:root{
+  --bg:#0b1220;        /* fundo */
+  --panel:#0f172a;     /* caixas */
+  --text:#e8eefc;      /* texto principal */
+  --muted:#9fb3c8;     /* texto secundário */
+  --line:#1f2a44;      /* bordas */
+  --accent:#4f46e5;    /* ação */
+}
+
+/* Fundo e texto */
+body{ background:var(--bg); color:var(--text); }
+
+/* Escopo da página */
+.guia-avaliacao h1,.guia-avaliacao h2,.guia-avaliacao legend{color:var(--text); margin:8px 0 12px;}
+.guia-avaliacao .muted, .guia-avaliacao small{color:var(--muted);}
+.guia-avaliacao label{color:var(--text);}
+
+/* Caixas das perguntas */
+.guia-avaliacao .box{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; margin:12px 0;}
+
+/* Inputs */
+.guia-avaliacao input[type="text"],
+.guia-avaliacao textarea{
+  width:100%; color:var(--text); background:#0b1324;
+  border:1px solid var(--line); border-radius:10px; padding:10px 12px;
+}
+.guia-avaliacao textarea{min-height:96px; resize:vertical;}
+.guia-avaliacao input[type="text"]:focus,
+.guia-avaliacao textarea:focus{
+  outline:0; border-color:var(--accent); box-shadow:0 0 0 3px rgba(79,70,229,.25);
+}
+
+/* Radios/checkbox */
+.guia-avaliacao input[type="radio"],
+.guia-avaliacao input[type="checkbox"]{ accent-color: var(--accent); }
+.guia-avaliacao .radios{display:flex; gap:12px; align-items:center; margin:6px 0; color:var(--text);}
+
+/* Botão */
+.guia-avaliacao .btn, .guia-avaliacao button{
+  background:var(--accent); color:#fff; border:0; border-radius:12px;
+  padding:10px 16px; cursor:pointer;
+}
+.guia-avaliacao button[disabled]{opacity:.6; cursor:not-allowed;}

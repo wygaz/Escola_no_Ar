@@ -1,33 +1,74 @@
-from django.urls import path
+# apps/contas/urls.py
+from django.urls import path, reverse_lazy
 from django.contrib.auth import views as auth_views
-from . import views
+from . import views  # suas views (ex.: registrar, perfil etc.)
+
+app_name = "contas"
 
 urlpatterns = [
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
-    path('perfil/', views.perfil_view, name='perfil'),
-    path('editar-perfil/', views.editar_perfil_view, name='editar_perfil'),
-    path('alterar-senha/', views.alterar_senha_view, name='alterar_senha'),
-    path('testar-template/', views.testar_template, name='testar_template'),
-    path('recuperar-senha/', auth_views.PasswordResetView.as_view(
-        template_name='contas/recuperar_senha.html',
-        email_template_name='contas/email_recuperacao.html',
-        subject_template_name='contas/assunto_email.txt',
-        success_url='/recuperar-senha/enviado/'
-    ), name='password_reset'),
+    path(
+        "login/",
+        auth_views.LoginView.as_view(
+            template_name="contas/login.html",
+            redirect_authenticated_user=True,
+        ),
+        name="login",
+    ),
 
-    path('recuperar-senha/enviado/', auth_views.PasswordResetDoneView.as_view(
-        template_name='contas/recuperar_senha_enviado.html'
-    ), name='password_reset_done'),
+    # POST-only
+    path("logout/", views.logout_view, name="logout"),
 
-    path('redefinir/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
-        template_name='contas/redefinir_senha.html',
-        success_url='/redefinir/sucesso/'
-    ), name='password_reset_confirm'),
+    # REGISTRO (criar conta)
+    path("registrar/", views.registrar, name="registrar"),
 
-    path('redefinir/sucesso/', auth_views.PasswordResetCompleteView.as_view(
-        template_name='contas/redefinir_sucesso.html'
-    ), name='password_reset_complete'),
+    # TROCAR SENHA (usuário logado)
+    path(
+        "password_change/",
+        auth_views.PasswordChangeView.as_view(
+            template_name="contas/alterar_senha.html",
+            success_url=reverse_lazy("contas:password_change_done"),
+        ),
+        name="password_change",
+    ),
+    path(
+        "password_change/done/",
+        auth_views.PasswordChangeDoneView.as_view(
+            template_name="contas/redefinir_sucesso.html"
+        ),
+        name="password_change_done",
+    ),
 
-    path('alterar-imagem/', views.alterar_imagem_view, name='alterar_imagem'),
+    # RESET DE SENHA (via e-mail)
+    path(
+        "password_reset/",
+        auth_views.PasswordResetView.as_view(
+            template_name="contas/recuperar_senha.html",
+            email_template_name="contas/email_recuperacao.html",
+            subject_template_name="contas/assunto_email.txt",
+            success_url=reverse_lazy("contas:password_reset_done"),
+        ),
+        name="password_reset",
+    ),
+    path(
+        "password_reset/done/",
+        auth_views.PasswordResetDoneView.as_view(
+            template_name="contas/recuperar_senha_enviado.html"
+        ),
+        name="password_reset_done",
+    ),
+    path(
+        "reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="contas/redefinir_senha.html",
+            success_url=reverse_lazy("contas:password_reset_complete"),
+        ),
+        name="password_reset_confirm",
+    ),
+    path(
+        "reset/done/",
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name="contas/redefinir_sucesso.html"
+        ),
+        name="password_reset_complete",
+    ),
 ]

@@ -1,0 +1,7 @@
+<h2>Validação do Bônus</h2>
+<p>Você já possui o Bônus do Guia. Para liberar o Teste Vocacional, finalize:</p>
+<ul>
+  {% for titulo, rota in pendencias %}
+    <li><a class="btn" href="{% url rota %}">{{ titulo }}</a></li>
+  {% endfor %}
+</ul>

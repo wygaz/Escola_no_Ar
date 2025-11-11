@@ -1,0 +1,37 @@
+Area,Dimensao,Estrategia,Frequencia,Periodo,Peso,OrdemArea,OrdemDimensao,OrdemEstrategia
+Família,Básico,Conversar com meus pais sobre como foi meu dia.,Diário,21 dias,1,1,1,1
+Família,Básico,Ajudar em uma tarefa de casa sem que me peçam.,Diário,21 dias,1,1,1,2
+Família,Desafio,Preparar uma refeição simples para a família.,Semanal,2 semanas,2,1,2,1
+Família,Desafio,Fazer um planejamento de tarefas domésticas da semana.,Semanal,2 semanas,2,1,2,2
+Família,Avançado,Planejar e conduzir culto familiar semanal.,Semanal,3 semanas,3,1,3,1
+Família,Avançado,Montar orçamento doméstico básico.,Programa,21 dias,3,1,3,2
+Igreja,Básico,Ler um verso bíblico curto.,Diário,21 dias,1,2,1,1
+Igreja,Básico,Anotar frase do sermão/estudo.,Semanal,3 semanas,1,2,1,2
+Igreja,Desafio,Preparar leitura pública de um salmo.,Semanal,2 semanas,2,2,2,1
+Igreja,Desafio,Apoiar uma classe infantil.,Semanal,2 semanas,2,2,2,2
+Igreja,Avançado,Liderar pequeno grupo 3 encontros.,Semanal,3 semanas,3,2,3,1
+Igreja,Avançado,Conduzir meditação de 15 min.,Semanal,3 semanas,3,2,3,2
+Escola,Básico,Revisar o conteúdo de uma aula no mesmo dia.,Diário,21 dias,1,3,1,1
+Escola,Básico,Anotar as tarefas no caderno/agenda.,Diário,21 dias,1,3,1,2
+Escola,Desafio,Elaborar resumo de um capítulo de livro.,Semanal,2 semanas,2,3,2,1
+Escola,Desafio,Resolver lista extra de exercícios.,Semanal,2 semanas,2,3,2,2
+Escola,Avançado,Montar plano de estudos de 3 semanas.,Programa,21 dias,3,3,3,1
+Escola,Avançado,Executar 3 ciclos Pomodoro/dia por 5 dias seguidos.,Programa,14 dias,3,3,3,2
+Amigos,Básico,Mandar uma mensagem positiva para um amigo.,Diário,21 dias,1,4,1,1
+Amigos,Básico,Ouvir sem interromper quando um amigo fala.,Diário,21 dias,1,4,1,2
+Amigos,Desafio,Organizar um encontro saudável com amigos.,Semanal,2 semanas,2,4,2,1
+Amigos,Desafio,Reduzir fofoca/negatividade nas conversas.,3x semana,2 semanas,2,4,2,2
+Amigos,Avançado,Coordenar grupo de responsabilidade mútua.,Semanal,3 semanas,3,4,3,1
+Amigos,Avançado,Ajudar na reconciliação de dois amigos.,Programa,14 dias,3,4,3,2
+Comunidade,Básico,Recolher um lixo da rua e jogar no lugar certo.,Diário,21 dias,1,5,1,1
+Comunidade,Básico,Cumprimentar educadamente vizinhos.,Diário,21 dias,1,5,1,2
+Comunidade,Desafio,Pesquisar e participar de voluntariado local.,Semanal,2 semanas,2,5,2,1
+Comunidade,Desafio,Apoiar campanha de doação (alimentos/agasalhos).,Semanal,2 semanas,2,5,2,2
+Comunidade,Avançado,Liderar mutirão de limpeza por 3 semanas.,Semanal,3 semanas,3,5,3,1
+Comunidade,Avançado,Organizar campanha de doação com metas.,Programa,21 dias,3,5,3,2
+Eu mesmo,Básico,Arrumar minha cama ao acordar.,Diário,21 dias,1,6,1,1
+Eu mesmo,Básico,Tomar um copo de água ao acordar.,Diário,21 dias,1,6,1,2
+Eu mesmo,Desafio,Fazer 30 minutos de atividade física contínua.,3x semana,2 semanas,2,6,2,1
+Eu mesmo,Desafio,Praticar alongamento/mobilidade por 15 minutos.,3x semana,2 semanas,2,6,2,2
+Eu mesmo,Avançado,Completar rotina de exercícios 5x/semana.,Programa,21 dias,3,6,3,1
+Eu mesmo,Avançado,Implementar cardápio planejado e saudável.,Programa,21 dias,3,6,3,2

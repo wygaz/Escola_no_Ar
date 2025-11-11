@@ -1,0 +1,166 @@
+/* ========== Tokens (dark default) ========== */
+:root{
+  --maxw: 1100px;
+
+  /* Core */
+  --bg:#0b1220; --text:#e7eefc;
+  --panel:#101a2b; --panel-2:#0c1626;
+  --border:#1f2c44; --muted:#aab4c8;
+  --brand:#86b6ff;
+
+  /* Acentos por papel */
+  --admin:#8b5cf6; --prof:#10b981; --mentor:#f59e0b;
+  --aluno:#06b6d4; --usuario:#0ea5e9;
+}
+
+/* (Opcional) Tema claro – habilite envolvendo com .theme-light no <body> se quiser
+.theme-light{
+  --bg:#fafafa; --text:#222; --panel:#ffffff; --panel-2:#ffffff;
+  --border:#eaecef; --muted:#556; --brand:#2b6cff;
+}
+*/
+
+/* ========== Base ========== */
+*{ box-sizing:border-box }
+html,body{ margin:0; padding:0 }
+body{ font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text) }
+
+/* ========== Layout ========== */
+.container{ max-width:var(--maxw); margin:0 auto; padding:24px }
+.grid{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)) }
+
+/* ========== Navbar ========== */
+.navbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(15,21,41,.7);
+  backdrop-filter:saturate(140%) blur(8px);
+  border-bottom:1px solid var(--border);
+}
+.navbar .container{ padding-block:10px }
+.navbar .brand{ font-weight:700; letter-spacing:.2px }
+.navbar nav a{ color:var(--text); padding:8px 10px; border-radius:10px }
+.navbar nav a:hover{ background:#0f2138 }
+.navbar nav a.is-active{
+  background:#0f2138; box-shadow:inset 0 -2px 0 var(--brand); font-weight:600;
+}
+
+/* ========== Cards ========== */
+.card{
+  position:relative;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:0 6px 18px rgba(0,0,0,.15);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.card:hover{ transform:translateY(-2px); box-shadow:0 12px 30px rgba(0,0,0,.2) }
+.card .desc{ color:var(--muted) }
+
+/* Acento superior */
+.card--acc::before{
+  content:""; position:absolute; left:0; right:0; top:0; height:3px; border-radius:16px 16px 0 0;
+}
+.card--admin{ border-color:color-mix(in oklab, var(--admin) 25%, #fff) }
+.card--admin::before{ background:linear-gradient(90deg,var(--admin),#a78bfa) }
+.card--prof{ border-color:color-mix(in oklab, var(--prof) 25%, #fff) }
+.card--prof::before{ background:linear-gradient(90deg,var(--prof),#34d399) }
+.card--mentor{ border-color:color-mix(in oklab, var(--mentor) 25%, #fff) }
+.card--mentor::before{ background:linear-gradient(90deg,var(--mentor),#fcd34d) }
+.card--aluno{ border-color:color-mix(in oklab, var(--aluno) 25%, #fff) }
+.card--aluno::before{ background:linear-gradient(90deg,var(--aluno),#22d3ee) }
+.card--usuario{ border-color:color-mix(in oklab, var(--usuario) 25%, #fff) }
+.card--usuario::before{ background:linear-gradient(90deg,var(--usuario),#60a5fa) }
+
+/* ========== KPIs ========== */
+.kpis{ display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); margin:16px 0 }
+.kpi{ background:var(--panel-2); border:1px solid var(--border); border-radius:12px; padding:12px; display:flex; justify-content:space-between; align-items:center }
+.kpi .label{ color:var(--muted) }
+.kpi .num{ font-size:1.25rem; font-weight:700 }
+
+/* ========== Botões & Links ========== */
+.btn{
+  display:inline-block; padding:8px 14px;
+  border:1px solid var(--border); border-radius:12px;
+  color:var(--text); text-decoration:none;
+}
+.btn:hover{ background:#0f2138; border-color:#2a3b5a }
+a{ color:var(--brand) } a:hover{ text-decoration:underline }
+a:focus, .btn:focus{ outline:2px solid var(--brand); outline-offset:2px }
+
+/* ========== Mensagens (Django messages) ========== */
+.messages{ list-style:none; padding:0; margin:12px 0 20px }
+.messages li{
+  padding:10px 12px; border-radius:12px; margin-bottom:8px;
+  background:var(--panel-2); border:1px solid var(--border); color:var(--text);
+}
+.messages li.success{ background:#0f2a1f; border-color:#1e5842 }
+.messages li.error  { background:#2a0f15; border-color:#5a1e27 }
+.messages li.warning{ background:#2a2610; border-color:#5a5020 }
+.messages li.info   { background:#101f33; border-color:#203a6a }
+
+/* ========== Breadcrumbs ========== */
+.breadcrumbs{ font-size:.95rem; margin:8px 0 12px; color:var(--muted) }
+.breadcrumbs a{ color:var(--brand) }
+
+/* ========== Vocacional: caixa de termos ========== */
+.vocacional-termos .box{
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:12px; padding:14px; margin:12px 0;
+}
+
+/* ========== Responsivo ========== */
+@media (max-width:560px){
+  .navbar .container, .container{ padding-inline:12px }
+}
+
+.btn, .btn:visited{ color:var(--text); }
+.btn--ghost{ background:transparent; border:1px solid var(--border); }
+.btn--ghost:hover{ background:#0f2138; }
+
+/* ----- Botões base ----- */
+:root{
+  --btn: #3b82f6;        /* primário */
+  --btn-ok: #22c55e;     /* sucesso */
+  --btn-ghost-bg: rgba(59,130,246,.12);
+  --btn-ghost-bd: rgba(59,130,246,.35);
+}
+
+button, .btn {
+  -webkit-appearance: none; appearance: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: .55rem 1rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  background: var(--btn);
+  color: #fff;
+  box-shadow: none; outline: 0;
+  transition: transform .12s ease, filter .2s, background-color .2s, color .2s, border-color .2s;
+}
+.btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+.btn:active { transform: translateY(0) scale(.98); }
+.btn:disabled, .btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+/* Ghost (contorno) — para Anterior/Próxima */
+.btn.ghost {
+  background: var(--btn-ghost-bg);
+  color: var(--btn);
+  border-color: var(--btn-ghost-bd);
+}
+.btn.ghost:hover { background: var(--btn); color: #fff; }
+
+/* Sucesso — para Finalizar */
+.btn.ok { background: var(--btn-ok); border-color: var(--btn-ok); }
+.btn.ok:hover { filter: brightness(1.08); }
+
+/* Garantias contra overlays estranhos */
+.btn::before, .btn::after { content: none !important; }
+
+.btn::before,
+.btn::after { content: none !important; }
+
+.btn { border-radius: 999px; padding: .55rem 1rem; border: 1px solid transparent; }
+.btn.ok { background: var(--ok, #3ba55d); color: #fff; }
+.btn.ghost { background: transparent; border-color: var(--ok, #3ba55d); color: var(--ok, #3ba55d); }
+.btn:disabled { opacity: .55; cursor: not-allowed; }

@@ -1,16 +1,45 @@
-<!doctype html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/site.css' %}">
+<!-- {% load auth_tags %} -->
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>{% block title %}Escola no Ar{% endblock %}</title>
-  {% load static %}
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  <link rel="stylesheet" href="{% static 'vocacional/css/vocacional.css' %}">  <!-- ADICIONE -->
+
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
-  {% include "includes/_navbar.html" %}
-  <main class="container">
-    {% include "includes/_messages.html" %}
-    {% block content %}{% endblock %}
+
+  <header class="card" style="border-radius:0;">
+    <div class="container">
+      {% include "includes/navbar.html" %}
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="msg {{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
   </main>
+
+  <footer>
+    <div class="container">
+      {% include "includes/footer.html" %}
+    </div>
+  </footer>
+
+  {% block extra_scripts %}{% endblock %}
 </body>
 </html>

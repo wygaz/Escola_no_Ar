@@ -1,16 +1,32 @@
-from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import LoginForm, PerfilForm, AlterarSenhaForm
+from .forms import LoginForm, PerfilForm, AlterarSenhaForm, UsuarioCreationForm
 from django.contrib.auth import get_user_model
 from .forms import FormularioImagem
-
 from django.template.loader import get_template
 from django.http import HttpResponse
+from django.urls import reverse
+from django.conf import settings
+from django.views.decorators.http import require_POST
+from django.utils.http import url_has_allowed_host_and_scheme
+
+def registrar(request):
+    if request.method == "POST":
+        form = UsuarioCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Conta criada com sucesso. Bem-vindo(a)!")
+            # redireciona para ?next=... se vier
+            next_url = request.GET.get("next") or request.POST.get("next")
+            return redirect(next_url or reverse("portal"))
+    else:
+        form = UsuarioCreationForm()
+    return render(request, "contas/criar_conta.html", {"form": form})
+
+
 def testar_template(request):
     try:
         template = get_template('contas/login.html')
@@ -18,27 +34,44 @@ def testar_template(request):
     except Exception as e:
         return HttpResponse(f"❌ Erro ao localizar o template: {e}")
 
-Usuario = get_user_model()
+User = get_user_model()
 
 def login_view(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            senha = form.cleaned_data['senha']
-            usuario = authenticate(request, email=email, password=senha)
-            if usuario is not None:
-                login(request, usuario)
-                return redirect('perfil')
-            else:
-                messages.error(request, 'E-mail ou senha inválidos.')
-    else:
-        form = LoginForm()
-    return render(request, 'contas/login.html', {'form': form})
+    if request.method == "POST":
+        ident = (request.POST.get("email") or request.POST.get("username") or "").strip().lower()
+        password = request.POST.get("password") or ""
+        remember = (request.POST.get("remember_me") == "on")
+        request.session.set_expiry(1209600 if remember else 0)  # 14 dias vs. sessão
 
+        # atalho: se digitar só o local-part, tenta resolver para 1 e-mail único
+        if ident and "@" not in ident:
+            qs = User.objects.filter(email__istartswith=ident + "@")
+            if qs.count() == 1:
+                ident = qs.first().email.lower()
+
+        # USERNAME_FIELD=email → funciona passar username=ident ou email=ident
+        user = (authenticate(request, username=ident, password=password)
+                or authenticate(request, email=ident, password=password))
+
+        if user and user.is_active:
+            login(request, user)
+            # lembrar: 14 dias; não lembrar: expira ao fechar o navegador
+            request.session.set_expiry(1209600 if remember else 0)
+            next_url = (request.POST.get("next")
+                        or request.GET.get("next")
+                        or reverse("vocacional:avaliacao_gate"))
+            return redirect(next_url)
+
+        messages.error(request, "E-mail ou senha inválidos.")
+
+    ctx = {"next": request.GET.get("next", "")}
+    return render(request, "contas/login.html", ctx)
+
+@require_POST
 def logout_view(request):
+    next_url = request.POST.get("next") or reverse("portal")
     logout(request)
-    return redirect('login')
+    return redirect(next_url)
 
 @login_required
 def perfil_view(request):

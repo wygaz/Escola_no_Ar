@@ -1,0 +1,9 @@
+# URLs — Vocacional (contrato)
+- vocacional:index
+- vocacional:avaliacao_gate
+- vocacional:avaliacao_form
+- vocacional:resultado (pk)
+- vocacional:guia_avaliacao
+- vocacional:consentimento_check
+- vocacional:consentimento_aceitar
+- vocacional:bonus

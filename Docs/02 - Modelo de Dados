@@ -1,0 +1,51 @@
+erDiagram
+  Usuario ||--o{ Acesso : "tem"
+  Produto ||--o{ Acesso : "libera"
+  Usuario ||--o{ AvaliacaoGuia : "preenche"
+  Usuario ||--o{ Avaliacao : "realiza"
+  Avaliacao ||--o{ Resposta : "possui"
+  Usuario ||--o{ PendingAccess : "pode ter (por e-mail)"
+
+  Usuario {
+    int id
+    string email
+    string first_name
+    string perfil
+  }
+  Produto {
+    int id
+    string slug
+    string nome
+  }
+  Acesso {
+    int id
+    int user_id
+    int produto_id
+    string origem
+    datetime expires_at (opcional)
+  }
+  PendingAccess {
+    int id
+    string email
+    string produto_slug
+    string origem
+    datetime processed_at
+  }
+  AvaliacaoGuia {
+    int id
+    int user_id
+    bool aceite_termos
+    string status  // rascunho | concluida
+  }
+  Avaliacao {
+    int id
+    int user_id
+    datetime criado_em
+    // resultados por dimensão
+  }
+  Resposta {
+    int id
+    int avaliacao_id
+    int pergunta_id
+    int valor
+  }

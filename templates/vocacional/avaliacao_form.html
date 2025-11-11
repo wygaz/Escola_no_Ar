@@ -1,0 +1,62 @@
+<!-- TEMPLATE: apps/vocacional/templates/vocacional/avaliacao_form.html -->
+
+{% extends "vocacional/base_vocacional.html" %}
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vocacional/css/quiz.css' %}?v=20251108">
+{% endblock %}
+
+{% block vocacional_content %}
+  <h1 class="title">Avaliação Vocacional</h1>
+
+  <div class="wrap accent-lilac">
+    <div class="card-info">
+      <strong>Como responder</strong>
+      <ul>
+        <li>Marque de 1 a 5 (1 = discordo totalmente • 5 = concordo totalmente).</li>
+        <li>Use ← / → para voltar/avançar • teclas 1–5 marcam a resposta.</li>
+        <li>Você não pode pular questões em branco.</li>
+        <li>Ao fechar a aba, suas respostas são salvas automaticamente.</li>
+      </ul>
+    </div>
+
+    <div class="progress" style="margin:.6rem 0 .4rem 0">
+      <div class="bar" id="progress-bar"></div>
+    </div>
+    <div class="progress-meta"><span>Progresso</span><span id="progress-text">0%</span></div>
+  </div>
+
+  <form id="quiz-form" method="post">
+    {% csrf_token %}
+    <div class="wrap accent-lilac">
+      <div style="margin:.75rem auto; text-align: center;">
+        <div id="quiz-container" class="card-quiz"><!-- PERGUNTAS VIA JS --></div>
+         style="display:flex;justify-content:space-between;gap:.75rem;margin-top:.75rem">
+        <div class="left">
+          <button type="button" id="prev-button" class="btn ghost">Anterior</button>
+          <button type="button" id="next-button" class="btn ghost">Próxima</button>
+        </div>
+        <div id="counter">0/0</div>
+        <div class="right">
+          <button type="submit" class="btn">Salvar</button>
+          <button type="submit" name="finalizar" value="1" class="btn ok">Finalizar</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  {% block extra_js %}
+  <script>
+    // Torna os dados globais para o quiz.js
+    window.quizData = {{ perguntas|safe }};
+    var quizData = window.quizData;
+    console.debug('quizData len =', Array.isArray(quizData) ? quizData.length : '(nao array)');
+    </script>
+    <script src="{% static 'vocacional/js/quiz.js' %}?v=20251029-2"></script>
+  {% endblock %}
+
+<script src="{% static 'vocacional/js/quiz.js' %}?v=dev"></script>
+
+{% endblock %}
+
+

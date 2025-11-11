@@ -1,0 +1,45 @@
+{% load static %}
+{# se você realmente usa os filtros in_group/has_perfil, mantenha a linha abaixo;
+   se não tiver templatetags/auth_tags.py, REMOVA-A #}
+{# {% load auth_tags %} #}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}Escola no Ar{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <header class="card" style="border-radius:0;">
+    <div class="container">
+      {% include "includes/navbar.html" %}
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="msg {{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      {% include "includes/footer.html" %}
+    </div>
+  </footer>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

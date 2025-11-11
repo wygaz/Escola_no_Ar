@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Projeto 21 – Dashboard{% endblock %}
+
+{% block content %}
+<h1>Projeto 21</h1>
+
+<div class="kpis">
+  {% if registros_hoje %}<div class="kpi"><div>🗓️ Registros</div><div class="num">{{ registros_hoje }}</div></div>{% endif %}
+  {% if estrategias_count %}<div class="kpi"><div>🎯 Estratégias</div><div class="num">{{ estrategias_count }}</div></div>{% endif %}
+</div>
+
+<div class="p21-grid">
+  <div class="card p21-card">
+    <h3>🧭 Meu Plano (Áreas → Objetivos → Estratégias)</h3>
+    <p class="desc">Monte ou revise seu plano de 21 dias com base nas 6 áreas e 8 objetivos.</p>
+    <div class="actions">
+      <a class="btn" href="/projeto21/plano/">Abrir plano</a>
+      <span class="p21-tag">Passo 1</span>
+    </div>
+  </div>
+
+  <div class="card p21-card">
+    <h3>📓 Registro Diário</h3>
+    <p class="desc">Marque o que cumpriu hoje, anote dificuldades e celebre vitórias.</p>
+    <div class="actions">
+      <a class="btn" href="/projeto21/registro/">Registrar hoje</a>
+      <a class="btn" href="/projeto21/historico/">Histórico</a>
+    </div>
+  </div>
+
+  <div class="card p21-card">
+    <h3>🏅 Pontuação & Progresso</h3>
+    <p class="desc">Acompanhe sua evolução por área, objetivos e dias.</p>
+    <div class="actions">
+      <a class="btn" href="/projeto21/pontuacao/">Ver progresso</a>
+    </div>
+  </div>
+
+  <div class="card p21-card">
+    <h3>🤝 Mentor</h3>
+    <p class="desc">Conecte-se ao seu mentor e receba feedback estruturado.</p>
+    <div class="actions">
+      <a class="btn" href="/mentorias/">Minhas mentorias</a>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi {% if adesao_semana >= 80 %}is-good{% elif adesao_semana >= 50 %}is-warn{% else %}is-bad{% endif %}">
+      <div class="label">📊 Adesão (semana)</div>
+      <div class="num">{% if adesao_semana is not None %}{{ adesao_semana }}%{% else %}—{% endif %}</div>
+    </div>
+    {# os demais KPIs podem ficar neutros, ou você usa .is-good para streak alto etc. #}
+  </div>
+</div>
+{% endblock %}

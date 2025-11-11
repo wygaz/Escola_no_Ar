@@ -1,22 +1,24 @@
 from __future__ import annotations
 
-from django.db import models, IntegrityError, transaction
-from django.utils import timezone
-from django.contrib.auth import get_user_model
+from datetime import date, timedelta
 
-from rest_framework import viewsets, mixins, status
-from rest_framework.response import Response
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import models
+from django.db.models import Q, Case, When, IntegerField
+from django.shortcuts import redirect, render
+from django.utils import timezone
+from django.views.generic import TemplateView
+
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-from .models import (
-    Area,
-    Estrategia,
-    RegistroDiario,
-    Mentoria,
-    MentorProfile,
-    AnotacaoMentor,
-)
+from .permissions import IsOwner
+from .forms import PlanoForm, RegistroForm
 from .serializers import (
     AreaSerializer,
     EstrategiaSerializer,
@@ -24,14 +26,144 @@ from .serializers import (
     MentoriaSerializer,
     AnotacaoMentorSerializer,
 )
-from .permissions import IsOwner  # já existente no seu app
+from .models import (
+    Area,
+    Estrategia,
+    RegistroDiario,
+    Mentoria,
+    MentorProfile,
+    AnotacaoMentor,
+    Plano,  # existe no seu models (patch P21)
+    # Objetivo,            # importado dentro das views quando necessário
+    # PlanoEstrategia,     # importado dentro das views quando necessário
+)
 
 User = get_user_model()
 
 
-# ---------------------------
-#   ÁREAS (somente leitura)
-# ---------------------------
+# ----------------------------------------------------------------------------
+# Helpers defensivos (usados no dashboard e em pontuação)
+# ----------------------------------------------------------------------------
+
+def _has_field(Model, name: str) -> bool:
+    try:
+        Model._meta.get_field(name)
+        return True
+    except Exception:
+        return False
+
+
+def _data_field(Model) -> str:
+    for f in ("data", "created_at", "criado_em"):
+        if _has_field(Model, f):
+            return f
+    return "id"
+
+
+def _q_concluido(Model) -> Q:
+    if _has_field(Model, "feito"):
+        return Q(feito=True)
+    if _has_field(Model, "concluido"):
+        return Q(concluido=True)
+    if _has_field(Model, "status"):
+        return Q(status__in=["CONCLUIDO", "FEITO", "OK", "DONE"])
+    return Q()
+
+
+def _user_field(Model) -> str | None:
+    for f in ("usuario", "aluno", "user", "owner"):
+        if _has_field(Model, f):
+            return f
+    return None
+
+
+# ----------------------------------------------------------------------------
+# Projeto 21 – páginas base (dashboard + stubs)
+# ----------------------------------------------------------------------------
+
+class Projeto21DashboardView(LoginRequiredMixin, TemplateView):
+    template_name = "sonho_de_ser/projeto21_dashboard.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        u = self.request.user
+
+        ctx.setdefault("registros_hoje", 0)
+        ctx.setdefault("estrategias_count", None)
+        ctx.setdefault("adesao_semana", None)
+
+        # Registro de hoje + adesão da semana
+        try:
+            user_f = _user_field(RegistroDiario)
+            if not user_f:
+                raise Exception("RegistroDiario sem FK de usuário")
+
+            data_f = _data_field(RegistroDiario)
+            q_ok = _q_concluido(RegistroDiario)
+
+            hoje = date.today()
+
+            # Hoje
+            if data_f == "data":
+                q_hoje = Q(data=hoje)
+            else:
+                q_hoje = Q(**{f"{data_f}__date": hoje})
+
+            ctx["registros_hoje"] = (
+                RegistroDiario.objects.filter(Q(**{user_f: u}) & q_hoje & q_ok).count()
+            )
+
+            # Semana
+            ini_sem = hoje - timedelta(days=hoje.weekday())
+            fim_sem = ini_sem + timedelta(days=6)
+            if data_f == "data":
+                q_sem = Q(data__gte=ini_sem, data__lte=fim_sem)
+            else:
+                q_sem = Q(**{f"{data_f}__date__gte": ini_sem, f"{data_f}__date__lte": fim_sem})
+
+            dias_ok = set()
+            for r in RegistroDiario.objects.filter(Q(**{user_f: u}) & q_sem & q_ok):
+                v = getattr(r, data_f)
+                d = v.date() if hasattr(v, "date") else v
+                dias_ok.add(d)
+
+            dias_passados = (hoje - ini_sem).days + 1
+            ctx["adesao_semana"] = round((len(dias_ok) / max(1, dias_passados)) * 100)
+        except Exception:
+            pass
+
+        try:
+            ctx["estrategias_count"] = Estrategia.objects.filter(ativo=True).count()
+        except Exception:
+            pass
+
+        return ctx
+
+
+class Projeto21PlanoView(LoginRequiredMixin, TemplateView):
+    template_name = "sonho_de_ser/projeto21_plano.html"
+
+
+class Projeto21RegistroHojeView(LoginRequiredMixin, TemplateView):
+    template_name = "sonho_de_ser/projeto21_registro.html"
+
+
+class Projeto21HistoricoView(LoginRequiredMixin, TemplateView):
+    template_name = "sonho_de_ser/projeto21_historico.html"
+
+
+class Projeto21PontuacaoView(LoginRequiredMixin, TemplateView):
+    template_name = "sonho_de_ser/projeto21_pontuacao.html"
+
+
+class Projeto21MentorView(LoginRequiredMixin, TemplateView):
+    template_name = "sonho_de_ser/projeto21_mentor.html"
+
+
+# ----------------------------------------------------------------------------
+# API – Áreas / Estratégias / Registro Diário / Mentoria / Anotações
+# ----------------------------------------------------------------------------
+
 class AreaViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = AreaSerializer
     permission_classes = [IsAuthenticated]
@@ -54,9 +186,7 @@ class AreaViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.filter(models.Q(nome__icontains=q) | models.Q(inicial__iexact=q))
         return qs
 
-# ---------------------------------
-#   ESTRATÉGIAS (somente leitura)
-# ---------------------------------
+
 class EstrategiaViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EstrategiaSerializer
     permission_classes = [IsAuthenticated]
@@ -65,19 +195,17 @@ class EstrategiaViewSet(viewsets.ReadOnlyModelViewSet):
         qs = (
             Estrategia.objects.filter(ativo=True)
             .select_related("area")
-            .order_by("area__inicial", "codigo")   # ou "titulo" se não houver "codigo"
+            .order_by("area__inicial", "codigo")  # ou "titulo" se não houver "codigo"
         )
 
-        # filtros aceitando nome ou inicial de área
-        area = self.request.query_params.get("area")         # nome (ex.: "Família")
-        area_inicial = self.request.query_params.get("inicial")  # ex.: "F"
+        area = self.request.query_params.get("area")  # nome da área
+        area_inicial = self.request.query_params.get("inicial")  # "F", "I"...
         q = self.request.query_params.get("q")
 
         if area_inicial:
             qs = qs.filter(area__inicial__iexact=area_inicial)
         if area:
             qs = qs.filter(area__nome__iexact=area)
-
         if q:
             qs = qs.filter(
                 models.Q(titulo__icontains=q)
@@ -87,10 +215,6 @@ class EstrategiaViewSet(viewsets.ReadOnlyModelViewSet):
         return qs
 
 
-
-# -------------------------------------------------------
-#   REGISTRO DIÁRIO (lista do usuário + criação/atualiza)
-# -------------------------------------------------------
 class RegistroDiarioViewSet(
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
@@ -101,65 +225,51 @@ class RegistroDiarioViewSet(
     permission_classes = [IsAuthenticated, IsOwner]
 
     def get_queryset(self):
-        """
-        Apenas os registros do próprio usuário.
-        Filtros: data, estrategia_codigo, concluido
-        """
         user = self.request.user
         qs = (
             RegistroDiario.objects.filter(usuario=user)
             .select_related("estrategia", "estrategia__area")
             .order_by("-data", "estrategia__codigo")
         )
-
-        data = self.request.query_params.get("data")  # YYYY-MM-DD
+        data_param = self.request.query_params.get("data")  # YYYY-MM-DD
         estrategia_codigo = self.request.query_params.get("estrategia")
         concluido = self.request.query_params.get("concluido")
-
-        if data:
-            qs = qs.filter(data=data)
+        if data_param:
+            qs = qs.filter(data=data_param)
         if estrategia_codigo:
             qs = qs.filter(estrategia__codigo__iexact=estrategia_codigo)
-        if concluido in {"true", "false", "1", "0"}:
+        if concluido in {"true", "false", "1", "0"} and _has_field(RegistroDiario, "concluido"):
             qs = qs.filter(concluido=concluido.lower() in {"true", "1"})
         return qs
 
     def perform_create(self, serializer):
-        """
-        Garante o usuário logado e respeita a unicidade (usuario, estrategia, data).
-        Se data não vier, usa data local de hoje.
-        """
         user = self.request.user
-        data = serializer.validated_data.get("data") or timezone.localdate()
-        serializer.save(usuario=user, data=data)
+        data_val = serializer.validated_data.get("data") or timezone.localdate()
+        serializer.save(usuario=user, data=data_val)
 
     @action(detail=True, methods=["post"])
     def concluir(self, request, pk=None):
         reg = self.get_object()
-        reg.concluido = True
-        reg.save(update_fields=["concluido", "atualizado_em"])
+        if _has_field(RegistroDiario, "concluido"):
+            reg.concluido = True
+            reg.save(update_fields=["concluido"])  # + updated_at se existir
         return Response({"detail": "Registro concluído."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
     def reabrir(self, request, pk=None):
         reg = self.get_object()
-        reg.concluido = False
-        reg.save(update_fields=["concluido", "atualizado_em"])
+        if _has_field(RegistroDiario, "concluido"):
+            reg.concluido = False
+            reg.save(update_fields=["concluido"])  # + updated_at se existir
         return Response({"detail": "Registro reaberto."}, status=status.HTTP_200_OK)
 
 
-# -------------------------------------------------------
-#   MENTOR PROFILE (acesso do próprio mentor)
-# -------------------------------------------------------
 class MentorProfileViewSet(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
-    """
-    Staff vê todos; usuário comum vê apenas o próprio perfil (se existir).
-    """
     queryset = MentorProfile.objects.select_related("usuario").all()
     permission_classes = [IsAuthenticated]
 
@@ -179,14 +289,7 @@ class MentorProfileViewSet(
         return Response(ser.data)
 
 
-# ---------------------------------------------
-#   MENTORIA (vínculo mentor → aluno)
-# ---------------------------------------------
 class MentoriaViewSet(viewsets.ModelViewSet):
-    """
-    O mentor (dono do MentorProfile) gerencia suas mentorias.
-    Staff pode tudo; aluno enxerga apenas onde é aluno.
-    """
     serializer_class = MentoriaSerializer
     permission_classes = [IsAuthenticated]
 
@@ -198,37 +301,25 @@ class MentoriaViewSet(viewsets.ModelViewSet):
         if status_param:
             qs = qs.filter(status=status_param)
 
-        # Staff tem visão completa
         if user.is_staff:
             return qs.order_by("-inicio")
 
-        # Se for mentor, vê as que pertencem ao seu perfil
         try:
-            mentor_profile = user.mentor_profile  # reverse OneToOne
+            mentor_profile = user.mentor_profile
         except MentorProfile.DoesNotExist:
             mentor_profile = None
 
         if mentor_profile:
-            return qs.filter(
-                models.Q(mentor=mentor_profile) | models.Q(aluno=user)
-            ).order_by("-inicio")
+            return qs.filter(models.Q(mentor=mentor_profile) | models.Q(aluno=user)).order_by("-inicio")
 
-        # Não-mentor: vê apenas onde é aluno
         return qs.filter(aluno=user).order_by("-inicio")
 
     def perform_create(self, serializer):
-        """
-        Ao criar: amarra automaticamente o mentor = request.user.mentor_profile
-        """
         user = self.request.user
         try:
             mentor_profile = user.mentor_profile
         except MentorProfile.DoesNotExist:
-            return Response(
-                {"detail": "Usuário não possui MentorProfile."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
+            return Response({"detail": "Usuário não possui MentorProfile."}, status=status.HTTP_400_BAD_REQUEST)
         serializer.save(mentor=mentor_profile)
 
     @action(detail=True, methods=["post"])
@@ -236,14 +327,14 @@ class MentoriaViewSet(viewsets.ModelViewSet):
         mentoria = self.get_object()
         mentoria.status = "encerrada"
         mentoria.fim = timezone.localdate()
-        mentoria.save(update_fields=["status", "fim", "atualizado_em"])
+        mentoria.save(update_fields=["status", "fim"])  # + updated_at se existir
         return Response({"detail": "Mentoria encerrada."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
     def pausar(self, request, pk=None):
         mentoria = self.get_object()
         mentoria.status = "pausada"
-        mentoria.save(update_fields=["status", "atualizado_em"])
+        mentoria.save(update_fields=["status"])  # + updated_at se existir
         return Response({"detail": "Mentoria pausada."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
@@ -251,23 +342,15 @@ class MentoriaViewSet(viewsets.ModelViewSet):
         mentoria = self.get_object()
         mentoria.status = "ativa"
         mentoria.fim = None
-        mentoria.save(update_fields=["status", "fim", "atualizado_em"])
+        mentoria.save(update_fields=["status", "fim"])  # + updated_at se existir
         return Response({"detail": "Mentoria reativada."}, status=status.HTTP_200_OK)
 
 
-# -------------------------------------------------------
-#   ANOTAÇÕES DO MENTOR (autor = mentor logado)
-# -------------------------------------------------------
 class AnotacaoMentorViewSet(viewsets.ModelViewSet):
     serializer_class = AnotacaoMentorSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        """
-        Staff vê todas. Mentor vê apenas as próprias (autor = seu MentorProfile).
-        Aluno vê apenas as 'compartilhadas' nas mentorias em que é aluno.
-        Filtro opcional: ?mentoria=<id>
-        """
         user = self.request.user
         qs = (
             AnotacaoMentor.objects.select_related(
@@ -284,7 +367,6 @@ class AnotacaoMentorViewSet(viewsets.ModelViewSet):
         if user.is_staff:
             return qs
 
-        # se mentor
         try:
             mentor_profile = user.mentor_profile
         except MentorProfile.DoesNotExist:
@@ -293,19 +375,143 @@ class AnotacaoMentorViewSet(viewsets.ModelViewSet):
         if mentor_profile:
             return qs.filter(autor=mentor_profile)
 
-        # se aluno
         return qs.filter(mentoria__aluno=user, visibilidade="compartilhada")
 
     def perform_create(self, serializer):
-        """
-        Autor = mentor logado; valida existência de MentorProfile.
-        """
         user = self.request.user
         try:
             mentor_profile = user.mentor_profile
         except MentorProfile.DoesNotExist:
-            return Response(
-                {"detail": "Somente mentores podem criar anotações."},
-                status=status.HTTP_403_FORBIDDEN,
-            )
+            return Response({"detail": "Somente mentores podem criar anotações."}, status=status.HTTP_403_FORBIDDEN)
         serializer.save(autor=mentor_profile)
+
+
+# ----------------------------------------------------------------------------
+# Projeto 21 – views funcionais (operacionais)
+# ----------------------------------------------------------------------------
+from .forms import PlanoForm
+from .models import Estrategia, Plano
+
+@login_required
+def plano_view(request):
+    plano, _ = Plano.objects.get_or_create(usuario=request.user, ativo=True)
+
+    if request.method == "POST":
+        form = PlanoForm(request.POST, usuario=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Plano atualizado!")
+            return redirect("/projeto21/")
+    else:
+        form = PlanoForm(usuario=request.user)
+
+    # Agrupa estratégias por área
+    qs = (Estrategia.objects.filter(ativo=True)
+          .select_related("area")
+          .order_by("area__inicial", "nivel", "ordem_nivel"))
+    grupos = {}
+    for e in qs:
+        grupos.setdefault(e.area, []).append(e)
+
+    return render(
+        request,
+        "sonho_de_ser/projeto21_plano.html",
+        {
+            "form": form,
+            "grupos": grupos,                    # {Area: [Estrategia, ...]}
+            "sel": set(form.initial.get("estrategias", [])),  # pks já no plano
+        },
+    )
+
+@login_required
+def registro_view(request):
+    """Registro do dia com base nas estratégias do plano atual."""
+    plano = Plano.objects.filter(usuario=request.user, ativo=True).first()
+    if not plano:
+        messages.info(request, "Crie seu plano antes de registrar o dia.")
+        return redirect("/projeto21/plano/")
+
+    today = date.today()
+
+    if request.method == "POST":
+        form = RegistroForm(plano, request.POST)
+        if form.is_valid():
+            reg = form.save(today)
+            messages.success(request, f"Registro de {reg.data:%d/%m} salvo.")
+            return redirect("/projeto21/registro/")
+    else:
+        form = RegistroForm(plano)
+
+    # Estratégias agrupadas por área
+    grupos = {}
+    try:
+        from .models import PlanoEstrategia
+        pes = (
+            PlanoEstrategia.objects.filter(plano_objetivo__plano=plano, ativo=True)
+            .select_related("plano_objetivo__objetivo__area", "estrategia")
+            .order_by(
+                "plano_objetivo__objetivo__area__ordem",
+                "plano_objetivo__objetivo__ordem",
+                "estrategia__ordem",
+            )
+        )
+        for pe in pes:
+            area = pe.plano_objetivo.objetivo.area
+            grupos.setdefault(area, []).append(pe)
+    except Exception:
+        pass
+
+    return render(
+        request, "sonho_de_ser/projeto21_registro.html", {"form": form, "grupos": grupos, "hoje": today}
+    )
+
+
+@login_required
+def historico_view(request):
+    """Histórico simples: últimos 30 registros do usuário."""
+    plano = Plano.objects.filter(usuario=request.user, ativo=True).first()
+    if not plano:
+        messages.info(request, "Você ainda não tem um plano ativo.")
+        return redirect("/projeto21/plano/")
+
+    regs = (
+        RegistroDiario.objects.filter(usuario=request.user)
+        .order_by("-data", "-id")[:30]
+    )
+    return render(request, "sonho_de_ser/projeto21_historico.html", {"registros": regs})
+
+
+@login_required
+def pontuacao_view(request):
+    """Adesão semanal com base no RegistroDiario do usuário."""
+    plano = Plano.objects.filter(usuario=request.user, ativo=True).first()
+    if not plano:
+        messages.info(request, "Você ainda não tem um plano ativo.")
+        return redirect("/projeto21/plano/")
+
+    # Cálculo leve (sem depender de services.py): percentual por dia e geral
+    hoje = date.today()
+    ini = hoje - timedelta(days=hoje.weekday())
+    serie = []
+
+    # total possível do dia = número de estratégias do plano
+    try:
+        from .models import PlanoItem
+        total_dia = PlanoItem.objects.filter(plano=plano, ativo=True).count()
+    except Exception:
+        total_dia = 0
+
+    for i in range(7):
+        d = ini + timedelta(days=i)
+        feitos = RegistroDiario.objects.filter(usuario=request.user, data=d).count()
+        perc = int((feitos / total_dia) * 100) if total_dia else 0
+        serie.append({"data": d, "percentual": perc})
+
+    possiveis = total_dia * len(serie)
+    feitos_total = sum(RegistroDiario.objects.filter(usuario=request.user, data__range=(ini, ini + timedelta(days=6))).values_list("id", flat=True).count() for _ in [0])
+    # mais barato:
+    feitos_total = sum(p['percentual'] for p in serie) * (total_dia / 100) if total_dia else 0
+    geral = int((feitos_total / possiveis) * 100) if possiveis else 0
+
+    info = {"serie": serie, "geral": geral}
+    return render(request, "sonho_de_ser/projeto21_pontuacao.html", {"info": info})

@@ -1,0 +1,22 @@
+﻿Rota/Endpoint,Recurso,Perfis permitidos,Tipo de acesso,Status,App/Fonte,Justificativa,Observações
+/portal/,Dashboard geral,"ADMIN, PROF, MENTOR, ALUNO, USER (autenticados)",GET,Ativo,core (templates globais),Visão inicial por papéis com cards coloridos; navegação do portal.,"Exibe registros_hoje, estrategias_count, adesao_semana (P21)."
+/contas/login/,Login,Público (não autenticado),"GET, POST",Ativo,apps.contas,Entrada padrão de autenticação.,
+/contas/logout/,Logout,Autenticados,POST/GET (conforme implementação),Ativo,apps.contas,Encerrar sessão.,
+/projeto21/,Hub P21,"ADMIN, PROF, MENTOR, ALUNO, USER (autenticados)",GET,Ativo,apps.sonho_de_ser,Hub do módulo com indicadores.,Templates em templates/sonho_de_ser/
+/projeto21/mentor/,Painel do Mentor (P21),"MENTOR, PROF, ADMIN",GET,Stub OK,apps.sonho_de_ser,Acompanhamento/mentorias; acesso restrito a quem acompanha alunos.,
+/projeto21/plano/,Plano do aluno (P21),"ALUNO, MENTOR, PROF, ADMIN",GET,Stub OK,apps.sonho_de_ser,Planejamento e metas do P21.,
+/projeto21/registro/,Registro diário (P21),"ALUNO, MENTOR, PROF, ADMIN","GET, POST",Stub OK,apps.sonho_de_ser,Lançamentos de evolução/participação.,
+/projeto21/historico/,Histórico (P21),"ALUNO (próprio), MENTOR/PROF/ADMIN",GET,Stub OK,apps.sonho_de_ser,Consulta de evoluções passadas.,Alunos veem apenas seus dados.
+/projeto21/pontuacao/,Pontuação (P21),"ALUNO (próprio), MENTOR/PROF/ADMIN",GET,Stub OK,apps.sonho_de_ser,Gamificação e soma de pontos.,
+/relatorios/,Relatórios,"PROF, MENTOR, ADMIN",GET,Stub,apps.core (ou relatorios),Relatórios gerenciais/educacionais.,
+/cursos/,Catálogo de cursos,"ADMIN, PROF, MENTOR, ALUNO, USER (autenticados)",GET,Stub,apps.cursos,Navegação/gestão de cursos.,
+/turmas/,Turmas,"PROF, ADMIN (gestão); ALUNO (consulta própria)",GET,Stub,apps.cursos,Organização por turmas.,
+/avaliacoes/,Avaliações (acadêmicas),"PROF, ADMIN (gestão); ALUNO (execução/consulta)","GET, POST",Stub,apps.atividades,Avaliações e notas.,
+/mentorias/,Mentorias (acadêmicas),"MENTOR, PROF, ADMIN; ALUNO (participante)","GET, POST",Stub,apps.comunicacao ou apps.sonho_de_ser,Acompanhamento e interações.,
+/meus-cursos/,Cursos do aluno,ALUNO,GET,Stub,apps.cursos,Área do aluno para seus cursos.,
+/atividades/,Atividades do aluno,ALUNO,"GET, POST",Stub,apps.atividades,Execução/entrega de atividades.,
+/notas/,Notas do aluno,"ALUNO (próprio), PROF (turmas), ADMIN",GET,Stub,apps.atividades,Consulta de desempenho.,
+/vocacional/,Hub Vocacional,"ADMIN, PROF, MENTOR, ALUNO, USER (autenticados)",GET,Ativo,apps.vocacional,Entrada do módulo; inicia/continua avaliação.,
+/vocacional/avaliacao/,Formulário de avaliação,"ALUNO, USER (autenticado), MENTOR/PROF/ADMIN (apenas se realizando própria avaliação)","GET, POST",Ativo,apps.vocacional,Coleta respostas por dimensões (Likert/Single).,Avaliação no estado 'rascunho' até finalizar.
+/vocacional/resultado/<id>/,Resultado da avaliação,Proprietário (ALUNO/USER) e MENTOR/PROF/ADMIN (se permitido),GET,Ativo,apps.vocacional,Relatório com percentuais e níveis por dimensão.,Restrições de privacidade: aluno vê apenas o próprio.
+/vocacional/mentor/,Painel do Mentor (Vocacional),"MENTOR, PROF, ADMIN",GET,Ativo,apps.vocacional,Listagem e acompanhamento das avaliações; restrito a papéis de acompanhamento.,Decorador require_mentor aplica o gate de perfil.

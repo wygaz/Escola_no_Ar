@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{# permite injetar CSS/JS de páginas do Vocacional e já carrega o CSS do app #}
+{% block extra_head %}{{ block.super }}
+<link rel="stylesheet" href="{% static 'vocacional/css/vocacional.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="vocacional">
+    {% block vocacional_content %}{% endblock %}
+  </div>
+{% endblock %}

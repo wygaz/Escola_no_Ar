@@ -1,0 +1,43 @@
+{% extends "vocacional/base_vocacional.html" %}
+{% block vocacional_content %}
+
+<h1 class="title">Resultado da Avaliação</h1>
+
+<div class="wrap">
+  <div class="card-info" style="margin-bottom:1rem">
+    <p>Parabéns! Sua avaliação foi concluída com sucesso.</p>
+    <p style="opacity:.8"><small>Código #{{ avaliacao.pk }} • Iniciada em {{ avaliacao.iniciado_em|date:"d/m/Y H:i" }}</small></p>
+  </div>
+
+  <!-- LISTA / GRADE DE RESULTADOS -->
+  <div class="resultados">
+    {% if resultados %}
+      {% for r in resultados %}
+        <div class="card-quiz" style="margin-bottom:1rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+            <strong>{{ r.dimensao.nome|default:r.dimensao_nome }}</strong>
+            <span>{{ r.percentual|floatformat:2 }}%</span>
+          </div>
+          <div class="bar" style="height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden">
+            <div class="fill" style="height:10px;width:{{ r.percentual|floatformat:0 }}%;background:#3b82f6"></div>
+          </div>
+          <div style="margin-top:.5rem;opacity:.9">Nível: <strong>{{ r.nivel }}</strong></div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="card-quiz"><em>Nenhum resultado calculado.</em></div>
+    {% endif %}
+  </div>
+
+  <!-- AÇÕES FINAIS -->
+  <div class="quiz-buttons" style="gap:.5rem; margin-top:1rem; flex-wrap:wrap">
+    <a class="btn-principal" href="{% url 'vocacional:avaliacao_form' %}">Repetir teste</a>
+    <a class="btn-secundario" href="{% url 'vocacional:index' %}">Voltar ao início</a>
+    {% if wh_text %}
+      <a class="btn-secundario" href="https://wa.me/?text={{ wh_text|urlencode }}" target="_blank" rel="noopener">Compartilhar no WhatsApp</a>
+    {% endif %}
+    <button type="button" class="btn-secundario" onclick="window.print()">Salvar em PDF</button>
+  </div>
+</div>
+
+{% endblock %}

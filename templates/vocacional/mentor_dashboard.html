@@ -1,0 +1,22 @@
+{% extends "vocacional/base_vocacional.html" %}
+{% load consent_tags %}
+{% block vocacional_content %}
+<h1>Mentor · Painel</h1>
+<table class="table">
+  <thead><tr><th>ID</th><th>Aluno</th><th>Status</th><th>Início</th><th>Fim</th><th>Ações</th></tr></thead>
+  <tbody>
+    {% for a in avaliacoes %}
+      <tr>
+        <td>#{{ a.pk }}</td>
+        <td>{{ a.usuario.first_name }} {{ a.usuario.last_name }} ({{ a.usuario.email }})</td>
+        <td>{{ a.get_status_display }}</td>
+        <td>{{ a.iniciado_em|date:"d/m/Y H:i" }}</td>
+        <td>{% if a.finalizado_em %}{{ a.finalizado_em|date:"d/m/Y H:i" }}{% else %}—{% endif %}</td>
+        <td>{% if a.status == 'concluida' %}<a class="btn btn-small" href="{% url 'vocacional:resultado' a.pk %}">Ver</a>{% endif %}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6">Sem avaliações.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
