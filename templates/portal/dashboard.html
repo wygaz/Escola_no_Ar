@@ -46,11 +46,16 @@
         <div class="card card--acc card--mentor">
           <div>🤝</div>
           <h3>Mentorias</h3>
-          <p class="desc">Acompanhe Projeto 21 e Vocacional dos seus mentorandos.</p>
+          <p class="desc">
+            Acompanhe o <strong>Projeto 21</strong> dos seus mentorandos:
+            planos, estratégias e evolução dos 21 dias.
+          </p>
           <div class="actions">
             <a class="btn" href="/mentorias/">Mentorias</a>
             <a class="btn" href="/projeto21/mentor/">Projeto 21 (Mentor)</a>
+            {# Futuro: quando o Vocacional estiver pronto, reativar:
             <a class="btn" href="/vocacional/mentor/">Vocacional (Mentor)</a>
+            #}
           </div>
         </div>
       {% endif %}
@@ -69,15 +74,35 @@
         </div>
       {% endif %}
 
-      {# USUÁRIO (sem matrícula) #}
+      {# USUÁRIO (sem matrícula) – FOCO TOTAL NO PROJETO 21 #}
       {% if user|has_perfil:"USER" or user|in_group:"Usuarios" or user.is_superuser %}
         <div class="card card--acc card--usuario">
           <div>🌱</div>
-          <h3>Desenvolvimento Pessoal</h3>
-          <p class="desc">Acesse o Projeto 21 ou realize o teste vocacional.</p>
+          <h3>Projeto 21 – uma aventura com propósito</h3>
+          <p class="desc">
+            Bem-vindo(a) à sua área de <strong>Desenvolvimento Pessoal</strong>.
+            Aqui você entra no <strong>Projeto 21</strong>, escolhe suas estratégias
+            e imprime a papelada para viver 21 dias de mudanças reais.
+          </p>
+
+          <div class="portal-next-steps">
+            <strong>Por onde começar?</strong>
+            <ul>
+              <li>
+                Clique em <strong>Entrar no Projeto 21</strong> para ir à página principal.
+              </li>
+              <li>
+                Lá você poderá <strong>baixar os kits</strong> e
+                <strong>montar seu plano de estratégias</strong>.
+              </li>
+              <li>
+                Depois é só <strong>imprimir a papelada</strong> e acompanhar os 21 dias.
+              </li>
+            </ul>
+          </div>
+
           <div class="actions">
-            <a class="btn" href="/projeto21/">Projeto 21</a>
-            <a class="btn" href="/vocacional/">Vocacional</a>
+            <a class="btn" href="/projeto21/">Entrar no Projeto 21</a>
           </div>
         </div>
       {% endif %}

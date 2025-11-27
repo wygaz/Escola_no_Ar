@@ -1,79 +1,60 @@
 {# templates/vocacional/index.html #}
 {% extends "vocacional/base_vocacional.html" %}
 
-{% block vocacional_content %}
-<style>
-  /* estilos leves só desta página */
-  .status { margin: 1rem 0 1.5rem }
-  .badge { display:inline-block; padding:.35rem .7rem; border-radius:999px; font-size:.85rem; font-weight:700; letter-spacing:.02em }
-  .badge-green { background:#064e3b; color:#bfffd7 }
-  .badge-amber { background:#78350f; color:#ffe1a6 }
-  .badge-gray { background:#1f2937; color:#cbd5e1 }
-  .lead { margin:.5rem 0 1rem; opacity:.9 }
-  .actions-row { display:flex; flex-wrap:wrap; gap:.5rem; align-items:center }
-  .pill { display:inline-flex; gap:.5rem; align-items:center; padding:.5rem .75rem; border:1px solid rgba(255,255,255,.12); border-radius:12px; font-size:.9rem; opacity:.9 }
-  .muted { opacity:.7 }
-  .btn.ghost { background:transparent; border:1px solid var(--border, #3b4452) }
-</style>
+{% block page_title %}Portal Vocacional{% endblock %}
+{% block header_title %}Avaliação Vocacional{% endblock %}
+{% block header_subtitle %}
+  <p class="vocacional-subtitle">
+    Faça a Avaliação Vocacional e veja seus resultados por dimensão.
+  </p>
+{% endblock %}
 
-<h1 class="title">Portal Vocacional</h1>
+{% block page_content %}
 
-<div class="wrap">
+{% if request.user.is_authenticated %}
+  <div class="vocacional-main-card">
 
-  <div class="card-info" style="margin-bottom:1rem">
-    <p>Faça a Avaliação Vocacional e veja seus resultados por dimensão.</p>
-  </div>
-
-  {% if request.user.is_authenticated %}
-
-    {# Espera receber do view: concluidas, disponiveis, ultima #}
     <div class="status">
-      {% if disponiveis == 2 %}
-        <span class="badge badge-green">Status: 2 avaliações disponíveis</span>
-        <p class="lead">Você tem <strong>2</strong> tentativas para realizar seu teste.</p>
+      {# Espera receber do view: concluidas, disponiveis, ultima #}
+
+      {% if disponiveis > 1 %}
+        <span class="badge badge-green">
+          Status: {{ disponiveis }} avaliações disponíveis
+        </span>
+        <p class="lead">
+          Você tem <strong>{{ disponiveis }}</strong> tentativas para realizar seu teste.
+        </p>
         <div class="actions-row">
-          <a class="btn" href="{% url 'vocacional:avaliacao_gate' %}">Começar Agora</a>
-          <span class="pill">Concluídas: <strong>{{ concluidas|default:0 }}</strong> • Disponíveis: <strong>{{ disponiveis }}</strong></span>
+          <a class="btn" href="{% url 'vocacional:avaliacao_gate' %}">Começar agora</a>
+          <span class="pill">
+            Concluídas: <strong>{{ concluidas|default:0 }}</strong> •
+            Disponíveis: <strong>{{ disponiveis }}</strong>
+          </span>
         </div>
 
       {% elif disponiveis == 1 %}
         <span class="badge badge-amber">Status: 1 avaliação disponível</span>
-        <p class="lead">Você ainda tem <strong>1</strong> tentativa para concluir.</p>
+        <p class="lead">
+          Você ainda tem <strong>1</strong> tentativa para concluir.
+        </p>
+
         <div class="actions-row">
           <a class="btn" href="{% url 'vocacional:avaliacao_gate' %}">Continuar</a>
-          <span class="pill">Concluídas: <strong>{{ concluidas|default:0 }}</strong> • Disponíveis: <strong>{{ disponiveis }}</strong></span>
-        </div>
 
-      {% else %}
-        <span class="badge badge-gray">Status: limite atingido (0/2)</span>
-        <p class="lead">Suas <strong>2</strong> avaliações já foram utilizadas.</p>
-        <div class="actions-row">
           {% if ultima %}
-            <a class="btn" href="{% url 'vocacional:resultado' pk=ultima.pk %}">Ver último resultado</a>
+            <a class="btn ghost" href="{% url 'vocacional:resultado' pk=ultima.pk %}">
+              Ver meu último resultado
+            </a>
           {% endif %}
-          <a class="btn ghost" href="{% url 'vocacional:bonus' %}">Conheça os próximos passos</a>
-          <span class="pill">Concluídas: <strong>{{ concluidas|default:0 }}</strong> • Disponíveis: <strong>{{ disponiveis }}</strong></span>
+
+          <span class="pill">
+            Concluídas: <strong>{{ concluidas|default:0 }}</strong> •
+            Disponíveis: <strong>{{ disponiveis }}</strong>
+          </span>
         </div>
       {% endif %}
     </div>
+  </div>
+{% endif %}
 
-    <div class="actions-row" style="margin-top:1rem">
-      <form method="post" action="{% url 'contas:logout' %}" class="inline">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{% url 'vocacional:index' %}">
-        <button type="submit" class="btn ghost">Sair</button>
-      </form>
-      <span class="muted">Não é você? Saia e entre com outra conta.</span>
-    </div>
-
-  {% else %}
-
-    <div class="actions-row">
-      <a class="btn" href="{% url 'contas:login' %}?next={% url 'vocacional:avaliacao_gate' %}">Entrar</a>
-      <a class="btn ghost" href="{% url 'contas:registrar' %}?next={% url 'vocacional:avaliacao_gate' %}">Criar conta</a>
-    </div>
-    <p class="muted" style="margin-top:.75rem">Após entrar, você será direcionado para iniciar a avaliação.</p>
-
-  {% endif %}
-</div>
 {% endblock %}

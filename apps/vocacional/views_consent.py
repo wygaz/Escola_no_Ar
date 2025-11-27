@@ -4,7 +4,6 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.utils import timezone
-
 from .forms import ConsentimentoForm          # defina no forms.py (nome, email disabled)
 from .models_consent import Consentimento     # seu model real
 from .gating import next_url
@@ -52,4 +51,8 @@ def consentimento_revogar(request):
 @login_required
 def privacidade(request):
     c = Consentimento.objects.filter(user=request.user).order_by("-aceito_em").first()
-    return render(request, "vocacional/privacidade.html", {"consentimento": c})
+    # antes: "vocacional/privacidade.html"
+    return render(request, "privacidade.html", {"consentimento": c})
+
+def termos(request):
+    return render(request, "vocacional/termos.html")

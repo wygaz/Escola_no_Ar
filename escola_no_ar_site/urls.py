@@ -12,6 +12,7 @@ urlpatterns = [
     # Foco no Vocacional
     path("vocacional/", include(("apps.vocacional.urls", "vocacional"), namespace="vocacional")),
     path("contas/", include(("apps.contas.urls", "contas"), namespace="contas")),
+    path("projeto21/", include(("apps.projeto21.urls", "projeto21"), namespace="projeto21")),
 
     # Webhooks (Hotmart)
     path("webhooks/", include("apps.core.urls")),

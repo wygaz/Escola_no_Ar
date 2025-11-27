@@ -1,42 +1,76 @@
 {% extends "contas/base.html" %}
+
 {% block content %}
-<h2>Criar conta</h2>
+
+<h1>Criar conta</h1>
 
 <form method="post">
   {% csrf_token %}
   {{ form.non_field_errors }}
-  <div>
+
+  <div class="field">
     <label for="{{ form.first_name.id_for_label }}">Nome</label>
     {{ form.first_name }}
-  </div>
-  <div>
-    <label for="{{ form.last_name.id_for_label }}">Sobrenome</label>
-    {{ form.last_name }}
-  </div>
-  <div>
-    <label for="{{ form.email.id_for_label }}">E-mail</label>
-    {{ form.email }}
-  </div>
-  <div>
-    <label for="{{ form.password1.id_for_label }}">Senha</label>
-    {{ form.password1 }}
-  </div>
-  <div>
-    <label for="{{ form.password2.id_for_label }}">Confirmar senha</label>
-    {{ form.password2 }}
+    {{ form.first_name.errors }}
   </div>
 
+  <div class="field">
+    <label for="{{ form.last_name.id_for_label }}">Sobrenome</label>
+    {{ form.last_name }}
+    {{ form.last_name.errors }}
+  </div>
+
+  <div class="field">
+    <label for="{{ form.email.id_for_label }}">E-mail</label>
+    {{ form.email }}
+    {{ form.email.errors }}
+  </div>
+
+  <div class="field">
+    <label for="{{ form.password1.id_for_label }}">Senha</label>
+    {{ form.password1 }}
+    {{ form.password1.errors }}
+  </div>
+
+  <div class="field">
+    <label for="{{ form.password2.id_for_label }}">Confirmar senha</label>
+    {{ form.password2 }}
+    {{ form.password2.errors }}
+  </div>
+
+  {# preserva ?next= se veio da landing com redirecionamento #}
   {% if request.GET.next %}
     <input type="hidden" name="next" value="{{ request.GET.next }}">
   {% endif %}
 
+  <label style="display:inline-flex; gap:.5rem; align-items:center; margin:.5rem 0;">
+    <input type="checkbox" id="toggle-senha">
+    Mostrar senha
+  </label>
+
   <button type="submit">Criar conta</button>
 </form>
 
-<p>Já tem conta? <a href="{% url 'contas:login' %}">Já tenho conta</a></p>
+<p>Já tem conta?
+  <a href="{% url 'contas:login' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">
+    Já tenho conta
+  </a>
+</p>
 
-{# linha ~36 #}
-<a href="{% url 'contas:login' %}">Já tenho conta</a>
+<script>
+  (function () {
+    const pwd1 = document.getElementById("{{ form.password1.id_for_label }}");
+    const pwd2 = document.getElementById("{{ form.password2.id_for_label }}");
+    const toggle = document.getElementById("toggle-senha");
 
+    if (!pwd1 || !toggle) return;
+
+    toggle.addEventListener("change", function () {
+      const type = this.checked ? "text" : "password";
+      pwd1.type = type;
+      if (pwd2) pwd2.type = type;
+    });
+  })();
+</script>
 
 {% endblock %}

@@ -13,13 +13,13 @@
   {% block extra_head %}{% endblock %}
 </head>
 <body>
-
-  <header class="card" style="border-radius:0;">
-    <div class="container">
-      {% include "includes/navbar.html" %}
-    </div>
-  </header>
-
+  {% if not hide_global_header %}
+    <header class="card" style="border-radius:0;">
+      <div class="container">
+        {% include "includes/navbar.html" %}
+      </div>
+    </header>
+  {% endif %}
   <main>
     <div class="container">
       {% if messages %}
@@ -34,11 +34,14 @@
     </div>
   </main>
 
-  <footer>
-    <div class="container">
-      {% include "includes/footer.html" %}
-    </div>
+  {% block footer %}
+  <footer class="site-footer">
+    © Escola no Ar ·
+    <a href="{% url 'sobre' %}">Sobre</a> ·
+    <a href="{% url 'contato' %}">Contato</a> ·
+    <a href="{% url 'vocacional:privacidade' %}">Política de Privacidade</a>
   </footer>
+  {% endblock %}
 
   {% block extra_scripts %}{% endblock %}
 </body>

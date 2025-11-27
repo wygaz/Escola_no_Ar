@@ -1,26 +1,31 @@
-'{% extends "contas/base.html" %}  {# ou "core/base.html" / "base.html" do site #}
+{% extends "contas/base.html" %}  {# ou "core/base.html" / "base.html" do site #}
 
 {% block content %}
+<style>
+  /* Esconde o primeiro <header> da página só nesta tela */
+  body > header {
+    display: none;
+  }
+</style>
+
 <h1>Login</h1>
 
 <form method="post">
   {% csrf_token %}
-  <input type="hidden" name="next" value="{{ next|default:request.GET.next }}">
 
-  <label for="id_username">E-mail</label>
-  {{ form.username }}   {# no seu USERNAME_FIELD=email, este é o campo #}
-
-  <label for="id_password">Senha</label>
-  {{ form.password }}
-
-  {# preserva ?next= para redirecionar de volta #}
-  {% if request.GET.next %}
-    <input type="hidden" name="next" value="{{ request.GET.next }}">
+  {# Se o LoginView recebeu ?next=..., ele já passa "next" pro template #}
+  {% if next %}
+    <input type="hidden" name="next" value="{{ next }}">
   {% endif %}
 
-  
+  <label for="{{ form.username.id_for_label }}">E-mail</label>
+  {{ form.username }}   {# USERNAME_FIELD=email #}
+
+  <label for="{{ form.password.id_for_label }}">Senha</label>
+  {{ form.password }}
+
   <label style="display:inline-flex; gap:.5rem; align-items:center; margin:.5rem 0;">
-    <input type="checkbox" name="remember_me" {% if request.POST.remember_me %}checked{% endif %}>
+    <input type="checkbox" name="remember_me">
     Manter-me conectado
   </label>
 
@@ -28,11 +33,12 @@
 </form>
 
 <p><a href="{% url 'contas:password_reset' %}">Esqueceu a senha?</a></p>
-<p>Não tem conta? 
-  <a href="{% url 'contas:registrar' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">
+
+<p>Não tem conta?
+  <a href="{% url 'contas:registrar' %}{% if next %}?next={{ next|urlencode }}{% endif %}">
     Criar conta
   </a>
 </p>
+
 <p><a href="{% url 'portal' %}">Voltar ao Portal</a></p>  {# se sua rota "portal" existir #}
 {% endblock %}
-'

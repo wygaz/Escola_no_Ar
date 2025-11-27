@@ -60,6 +60,8 @@ class Avaliacao(models.Model):
     finalizado_em = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=12, choices=STATUS, default="rascunho")
     ordem_ids = models.TextField(blank=True, default="")  # ids das perguntas, separados por vírgula
+    email_enviado_em = models.DateTimeField(null=True, blank=True)
+    whatsapp_enviado_em = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["-iniciado_em"]
@@ -83,6 +85,7 @@ class Resultado(models.Model):
     pontuacao = models.IntegerField(default=0)
     percentual = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     nivel = models.CharField(max_length=40, blank=True, help_text="Ex.: baixo, médio, alto")
+    
 
     class Meta:
         unique_together = ("avaliacao", "dimensao")

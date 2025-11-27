@@ -30,7 +30,8 @@ sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 # Segurança & Debug (dotenv + dj_database_url)
 # -----------------------------------------------------------------------------
 SECRET_KEY = os.getenv("SECRET_KEY", "chave-padrao-insegura")
-DEBUG = os.getenv("DEBUG", "False") == "True"
+#DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG=True
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 CSRF_TRUSTED_ORIGINS = os.getenv(
@@ -63,7 +64,7 @@ INSTALLED_APPS = [
     "apps.sonho_de_ser.apps.SonhoDeSerConfig",
     "apps.vocacional.apps.VocacionalConfig",
     "apps.projeto21.apps.Projeto21Config",
-
+    
     # Terceiros
     "rest_framework",
 ]
@@ -209,6 +210,11 @@ SERVER_EMAIL = os.getenv("SERVER_EMAIL") or DEFAULT_FROM_EMAIL
 if EMAIL_BACKEND.endswith("smtp.EmailBackend"):
     if not (EMAIL_HOST and EMAIL_HOST_USER and EMAIL_HOST_PASSWORD):
         EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# 5) Contatos
+DEFAULT_FROM_EMAIL = "nao-responder@escolanoar.com.br"
+EMAIL_CONTATO = "wygazeta@gmail.com.com"
+
 # -----------------------------------------------------------------------------
 # Defaults de AutoField
 # -----------------------------------------------------------------------------

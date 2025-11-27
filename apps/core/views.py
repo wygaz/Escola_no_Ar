@@ -3,6 +3,58 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 # apps/core/views.py (adicione/ajuste sua PortalView)
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.core.mail import send_mail
+from django.contrib import messages
+from django import forms
+
+
+class ContatoForm(forms.Form):
+    nome = forms.CharField(label="Nome", max_length=100)
+    email = forms.EmailField(label="E-mail")
+    assunto = forms.CharField(label="Assunto", max_length=120, required=False)
+    mensagem = forms.CharField(
+        label="Mensagem",
+        widget=forms.Textarea(attrs={"rows": 5}),
+    )
+
+def sobre(request):
+    return render(request, "sobre.html")
+
+
+def contato(request):
+    if request.method == "POST":
+        form = ContatoForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+
+            assunto = cd.get("assunto") or "Contato pelo site Escola no Ar"
+            corpo = (
+                f"Nome: {cd['nome']}\n"
+                f"E-mail: {cd['email']}\n\n"
+                f"Mensagem:\n{cd['mensagem']}"
+            )
+
+            destinatario = getattr(
+                settings, "EMAIL_CONTATO", getattr(settings, "DEFAULT_FROM_EMAIL", None)
+            )
+
+            if destinatario:
+                send_mail(
+                    subject=assunto,
+                    message=corpo,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[destinatario],
+                    fail_silently=True,   # evita quebrar se o email não estiver configurado
+                )
+
+            messages.success(request, "Mensagem enviada com sucesso! Obrigado pelo contato.")
+            return redirect("contato")
+    else:
+        form = ContatoForm()
+
+    return render(request, "contato.html", {"form": form})
+
 
 TEMPLATE_BY_PERFIL = {
 "ADMIN": "portal/admin_home.html",
@@ -73,7 +125,6 @@ class MinhasNotasView(LoginRequiredMixin, TemplateView):
     template_name = "core/minhas_notas.html"
 class VocacionalMentorView(LoginRequiredMixin, TemplateView):
     template_name = "vocacional/mentor_home.html"
-
 
 def raiz_inteligente(request):
     return redirect("/portal/") if request.user.is_authenticated else redirect("/contas/login/")

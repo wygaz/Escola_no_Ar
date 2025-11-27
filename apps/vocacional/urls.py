@@ -8,7 +8,10 @@ urlpatterns = [
     path("avaliacao/", views.avaliacao_gate, name="avaliacao_gate"),
     path("avaliacao/form/", views.avaliacao_form, name="avaliacao_form"),
     path("resultado/<int:pk>/", views.resultado, name="resultado"),
-    path("resultado/<int:pk>/enviar-email/", views.enviar_resultado_email, name="enviar_resultado_email"),    
+    path("resultado/ultimo/", views.meu_resultado, name="meu_resultado"),
+    path("termos/", views_consent.termos, name="termos"),
+    path("resultado/<int:pk>/enviar-email/", views.enviar_resultado_email, name="enviar_resultado_email"),
+    path("resultado/<int:pk>/whatsapp/", views.resultado_whatsapp, name="resultado_whatsapp"),
 
     # consentimento
     path("consentimento/", views_consent.consentimento_check, name="consentimento_check"),

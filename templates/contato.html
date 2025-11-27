@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Contato • Escola no Ar{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+  <div class="page-card">
+    <h1>Fale conosco</h1>
+
+    <p>
+      Use o formulário abaixo para enviar dúvidas, sugestões ou propostas de parceria
+      relacionadas à plataforma <strong>Escola no Ar</strong>, ao Teste Vocacional
+      ou ao Projeto 21.
+    </p>
+
+    <form method="post" class="form-contato">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <div class="form-group">
+        <label for="{{ form.nome.id_for_label }}">Nome</label>
+        {{ form.nome }}
+        {{ form.nome.errors }}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.email.id_for_label }}">E-mail</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.assunto.id_for_label }}">Assunto</label>
+        {{ form.assunto }}
+        {{ form.assunto.errors }}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.mensagem.id_for_label }}">Mensagem</label>
+        {{ form.mensagem }}
+        {{ form.mensagem.errors }}
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        Enviar mensagem
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

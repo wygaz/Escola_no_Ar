@@ -1,0 +1,17 @@
+{% extends "vocacional/base_vocacional.html" %}
+{% block vocacional_content %}
+  <div class="wrap">
+    <h1 class="title">Termos de Uso</h1>
+    <div class="card-info card-info--pastel" style="margin-top:.6rem">
+      <p>Estes Termos de Uso regem a utilização dos recursos do Vocacional e da plataforma Escola no Ar.</p>
+      <ul>
+        <li><strong>1. Conta e acesso:</strong> você é responsável por manter a confidencialidade das suas credenciais.</li>
+        <li><strong>2. Uso adequado:</strong> não utilize o serviço para fins ilícitos, abusivos ou que violem direitos de terceiros.</li>
+        <li><strong>3. Conteúdos:</strong> textos, imagens e materiais são protegidos por direitos autorais e marcas.</li>
+        <li><strong>4. Privacidade:</strong> dados pessoais são tratados conforme a nossa <a href="{% url 'vocacional:privacidade' %}">Política de Privacidade</a>.</li>
+        <li><strong>5. Suporte:</strong> dúvidas e solicitações podem ser enviadas pelos canais oficiais.</li>
+      </ul>
+      <p style="opacity:.85">Versão {{ now|date:"Y.m" }} — ajuste este texto conforme sua necessidade jurídica.</p>
+    </div>
+  </div>
+{% endblock %}

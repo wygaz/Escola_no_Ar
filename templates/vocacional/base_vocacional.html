@@ -1,13 +1,46 @@
+{# templates/vocacional/base_vocacional.html #}
 {% extends "base.html" %}
 {% load static %}
 
-{# permite injetar CSS/JS de páginas do Vocacional e já carrega o CSS do app #}
-{% block extra_head %}{{ block.super }}
-<link rel="stylesheet" href="{% static 'vocacional/css/vocacional.css' %}">
+{% block title %}
+  {% block page_title %}Portal Vocacional{% endblock %} • Escola no Ar
 {% endblock %}
 
 {% block content %}
-  <div class="vocacional">
-    {% block vocacional_content %}{% endblock %}
-  </div>
+<div class="vocacional-wrap">
+
+  <header class="vocacional-header">
+    <div>
+      <a href="{% url 'portal' %}">
+        <img src="{% static 'core/img/logo_escola_no_ar.jpg' %}" alt="Escola no Ar" class="vocacional-logo">
+      </a>
+    </div>
+
+    <div>
+      <h1 class="vocacional-title">
+        {% block header_title %}Avaliação Vocacional{% endblock %}
+      </h1>
+      {% block header_subtitle %}
+        <p class="vocacional-subtitle">
+          Descubra seus talentos e áreas de interesse.
+        </p>
+      {% endblock %}
+    </div>
+
+    <div class="vocacional-header-right">
+      <div class="vocacional-user">
+        Olá, {{ request.user.first_name|default:request.user.nome|default:request.user.email }}
+      </div>
+      <div class="vocacional-nav">
+        <a href="{% url 'portal' %}" class="btn btn-xs btn-outline-light">Home</a>
+        <a href="{% url 'contas:logout' %}" class="btn btn-xs btn-outline-danger">Sair</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="vocacional-main">
+    {% block page_content %}{% endblock %}
+  </main>
+
+</div>
 {% endblock %}

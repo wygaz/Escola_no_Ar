@@ -19,9 +19,11 @@ class PerguntaAdmin(admin.ModelAdmin):
 
 @admin.register(Avaliacao)
 class AvaliacaoAdmin(admin.ModelAdmin):
-    list_display = ("id", "usuario", "mentor", "status", "iniciado_em", "finalizado_em")
+    list_display = ("id", "usuario", "status", "iniciado_em", "finalizado_em",
+                    "email_enviado_em", "whatsapp_enviado_em")
     list_filter = ("status",)
-
+    search_fields = ("usuario__email", "usuario__first_name", "usuario__last_name")
+    readonly_fields = ("email_enviado_em", "whatsapp_enviado_em")
 @admin.register(Resposta)
 class RespostaAdmin(admin.ModelAdmin):
     list_display = ("avaliacao", "pergunta", "opcao", "valor")

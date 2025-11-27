@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Guia Como Descobrir Minha Vocação • Escola no Ar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+    /* Paleta em tons de amarelo → laranja */
+      --bg-gradient: linear-gradient(135deg, #ffe66d 0%, #ffca3a 40%, #ff9f43 100%);
+      --bg-soft: #fff9ed;
+      --accent: #ffb347;
+      --accent-2: #00c9a7;
+      --accent-3: #ff6b6b;
+      --dark: #222031;
+      --text: #2b2440;
+      --muted: #8c7f9e;
+      --card-bg: #ffffff;
+      --radius-lg: 18px;
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.12);
+      --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+/* Cores extras para a seção Johari */
+      --sonhe-azul-escuro: #051647;
+      --sonhe-azul-medio:  #0b2274;
+      --sonhe-texto-escuro: #0f172a;
+      --sonhe-bg-suave:    #f5f5fb;
+
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-soft);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(20px);
+      background: rgba(255, 249, 237, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      /* logo em um retângulo arredondado */
+      height: 120px;
+      width: 230px;
+      border-radius: 16px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-light);
+      padding: 4px 10px;
+      overflow: hidden;
+    }
+
+    .brand-logo-img {
+      height: 100%;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .brand-title {
+      display: flex;
+      flex-direction: column;
+      font-size: 1.5rem;
+    }
+
+    .header-cta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .header-cta .tag {
+      background: rgba(255, 179, 71, 0.18);
+      color: #a36815;
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+    }
+
+    .btn-small {
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      border: none;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #fff;
+      box-shadow: var(--shadow-light);
+    }
+
+    .btn-small span.icon {
+      font-size: 1rem;
+    }
+
+    /* ===============================
+      HERO – JANELA DE JOHARI
+      =============================== */
+
+    .hero-johari {
+      padding: 3rem 1.5rem 3.5rem;
+      background: radial-gradient(circle at top left,
+                  #ffffff,
+                  var(--sonhe-bg-suave));
+    }
+
+    .hero-johari-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* Cabeçalho do hero Johari */
+    .hero-johari-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .hero-johari-title {
+      font-size: clamp(1.9rem, 2.4vw, 2.4rem);
+      font-weight: 700;
+      color: var(--sonhe-azul-escuro);
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-johari-subtitle {
+      max-width: 720px;
+      margin: 0 auto;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: #ff0000;
+        border: 1px #
+    }
+    
+    /* Grid 2x2 em formato de janela */
+    .hero-johari-grid {
+      max-width: 900px;
+      margin: 2rem auto 0;
+      display: grid;
+      grid-template-columns: 1fr;      /* celular: 1 por linha */
+      gap: 0;                          /* sem espaço entre quadrantes */
+      border-radius: 24px;             /* borda arredondada da janela */
+      overflow: hidden;
+      border: 6px solid #0b2274;       /* moldura externa mais grossa */
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
+      background: #0b2274;             /* só pra não aparecer “vão” entre cards */
+    }
+
+    @media (min-width: 768px) {
+      .hero-johari-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));  /* 2 em cima, 2 embaixo */
+      }
+    }
+
+    /* Cada “vidro” da janela */
+    .hero-johari-card {
+      background: #ffffff;
+      border: 1px solid #0b2274;       /* antes era 1px → agora 2px para cruz mais forte */
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;             /* centraliza horizontalmente */
+      justify-content: center;         /* centraliza verticalmente */
+      gap: 0.55rem;
+      border-radius: 0;                /* quem tem raio é só a moldura externa */
+      box-shadow: none;
+      min-height: 170px;               /* garante altura agradável nos 4 quadrantes */
+    }
+
+    /* Centralizar texto dentro do quadrante */
+    .hero-johari-card h3,
+    .hero-johari-card p {
+      text-align: center;
+    }
+
+    /* Cores de fundo suaves por quadrante */
+    .hero-johari-card:nth-child(1) { background: #ffff96; }  /* amarelo claro */
+    .hero-johari-card:nth-child(2) { background: #5fffff; }  /* azul claro */
+    .hero-johari-card:nth-child(3) { background: #ffa7d6; }  /* rosado */
+    .hero-johari-card:nth-child(4) { background: #00f080; }  /* azul acinzentado */
+
+    /* Ajustes finos */
+    .hero-johari-icon {
+      margin-bottom: 0.3rem;
+    }
+
+    .hero-johari-card h3 {
+      margin-bottom: 0.15rem;
+    }
+
+    /* Imagenzinha/ícone no topo do card (opcional) */
+    .hero-johari-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-johari-icon img {
+      display: block;
+      max-width: 72px;
+      max-height: 72px;
+      width: auto;
+      height: auto;
+    }
+
+    .hero-johari-card h3 {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--sonhe-azul-medio);
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-johari-card p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--sonhe-texto-escuro);
+    }
+
+    /* Rodapé da seção Johari */
+    .hero-johari-footer {
+      margin-top: 2.2rem;
+      text-align: center;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-johari-footer p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #374151;
+    }
+
+
+    /* HERO */
+    .hero {
+      background-image: var(--bg-gradient);
+      color: #3b2600;
+      padding: 2.5rem 0 3rem 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.2fr);
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (max-width: 850px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.9);
+      color: #a36815;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .hero-tag span.icon {
+      font-size: 1rem;
+    }
+
+    .hero-title {
+      font-size: clamp(1.9rem, 3vw, 2.4rem);
+      line-height: 1.2;
+      margin-bottom: 0.7rem;
+      font-weight: 800;
+      color: #2b1900;
+    }
+
+    .hero-title .highlight {
+      color: #e85d04;
+    }
+
+    .hero-subtitle {
+      font-size: 0.98rem;
+      max-width: 520px;
+      color: #4a3200;
+      margin-bottom: 1.4rem;
+    }
+
+    .hero-note {
+      margin-top: 1.25rem;
+      padding: .75rem 1rem;
+      border-radius: 999px;
+      font-size: .9rem;
+      background: #fff7d6;
+      border: 1px solid #facc6b;
+      color: #7a4b09;
+    }
+
+    /* Versão “logado” */
+    .hero-note-ok {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #166534;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+      background: #fff3c4;
+      color: #8a4b00;
+      border: 1px solid rgba(204, 120, 0, 0.35);
+      box-shadow: 0 6px 16px rgba(204, 120, 0, 0.18);
+      border-radius: 999px;
+      padding: 0.7rem 1.4rem;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+    }
+
+    .btn-primary {
+      background: #ffeaa7;
+      color: #5b3a00;
+      box-shadow: 0 10px 24px rgba(20, 0, 0, 0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(20, 0, 0, 0.28);
+    }
+
+    .btn-ghost {
+      background: #fff3c4;
+      color: #8a4b00;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-ghost:hover {
+      background: #ffeaa7;
+    }
+
+    /* HERO – coluna da direita + monitor */
+    .hero-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-monitor-shell {
+      position: relative;
+      display: inline-block;
+      padding: 1.2rem 1.4rem;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 179, 71, 0.35), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(123, 97, 255, 0.22), transparent 55%),
+        #101322;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+      transform: none; /* reto, sem giro */
+    }
+
+    .hero-monitor-shell::after {
+      display: none;
+    }
+
+    .hero-card {
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--text);
+      border-radius: 24px;
+      padding: 1.2rem 1.1rem 1.3rem 1.1rem;
+      box-shadow: var(--shadow-soft);
+      width: 100%;
+      max-width: 360px;
+      position: relative;
+      overflow: hidden;
+      transform: translateY(-2px);
+    }
+
+    .hero-card-badge {
+      position: absolute;
+      top: 0.9rem;
+      right: 1.1rem;
+      background: var(--accent-2);
+      color: #0a2c25;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .hero-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .hero-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 30% 20%, #fff9e6, #ffb36b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+    }
+
+    .hero-card-header-text h3 {
+      font-size: 1rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .hero-card-header-text span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hero-steps {
+      margin: 0.8rem 0 0.7rem;
+      padding-left: 1.2rem;
+      font-size: 0.9rem;
+    }
+
+    .hero-steps li + li {
+      margin-top: 0.4rem;
+    }
+
+    .hero-steps a {
+      text-decoration: underline;
+    }
+
+    .hero-card-footer-text {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 0.4rem;
+    }
+
+    /* ROTEIRO RÁPIDO */
+    .howto {
+      padding: 2.3rem 0 2.1rem;
+      background: linear-gradient(
+        135deg,
+        #fff8dd 0%,
+        #ffe7ba 40%,
+        #fff2e0 100%
+      );
+    }
+
+    .howto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .howto-card {
+      position: relative;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 1rem 1.1rem;
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      font-size: 0.9rem;
+    }
+
+    .howto-step {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: #ffb347;
+      color: #222;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .howto-card::before {
+      content: "";
+      position: absolute;
+      left: 0.9rem;
+      right: 0.9rem;
+      top: 0.6rem;
+      height: 3px;
+      border-radius: 999px;
+      background: #ffb347;
+    }
+
+    .howto-card:nth-child(2)::before {
+      background: #7b61ff;
+    }
+
+    .howto-card:nth-child(3)::before {
+      background: #00b894;
+    }
+
+    .link-inline {
+      display: inline-block;
+      margin-top: 0.35rem;
+      font-size: 0.85rem;
+      text-decoration: underline;
+    }
+
+    /* SECTIONS GENERIC */
+    section {
+      padding: 1.8rem 0;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.4rem;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto 1.4rem auto;
+    }
+
+    /* BENEFÍCIOS */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .benefits-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .benefit-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      box-shadow: var(--shadow-light);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .benefit-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .benefit-icon.pink {
+      background: rgba(255, 183, 77, 0.22);
+    }
+
+    .benefit-icon.yellow {
+      background: rgba(255, 224, 130, 0.26);
+    }
+
+    .benefit-icon.green {
+      background: rgba(0, 201, 167, 0.18);
+    }
+
+    .benefit-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .benefit-text {
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    /* PAINEL AZUL SONHE + ALTO (envolve Kits e Plano) */
+    .panel-sonhe,
+    .kits-download-wrapper {
+      margin-top: 1.5rem;
+      padding: 1.6rem 1.6rem 1.8rem;
+      border-radius: 24px;
+      border: 1px solid #ef4444;
+      background: linear-gradient(135deg, #111179, #111179);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.32);
+    }
+
+    /* DOWNLOAD KITS */
+    .kits-panel {
+      /* só pra semântica, se quiser customizar depois */
+    }
+
+    /* CONTAINER DOS 3 KITS (apenas grid, sem moldura) */
+    .kits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+
+    @media (max-width: 900px) {
+      .kits-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .kits-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* CARD GENÉRICO DO KIT (branco, com borda vermelha) */
+    .kit-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 1.1rem 1.2rem 1.3rem;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.20);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #ef4444;
+      color: #0f172a;
+    }
+
+    /* BADGE GENÉRICA (se quiser usar em outros) */
+    .kit-badge {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.9rem;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(239, 68, 68, 0.9);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Destaque leve para um dos kits */
+    .kit-card-main {
+      border-width: 2px;
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .kit-title {
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .kit-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .kit-list {
+      list-style: none;
+      font-size: 0.85rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .kit-list li::before {
+      content: "• ";
+      color: var(--accent-2);
+      font-weight: 700;
+      margin-right: 0.2rem;
+    }
+
+    .kit-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: 0.3rem;
+    }
+
+    .kit-note {
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+
+    /* MINHA TRILHA / PLANO (ainda disponível se quiser usar) */
+    .trilha-wrapper {
+      background: #fff7e9;
+      border-radius: 22px;
+      padding: 1rem;
+      box-shadow: var(--shadow-light);
+      margin-top: 0.5rem;
+    }
+
+    .trilha-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .trilha-header h3 {
+      font-size: 1rem;
+    }
+
+    .trilha-badge {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .trilha-form {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem;
+    }
+
+    @media (max-width: 800px) {
+      .trilha-form {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .trilha-divider {
+      border: none;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      margin: 0.8rem 0 1rem 0;
+    }
+
+    .estrategias-lista {
+      margin-top: 0.5rem;
+    }
+
+    .estrategias-header {
+      margin-bottom: .5rem;
+      font-size: .9rem;
+      color: #444;
+    }
+
+    .estrategias-header strong {
+      display: block;
+      font-weight: 600;
+      margin-bottom: .15rem;
+    }
+
+    .estrategias-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 0.3rem;
+    }
+
+    .estrategia-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.6rem;
+      align-items: flex-start;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 0.55rem 0.75rem;
+      box-shadow: var(--shadow-light);
+      cursor: pointer;
+    }
+
+    .estrategia-card input[type="checkbox"] {
+      margin-top: 0.3rem;
+    }
+
+    .estrategia-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .estrategia-titulo {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .estrategia-dosagem {
+      font-size: 0.85rem;
+      color: #4b3b78;
+      font-weight: 500;
+    }
+
+    .estrategia-meta {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+    }
+
+    .field label {
+      font-weight: 600;
+    }
+
+    .field select,
+    .field input,
+    .field textarea {
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 0.4rem 0.6rem;
+      font-size: 0.84rem;
+      background: #fff;
+    }
+
+    .field textarea {
+      resize: vertical;
+    }
+
+    .field small {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .trilha-actions {
+      margin-top: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.7rem;
+      font-size: 0.8rem;
+    }
+
+    .trilha-actions span.info {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    /* Estratégias + sugestões lado a lado */
+    .trilha-estrategias-layout {
+      margin-top: 0.9rem;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      gap: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .trilha-estrategias-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field-sugestoes textarea {
+      min-height: 150px;
+    }
+
+    /* ============================
+       PLANO DE ESTRATÉGIAS – CARDS
+       ============================ */
+
+    /* título no painel azul */
+    .plano-identificacao-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      color: #f9fafb;
+    }
+
+    /* cards internos (identificação, dados e sugestões) */
+    .plano-identificacao-card,
+    .plano-form-card,
+    .plano-sugestoes-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 1.2rem 1.4rem 1.4rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ef4444;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+      color: #0f172a;
+    }
+
+    /* título “Dados para o plano” dentro do card branco */
+    .plano-form-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #374151;
+    }
+
+    /* grade dos campos principais (Nome, Escola, Área, Nível, Objetivo) */
+    .plano-main-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .plano-main-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 650px) {
+      .plano-main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* labels mais fortes + asterisco nos obrigatórios */
+    .plano-form-card label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #374151;
+      display: inline-flex;
+      align-items: center;
+      gap: .2rem;
+    }
+
+    .plano-form-card label.required::after {
+      content: "*";
+      color: #ef4444;
+      font-weight: 700;
+    }
+
+    /* inputs/selects com mais contraste */
+    .plano-form-card input[type="text"],
+    .plano-form-card select {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      padding: 0.55rem 0.9rem;
+      font-size: 0.9rem;
+      background: #ffffff;
+      box-shadow: 0 2px 4px rgba(148, 163, 184, 0.18) inset;
+    }
+
+    .plano-form-card input[type="text"]:focus,
+    .plano-form-card select:focus,
+    .plano-form-card textarea:focus {
+      outline: none;
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+    }
+
+    /* texto “Estratégias sugeridas – escolha de 3 a 5…” */
+    .plano-form-card .estrategias-title {
+      font-weight: 700;
+      margin-top: .3rem;
+    }
+
+    .plano-form-card .estrategias-help {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: .7rem;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: auto;
+      background: #201a34;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 0.8rem;
+    }
+
+    .footer-inner {
+      padding: 1rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-inner a {
+      color: rgba(255, 255, 255, 0.86);
+      text-decoration: underline;
+      text-decoration-style: dotted;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-logo">
+          <img src="{% static 'core/img/logo_escola_no_ar.jpg' %}"
+               alt="Escola no Ar" class="brand-logo-img">
+        </div>
+
+        <div class="brand-title">
+          Guia Como Descobrir Minha Vocação &amp;<br>Sonhe + Alto
+        </div>
+      </div>
+
+      <div class="header-cta">
+        <div class="tag">Se você já tem o Guia ------></div>
+        <a href="{% url 'contas:login' %}" class="btn-small">
+          <span class="icon">👤</span>
+          <span>Login</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+
+      <div class="hero-left">
+        <div class="hero-tag">
+          <span class="hero-tag-icon">★</span>
+
+          {% if request.user.is_authenticated %}
+            <span><strong>
+              Você está logado como {{ request.user.first_name|default:request.user.get_username }}, </strong> e aqui começa o seu futuro com propósito.
+              <p>Agora é só clicar no botão <strong>[🧭 Montar meu plano de estratégias]</strong>, logo abaixo, fazer as suas escolhas e começar o seu vôo.</p> 
+            </span>
+          {% else %}
+            <p class="hero-note">
+              Use o mesmo e-mail que você usou na Hotmart para fazer login na Escola no Ar.
+              Depois do login, você volta pra cá automaticamente pra montar seu plano.
+            </p>
+          {% endif %}
+        </div>
+        
+        <h1 class="hero-title">
+          Utilize com sabedoria o Projeto <span class="highlight">Sonhe + Alto </span> e sua vida terá mais alcance e propósito.
+        </h1>
+
+        <p class="hero-subtitle">
+          Se você já comprou o <strong>guia Como Descobrir Minha Vocação</strong> na Hotmart, aqui é a sua
+          área especial para acessar os <strong>Kits do Projeto Sonhe + Alto</strong>, imprimir a
+          papelada e acompanhar sua jornada.
+        </p>
+
+      <div class="hero-actions">
+        {% if user.is_authenticated %}
+          {# Já logado: levar direto pro plano e kits #}
+          <a href="#plano-estrategias" class="btn-primary">
+            <span>🧭 Montar meu plano de estratégias</span>
+          </a>
+
+          <a href="#kits-projeto21" class="btn-ghost">
+            <span>📄 Ver kits para impressão</span>
+          </a>
+        {% else %}
+          {# Visitante: login ou comprar o Guia #}
+          <a href="{% url 'contas:login' %}?next={{ request.path }}#plano-estrategias"
+            class="btn-primary">
+            <span>🔑 Já tenho o Guia – entrar com minha conta</span>
+          </a>
+
+          <a href="https://SEU-LINK-HOTMART-AQUI"
+            class="btn-ghost"
+            target="_blank" rel="noopener">
+            <span>✨ Ainda não tenho o Guia</span>
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-monitor-shell">
+          <div class="hero-card hero-card-steps">
+            <div class="hero-card-badge">Por onde começar?</div>
+
+            <div class="hero-card-header">
+              <div class="hero-avatar">
+                <span>🗺️</span>
+              </div>
+              <div class="hero-card-header-text">
+                <h3>Seu roteiro no Sonhe + Alto</h3>
+                <span>Três passos simples para usar esta página.</span>
+              </div>
+            </div>
+
+            <ol class="hero-steps">
+              <li>
+                <strong>Entre com sua conta.</strong><br>
+                Use o mesmo e-mail que você usou na Hotmart para acessar a Escola no Ar.
+              </li>
+              <li>
+                <strong>Baixe seus Kits.</strong><br>
+                Depois do login, role até a seção
+                <a href="#kits-projeto21">Kits do Projeto Sonhe + Alto</a> para imprimir a papelada.
+              </li>
+              <li>
+                <strong>Monte seu plano.</strong><br>
+                <a href="#plano-estrategias">Clique aqui e siga as instruções.</a>
+              </li>
+            </ol>
+
+            <p class="hero-card-footer-text">
+              Depois é só marcar os 21 dias e acompanhar sua evolução.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- JANELA DE JOHARI -->
+  <section id="johari-hero" class="hero-johari">
+    <div class="container hero-johari-inner">
+
+      <header class="hero-johari-header">
+        <h2 class="hero-johari-title">
+          Quanto você realmente se conhece?
+        </h2>
+        <p class="hero-johari-subtitle">Existe um estudo interessante feito por Joseph Luft e Harrington Ingham, que leva o nome de <strong>Janela de Johari</strong> (fusão das silabas iniciais dos seus criadores).</p?
+         <br><p class="hero-johari-subtitle">É frequentemente usada em empresas para melhorar a comunicação e o trabalho em equipe, mas também pode ser utilizada para o desenvolvimento pessoal. Veja aqui o que ela mostra a seu respeito: </p>
+      </header>
+
+      <div class="hero-johari-grid">
+        <!-- Quadrante 1 – Área aberta -->
+        <article class="hero-johari-card">
+          <figure class="hero-johari-icon">
+            <img src="{% static 'projeto21\dashboard\img\johari_1_area_aberta.png' %}"
+                 alt="Área aberta">
+          </figure>
+          <h3>Área aberta</h3>
+          <p>
+            O que eu sei sobre mim e os outros também veem.
+          </p>
+        </article>
+
+        <!-- Quadrante 2 – Ponto cego -->
+        <article class="hero-johari-card">
+          <figure class="hero-johari-icon">
+            <img src="{% static 'projeto21/dashboard/img/johari_2_ponto_cego.png' %}"
+                 alt="Ponto cego">
+          </figure>
+          <h3>Ponto cego</h3>
+          <p>
+            O que os vêem em mim, mas eu não percebi, ainda.
+          </p>
+        </article>
+
+        <!-- Quadrante 3 – Área secreta -->
+        <article class="hero-johari-card">
+          <figure class="hero-johari-icon">
+            <img src="{% static 'projeto21/dashboard/img/johari_3_area_secreta.png' %}"
+                 alt="Área secreta">
+          </figure>
+          <h3>Área secreta</h3>
+          <p>
+            O que eu sei, mas quase ninguém sabe.
+          </p>
+        </article>
+
+        <!-- Quadrante 4 – Área desconhecida -->
+        <article class="hero-johari-card">
+          <figure class="hero-johari-icon">
+            <img src="{% static 'projeto21/dashboard/img/johari_4_area_desconhecida.png' %}"
+                 alt="Área desconhecida">
+          </figure>
+          <h3>Área desconhecida</h3>
+          <p>
+            Potenciais que nem eu nem os outros conhecemos ainda.
+          </p>
+        </article>
+      </div>
+
+      <div class="hero-johari-footer">
+        <p>
+          O Guia e o Projeto <strong>Sonhe + Alto</strong> ajudam você a ampliar essa área aberta,
+          alinhando vocação, hábitos e projeto de vida.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+
+
+  <!-- ROTEIRO RÁPIDO DE NAVEGAÇÃO -->
+  <section class="howto">
+    <div class="container">
+      <h2 class="section-title">Como usar esta página</h2>
+      <p class="section-subtitle">
+        Em três passos simples você chega onde precisa.
+      </p>
+
+      <div class="howto-grid">
+        <div class="howto-card">
+          <span class="howto-step">1</span>
+          <h3>Entrar com minha conta</h3>
+          <p>
+            Use o mesmo e-mail que você usou na Hotmart para fazer login na Escola no Ar.
+          </p>
+          <a href="{% url 'contas:login' %}?next=/projeto21/" class="link-inline">
+            Entrar / acessar minha conta
+          </a>
+        </div>
+
+        <div class="howto-card">
+          <span class="howto-step">2</span>
+          <h3>Baixar meus kits</h3>
+          <p>
+            Depois do login, role até a seção de <strong>Kits do Projeto Sonhe + Alto</strong>
+            para baixar e imprimir a papelada.
+          </p>
+          <a href="#kits-projeto21" class="link-inline">
+            Ir para os kits
+          </a>
+        </div>
+
+        <div class="howto-card">
+          <span class="howto-step">3</span>
+          <h3>Montar meu plano</h3>
+          <p>
+            Use a seção <strong>Montar meu plano de estratégias</strong> para escolher
+            as atividades e gerar o plano pronto para impressão.
+          </p>
+          <a href="#plano-estrategias" class="link-inline">
+            Ir para o plano de estratégias
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFÍCIOS -->
+  <section>
+    <div class="container">
+      <h2 class="section-title">O que você encontra aqui</h2>
+      <p class="section-subtitle">
+        Esta área é o complemento prático do guia Como Descobrir Minha Vocação: aqui você baixa
+        os Kits do Projeto Sonhe + Alto, organiza seus objetivos e registra o que Deus tem
+        feito na sua vida em cada etapa.
+      </p>
+
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon pink">🧩</div>
+          <div class="benefit-title">Kits prontos para imprimir</div>
+          <div class="benefit-text">
+            Papéis com objetivos e estratégias sugeridos, organizados por área da vida, para você marcar dia a dia.
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">📝</div>
+          <div class="benefit-title">Diário da jornada</div>
+          <div class="benefit-text">
+            Espaços para registrar vitórias, desafios e aprendizados ao longo dos 21 dias.
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon green">🎮</div>
+          <div class="benefit-title">Pontos &amp; níveis</div>
+          <div class="benefit-text">
+            Cada estratégia cumprida conta pontos. Você visualiza sua evolução de forma simples e divertida.
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon yellow">👨‍👩‍👧‍👦</div>
+          <div class="benefit-title">Foco na vida real</div>
+          <div class="benefit-text">
+            Kits pensados para Família, Escola, Amigos, Comunidade, Igreja e você mesmo.
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon green">📌</div>
+          <div class="benefit-title">Simples de usar</div>
+          <div class="benefit-text">
+            Baixar, imprimir, preencher e acompanhar. Sem complicações nem telas o tempo todo.
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon pink">🚀</div>
+          <div class="benefit-title">Comece de onde você está</div>
+          <div class="benefit-text">
+            Não precisa estar “perfeito” para começar. O importante é dar o primeiro passo com propósito.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD DOS KITS -->
+  <section id="kits-projeto21">
+    <div class="container">
+      <h2 class="section-title">Kits disponíveis para quem tem o Guia</h2>
+      <p class="section-subtitle">
+        Depois que você entrar com sua conta, poderá baixar os Kits conforme o acesso
+        liberado pela compra do guia Como Descobrir Minha Vocação na Hotmart.
+      </p>
+
+      <div class="panel-sonhe kits-panel">
+        <div class="kits-grid">
+          <!-- KIT 1 ESSENCIAL -->
+          <article class="kit-card kit-card-main">
+            <div class="kit-title"><strong>Kit Projeto Sonhe + Alto Essencial</strong></div>
+            <div class="kit-sub">Comece com o básico bem feito.</div>
+            <ul class="kit-list">
+              <li>Capa do Projeto Sonhe + Alto com seus dados.</li>
+              <li>Plano geral com as 6 áreas da vida.</li>
+              <li>Folhas de estratégias para os objetivos principais.</li>
+            </ul>
+            <div class="kit-footer">
+              <button class="btn-primary">
+                <span>🧩 Baixar Kit Essencial</span>
+              </button>
+              <span class="kit-note">Requer login e acesso liberado.</span>
+            </div>
+          </article>
+
+          <!-- KIT 2 COMPLETO -->
+          <article class="kit-card kit-card-main">
+            <div class="kit-badge">+ usado</div>
+            <div class="kit-title"><strong>Kit Projeto Sonhe + Alto Completo</strong></div>
+            <div class="kit-sub">Tudo o que você precisa para os 21 dias.</div>
+            <ul class="kit-list">
+              <li>Todos os papéis do Projeto Sonhe + Alto (capa, plano geral, estratégias).</li>
+              <li>Diários semanais para 21 dias.</li>
+              <li>Painel de pontos e níveis.</li>
+            </ul>
+            <div class="kit-footer">
+              <button class="btn-primary">
+                <span>🚀 Baixar Kit Completo</span>
+              </button>
+              <span class="kit-note">Sugestão para uso individual.</span>
+            </div>
+          </article>
+
+          <!-- KIT 3 GRUPOS -->
+          <article class="kit-card kit-card-main">
+            <div class="kit-title"><strong>Kit para Grupos</strong></div>
+            <div class="kit-sub">Ideal para escolas, igrejas e clubes.</div>
+            <ul class="kit-list">
+              <li>Modelos para cópia em grupo (múltiplos alunos).</li>
+              <li>Campos extras para nome da turma e mentor.</li>
+              <li>Indicadores simples para acompanhamento coletivo.</li>
+            </ul>
+            <div class="kit-footer">
+              <button class="btn-primary">
+                <span>📦 Baixar Kit para Grupos</span>
+              </button>
+              <span class="kit-note">Perfeito para projetos em sala ou igreja.</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANO PERSONALIZADO DE ESTRATÉGIAS -->
+  <section id="plano-estrategias">
+    <div class="container">
+      <h2 class="section-title">Montar meu plano de estratégias</h2>
+      <p class="section-subtitle">
+        Aqui você escolhe a área da vida, o nível de desafio e as estratégias
+        que quer praticar. Depois é só gerar o plano e imprimir.
+      </p>
+
+      <div class="kits-download-wrapper">
+        <div class="plano-identificacao-title">
+          Dados de identificação
+        </div>
+
+        <!-- 1) Card com dados pessoais -->
+        <div class="plano-identificacao-card">
+          <div class="plano-main-grid">
+            <div>
+              <label class="required" for="id_nome">Nome</label>
+              <input
+                type="text"
+                id="plano-nome"
+                placeholder="Seu nome"
+                value="{% if user.is_authenticated %}{% firstof user.first_name user.nome user.email %}{% endif %}"
+                {% if user.is_authenticated %}readonly{% endif %}
+              >
+            </div>
+
+            <div class="field">
+              <label for="plano-escola">Escola / Turma (opcional)</label>
+              <input
+                type="text"
+                id="plano-escola"
+                placeholder="Ex.: Colégio X – 8º ano"
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- 2) Card com dados do plano + estratégias -->
+        <div class="plano-form-card">
+          <h3 class="plano-form-title">Dados para o plano</h3>
+
+          <div class="trilha-form">
+            <div class="field">
+              <label for="plano-area">Área da vida</label>
+              <select id="plano-area">
+                <option value="">Selecione...</option>
+                <option value="Família">Família</option>
+                <option value="Escola">Escola</option>
+                <option value="Amigos">Amigos</option>
+                <option value="Comunidade">Comunidade</option>
+                <option value="Igreja">Igreja</option>
+                <option value="Eu mesmo">Eu mesmo</option>
+              </select>
+              <small>Campo obrigatório: Escolha uma área para montar o plano agora.</small>
+            </div>
+
+            <div class="field">
+              <label for="plano-nivel">Nível</label>
+              <select id="plano-nivel">
+                <option value="">Selecione...</option>
+                <option value="Básico">Básico</option>
+                <option value="Desafio">Desafio</option>
+                <option value="Avançado">Avançado</option>
+              </select>
+              <small>Campo obrigatório: O Básico é um bom começo. Desafio e Avançado exigem mais constância.</small>
+            </div>
+
+            <div class="field">
+              <label for="plano-objetivo-sugerido">Objetivo sugerido</label>
+              <select id="plano-objetivo-sugerido" disabled>
+                <option value="">Selecione a área para ver os objetivos</option>
+              </select>
+              <small>Escolha um objetivo sugerido para esta área.</small>
+            </div>
+          </div>
+
+          <div class="estrategias-col">
+            <div class="estrategias-header">
+              <strong>Estratégias sugeridas</strong>
+              <span>Escolha de 3 a 5 estratégias para o seu plano nesta área.</span>
+            </div>
+
+            <div id="estrategias-lista" class="estrategias-lista">
+              <p class="placeholder">
+                Escolha a área e o nível para ver as estratégias disponíveis.
+              </p>
+            </div>
+
+            <div class="trilha-actions">
+              <span class="info">
+                Marque de 3 a 5 estratégias que você quer praticar nesta área.
+              </span>
+              <button type="button" id="btn-gerar-plano" class="btn-primary">
+                Gerar meu plano de estratégias
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3) Card com sugestões -->
+        <div class="plano-sugestoes-card">
+          <div class="field field-sugestoes">
+            <label for="plano-sugestoes">Minhas sugestões (opcional)</label>
+            <textarea id="plano-sugestoes" rows="6"
+              placeholder="Use este espaço para sugerir novos objetivos ou estratégias que ainda não aparecem na lista. Essas sugestões não entram neste plano automaticamente, mas podem nos ajudar a melhorar o Projeto Sonhe + Alto."></textarea>
+            <small></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        © <span>Escola no Ar</span> • Desenvolvimento Vocacional e Projeto de Vida
+      </div>
+      <div>
+        Contato: <a href="#">contato@escolanoar.com.br</a> • WhatsApp: <a href="#">(19) 19-99935-0101</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    // URL do JSON de estratégias
+    const ESTRATEGIAS_URL = "{% static 'projeto21/data/estrategias.json' %}";
+
+    // Referências ao DOM
+    const areaSelect   = document.getElementById("plano-area");
+    const nivelSelect  = document.getElementById("plano-nivel");
+    const objetivoSugeridoSelect = document.getElementById("plano-objetivo-sugerido");
+    const sugestoesTextarea      = document.getElementById("plano-sugestoes");
+    const listaDiv     = document.getElementById("estrategias-lista");
+    const btnGerar     = document.getElementById("btn-gerar-plano");
+
+    if (!areaSelect || !nivelSelect || !listaDiv || !btnGerar) return;
+
+    // Objetivos sugeridos por área
+    const OBJETIVOS_SUGERIDOS = {
+      "Família": [
+        "Melhorar a comunicação com meus pais",
+        "Ajudar nas tarefas de casa com regularidade",
+        "Passar tempo de qualidade com minha família",
+        "Ser mais paciente com meus irmãos ou parentes",
+        "Expressar gratidão e carinho dentro de casa",
+        "Evitar discussões desnecessárias",
+        "Orar com minha família regularmente",
+        "Respeitar os horários e regras do lar"
+      ],
+      "Escola": [
+        "Organizar melhor meus estudos e prazos",
+        "Melhorar minha participação nas aulas",
+        "Cuidar do meu comportamento escolar",
+        "Buscar ajuda quando tiver dificuldades",
+        "Aumentar minha média em pelo menos uma disciplina",
+        "Respeitar professores e colegas",
+        "Evitar distrações em sala de aula",
+        "Montar um plano de estudos realista"
+      ],
+      "Amigos": [
+        "Valorizar os verdadeiros amigos",
+        "Ser mais presente nos momentos difíceis",
+        "Dar bons conselhos quando for procurado",
+        "Manter contato com amigos antigos",
+        "Evitar fofocas e julgamentos",
+        "Incluir colegas que ficam isolados",
+        "Desenvolver amizades saudáveis",
+        "Orar por meus amigos regularmente"
+      ],
+      "Comunidade": [
+        "Participar de ações sociais ou voluntariado",
+        "Cuidar do ambiente ao meu redor",
+        "Ser respeitoso com todos, mesmo os diferentes",
+        "Cumprir regras e responsabilidades públicas",
+        "Tratar bem os vizinhos",
+        "Ajudar idosos ou crianças quando possível",
+        "Usar redes sociais com responsabilidade",
+        "Representar bem minha fé e meus valores"
+      ],
+      "Igreja": [
+        "Frequentar os cultos com regularidade",
+        "Participar ativamente do ministério de jovens",
+        "Servir em algum ministério da igreja",
+        "Orar e ler a Bíblia diariamente",
+        "Testemunhar minha fé com sabedoria",
+        "Apoiar os novos membros e visitantes",
+        "Ser pontual e comprometido nas atividades",
+        "Buscar conselhos com líderes espirituais"
+      ],
+      "Eu mesmo": [
+        "Me conhecer melhor e valorizar minhas qualidades",
+        "Cuidar da minha saúde física",
+        "Controlar meu tempo no celular e redes",
+        "Aprender a lidar com minhas emoções",
+        "Criar hábitos saudáveis (sono, alimentação)",
+        "Buscar crescimento espiritual",
+        "Evitar comparações e inveja",
+        "Desenvolver um plano de vida com metas claras"
+      ]
+    };
+
+    // Preenche o select de objetivos quando a área muda
+    function atualizarObjetivosSugeridos() {
+      if (!objetivoSugeridoSelect) return;
+
+      const area = areaSelect.value;
+      objetivoSugeridoSelect.innerHTML = "";
+
+      if (!area || !OBJETIVOS_SUGERIDOS[area]) {
+        objetivoSugeridoSelect.disabled = true;
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "Selecione a área para ver os objetivos";
+        objetivoSugeridoSelect.appendChild(opt);
+        return;
+      }
+
+      objetivoSugeridoSelect.disabled = false;
+
+      const optPadrao = document.createElement("option");
+      optPadrao.value = "";
+      optPadrao.textContent = "Selecione um objetivo...";
+      objetivoSugeridoSelect.appendChild(optPadrao);
+
+      OBJETIVOS_SUGERIDOS[area].forEach((texto) => {
+        const opt = document.createElement("option");
+        opt.value = texto;
+        opt.textContent = texto;
+        objetivoSugeridoSelect.appendChild(opt);
+      });
+    }
+
+    // Cache do JSON
+    let estrategiasCache = null;
+
+    async function carregarEstrategias() {
+      if (estrategiasCache) return estrategiasCache;
+
+      try {
+        const resp = await fetch(ESTRATEGIAS_URL);
+        if (!resp.ok) {
+          console.error("Erro ao buscar estrategias.json", resp.status, resp.statusText);
+          listaDiv.innerHTML =
+            "<p>Não foi possível carregar as estratégias (erro " +
+            resp.status +
+            "). Confira se o arquivo <strong>estrategias.json</strong> está em <code>static/projeto21/data</code>.</p>";
+          estrategiasCache = [];
+          return estrategiasCache;
+        }
+        estrategiasCache = await resp.json();
+      } catch (err) {
+        console.error("Erro ao ler/parsear estrategias.json", err);
+        listaDiv.innerHTML =
+          "<p>Ocorreu um erro ao ler o arquivo de estratégias. Veja o console do navegador (F12) para mais detalhes.</p>";
+        estrategiasCache = [];
+      }
+      return estrategiasCache;
+    }
+
+    // Atualiza lista de estratégias conforme área + nível
+    async function atualizarLista() {
+      const area  = areaSelect.value;
+      const nivel = nivelSelect.value;
+
+      if (!area || !nivel) {
+        listaDiv.innerHTML = "<p>Escolha a área e o nível para ver as estratégias sugeridas.</p>";
+        return;
+      }
+
+      listaDiv.innerHTML = "<p>Carregando estratégias...</p>";
+
+      const dados = await carregarEstrategias();
+      if (!dados || !dados.length) return;
+
+      const filtradas = dados.filter(
+        (e) => e.area === area && e.nivel === nivel
+      );
+
+      if (!filtradas.length) {
+        listaDiv.innerHTML =
+          "<p>Não encontramos estratégias para essa combinação de área e nível. Confira a planilha / JSON.</p>";
+        return;
+      }
+
+      const container = document.createElement("div");
+      container.className = "estrategias-cards";
+
+      filtradas.forEach((est) => {
+        const card = document.createElement("label");
+        card.className = "estrategia-card";
+
+        const pesoTxt = (est.peso != null) ? (" · Peso: " + est.peso) : "";
+
+        card.innerHTML = `
+          <input type="checkbox"
+                 class="estrategia-check"
+                 data-codigo="${est.codigo}"
+                 data-estrategia="${est.estrategia}"
+                 data-dosagem="${est.dosagem}">
+          <div class="estrategia-content">
+            <div class="estrategia-titulo">${est.estrategia}</div>
+            <div class="estrategia-dosagem">${est.dosagem}</div>
+            <div class="estrategia-meta">Código: ${est.codigo}${pesoTxt}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      listaDiv.innerHTML = "";
+      listaDiv.appendChild(container);
+    }
+
+    // Eventos
+    areaSelect.addEventListener("change", function () {
+      atualizarObjetivosSugeridos();
+      atualizarLista();
+    });
+
+    nivelSelect.addEventListener("change", atualizarLista);
+
+    // Inicializa estado do select de objetivos
+    atualizarObjetivosSugeridos();
+
+    // Utilitário para escapar HTML
+    function escapeHtml(text) {
+      const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+      };
+      return text.replace(/[&<>"']/g, (m) => map[m]);
+    }
+
+    // Geração do plano
+    btnGerar.addEventListener("click", function () {
+      const checks = Array.from(
+        document.querySelectorAll(".estrategia-check:checked")
+      );
+
+      if (!checks.length) {
+        alert("Marque pelo menos uma estratégia para gerar o plano.");
+        return;
+      }
+
+      const nomeInput   = document.getElementById("plano-nome");
+      const escolaInput = document.getElementById("plano-escola");
+
+      const nome     = nomeInput ? nomeInput.value.trim() : "";
+      const escola   = escolaInput ? escolaInput.value.trim() : "";
+      const area     = areaSelect.value;
+      const nivel    = nivelSelect.value;
+
+      const objetivoSelecionado =
+        (objetivoSugeridoSelect && objetivoSugeridoSelect.value)
+          ? objetivoSugeridoSelect.value.trim()
+          : "";
+
+      const sugestoes =
+        sugestoesTextarea && sugestoesTextarea.value
+          ? sugestoesTextarea.value.trim()
+          : "";
+
+      let linhas = "";
+      checks.forEach((chk, idx) => {
+        const est = chk.getAttribute("data-estrategia");
+        const dos = chk.getAttribute("data-dosagem");
+        const cod = chk.getAttribute("data-codigo");
+
+        linhas += `
+          <tr>
+            <td style="text-align:center;">${idx + 1}</td>
+            <td>${escapeHtml(est)}</td>
+            <td>${escapeHtml(dos)}</td>
+            <td>${escapeHtml(cod)}</td>
+          </tr>
+        `;
+      });
+
+      const objetivoHtml = objetivoSelecionado
+        ? `<p><strong>Meu objetivo nesta área:</strong> ${escapeHtml(objetivoSelecionado)}</p>`
+        : `<p><strong>Meu objetivo nesta área:</strong> _________________________________</p>`;
+
+      const nomeHtml = nome
+        ? escapeHtml(nome)
+        : "_____________________________";
+
+      const escolaHtml = escola
+        ? escapeHtml(escola)
+        : "________________________________________";
+
+      const win = window.open("", "_blank");
+      const doc = win.document;
+
+      doc.write(`
+        <!DOCTYPE html>
+        <html lang="pt-br">
+        <head>
+          <meta charset="UTF-8">
+          <title>Plano de Estratégias - Projeto Sonhe + Alto</title>
+          <style>
+            body {
+              font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+              margin: 1.5cm;
+              color: #222031;
+            }
+            h1 {
+              font-size: 1.6rem;
+              margin-bottom: 0.2rem;
+            }
+            h2 {
+              font-size: 1.1rem;
+              margin-top: 0.4rem;
+            }
+            .sub {
+              font-size: 0.9rem;
+              color: #666;
+              margin-bottom: 0.8rem;
+            }
+            .dados {
+              font-size: 0.9rem;
+              margin-bottom: 0.6rem;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 0.6rem;
+              font-size: 0.9rem;
+            }
+            th, td {
+              border: 1px solid #ccc;
+              padding: 0.25rem 0.35rem;
+            }
+            th {
+              background: #f6f2ff;
+              text-align: left;
+            }
+            .rodape {
+              margin-top: 1.2rem;
+              font-size: 0.85rem;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>MEU PLANO DE ESTRATÉGIAS</h1>
+          <div class="sub">Projeto Sonhe + Alto • Área: ${escapeHtml(area)} • Nível: ${escapeHtml(nivel)}</div>
+
+          <div class="dados">
+            <p><strong>Nome:</strong> ${nomeHtml}</p>
+            <p><strong>Escola / Turma:</strong> ${escolaHtml}</p>
+          </div>
+
+          ${objetivoHtml}
+
+          <h2>Estratégias que escolhi para praticar</h2>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:40px;">#</th>
+                <th>Estratégia</th>
+                <th style="width:180px;">Dosagem</th>
+                <th style="width:100px;">Código</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${linhas}
+            </tbody>
+          </table>
+
+          ${sugestoes ? `<h2>Minhas sugestões</h2><p>${escapeHtml(sugestoes)}</p>` : ""}
+
+          <div class="rodape">
+            <p><strong>Combinação sugerida:</strong> praticar estas estratégias por 21 dias, registrando nos papéis de acompanhamento.</p>
+            <br>
+            <p>Assinatura do participante: _________________________________</p>
+            <p>Assinatura do mentor(a): _________________________________</p>
+          </div>
+        </body>
+        </html>
+      `);
+
+      doc.close();
+    });
+  })();
+</script>
+</body>
+</html>

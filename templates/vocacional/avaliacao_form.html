@@ -1,62 +1,97 @@
-<!-- TEMPLATE: apps/vocacional/templates/vocacional/avaliacao_form.html -->
-
 {% extends "vocacional/base_vocacional.html" %}
 {% load static %}
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'vocacional/css/quiz.css' %}?v=20251108">
+
+{% block page_title %}Avaliação Vocacional{% endblock %}
+
+{% block header_title %}Avaliação Vocacional{% endblock %}
+{% block header_subtitle %}
+Responda às afirmações pensando em você hoje. Leva cerca de 10–15 minutos.
 {% endblock %}
 
-{% block vocacional_content %}
-  <h1 class="title">Avaliação Vocacional</h1>
+{% block page_content %}
 
-  <div class="wrap accent-lilac">
-    <div class="card-info">
-      <strong>Como responder</strong>
-      <ul>
-        <li>Marque de 1 a 5 (1 = discordo totalmente • 5 = concordo totalmente).</li>
-        <li>Use ← / → para voltar/avançar • teclas 1–5 marcam a resposta.</li>
-        <li>Você não pode pular questões em branco.</li>
-        <li>Ao fechar a aba, suas respostas são salvas automaticamente.</li>
-      </ul>
-    </div>
+<div class="vocacional-main-card">
 
-    <div class="progress" style="margin:.6rem 0 .4rem 0">
-      <div class="bar" id="progress-bar"></div>
-    </div>
-    <div class="progress-meta"><span>Progresso</span><span id="progress-text">0%</span></div>
-  </div>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} mb-3">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
 
-  <form id="quiz-form" method="post">
-    {% csrf_token %}
-    <div class="wrap accent-lilac">
-      <div style="margin:.75rem auto; text-align: center;">
-        <div id="quiz-container" class="card-quiz"><!-- PERGUNTAS VIA JS --></div>
-         style="display:flex;justify-content:space-between;gap:.75rem;margin-top:.75rem">
-        <div class="left">
-          <button type="button" id="prev-button" class="btn ghost">Anterior</button>
-          <button type="button" id="next-button" class="btn ghost">Próxima</button>
-        </div>
-        <div id="counter">0/0</div>
-        <div class="right">
-          <button type="submit" class="btn">Salvar</button>
-          <button type="submit" name="finalizar" value="1" class="btn ok">Finalizar</button>
+  {% if ultima_concluida %}
+    <p class="text-muted mb-3">
+      Você já concluiu uma avaliação.
+      <a href="{% url 'vocacional:resultado' ultima_concluida.pk %}"
+         class="btn btn-sm btn-primary ms-2">
+        Ver meu resultado
+      </a>
+    </p>
+  {% endif %}
+
+  <div class="vocacional-card">
+    <h2 class="vocacional-section-title">Como responder</h2>
+    <ul class="instructions">
+      <li>Marque de <strong>1 a 5</strong> (1 = discordo totalmente · 5 = concordo totalmente).</li>
+      <li>Use as teclas <kbd>←</kbd> / <kbd>→</kbd> para voltar/avançar e as teclas <kbd>1–5</kbd> para marcar a resposta.</li>
+      <li>Você não pode pular questões em branco.</li>
+      <li>Ao fechar a aba, suas respostas são salvas automaticamente.</li>
+      <li>Depois de responder todas as questões, clique no botão <strong>Finalizar</strong> para ver o resultado.</li>
+    </ul>
+
+    <form id="quiz-form" method="post">
+      {% csrf_token %}
+
+      <div class="quiz-shell">
+        <div class="quiz-body">
+
+          <div class="progress">
+            <div class="bar">
+              <div id="progress-bar" class="bar-fill" style="width: 0%"></div>
+            </div>
+            <div id="progress-text">0/{{ total_perguntas }} (0%)</div>
+          </div>
+
+          <div id="quiz-container" class="quiz-container">
+            Questão 0/0
+          </div>
+          
+          <div class="progress" style="margin:.8rem 0 .5rem 0">
+            <div class="bar" id="progress-bar"></div>
+          </div>
+          <!-- texto inicial zerado; JS atualiza depois -->
+          <div id="progress-text">0/0 (0%)</div>
+
+          <div id="quiz-container">
+            <!-- Pergunta + escala serão injetadas via JS -->
+          </div>
+
+          <div class="quiz-toolbar">
+            <div class="quiz-toolbar-left">
+              <span class="text-muted small">
+                Questão
+                <span id="counter">0/0</span>
+              </span>
+            </div>
+            <div class="quiz-toolbar-right">
+              <button id="prev-button" type="button" class="btn btn-sm btn-secondary">← Anterior</button>
+              <button type="submit" name="salvar" value="1" class="btn btn-sm btn-outline-light">Salvar</button>
+              <button type="submit" name="finalizar" value="1" class="btn btn-sm btn-success">Finalizar</button>
+              <button id="next-button" type="button" class="btn btn-sm btn-primary">Próxima →</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </form>
-
-  {% block extra_js %}
-  <script>
-    // Torna os dados globais para o quiz.js
-    window.quizData = {{ perguntas|safe }};
-    var quizData = window.quizData;
-    console.debug('quizData len =', Array.isArray(quizData) ? quizData.length : '(nao array)');
-    </script>
-    <script src="{% static 'vocacional/js/quiz.js' %}?v=20251029-2"></script>
-  {% endblock %}
-
-<script src="{% static 'vocacional/js/quiz.js' %}?v=dev"></script>
-
+    </form>
+  </div>
 {% endblock %}
 
+{% block vocacional_extra_js %}
+  <script>
+    window.quizData = {{ perguntas|safe }};
+    window.quizInterleaveKey = 'dimensao';
+  </script>
+  <script src="{% static 'vocacional/js/quiz.js' %}?v=20251112"></script>
 
+{% endblock %}

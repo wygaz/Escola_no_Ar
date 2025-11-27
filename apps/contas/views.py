@@ -24,7 +24,7 @@ def registrar(request):
             return redirect(next_url or reverse("portal"))
     else:
         form = UsuarioCreationForm()
-    return render(request, "contas/criar_conta.html", {"form": form})
+    return render(request, "contas/criar_conta.html", {"form": form, "next": request.GET.get("next", "")})
 
 
 def testar_template(request):

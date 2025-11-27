@@ -1,3 +1,5 @@
+# apps/projeto21/views.py
 from django.shortcuts import render
 
-# Create your views here.
+def landing(request):
+    return render(request, "projeto21/landing.html")
