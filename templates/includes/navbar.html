@@ -1,0 +1,17 @@
+{% load auth_tags nav_active %}
+
+<nav class="breadcrumbs">
+  <a href="{% url 'portal' %}">Portal</a>
+{#  <a href="{% url 'projeto21:index' %}">Projeto 21</a> #}
+  <a href="{% url 'vocacional:index' %}">Vocacional</a>
+  <span class="spacer"></span>
+
+  {% if request.user.is_authenticated %}
+    <span class="hello">Olá, {{ request.user.first_name|default:request.user.email }}</span>
+    <form method="post" action="{% url 'contas:logout' %}" class="inline">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button type="submit" class="btn btn--ghost">Sair</button>
+    </form>
+  {% endif %}
+</nav>

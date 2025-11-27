@@ -1,0 +1,21 @@
+Area,Dimensao,Estrategia,Frequencia,Periodo,Peso,OrdemArea,OrdemDimensao,OrdemEstrategia
+Família,Básico,Conversar com meus pais sobre como foi meu dia.,Diário,21 dias,1,1,1,1
+Família,Básico,Ajudar em uma tarefa de casa sem que me peçam.,Diário,21 dias,1,1,1,2
+Família,Básico,Dar um abraço de carinho em alguém da família.,Diário,21 dias,1,1,1,3
+Família,Básico,Participar de uma refeição em família sem celular.,Diário,21 dias,1,1,1,4
+Família,Básico,Ouvir com atenção a opinião de um familiar.,Dia sim-dia não,21 dias,1,1,1,5
+Família,Básico,Fazer uma oração pela minha família.,Diário,21 dias,1,1,1,6
+Família,Básico,Escrever uma mensagem positiva para um parente.,Dia sim-dia não,21 dias,1,1,1,7
+Família,Básico,Organizar meu quarto ou espaço pessoal.,Diário,21 dias,1,1,1,8
+Família,Básico,Agradecer verbalmente algo que alguém fez por mim.,Diário,21 dias,1,1,1,9
+Família,Básico,Contar uma lembrança boa para alguém da família.,Semanal,3 semanas,1,1,1,10
+Família,Básico,Preparar a mesa para uma refeição em conjunto.,Dia sim-dia não,21 dias,1,1,1,11
+Família,Básico,Cuidar de um animal de estimação por conta própria.,Diário,21 dias,1,1,1,12
+Família,Básico,Guardar meu celular durante 30 minutos de convivência.,Diário,21 dias,1,1,1,13
+Família,Básico,Ajudar a lavar ou secar a louça.,Diário,21 dias,1,1,1,14
+Família,Básico,Escolher um versículo e ler em voz alta para a família.,Semanal,3 semanas,1,1,1,15
+Família,Básico,Perguntar a alguém como foi o dia dele(a).,Diário,21 dias,1,1,1,16
+Família,Básico,Contar uma coisa positiva que me aconteceu.,Diário,21 dias,1,1,1,17
+Família,Básico,"Participar de uma atividade em conjunto (jogo, conversa).",Semanal,3 semanas,1,1,1,18
+Família,Básico,Fazer silêncio respeitoso quando outro está descansando.,Diário,21 dias,1,1,1,19
+Família,Básico,Desejar “boa noite” pessoalmente a todos.,Diário,21 dias,1,1,1,20

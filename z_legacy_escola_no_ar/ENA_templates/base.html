@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Escola no Ar{% endblock %}</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'site.css' %}">
+</head>
+<body>
+    <header>
+        <img src="{% static 'img/logo_escola_no_ar.jpg' %}" alt="Logo Escola no Ar" style="max-height:100px;">
+    </header>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,16 @@
+flowchart TD
+    A[/GET /vocacional/ (index)/] --> B{login?}
+    B -- não --> L[/login (next=/vocacional)/] --> A
+    B -- sim --> C{bonus exigido?}
+    C -- não --> D{consent ok?}
+    C -- sim --> C1{tem bônus?}
+    C1 -- não --> E[/bonus/]
+    C1 -- sim --> D
+
+    D -- não --> T[/consentimento_check/]
+    D -- sim --> G{guia concluído?}
+    G -- não --> H[/guia/avaliacao/]
+    G -- sim --> F[/avaliacao/form/]
+
+    %% backdoors
+    F -. valida gating .-> C

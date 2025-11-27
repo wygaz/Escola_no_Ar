@@ -1,0 +1,16 @@
+{% extends 'sonho_de_serbase_sonhodeser.html' %}
+{% block conteudo %}
+<h2>Desafio do Dia</h2>
+{% if desafio %}
+    <h4>{{ desafio.titulo }}</h4>
+    <p>{{ desafio.texto }}</p>
+    {% if desafio.versiculo %}<blockquote class="blockquote">{{ desafio.versiculo }}</blockquote>{% endif %}
+    <form method="post">{% csrf_token %}
+        <textarea name="resposta_texto" class="form-control" rows="4" placeholder="Sua resposta aqui..."></textarea>
+        <button type="submit" class="btn btn-success mt-2">Enviar</button>
+    </form>
+{% else %}
+    <p>Nenhum desafio disponível.</p>
+{% endif %}
+
+{% endblock %}

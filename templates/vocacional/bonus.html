@@ -1,0 +1,38 @@
+{% extends "vocacional/base_vocacional.html" %}
+{% block vocacional_content %}
+{% load contas_extras %}
+
+<h1 class="title">Bônus do Guia Vocacional</h1>
+<div class="wrap">
+  <div class="card-info">
+    <p>Como comprador do Guia, você tem acesso ao Teste Vocacional completo.</p>
+    <ul>
+      <li>Leva ~10–12 minutos</li>
+      <li>Resultados por dimensão</li>
+      <li>Seu histórico fica salvo</li>
+    </ul>
+  </div>
+
+
+{% if request.user.is_authenticated %}
+    <div class="actions">
+        <a class="btn" href="{{ link_avaliacao }}">Ir para a Avaliação</a>
+        <span class="btn outline">{{ usuario_label }}</span>
+        <a class="btn ghost" href="{% url 'contas:logout' %}?next={% url 'vocacional:bonus' %}">{{ request.user|display_name }} {{ request.user.first_name|default:request.user.email }}</a>
+    </div>
+{% else %}
+    <div class="actions">
+        <a class="btn" href="{% url 'contas:login' %}?next={% url 'vocacional:avaliacao_form' %}">Entrar</a>
+        <a class="btn" href="{% url 'contas:cadastro' %}?next={% url 'vocacional:avaliacao_form' %}">Cadastrar</a>
+    </div>
+{% endif %}
+</div>
+{% endblock %}
+
+
+<h2>Bônus do Guia</h2>
+<p>Para obter o Bônus, adquira o Guia ou resgate seu token:</p>
+<ul>
+  <li><a class="btn" href="LINK_HOTMART">Comprar o Guia</a></li>
+  <li><a class="btn" href="{% url 'vocacional:resgatar_bonus' token='SEU_TOKEN' %}">Resgatar token</a></li>
+</ul>

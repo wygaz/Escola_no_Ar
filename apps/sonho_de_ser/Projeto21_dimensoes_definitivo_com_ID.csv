@@ -1,0 +1,361 @@
+ID,Area,Dimensao,Estrategia,Frequencia,Periodo,FreqCodigo,PeriodoCodigo,Peso,OrdemArea,OrdemDimensao,OrdemEstrategia
+FaB001-1d21d,Família,Básico,Família Básico – Estratégia 1,Diário,21 dias,1d,21d,1,1,1,1
+FaB002-1d21d,Família,Básico,Família Básico – Estratégia 2,Diário,21 dias,1d,21d,1,1,1,2
+FaB003-1d21d,Família,Básico,Família Básico – Estratégia 3,Diário,21 dias,1d,21d,1,1,1,3
+FaB004-1d21d,Família,Básico,Família Básico – Estratégia 4,Diário,21 dias,1d,21d,1,1,1,4
+FaB005-1d21d,Família,Básico,Família Básico – Estratégia 5,Diário,21 dias,1d,21d,1,1,1,5
+FaB006-1d21d,Família,Básico,Família Básico – Estratégia 6,Diário,21 dias,1d,21d,1,1,1,6
+FaB007-1d21d,Família,Básico,Família Básico – Estratégia 7,Diário,21 dias,1d,21d,1,1,1,7
+FaB008-1d21d,Família,Básico,Família Básico – Estratégia 8,Diário,21 dias,1d,21d,1,1,1,8
+FaB009-1d21d,Família,Básico,Família Básico – Estratégia 9,Diário,21 dias,1d,21d,1,1,1,9
+FaB010-1d21d,Família,Básico,Família Básico – Estratégia 10,Diário,21 dias,1d,21d,1,1,1,10
+FaB011-1d21d,Família,Básico,Família Básico – Estratégia 11,Diário,21 dias,1d,21d,1,1,1,11
+FaB012-1d21d,Família,Básico,Família Básico – Estratégia 12,Diário,21 dias,1d,21d,1,1,1,12
+FaB013-1d21d,Família,Básico,Família Básico – Estratégia 13,Diário,21 dias,1d,21d,1,1,1,13
+FaB014-1d21d,Família,Básico,Família Básico – Estratégia 14,Diário,21 dias,1d,21d,1,1,1,14
+FaB015-1d21d,Família,Básico,Família Básico – Estratégia 15,Diário,21 dias,1d,21d,1,1,1,15
+FaB016-1d21d,Família,Básico,Família Básico – Estratégia 16,Diário,21 dias,1d,21d,1,1,1,16
+FaB017-1d21d,Família,Básico,Família Básico – Estratégia 17,Diário,21 dias,1d,21d,1,1,1,17
+FaB018-1d21d,Família,Básico,Família Básico – Estratégia 18,Diário,21 dias,1d,21d,1,1,1,18
+FaB019-1d21d,Família,Básico,Família Básico – Estratégia 19,Diário,21 dias,1d,21d,1,1,1,19
+FaB020-1d21d,Família,Básico,Família Básico – Estratégia 20,Diário,21 dias,1d,21d,1,1,1,20
+FaD001-1s02s,Família,Desafio,Família Desafio – Estratégia 1,Semanal,2 semanas,1s,02s,2,1,2,1
+FaD002-1s02s,Família,Desafio,Família Desafio – Estratégia 2,Semanal,2 semanas,1s,02s,2,1,2,2
+FaD003-1s02s,Família,Desafio,Família Desafio – Estratégia 3,Semanal,2 semanas,1s,02s,2,1,2,3
+FaD004-1s02s,Família,Desafio,Família Desafio – Estratégia 4,Semanal,2 semanas,1s,02s,2,1,2,4
+FaD005-1s02s,Família,Desafio,Família Desafio – Estratégia 5,Semanal,2 semanas,1s,02s,2,1,2,5
+FaD006-1s02s,Família,Desafio,Família Desafio – Estratégia 6,Semanal,2 semanas,1s,02s,2,1,2,6
+FaD007-1s02s,Família,Desafio,Família Desafio – Estratégia 7,Semanal,2 semanas,1s,02s,2,1,2,7
+FaD008-1s02s,Família,Desafio,Família Desafio – Estratégia 8,Semanal,2 semanas,1s,02s,2,1,2,8
+FaD009-1s02s,Família,Desafio,Família Desafio – Estratégia 9,Semanal,2 semanas,1s,02s,2,1,2,9
+FaD010-1s02s,Família,Desafio,Família Desafio – Estratégia 10,Semanal,2 semanas,1s,02s,2,1,2,10
+FaD011-1s02s,Família,Desafio,Família Desafio – Estratégia 11,Semanal,2 semanas,1s,02s,2,1,2,11
+FaD012-1s02s,Família,Desafio,Família Desafio – Estratégia 12,Semanal,2 semanas,1s,02s,2,1,2,12
+FaD013-1s02s,Família,Desafio,Família Desafio – Estratégia 13,Semanal,2 semanas,1s,02s,2,1,2,13
+FaD014-1s02s,Família,Desafio,Família Desafio – Estratégia 14,Semanal,2 semanas,1s,02s,2,1,2,14
+FaD015-1s02s,Família,Desafio,Família Desafio – Estratégia 15,Semanal,2 semanas,1s,02s,2,1,2,15
+FaD016-1s02s,Família,Desafio,Família Desafio – Estratégia 16,Semanal,2 semanas,1s,02s,2,1,2,16
+FaD017-1s02s,Família,Desafio,Família Desafio – Estratégia 17,Semanal,2 semanas,1s,02s,2,1,2,17
+FaD018-1s02s,Família,Desafio,Família Desafio – Estratégia 18,Semanal,2 semanas,1s,02s,2,1,2,18
+FaD019-1s02s,Família,Desafio,Família Desafio – Estratégia 19,Semanal,2 semanas,1s,02s,2,1,2,19
+FaD020-1s02s,Família,Desafio,Família Desafio – Estratégia 20,Semanal,2 semanas,1s,02s,2,1,2,20
+FaA001-1d21d,Família,Avançado,Família Avançado – Estratégia 1,Programa,21 dias,1d,21d,3,1,3,1
+FaA002-1d21d,Família,Avançado,Família Avançado – Estratégia 2,Programa,21 dias,1d,21d,3,1,3,2
+FaA003-1d21d,Família,Avançado,Família Avançado – Estratégia 3,Programa,21 dias,1d,21d,3,1,3,3
+FaA004-1d21d,Família,Avançado,Família Avançado – Estratégia 4,Programa,21 dias,1d,21d,3,1,3,4
+FaA005-1d21d,Família,Avançado,Família Avançado – Estratégia 5,Programa,21 dias,1d,21d,3,1,3,5
+FaA006-1d21d,Família,Avançado,Família Avançado – Estratégia 6,Programa,21 dias,1d,21d,3,1,3,6
+FaA007-1d21d,Família,Avançado,Família Avançado – Estratégia 7,Programa,21 dias,1d,21d,3,1,3,7
+FaA008-1d21d,Família,Avançado,Família Avançado – Estratégia 8,Programa,21 dias,1d,21d,3,1,3,8
+FaA009-1d21d,Família,Avançado,Família Avançado – Estratégia 9,Programa,21 dias,1d,21d,3,1,3,9
+FaA010-1d21d,Família,Avançado,Família Avançado – Estratégia 10,Programa,21 dias,1d,21d,3,1,3,10
+FaA011-1d21d,Família,Avançado,Família Avançado – Estratégia 11,Programa,21 dias,1d,21d,3,1,3,11
+FaA012-1d21d,Família,Avançado,Família Avançado – Estratégia 12,Programa,21 dias,1d,21d,3,1,3,12
+FaA013-1d21d,Família,Avançado,Família Avançado – Estratégia 13,Programa,21 dias,1d,21d,3,1,3,13
+FaA014-1d21d,Família,Avançado,Família Avançado – Estratégia 14,Programa,21 dias,1d,21d,3,1,3,14
+FaA015-1d21d,Família,Avançado,Família Avançado – Estratégia 15,Programa,21 dias,1d,21d,3,1,3,15
+FaA016-1d21d,Família,Avançado,Família Avançado – Estratégia 16,Programa,21 dias,1d,21d,3,1,3,16
+FaA017-1d21d,Família,Avançado,Família Avançado – Estratégia 17,Programa,21 dias,1d,21d,3,1,3,17
+FaA018-1d21d,Família,Avançado,Família Avançado – Estratégia 18,Programa,21 dias,1d,21d,3,1,3,18
+FaA019-1d21d,Família,Avançado,Família Avançado – Estratégia 19,Programa,21 dias,1d,21d,3,1,3,19
+FaA020-1d21d,Família,Avançado,Família Avançado – Estratégia 20,Programa,21 dias,1d,21d,3,1,3,20
+IgB001-1d21d,Igreja,Básico,Igreja Básico – Estratégia 1,Diário,21 dias,1d,21d,1,2,1,1
+IgB002-1d21d,Igreja,Básico,Igreja Básico – Estratégia 2,Diário,21 dias,1d,21d,1,2,1,2
+IgB003-1d21d,Igreja,Básico,Igreja Básico – Estratégia 3,Diário,21 dias,1d,21d,1,2,1,3
+IgB004-1d21d,Igreja,Básico,Igreja Básico – Estratégia 4,Diário,21 dias,1d,21d,1,2,1,4
+IgB005-1d21d,Igreja,Básico,Igreja Básico – Estratégia 5,Diário,21 dias,1d,21d,1,2,1,5
+IgB006-1d21d,Igreja,Básico,Igreja Básico – Estratégia 6,Diário,21 dias,1d,21d,1,2,1,6
+IgB007-1d21d,Igreja,Básico,Igreja Básico – Estratégia 7,Diário,21 dias,1d,21d,1,2,1,7
+IgB008-1d21d,Igreja,Básico,Igreja Básico – Estratégia 8,Diário,21 dias,1d,21d,1,2,1,8
+IgB009-1d21d,Igreja,Básico,Igreja Básico – Estratégia 9,Diário,21 dias,1d,21d,1,2,1,9
+IgB010-1d21d,Igreja,Básico,Igreja Básico – Estratégia 10,Diário,21 dias,1d,21d,1,2,1,10
+IgB011-1d21d,Igreja,Básico,Igreja Básico – Estratégia 11,Diário,21 dias,1d,21d,1,2,1,11
+IgB012-1d21d,Igreja,Básico,Igreja Básico – Estratégia 12,Diário,21 dias,1d,21d,1,2,1,12
+IgB013-1d21d,Igreja,Básico,Igreja Básico – Estratégia 13,Diário,21 dias,1d,21d,1,2,1,13
+IgB014-1d21d,Igreja,Básico,Igreja Básico – Estratégia 14,Diário,21 dias,1d,21d,1,2,1,14
+IgB015-1d21d,Igreja,Básico,Igreja Básico – Estratégia 15,Diário,21 dias,1d,21d,1,2,1,15
+IgB016-1d21d,Igreja,Básico,Igreja Básico – Estratégia 16,Diário,21 dias,1d,21d,1,2,1,16
+IgB017-1d21d,Igreja,Básico,Igreja Básico – Estratégia 17,Diário,21 dias,1d,21d,1,2,1,17
+IgB018-1d21d,Igreja,Básico,Igreja Básico – Estratégia 18,Diário,21 dias,1d,21d,1,2,1,18
+IgB019-1d21d,Igreja,Básico,Igreja Básico – Estratégia 19,Diário,21 dias,1d,21d,1,2,1,19
+IgB020-1d21d,Igreja,Básico,Igreja Básico – Estratégia 20,Diário,21 dias,1d,21d,1,2,1,20
+IgD001-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 1,Semanal,2 semanas,1s,02s,2,2,2,1
+IgD002-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 2,Semanal,2 semanas,1s,02s,2,2,2,2
+IgD003-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 3,Semanal,2 semanas,1s,02s,2,2,2,3
+IgD004-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 4,Semanal,2 semanas,1s,02s,2,2,2,4
+IgD005-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 5,Semanal,2 semanas,1s,02s,2,2,2,5
+IgD006-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 6,Semanal,2 semanas,1s,02s,2,2,2,6
+IgD007-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 7,Semanal,2 semanas,1s,02s,2,2,2,7
+IgD008-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 8,Semanal,2 semanas,1s,02s,2,2,2,8
+IgD009-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 9,Semanal,2 semanas,1s,02s,2,2,2,9
+IgD010-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 10,Semanal,2 semanas,1s,02s,2,2,2,10
+IgD011-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 11,Semanal,2 semanas,1s,02s,2,2,2,11
+IgD012-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 12,Semanal,2 semanas,1s,02s,2,2,2,12
+IgD013-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 13,Semanal,2 semanas,1s,02s,2,2,2,13
+IgD014-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 14,Semanal,2 semanas,1s,02s,2,2,2,14
+IgD015-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 15,Semanal,2 semanas,1s,02s,2,2,2,15
+IgD016-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 16,Semanal,2 semanas,1s,02s,2,2,2,16
+IgD017-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 17,Semanal,2 semanas,1s,02s,2,2,2,17
+IgD018-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 18,Semanal,2 semanas,1s,02s,2,2,2,18
+IgD019-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 19,Semanal,2 semanas,1s,02s,2,2,2,19
+IgD020-1s02s,Igreja,Desafio,Igreja Desafio – Estratégia 20,Semanal,2 semanas,1s,02s,2,2,2,20
+IgA001-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 1,Programa,21 dias,1d,21d,3,2,3,1
+IgA002-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 2,Programa,21 dias,1d,21d,3,2,3,2
+IgA003-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 3,Programa,21 dias,1d,21d,3,2,3,3
+IgA004-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 4,Programa,21 dias,1d,21d,3,2,3,4
+IgA005-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 5,Programa,21 dias,1d,21d,3,2,3,5
+IgA006-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 6,Programa,21 dias,1d,21d,3,2,3,6
+IgA007-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 7,Programa,21 dias,1d,21d,3,2,3,7
+IgA008-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 8,Programa,21 dias,1d,21d,3,2,3,8
+IgA009-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 9,Programa,21 dias,1d,21d,3,2,3,9
+IgA010-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 10,Programa,21 dias,1d,21d,3,2,3,10
+IgA011-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 11,Programa,21 dias,1d,21d,3,2,3,11
+IgA012-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 12,Programa,21 dias,1d,21d,3,2,3,12
+IgA013-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 13,Programa,21 dias,1d,21d,3,2,3,13
+IgA014-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 14,Programa,21 dias,1d,21d,3,2,3,14
+IgA015-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 15,Programa,21 dias,1d,21d,3,2,3,15
+IgA016-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 16,Programa,21 dias,1d,21d,3,2,3,16
+IgA017-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 17,Programa,21 dias,1d,21d,3,2,3,17
+IgA018-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 18,Programa,21 dias,1d,21d,3,2,3,18
+IgA019-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 19,Programa,21 dias,1d,21d,3,2,3,19
+IgA020-1d21d,Igreja,Avançado,Igreja Avançado – Estratégia 20,Programa,21 dias,1d,21d,3,2,3,20
+EsB001-1d21d,Escola,Básico,Escola Básico – Estratégia 1,Diário,21 dias,1d,21d,1,3,1,1
+EsB002-1d21d,Escola,Básico,Escola Básico – Estratégia 2,Diário,21 dias,1d,21d,1,3,1,2
+EsB003-1d21d,Escola,Básico,Escola Básico – Estratégia 3,Diário,21 dias,1d,21d,1,3,1,3
+EsB004-1d21d,Escola,Básico,Escola Básico – Estratégia 4,Diário,21 dias,1d,21d,1,3,1,4
+EsB005-1d21d,Escola,Básico,Escola Básico – Estratégia 5,Diário,21 dias,1d,21d,1,3,1,5
+EsB006-1d21d,Escola,Básico,Escola Básico – Estratégia 6,Diário,21 dias,1d,21d,1,3,1,6
+EsB007-1d21d,Escola,Básico,Escola Básico – Estratégia 7,Diário,21 dias,1d,21d,1,3,1,7
+EsB008-1d21d,Escola,Básico,Escola Básico – Estratégia 8,Diário,21 dias,1d,21d,1,3,1,8
+EsB009-1d21d,Escola,Básico,Escola Básico – Estratégia 9,Diário,21 dias,1d,21d,1,3,1,9
+EsB010-1d21d,Escola,Básico,Escola Básico – Estratégia 10,Diário,21 dias,1d,21d,1,3,1,10
+EsB011-1d21d,Escola,Básico,Escola Básico – Estratégia 11,Diário,21 dias,1d,21d,1,3,1,11
+EsB012-1d21d,Escola,Básico,Escola Básico – Estratégia 12,Diário,21 dias,1d,21d,1,3,1,12
+EsB013-1d21d,Escola,Básico,Escola Básico – Estratégia 13,Diário,21 dias,1d,21d,1,3,1,13
+EsB014-1d21d,Escola,Básico,Escola Básico – Estratégia 14,Diário,21 dias,1d,21d,1,3,1,14
+EsB015-1d21d,Escola,Básico,Escola Básico – Estratégia 15,Diário,21 dias,1d,21d,1,3,1,15
+EsB016-1d21d,Escola,Básico,Escola Básico – Estratégia 16,Diário,21 dias,1d,21d,1,3,1,16
+EsB017-1d21d,Escola,Básico,Escola Básico – Estratégia 17,Diário,21 dias,1d,21d,1,3,1,17
+EsB018-1d21d,Escola,Básico,Escola Básico – Estratégia 18,Diário,21 dias,1d,21d,1,3,1,18
+EsB019-1d21d,Escola,Básico,Escola Básico – Estratégia 19,Diário,21 dias,1d,21d,1,3,1,19
+EsB020-1d21d,Escola,Básico,Escola Básico – Estratégia 20,Diário,21 dias,1d,21d,1,3,1,20
+EsD001-1s02s,Escola,Desafio,Escola Desafio – Estratégia 1,Semanal,2 semanas,1s,02s,2,3,2,1
+EsD002-1s02s,Escola,Desafio,Escola Desafio – Estratégia 2,Semanal,2 semanas,1s,02s,2,3,2,2
+EsD003-1s02s,Escola,Desafio,Escola Desafio – Estratégia 3,Semanal,2 semanas,1s,02s,2,3,2,3
+EsD004-1s02s,Escola,Desafio,Escola Desafio – Estratégia 4,Semanal,2 semanas,1s,02s,2,3,2,4
+EsD005-1s02s,Escola,Desafio,Escola Desafio – Estratégia 5,Semanal,2 semanas,1s,02s,2,3,2,5
+EsD006-1s02s,Escola,Desafio,Escola Desafio – Estratégia 6,Semanal,2 semanas,1s,02s,2,3,2,6
+EsD007-1s02s,Escola,Desafio,Escola Desafio – Estratégia 7,Semanal,2 semanas,1s,02s,2,3,2,7
+EsD008-1s02s,Escola,Desafio,Escola Desafio – Estratégia 8,Semanal,2 semanas,1s,02s,2,3,2,8
+EsD009-1s02s,Escola,Desafio,Escola Desafio – Estratégia 9,Semanal,2 semanas,1s,02s,2,3,2,9
+EsD010-1s02s,Escola,Desafio,Escola Desafio – Estratégia 10,Semanal,2 semanas,1s,02s,2,3,2,10
+EsD011-1s02s,Escola,Desafio,Escola Desafio – Estratégia 11,Semanal,2 semanas,1s,02s,2,3,2,11
+EsD012-1s02s,Escola,Desafio,Escola Desafio – Estratégia 12,Semanal,2 semanas,1s,02s,2,3,2,12
+EsD013-1s02s,Escola,Desafio,Escola Desafio – Estratégia 13,Semanal,2 semanas,1s,02s,2,3,2,13
+EsD014-1s02s,Escola,Desafio,Escola Desafio – Estratégia 14,Semanal,2 semanas,1s,02s,2,3,2,14
+EsD015-1s02s,Escola,Desafio,Escola Desafio – Estratégia 15,Semanal,2 semanas,1s,02s,2,3,2,15
+EsD016-1s02s,Escola,Desafio,Escola Desafio – Estratégia 16,Semanal,2 semanas,1s,02s,2,3,2,16
+EsD017-1s02s,Escola,Desafio,Escola Desafio – Estratégia 17,Semanal,2 semanas,1s,02s,2,3,2,17
+EsD018-1s02s,Escola,Desafio,Escola Desafio – Estratégia 18,Semanal,2 semanas,1s,02s,2,3,2,18
+EsD019-1s02s,Escola,Desafio,Escola Desafio – Estratégia 19,Semanal,2 semanas,1s,02s,2,3,2,19
+EsD020-1s02s,Escola,Desafio,Escola Desafio – Estratégia 20,Semanal,2 semanas,1s,02s,2,3,2,20
+EsA001-1d21d,Escola,Avançado,Escola Avançado – Estratégia 1,Programa,21 dias,1d,21d,3,3,3,1
+EsA002-1d21d,Escola,Avançado,Escola Avançado – Estratégia 2,Programa,21 dias,1d,21d,3,3,3,2
+EsA003-1d21d,Escola,Avançado,Escola Avançado – Estratégia 3,Programa,21 dias,1d,21d,3,3,3,3
+EsA004-1d21d,Escola,Avançado,Escola Avançado – Estratégia 4,Programa,21 dias,1d,21d,3,3,3,4
+EsA005-1d21d,Escola,Avançado,Escola Avançado – Estratégia 5,Programa,21 dias,1d,21d,3,3,3,5
+EsA006-1d21d,Escola,Avançado,Escola Avançado – Estratégia 6,Programa,21 dias,1d,21d,3,3,3,6
+EsA007-1d21d,Escola,Avançado,Escola Avançado – Estratégia 7,Programa,21 dias,1d,21d,3,3,3,7
+EsA008-1d21d,Escola,Avançado,Escola Avançado – Estratégia 8,Programa,21 dias,1d,21d,3,3,3,8
+EsA009-1d21d,Escola,Avançado,Escola Avançado – Estratégia 9,Programa,21 dias,1d,21d,3,3,3,9
+EsA010-1d21d,Escola,Avançado,Escola Avançado – Estratégia 10,Programa,21 dias,1d,21d,3,3,3,10
+EsA011-1d21d,Escola,Avançado,Escola Avançado – Estratégia 11,Programa,21 dias,1d,21d,3,3,3,11
+EsA012-1d21d,Escola,Avançado,Escola Avançado – Estratégia 12,Programa,21 dias,1d,21d,3,3,3,12
+EsA013-1d21d,Escola,Avançado,Escola Avançado – Estratégia 13,Programa,21 dias,1d,21d,3,3,3,13
+EsA014-1d21d,Escola,Avançado,Escola Avançado – Estratégia 14,Programa,21 dias,1d,21d,3,3,3,14
+EsA015-1d21d,Escola,Avançado,Escola Avançado – Estratégia 15,Programa,21 dias,1d,21d,3,3,3,15
+EsA016-1d21d,Escola,Avançado,Escola Avançado – Estratégia 16,Programa,21 dias,1d,21d,3,3,3,16
+EsA017-1d21d,Escola,Avançado,Escola Avançado – Estratégia 17,Programa,21 dias,1d,21d,3,3,3,17
+EsA018-1d21d,Escola,Avançado,Escola Avançado – Estratégia 18,Programa,21 dias,1d,21d,3,3,3,18
+EsA019-1d21d,Escola,Avançado,Escola Avançado – Estratégia 19,Programa,21 dias,1d,21d,3,3,3,19
+EsA020-1d21d,Escola,Avançado,Escola Avançado – Estratégia 20,Programa,21 dias,1d,21d,3,3,3,20
+AmB001-1d21d,Amigos,Básico,Amigos Básico – Estratégia 1,Diário,21 dias,1d,21d,1,4,1,1
+AmB002-1d21d,Amigos,Básico,Amigos Básico – Estratégia 2,Diário,21 dias,1d,21d,1,4,1,2
+AmB003-1d21d,Amigos,Básico,Amigos Básico – Estratégia 3,Diário,21 dias,1d,21d,1,4,1,3
+AmB004-1d21d,Amigos,Básico,Amigos Básico – Estratégia 4,Diário,21 dias,1d,21d,1,4,1,4
+AmB005-1d21d,Amigos,Básico,Amigos Básico – Estratégia 5,Diário,21 dias,1d,21d,1,4,1,5
+AmB006-1d21d,Amigos,Básico,Amigos Básico – Estratégia 6,Diário,21 dias,1d,21d,1,4,1,6
+AmB007-1d21d,Amigos,Básico,Amigos Básico – Estratégia 7,Diário,21 dias,1d,21d,1,4,1,7
+AmB008-1d21d,Amigos,Básico,Amigos Básico – Estratégia 8,Diário,21 dias,1d,21d,1,4,1,8
+AmB009-1d21d,Amigos,Básico,Amigos Básico – Estratégia 9,Diário,21 dias,1d,21d,1,4,1,9
+AmB010-1d21d,Amigos,Básico,Amigos Básico – Estratégia 10,Diário,21 dias,1d,21d,1,4,1,10
+AmB011-1d21d,Amigos,Básico,Amigos Básico – Estratégia 11,Diário,21 dias,1d,21d,1,4,1,11
+AmB012-1d21d,Amigos,Básico,Amigos Básico – Estratégia 12,Diário,21 dias,1d,21d,1,4,1,12
+AmB013-1d21d,Amigos,Básico,Amigos Básico – Estratégia 13,Diário,21 dias,1d,21d,1,4,1,13
+AmB014-1d21d,Amigos,Básico,Amigos Básico – Estratégia 14,Diário,21 dias,1d,21d,1,4,1,14
+AmB015-1d21d,Amigos,Básico,Amigos Básico – Estratégia 15,Diário,21 dias,1d,21d,1,4,1,15
+AmB016-1d21d,Amigos,Básico,Amigos Básico – Estratégia 16,Diário,21 dias,1d,21d,1,4,1,16
+AmB017-1d21d,Amigos,Básico,Amigos Básico – Estratégia 17,Diário,21 dias,1d,21d,1,4,1,17
+AmB018-1d21d,Amigos,Básico,Amigos Básico – Estratégia 18,Diário,21 dias,1d,21d,1,4,1,18
+AmB019-1d21d,Amigos,Básico,Amigos Básico – Estratégia 19,Diário,21 dias,1d,21d,1,4,1,19
+AmB020-1d21d,Amigos,Básico,Amigos Básico – Estratégia 20,Diário,21 dias,1d,21d,1,4,1,20
+AmD001-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 1,Semanal,2 semanas,1s,02s,2,4,2,1
+AmD002-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 2,Semanal,2 semanas,1s,02s,2,4,2,2
+AmD003-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 3,Semanal,2 semanas,1s,02s,2,4,2,3
+AmD004-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 4,Semanal,2 semanas,1s,02s,2,4,2,4
+AmD005-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 5,Semanal,2 semanas,1s,02s,2,4,2,5
+AmD006-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 6,Semanal,2 semanas,1s,02s,2,4,2,6
+AmD007-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 7,Semanal,2 semanas,1s,02s,2,4,2,7
+AmD008-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 8,Semanal,2 semanas,1s,02s,2,4,2,8
+AmD009-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 9,Semanal,2 semanas,1s,02s,2,4,2,9
+AmD010-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 10,Semanal,2 semanas,1s,02s,2,4,2,10
+AmD011-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 11,Semanal,2 semanas,1s,02s,2,4,2,11
+AmD012-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 12,Semanal,2 semanas,1s,02s,2,4,2,12
+AmD013-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 13,Semanal,2 semanas,1s,02s,2,4,2,13
+AmD014-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 14,Semanal,2 semanas,1s,02s,2,4,2,14
+AmD015-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 15,Semanal,2 semanas,1s,02s,2,4,2,15
+AmD016-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 16,Semanal,2 semanas,1s,02s,2,4,2,16
+AmD017-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 17,Semanal,2 semanas,1s,02s,2,4,2,17
+AmD018-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 18,Semanal,2 semanas,1s,02s,2,4,2,18
+AmD019-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 19,Semanal,2 semanas,1s,02s,2,4,2,19
+AmD020-1s02s,Amigos,Desafio,Amigos Desafio – Estratégia 20,Semanal,2 semanas,1s,02s,2,4,2,20
+AmA001-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 1,Programa,21 dias,1d,21d,3,4,3,1
+AmA002-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 2,Programa,21 dias,1d,21d,3,4,3,2
+AmA003-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 3,Programa,21 dias,1d,21d,3,4,3,3
+AmA004-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 4,Programa,21 dias,1d,21d,3,4,3,4
+AmA005-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 5,Programa,21 dias,1d,21d,3,4,3,5
+AmA006-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 6,Programa,21 dias,1d,21d,3,4,3,6
+AmA007-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 7,Programa,21 dias,1d,21d,3,4,3,7
+AmA008-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 8,Programa,21 dias,1d,21d,3,4,3,8
+AmA009-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 9,Programa,21 dias,1d,21d,3,4,3,9
+AmA010-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 10,Programa,21 dias,1d,21d,3,4,3,10
+AmA011-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 11,Programa,21 dias,1d,21d,3,4,3,11
+AmA012-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 12,Programa,21 dias,1d,21d,3,4,3,12
+AmA013-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 13,Programa,21 dias,1d,21d,3,4,3,13
+AmA014-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 14,Programa,21 dias,1d,21d,3,4,3,14
+AmA015-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 15,Programa,21 dias,1d,21d,3,4,3,15
+AmA016-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 16,Programa,21 dias,1d,21d,3,4,3,16
+AmA017-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 17,Programa,21 dias,1d,21d,3,4,3,17
+AmA018-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 18,Programa,21 dias,1d,21d,3,4,3,18
+AmA019-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 19,Programa,21 dias,1d,21d,3,4,3,19
+AmA020-1d21d,Amigos,Avançado,Amigos Avançado – Estratégia 20,Programa,21 dias,1d,21d,3,4,3,20
+CoB001-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 1,Diário,21 dias,1d,21d,1,5,1,1
+CoB002-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 2,Diário,21 dias,1d,21d,1,5,1,2
+CoB003-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 3,Diário,21 dias,1d,21d,1,5,1,3
+CoB004-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 4,Diário,21 dias,1d,21d,1,5,1,4
+CoB005-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 5,Diário,21 dias,1d,21d,1,5,1,5
+CoB006-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 6,Diário,21 dias,1d,21d,1,5,1,6
+CoB007-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 7,Diário,21 dias,1d,21d,1,5,1,7
+CoB008-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 8,Diário,21 dias,1d,21d,1,5,1,8
+CoB009-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 9,Diário,21 dias,1d,21d,1,5,1,9
+CoB010-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 10,Diário,21 dias,1d,21d,1,5,1,10
+CoB011-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 11,Diário,21 dias,1d,21d,1,5,1,11
+CoB012-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 12,Diário,21 dias,1d,21d,1,5,1,12
+CoB013-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 13,Diário,21 dias,1d,21d,1,5,1,13
+CoB014-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 14,Diário,21 dias,1d,21d,1,5,1,14
+CoB015-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 15,Diário,21 dias,1d,21d,1,5,1,15
+CoB016-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 16,Diário,21 dias,1d,21d,1,5,1,16
+CoB017-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 17,Diário,21 dias,1d,21d,1,5,1,17
+CoB018-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 18,Diário,21 dias,1d,21d,1,5,1,18
+CoB019-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 19,Diário,21 dias,1d,21d,1,5,1,19
+CoB020-1d21d,Comunidade,Básico,Comunidade Básico – Estratégia 20,Diário,21 dias,1d,21d,1,5,1,20
+CoD001-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 1,Semanal,2 semanas,1s,02s,2,5,2,1
+CoD002-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 2,Semanal,2 semanas,1s,02s,2,5,2,2
+CoD003-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 3,Semanal,2 semanas,1s,02s,2,5,2,3
+CoD004-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 4,Semanal,2 semanas,1s,02s,2,5,2,4
+CoD005-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 5,Semanal,2 semanas,1s,02s,2,5,2,5
+CoD006-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 6,Semanal,2 semanas,1s,02s,2,5,2,6
+CoD007-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 7,Semanal,2 semanas,1s,02s,2,5,2,7
+CoD008-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 8,Semanal,2 semanas,1s,02s,2,5,2,8
+CoD009-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 9,Semanal,2 semanas,1s,02s,2,5,2,9
+CoD010-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 10,Semanal,2 semanas,1s,02s,2,5,2,10
+CoD011-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 11,Semanal,2 semanas,1s,02s,2,5,2,11
+CoD012-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 12,Semanal,2 semanas,1s,02s,2,5,2,12
+CoD013-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 13,Semanal,2 semanas,1s,02s,2,5,2,13
+CoD014-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 14,Semanal,2 semanas,1s,02s,2,5,2,14
+CoD015-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 15,Semanal,2 semanas,1s,02s,2,5,2,15
+CoD016-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 16,Semanal,2 semanas,1s,02s,2,5,2,16
+CoD017-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 17,Semanal,2 semanas,1s,02s,2,5,2,17
+CoD018-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 18,Semanal,2 semanas,1s,02s,2,5,2,18
+CoD019-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 19,Semanal,2 semanas,1s,02s,2,5,2,19
+CoD020-1s02s,Comunidade,Desafio,Comunidade Desafio – Estratégia 20,Semanal,2 semanas,1s,02s,2,5,2,20
+CoA001-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 1,Programa,21 dias,1d,21d,3,5,3,1
+CoA002-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 2,Programa,21 dias,1d,21d,3,5,3,2
+CoA003-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 3,Programa,21 dias,1d,21d,3,5,3,3
+CoA004-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 4,Programa,21 dias,1d,21d,3,5,3,4
+CoA005-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 5,Programa,21 dias,1d,21d,3,5,3,5
+CoA006-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 6,Programa,21 dias,1d,21d,3,5,3,6
+CoA007-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 7,Programa,21 dias,1d,21d,3,5,3,7
+CoA008-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 8,Programa,21 dias,1d,21d,3,5,3,8
+CoA009-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 9,Programa,21 dias,1d,21d,3,5,3,9
+CoA010-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 10,Programa,21 dias,1d,21d,3,5,3,10
+CoA011-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 11,Programa,21 dias,1d,21d,3,5,3,11
+CoA012-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 12,Programa,21 dias,1d,21d,3,5,3,12
+CoA013-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 13,Programa,21 dias,1d,21d,3,5,3,13
+CoA014-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 14,Programa,21 dias,1d,21d,3,5,3,14
+CoA015-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 15,Programa,21 dias,1d,21d,3,5,3,15
+CoA016-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 16,Programa,21 dias,1d,21d,3,5,3,16
+CoA017-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 17,Programa,21 dias,1d,21d,3,5,3,17
+CoA018-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 18,Programa,21 dias,1d,21d,3,5,3,18
+CoA019-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 19,Programa,21 dias,1d,21d,3,5,3,19
+CoA020-1d21d,Comunidade,Avançado,Comunidade Avançado – Estratégia 20,Programa,21 dias,1d,21d,3,5,3,20
+EuB001-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 1,Diário,21 dias,1d,21d,1,6,1,1
+EuB002-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 2,Diário,21 dias,1d,21d,1,6,1,2
+EuB003-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 3,Diário,21 dias,1d,21d,1,6,1,3
+EuB004-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 4,Diário,21 dias,1d,21d,1,6,1,4
+EuB005-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 5,Diário,21 dias,1d,21d,1,6,1,5
+EuB006-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 6,Diário,21 dias,1d,21d,1,6,1,6
+EuB007-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 7,Diário,21 dias,1d,21d,1,6,1,7
+EuB008-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 8,Diário,21 dias,1d,21d,1,6,1,8
+EuB009-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 9,Diário,21 dias,1d,21d,1,6,1,9
+EuB010-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 10,Diário,21 dias,1d,21d,1,6,1,10
+EuB011-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 11,Diário,21 dias,1d,21d,1,6,1,11
+EuB012-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 12,Diário,21 dias,1d,21d,1,6,1,12
+EuB013-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 13,Diário,21 dias,1d,21d,1,6,1,13
+EuB014-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 14,Diário,21 dias,1d,21d,1,6,1,14
+EuB015-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 15,Diário,21 dias,1d,21d,1,6,1,15
+EuB016-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 16,Diário,21 dias,1d,21d,1,6,1,16
+EuB017-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 17,Diário,21 dias,1d,21d,1,6,1,17
+EuB018-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 18,Diário,21 dias,1d,21d,1,6,1,18
+EuB019-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 19,Diário,21 dias,1d,21d,1,6,1,19
+EuB020-1d21d,Eu mesmo,Básico,Eu mesmo Básico – Estratégia 20,Diário,21 dias,1d,21d,1,6,1,20
+EuD001-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 1,Semanal,2 semanas,1s,02s,2,6,2,1
+EuD002-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 2,Semanal,2 semanas,1s,02s,2,6,2,2
+EuD003-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 3,Semanal,2 semanas,1s,02s,2,6,2,3
+EuD004-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 4,Semanal,2 semanas,1s,02s,2,6,2,4
+EuD005-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 5,Semanal,2 semanas,1s,02s,2,6,2,5
+EuD006-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 6,Semanal,2 semanas,1s,02s,2,6,2,6
+EuD007-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 7,Semanal,2 semanas,1s,02s,2,6,2,7
+EuD008-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 8,Semanal,2 semanas,1s,02s,2,6,2,8
+EuD009-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 9,Semanal,2 semanas,1s,02s,2,6,2,9
+EuD010-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 10,Semanal,2 semanas,1s,02s,2,6,2,10
+EuD011-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 11,Semanal,2 semanas,1s,02s,2,6,2,11
+EuD012-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 12,Semanal,2 semanas,1s,02s,2,6,2,12
+EuD013-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 13,Semanal,2 semanas,1s,02s,2,6,2,13
+EuD014-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 14,Semanal,2 semanas,1s,02s,2,6,2,14
+EuD015-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 15,Semanal,2 semanas,1s,02s,2,6,2,15
+EuD016-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 16,Semanal,2 semanas,1s,02s,2,6,2,16
+EuD017-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 17,Semanal,2 semanas,1s,02s,2,6,2,17
+EuD018-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 18,Semanal,2 semanas,1s,02s,2,6,2,18
+EuD019-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 19,Semanal,2 semanas,1s,02s,2,6,2,19
+EuD020-1s02s,Eu mesmo,Desafio,Eu mesmo Desafio – Estratégia 20,Semanal,2 semanas,1s,02s,2,6,2,20
+EuA001-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 1,Programa,21 dias,1d,21d,3,6,3,1
+EuA002-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 2,Programa,21 dias,1d,21d,3,6,3,2
+EuA003-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 3,Programa,21 dias,1d,21d,3,6,3,3
+EuA004-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 4,Programa,21 dias,1d,21d,3,6,3,4
+EuA005-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 5,Programa,21 dias,1d,21d,3,6,3,5
+EuA006-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 6,Programa,21 dias,1d,21d,3,6,3,6
+EuA007-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 7,Programa,21 dias,1d,21d,3,6,3,7
+EuA008-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 8,Programa,21 dias,1d,21d,3,6,3,8
+EuA009-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 9,Programa,21 dias,1d,21d,3,6,3,9
+EuA010-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 10,Programa,21 dias,1d,21d,3,6,3,10
+EuA011-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 11,Programa,21 dias,1d,21d,3,6,3,11
+EuA012-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 12,Programa,21 dias,1d,21d,3,6,3,12
+EuA013-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 13,Programa,21 dias,1d,21d,3,6,3,13
+EuA014-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 14,Programa,21 dias,1d,21d,3,6,3,14
+EuA015-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 15,Programa,21 dias,1d,21d,3,6,3,15
+EuA016-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 16,Programa,21 dias,1d,21d,3,6,3,16
+EuA017-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 17,Programa,21 dias,1d,21d,3,6,3,17
+EuA018-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 18,Programa,21 dias,1d,21d,3,6,3,18
+EuA019-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 19,Programa,21 dias,1d,21d,3,6,3,19
+EuA020-1d21d,Eu mesmo,Avançado,Eu mesmo Avançado – Estratégia 20,Programa,21 dias,1d,21d,3,6,3,20

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Projeto 21 – Mentor{% endblock %}
+{% block content %}
+<h1>Projeto 21 – Mentor</h1>
+<div class="grid">
+  {% for m in mentorandos %}
+    <div class="card">
+      <h3>👤 {{ m.mentorado.get_full_name|default:m.mentorado.email }}</h3>
+      <p class="desc">Escopo: {{ m.get_escopo_display }} • Status: {{ m.get_status_display }}</p>
+      <div class="actions">
+        <a class="btn" href="/projeto21/mentor/{{ m.mentorado_id }}/">Ver progresso</a>
+      </div>
+    </div>
+  {% empty %}
+    <p>Nenhum mentorando ativo no momento.</p>
+  {% endfor %}
+</div>
+{% endblock %}

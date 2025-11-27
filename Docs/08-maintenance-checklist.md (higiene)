@@ -1,0 +1,6 @@
+- [ ] Todos os imports para contas usam `apps.contas...`
+- [ ] Não há duplicatas de URLs (mesmo path com nomes diferentes)
+- [ ] `urls.py` do projeto não inclui apps inexistentes
+- [ ] `navbar.html` só referencia rotas registradas
+- [ ] `gating.py` é a única fonte de verdade do fluxo
+- [ ] `docs/` atualizado após qualquer mudança de fluxo/modelo

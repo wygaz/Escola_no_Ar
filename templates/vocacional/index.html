@@ -1,0 +1,60 @@
+{# templates/vocacional/index.html #}
+{% extends "vocacional/base_vocacional.html" %}
+
+{% block page_title %}Portal Vocacional{% endblock %}
+{% block header_title %}Avaliação Vocacional{% endblock %}
+{% block header_subtitle %}
+  <p class="vocacional-subtitle">
+    Faça a Avaliação Vocacional e veja seus resultados por dimensão.
+  </p>
+{% endblock %}
+
+{% block page_content %}
+
+{% if request.user.is_authenticated %}
+  <div class="vocacional-main-card">
+
+    <div class="status">
+      {# Espera receber do view: concluidas, disponiveis, ultima #}
+
+      {% if disponiveis > 1 %}
+        <span class="badge badge-green">
+          Status: {{ disponiveis }} avaliações disponíveis
+        </span>
+        <p class="lead">
+          Você tem <strong>{{ disponiveis }}</strong> tentativas para realizar seu teste.
+        </p>
+        <div class="actions-row">
+          <a class="btn" href="{% url 'vocacional:avaliacao_gate' %}">Começar agora</a>
+          <span class="pill">
+            Concluídas: <strong>{{ concluidas|default:0 }}</strong> •
+            Disponíveis: <strong>{{ disponiveis }}</strong>
+          </span>
+        </div>
+
+      {% elif disponiveis == 1 %}
+        <span class="badge badge-amber">Status: 1 avaliação disponível</span>
+        <p class="lead">
+          Você ainda tem <strong>1</strong> tentativa para concluir.
+        </p>
+
+        <div class="actions-row">
+          <a class="btn" href="{% url 'vocacional:avaliacao_gate' %}">Continuar</a>
+
+          {% if ultima %}
+            <a class="btn ghost" href="{% url 'vocacional:resultado' pk=ultima.pk %}">
+              Ver meu último resultado
+            </a>
+          {% endif %}
+
+          <span class="pill">
+            Concluídas: <strong>{{ concluidas|default:0 }}</strong> •
+            Disponíveis: <strong>{{ disponiveis }}</strong>
+          </span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% endblock %}

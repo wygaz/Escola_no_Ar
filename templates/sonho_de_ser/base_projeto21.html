@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Projeto 21 · {{ block.super }}{% endblock %}
+{% block content %}
+  <div class="container">
+    {% include "includes/_messages.html" %}
+    {% block p21_content %}{% endblock %}
+  </div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load auth_tags %}
+{% block content %}
+  <div class="container">
+    <h1>Portal</h1>
+
+    {# KPIs rápidos (renderizam só se vier algo do contexto) #}
+    <div class="kpis">
+      {% if cursos_count %}<div class="kpi"><div>📚 Cursos</div><div class="num">{{ cursos_count }}</div></div>{% endif %}
+      {% if turmas_count %}<div class="kpi"><div>👥 Turmas</div><div class="num">{{ turmas_count }}</div></div>{% endif %}
+      {% if mentorandos_count %}<div class="kpi"><div>🤝 Mentorandos ativos</div><div class="num">{{ mentorandos_count }}</div></div>{% endif %}
+      {% if atividades_pendentes %}<div class="kpi"><div>📝 Atividades pendentes</div><div class="num">{{ atividades_pendentes }}</div></div>{% endif %}
+    </div>
+
+    <div class="grid">
+      {# ADMIN #}
+      {% if user|has_perfil:"ADMIN" or user|in_group:"Admins" %}
+        <div class="card card--acc card--admin">
+          <div>🛠️</div>
+          <h3>Administração</h3>
+          <p class="desc">Governança do portal, usuários, permissões e relatórios globais.</p>
+          <div class="actions">
+            <a class="btn" href="/admin/">Abrir Admin</a>
+            <a class="btn" href="/relatorios/">Relatórios</a>
+            <a class="btn" href="/contas/perfil/">Meu perfil</a>
+          </div>
+        </div>
+      {% endif %}
+
+      {# PROFESSOR #}
+      {% if user|has_perfil:"PROF" or user|in_group:"Professores" or user.is_superuser %}
+        <div class="card card--acc card--prof">
+          <div>👩‍🏫</div>
+          <h3>Professor</h3>
+          <p class="desc">Gerencie cursos, turmas e avaliações dos alunos.</p>
+          <div class="actions">
+            <a class="btn" href="/cursos/">Meus Cursos</a>
+            <a class="btn" href="/turmas/">Minhas Turmas</a>
+            <a class="btn" href="/avaliacoes/">Avaliações</a>
+          </div>
+        </div>
+      {% endif %}
+
+      {# MENTOR #}
+      {% if user|has_perfil:"MENTOR" or user|in_group:"Mentores" or user.is_superuser %}
+        <div class="card card--acc card--mentor">
+          <div>🤝</div>
+          <h3>Mentorias</h3>
+          <p class="desc">
+            Acompanhe o <strong>Projeto 21</strong> dos seus mentorandos:
+            planos, estratégias e evolução dos 21 dias.
+          </p>
+          <div class="actions">
+            <a class="btn" href="/mentorias/">Mentorias</a>
+            <a class="btn" href="/projeto21/mentor/">Projeto 21 (Mentor)</a>
+            {# Futuro: quando o Vocacional estiver pronto, reativar:
+            <a class="btn" href="/vocacional/mentor/">Vocacional (Mentor)</a>
+            #}
+          </div>
+        </div>
+      {% endif %}
+
+      {# ALUNO #}
+      {% if user|has_perfil:"ALUNO" or user|in_group:"Alunos" or user.is_superuser %}
+        <div class="card card--acc card--aluno">
+          <div>🎒</div>
+          <h3>Aluno</h3>
+          <p class="desc">Acesse aulas, atividades e suas notas.</p>
+          <div class="actions">
+            <a class="btn" href="/meus-cursos/">Meus Cursos</a>
+            <a class="btn" href="/atividades/">Minhas Atividades</a>
+            <a class="btn" href="/notas/">Minhas Notas</a>
+          </div>
+        </div>
+      {% endif %}
+
+      {# USUÁRIO (sem matrícula) – FOCO TOTAL NO PROJETO 21 #}
+      {% if user|has_perfil:"USER" or user|in_group:"Usuarios" or user.is_superuser %}
+        <div class="card card--acc card--usuario">
+          <div>🌱</div>
+          <h3>Projeto 21 – uma aventura com propósito</h3>
+          <p class="desc">
+            Bem-vindo(a) à sua área de <strong>Desenvolvimento Pessoal</strong>.
+            Aqui você entra no <strong>Projeto 21</strong>, escolhe suas estratégias
+            e imprime a papelada para viver 21 dias de mudanças reais.
+          </p>
+
+          <div class="portal-next-steps">
+            <strong>Por onde começar?</strong>
+            <ul>
+              <li>
+                Clique em <strong>Entrar no Projeto 21</strong> para ir à página principal.
+              </li>
+              <li>
+                Lá você poderá <strong>baixar os kits</strong> e
+                <strong>montar seu plano de estratégias</strong>.
+              </li>
+              <li>
+                Depois é só <strong>imprimir a papelada</strong> e acompanhar os 21 dias.
+              </li>
+            </ul>
+          </div>
+
+          <div class="actions">
+            <a class="btn" href="/projeto21/">Entrar no Projeto 21</a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>  
+{% endblock %}

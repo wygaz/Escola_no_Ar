@@ -1,0 +1,14 @@
+Destaque da linha ativa (Excel)
+
+Arquivos:
+- Destaque_Linha_template.xlsx  -> planilha com formatação condicional pronta
+- Worksheet_SelectionChange.bas -> macro VBA para atualizar a linha em tempo real
+
+Como ativar o destaque em tempo real:
+1) Abra o arquivo Destaque_Linha_template.xlsx no Excel.
+2) Salve como: Pasta de Trabalho Habilitada para Macro (*.xlsm).
+3) Pressione Alt+F11 para abrir o Editor do VBA.
+4) No menu: Arquivo > Importar arquivo... e selecione "Worksheet_SelectionChange.bas".
+5) Se necessário, copie o código do módulo importado para o módulo de código da planilha "Dados".
+   (No painel esquerdo, clique duas vezes em "Dados" e cole o código lá.)
+6) Volte ao Excel e permita a execução de macros. Ao mover o cursor, a linha será destacada.

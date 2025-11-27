@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guia de Descoberta — Quem sou eu?</title>
+  <meta name="description" content="Baixe o Guia de Descoberta, avalie em 2–3 minutos e ative seu Bônus: acesso gratuito ao Projeto 21." />
+  <meta property="og:title" content="Guia de Descoberta — Quem sou eu?" />
+  <meta property="og:description" content="Avalie o Guia em 2–3 minutos e ative seu Bônus: Projeto 21 gratuito." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0a6cff" />
+  <style>
+    :root{
+      --bg: #0f172a;          /* slate-900 */
+      --panel: #0b1220;       /* darker */
+      --text: #e5e7eb;        /* gray-200 */
+      --muted:#9ca3af;        /* gray-400 */
+      --brand:#2563eb;        /* blue-600 */
+      --brand-2:#22c55e;      /* green-500 */
+      --accent:#f59e0b;       /* amber-500 */
+      --ring: rgba(37,99,235,.35);
+      --radius: 16px;
+      --shadow: 0 10px 25px rgba(0,0,0,.25);
+      --gradient: radial-gradient(1200px 600px at 10% -10%, #1e3a8a66, transparent),
+                  radial-gradient(1200px 600px at 110% 10%, #065f4666, transparent),
+                  radial-gradient(1000px 500px at 80% 120%, #7c3aed4d, transparent);
+    }
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body{
+      margin:0; font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text); background: var(--bg); background-image: var(--gradient);
+    }
+    a{ color: inherit; text-decoration: none }
+    .container{ width:min(1100px, 92vw); margin: 0 auto; }
+    .btn{ display:inline-flex; align-items:center; gap:.6rem; padding:.9rem 1.2rem; border-radius: 999px; font-weight:600; letter-spacing:.2px; box-shadow: var(--shadow); transition:.2s transform, .2s box-shadow, .2s background;
+      background: var(--brand); color:white; border:1px solid #1d4ed8 }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 14px 30px rgba(37,99,235,.35) }
+    .btn.alt{ background: var(--brand-2); border-color:#16a34a }
+    .btn.ghost{ background: transparent; border:1px solid #3b82f6; color:#bfdbfe; box-shadow:none }
+    header{ padding: 20px 0; position: sticky; top:0; backdrop-filter: blur(8px); background: color-mix(in oklab, var(--bg) 75%, transparent); border-bottom:1px solid #1f2a44 }
+    nav{ display:flex; align-items:center; justify-content:space-between; gap:1rem }
+    nav .brand{ display:flex; align-items:center; gap:.75rem; font-weight:700 }
+    nav .brand .logo{ width:40px; height:40px; background:linear-gradient(135deg,#60a5fa,#a78bfa); border-radius:10px; box-shadow:var(--shadow) }
+    main{ padding: 32px 0 72px }
+    .hero{ display:grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items:center; padding: 40px 0 10px }
+    .panel{ background: linear-gradient( to bottom, color-mix(in oklab, var(--panel), #0b1b3a 40%), var(--panel)); border:1px solid #1f2a44; border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow) }
+    h1{ font-size: clamp(28px, 3.4vw, 46px); line-height:1.15; margin:0 0 12px }
+    p.lead{ font-size: clamp(16px, 1.5vw, 20px); color: var(--muted); margin:0 0 22px }
+    .hero .actions{ display:flex; flex-wrap:wrap; gap: .8rem }
+    .badge{ display:inline-flex; align-items:center; gap:.5rem; background:#0b1b2a; border:1px solid #1f2a44; color:#cbd5e1; padding:.35rem .65rem; border-radius:999px; font-size:.85rem }
+    .grid{ display:grid; gap:18px }
+    .grid.cols-3{ grid-template-columns: repeat(3, 1fr) }
+    .grid.cols-2{ grid-template-columns: repeat(2, 1fr) }
+    .feat{ padding:18px; border-radius:14px; border:1px solid #1f2a44; background:#0b1220; min-height: 120px }
+    .feat h3{ margin:.2rem 0 .3rem; font-size:1.05rem }
+    .feat p{ margin:0; color:#a5b4fc }
+    .section{ margin: 54px 0 }
+    .section h2{ font-size: clamp(22px, 2.2vw, 30px); margin:0 0 14px }
+    .form{ display:grid; gap:14px }
+    label{ font-weight:600 }
+    input, textarea, select{
+      background:#0b0f1a; color: #e5e7eb; border:1px solid #23304e; padding:.8rem .9rem; border-radius:12px; outline:none; transition:.2s box-shadow,.2s border-color
+    }
+    input:focus, textarea:focus, select:focus{ box-shadow:0 0 0 6px var(--ring); border-color:#3b82f6 }
+    .two{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
+    .disclaimer{ color: #9ca3af; font-size:.9rem }
+    .cards{ display:grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap:14px }
+    .card{ border:1px solid #1f2a44; border-radius:14px; overflow:hidden; background:#0b1220 }
+    .card img{ width:100%; display:block }
+    .card .cbody{ padding:12px 14px }
+    .hide{ display:none !important }
+    footer{ margin: 52px 0 30px; color:#94a3b8; font-size:.92rem }
+    @media (max-width: 880px){
+      .hero{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand"><div class="logo" aria-hidden="true"></div> Guia de Descoberta</div>
+        <div class="links" style="display:flex; gap:.6rem; align-items:center">
+          <a class="btn ghost" href="#avaliar">Avaliar o Guia</a>
+          <a class="btn" href="#bonus">Ativar Bônus</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <div class="badge">📘 Guia: Quem sou eu? • versão 1.0</div>
+        <h1>Descubra quem você é <br/>e ative o seu <em>Projeto de Vida</em></h1>
+        <p class="lead">Baixe o Guia gratuito, responda uma avaliação rápida (2–3 min) e desbloqueie o <strong>Bônus Projeto 21</strong> — um programa prático de 21 dias para transformar vocação em ação.</p>
+        <div class="actions">
+          <a class="btn" href="#download">⬇️ Baixar PDF do Guia</a>
+          <a class="btn alt" href="#avaliar">✅ Avaliar & liberar Bônus</a>
+        </div>
+        <div style="margin-top:16px; color:#cbd5e1">Ou abra pelo celular com o QR Code →</div>
+      </div>
+      <aside class="panel" aria-label="QR e destaques">
+        <div style="display:grid; gap:14px">
+          <div style="height:180px; border-radius:12px; border:1px dashed #334155; display:grid; place-items:center; color:#a5b4fc">QR CODE (apontar para esta página)</div>
+          <div class="grid cols-2">
+            <div class="feat"><h3>🎯 Vocação prática</h3><p>Metas SMART, hábitos semanais e evidências.</p></div>
+            <div class="feat"><h3>🧭 Valores</h3><p>Cartaz dos 5 valores não negociáveis.</p></div>
+          </div>
+          <div class="grid cols-2">
+            <div class="feat"><h3>📊 Áreas da vida</h3><p>“Agora” × “12 meses” em uma página.</p></div>
+            <div class="feat"><h3>🗺️ Decisão</h3><p>Fluxo simples para escolhas difíceis.</p></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- BENEFÍCIOS CURTOS -->
+    <section class="section" id="download">
+      <h2>O que você recebe</h2>
+      <div class="cards">
+        <article class="card">
+          <img src="assets/valores.jpg" alt="Cartaz Meus 5 valores" loading="lazy" />
+          <div class="cbody"><strong>Valores</strong><br/><span class="disclaimer">Página para preencher seus 5 valores não negociáveis.</span></div>
+        </article>
+        <article class="card">
+          <img src="assets/areas-agora-12m.jpg" alt="Áreas da vida: agora e em 12 meses" loading="lazy" />
+          <div class="cbody"><strong>Áreas da Vida</strong><br/><span class="disclaimer">Avaliação 0–10 com metas de 12 meses.</span></div>
+        </article>
+        <article class="card">
+          <img src="assets/smart.jpg" alt="3 Objetivos SMART" loading="lazy" />
+          <div class="cbody"><strong>3 Objetivos (SMART)</strong><br/><span class="disclaimer">Específico, mensurável, relevante e com prazo.</span></div>
+        </article>
+        <article class="card">
+          <img src="assets/mapa-dec.jpg" alt="Mapa de decisão" loading="lazy" />
+          <div class="cbody"><strong>Mapa de decisão</strong><br/><span class="disclaimer">Passos simples para decidir com paz.</span></div>
+        </article>
+      </div>
+      <div style="margin-top:18px; display:flex; gap:.8rem; flex-wrap:wrap">
+        <a class="btn" href="guia.pdf">Baixar PDF do Guia</a>
+        <a class="btn ghost" href="#avaliar">Quero avaliar</a>
+      </div>
+      <p class="disclaimer" style="margin-top:10px">Substitua <code>guia.pdf</code> e as imagens em <code>assets/</code> pelos seus arquivos reais.</p>
+    </section>
+
+    <!-- AVALIAÇÃO (2–3 min) -->
+    <section class="section panel" id="avaliar" aria-labelledby="h-avaliar">
+      <h2 id="h-avaliar">Avaliação rápida do Guia (2–3 min)</h2>
+      <form class="form" id="form-avaliacao">
+        <div class="two">
+          <div>
+            <label for="nome">Nome</label>
+            <input id="nome" name="nome" required placeholder="Seu nome" />
+          </div>
+          <div>
+            <label for="email">E‑mail</label>
+            <input id="email" name="email" type="email" required placeholder="voce@email.com" />
+          </div>
+        </div>
+        <div class="two">
+          <div>
+            <label for="clareza">O Guia foi claro?</label>
+            <select id="clareza" name="clareza" required>
+              <option value="">Selecione…</option>
+              <option>1 — pouco claro</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5 — muito claro</option>
+            </select>
+          </div>
+          <div>
+            <label for="utilidade">O Guia ajudou você?</label>
+            <select id="utilidade" name="utilidade" required>
+              <option value="">Selecione…</option>
+              <option>1 — pouco</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5 — muito</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="comentarios">Comentário (opcional)</label>
+          <textarea id="comentarios" name="comentarios" rows="3" placeholder="O que podemos melhorar?"></textarea>
+        </div>
+        <div style="display:flex; gap:.8rem; align-items:center; flex-wrap:wrap">
+          <button class="btn alt" type="submit">Enviar avaliação</button>
+          <span class="disclaimer">Ao enviar, você libera o acesso ao Bônus Projeto 21 nesta página.</span>
+        </div>
+      </form>
+      <div id="ok" class="hide" style="margin-top:14px; background:#052e14; border:1px solid #14532d; padding:12px 14px; border-radius:12px">
+        ✅ Obrigado! Sua avaliação foi registrada localmente. O Bônus foi liberado abaixo.
+      </div>
+    </section>
+
+    <!-- BÔNUS (liberado após avaliação) -->
+    <section class="section" id="bonus" aria-labelledby="h-bonus">
+      <h2 id="h-bonus">Bônus: Projeto 21 (acesso gratuito)</h2>
+      <p class="lead">Um programa prático de 21 dias com missões simples, hábitos semanais e evidências. Ideal para transformar propósito em rotina.</p>
+      <div class="panel" id="bonus-locked">
+        <p>🔒 Faça a avaliação acima para liberar este conteúdo.</p>
+      </div>
+      <div class="panel hide" id="bonus-unlocked">
+        <p>🎉 Acesso liberado! Clique para começar:</p>
+        <div style="display:flex; gap:.8rem; flex-wrap:wrap">
+          <a class="btn" href="#" id="link-p21">Abrir Projeto 21</a>
+          <a class="btn ghost" href="https://wa.me/5500000000000" target="_blank" rel="noopener">Falar no WhatsApp</a>
+        </div>
+        <p class="disclaimer" style="margin-top:8px">Substitua o link do Projeto 21 e o número do WhatsApp pelos seus.</p>
+      </div>
+    </section>
+
+    <!-- FAQ curto -->
+    <section class="section">
+      <h2>Perguntas rápidas</h2>
+      <div class="grid cols-3">
+        <div class="feat"><h3>O Guia é gratuito?</h3><p>Sim. O Bônus Projeto 21 também é gratuito após a avaliação.</p></div>
+        <div class="feat"><h3>Quanto tempo leva?</h3><p>Leitura dinâmica e avaliação de 2–3 minutos.</p></div>
+        <div class="feat"><h3>Posso usar em escola/igreja?</h3><p>Sim! Incentivamos o uso comunitário com mentoria.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="y"></span> Guia de Descoberta · Feito com propósito. · <a href="#avaliar">Avaliar</a>
+    </footer>
+  </main>
+
+  <script>
+    // util: ano no rodapé
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // avaliação -> libera bônus (localStorage para persistência simples)
+    const form = document.getElementById('form-avaliacao');
+    const ok   = document.getElementById('ok');
+    const locked = document.getElementById('bonus-locked');
+    const unlocked = document.getElementById('bonus-unlocked');
+    const KEY = 'avaliacao_guia_ok_v1';
+
+    function setUnlocked(){
+      ok.classList.remove('hide');
+      locked.classList.add('hide');
+      unlocked.classList.remove('hide');
+      localStorage.setItem(KEY, '1');
+    }
+    if(localStorage.getItem(KEY)==='1') setUnlocked();
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      // Aqui você pode integrar com seu backend, Google Forms ou Apps Script.
+      // Por enquanto, só libera localmente.
+      setUnlocked();
+      form.reset();
+    });
+  </script>
+</body>
+</html>

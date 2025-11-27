@@ -1,0 +1,55 @@
+{% extends "vocacional/base_vocacional.html" %}
+{% load static %}
+
+{% block title %}Vocacional — Avaliação do Guia{% endblock %}
+
+{% block extra_head %}{{ block.super }}
+<style>
+  .guia-avaliacao .help-text{ color: var(--muted); font-size:.95rem; margin:6px 0 12px; }
+  .guia-avaliacao fieldset{ border:0; margin:0; padding:0; }
+  .guia-avaliacao legend{ font-weight:600; margin-bottom:6px; }
+  .guia-avaliacao .box{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; margin:12px 0; }
+  .guia-avaliacao .radios{ display:flex; gap:14px; align-items:center; margin-top:8px; }
+  .guia-avaliacao textarea{ width:100%; min-height:120px; resize:vertical; background:#0b1324; color:var(--text); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  .guia-avaliacao .actions{ display:flex; gap:10px; margin-top:16px; }
+</style>
+{% endblock %}
+
+{% block vocacional_content %}
+<div class="guia-avaliacao">
+  <h1>Avaliação do Guia (pré-requisito)</h1>
+  <p class="help-text">Responda às perguntas abaixo. Ao final, aceite os termos para liberar o teste vocacional.</p>
+
+  {% if avaliacao.status == 'concluida' and avaliacao.aceite_termos %}
+    <div class="box">
+      <p>Você já concluiu esta etapa. Siga para o teste.</p>
+      <p><a class="btn" href="{% url 'vocacional:avaliacao_form' %}">Ir para o teste</a></p>
+    </div>
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    {% for q in perguntas %}
+      <fieldset class="box">
+        <legend>{{ forloop.counter }}. {{ q.enunciado|safe }}</legend>
+
+        {% if q.tipo == 'likert' %}
+          <div class="radios">
+            <label><input type="radio" name="q{{ q.id }}" value="1"> 1</label>
+            <label><input type="radio" name="q{{ q.id }}" value="2"> 2</label>
+            <label><input type="radio" name="q{{ q.id }}" value="3"> 3</label>
+            <label><input type="radio" name="q{{ q.id }}" value="4"> 4</label>
+            <label><input type="radio" name="q{{ q.id }}" value="5"> 5</label>
+          </div>
+        {% else %}
+          <textarea name="q{{ q.id }}_t" placeholder="Escreva aqui..."></textarea>
+        {% endif %}
+      </fieldset>
+    {% endfor %}
+      <input type="checkbox" name="aceite_termos" id="aceite_termos">
+      <label for="aceite_termos">Li e aceito os Termos de Uso e Privacidade</label>
+      <button type="submit" name="finalizar" class="btn">Enviar e liberar teste vocacional</button>
+  </form>
+</div>
+{% endblock %}

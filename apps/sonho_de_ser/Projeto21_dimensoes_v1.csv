@@ -1,0 +1,223 @@
+Area,Dimensao,Estrategia,Peso,OrdemArea,OrdemDimensao,OrdemEstrategia
+Família,Básico,Conversar com meus pais sobre como foi meu dia.,1,1,1,1
+Família,Básico,Ajudar em uma tarefa de casa sem que me peçam.,1,1,1,2
+Família,Básico,Dar um abraço de carinho em alguém da família.,1,1,1,3
+Família,Básico,Participar de uma refeição em família sem celular.,1,1,1,4
+Família,Básico,Ouvir com atenção a opinião de um familiar.,1,1,1,5
+Família,Básico,Fazer uma oração pela minha família.,1,1,1,6
+Família,Básico,Escrever uma mensagem positiva para um parente.,1,1,1,7
+Família,Básico,Organizar meu quarto ou espaço pessoal.,1,1,1,8
+Família,Básico,Agradecer algo que alguém da família fez por mim.,1,1,1,9
+Família,Básico,Contar uma lembrança boa para alguém da família.,1,1,1,10
+Família,Desafio,Preparar uma refeição simples para a família.,2,1,2,1
+Família,Desafio,Fazer um planejamento de tarefas domésticas para a semana.,2,1,2,2
+Família,Desafio,Conversar sobre finanças familiares com responsabilidade.,2,1,2,3
+Família,Desafio,Acompanhar um familiar em um compromisso importante.,2,1,2,4
+Família,Desafio,Escrever uma carta de gratidão para um membro da família.,2,1,2,5
+Família,Desafio,Medir e reduzir meu tempo de tela durante o tempo em família.,2,1,2,6
+Família,Desafio,Organizar um momento devocional familiar curto.,2,1,2,7
+Família,Desafio,Resolver um pequeno conflito propondo um acordo justo.,2,1,2,8
+Família,Desafio,Escanear/organizar fotos antigas da família e compartilhar.,2,1,2,9
+Família,Desafio,Criar um calendário de aniversários e datas especiais.,2,1,2,10
+Família,Desafio,Cuidar de um animal de estimação ou planta da casa.,2,1,2,11
+Família,Desafio,Aprender e ensinar uma receita tradicional da família.,2,1,2,12
+Família,Avançado,Planejar e conduzir um culto familiar semanal de 30 minutos.,3,1,3,1
+Família,Avançado,Montar orçamento doméstico básico e acompanhar por 2 semanas.,3,1,3,2
+Família,Avançado,Medir e reduzir discussões recorrentes com técnicas de mediação.,3,1,3,3
+Família,Avançado,"Criar e executar um projeto familiar (horta, reforma, doação).",3,1,3,4
+Família,Avançado,Acompanhar um irmão/parentesco em rotina de estudos por 2 semanas.,3,1,3,5
+Família,Avançado,Desenvolver um manual de tarefas domésticas compartilhadas.,3,1,3,6
+Família,Avançado,Promover um dia de reconciliação: pedir perdão e perdoar.,3,1,3,7
+Família,Avançado,Organizar um encontro de gerações e registrar histórias.,3,1,3,8
+Família,Avançado,Implantar regras de uso de telas e revisar em família.,3,1,3,9
+Família,Avançado,Praticar orçamento do tempo: bloco de atividades familiares.,3,1,3,10
+Família,Avançado,Conduzir um plano de oração por familiares específicos.,3,1,3,11
+Família,Avançado,Facilitar uma conversa sobre vocação com um membro da família.,3,1,3,12
+Família,Avançado,Estabelecer uma noite de jogos sem telas por 3 semanas.,3,1,3,13
+Família,Avançado,Criar um álbum digital com curadoria e legendas significativas.,3,1,3,14
+Família,Avançado,Implantar check-ins semanais sobre clima familiar.,3,1,3,15
+Igreja,Básico,Ler um verso bíblico curto por dia.,1,2,1,1
+Igreja,Básico,Anotar uma frase marcante do sermão ou estudo.,1,2,1,2
+Igreja,Básico,Cumprimentar calorosamente alguém que eu não conheço bem.,1,2,1,3
+Igreja,Básico,Participar ativamente de uma oração coletiva.,1,2,1,4
+Igreja,Básico,Compartilhar uma reflexão nas redes sociais.,1,2,1,5
+Igreja,Básico,Convidar um amigo para vir à igreja comigo.,1,2,1,6
+Igreja,Básico,Ajudar a recolher materiais ou organizar cadeiras.,1,2,1,7
+Igreja,Básico,Cantar com alegria durante o louvor.,1,2,1,8
+Igreja,Básico,Fazer uma oração silenciosa por alguém da igreja.,1,2,1,9
+Igreja,Básico,Agradecer a um líder ou professor da igreja.,1,2,1,10
+Igreja,Desafio,Preparar a leitura pública de um salmo ou texto.,2,2,2,1
+Igreja,Desafio,Apoiar voluntariamente uma classe infantil por um dia.,2,2,2,2
+Igreja,Desafio,Ensaiar e apresentar um hino/leitura responsiva.,2,2,2,3
+Igreja,Desafio,Visitar alguém ausente e levar uma palavra de ânimo.,2,2,2,4
+Igreja,Desafio,Participar da organização de um pequeno evento da igreja.,2,2,2,5
+Igreja,Desafio,Fazer um estudo bíblico guiado de 20 minutos com alguém.,2,2,2,6
+Igreja,Desafio,Planejar e cumprir um plano semanal de leitura devocional.,2,2,2,7
+Igreja,Desafio,Levantar e registrar pedidos de oração ao longo da semana.,2,2,2,8
+Igreja,Desafio,Apoiar a mídia/sonoplastia como auxiliar.,2,2,2,9
+Igreja,Desafio,Ajudar na limpeza/arrumação após um programa.,2,2,2,10
+Igreja,Desafio,Conduzir uma oração intercessória específica por alguém.,2,2,2,11
+Igreja,Desafio,Escrever e compartilhar um breve testemunho pessoal.,2,2,2,12
+Igreja,Avançado,Liderar pequeno grupo/PG por 3 encontros consecutivos.,3,2,3,1
+Igreja,Avançado,Preparar e conduzir uma meditação de 10–15 minutos.,3,2,3,2
+Igreja,Avançado,Organizar e executar uma ação missionária simples.,3,2,3,3
+Igreja,Avançado,"Coordenar logística de um programa (escala, materiais, tempo).",3,2,3,4
+Igreja,Avançado,Acompanhar discipulado de 1 pessoa por 3 semanas.,3,2,3,5
+Igreja,Avançado,Elaborar e cumprir plano de leitura bíblica diário (21–30 dias).,3,2,3,6
+Igreja,Avançado,Treinar e atuar em equipe de recepção/acolhimento.,3,2,3,7
+Igreja,Avançado,Produzir uma série de 3 posts devocionais.,3,2,3,8
+Igreja,Avançado,Criar roteiro e conduzir oração de intercessão em cadeia.,3,2,3,9
+Igreja,Avançado,Servir em ministério infantil por 3 sábados seguidos.,3,2,3,10
+Igreja,Avançado,Pesquisar doutrina/tema e apresentar síntese em 10 minutos.,3,2,3,11
+Igreja,Avançado,Apoiar ou liderar ensaio musical com organização de repertório.,3,2,3,12
+Igreja,Avançado,Mapear talentos do grupo e propor escala de participação.,3,2,3,13
+Igreja,Avançado,Fazer visitação a enfermo/idoso com planejamento e registros.,3,2,3,14
+Igreja,Avançado,Conduzir feedback respeitoso para melhoria de um ministério.,3,2,3,15
+Escola,Básico,Revisar o conteúdo de uma aula no mesmo dia.,1,3,1,1
+Escola,Básico,Anotar as tarefas no caderno ou agenda.,1,3,1,2
+Escola,Básico,Perguntar uma dúvida ao professor.,1,3,1,3
+Escola,Básico,Ajudar um colega com explicação simples.,1,3,1,4
+Escola,Básico,Ler 10 minutos de um livro extra além da escola.,1,3,1,5
+Escola,Básico,Organizar minha mochila antes de dormir.,1,3,1,6
+Escola,Básico,Participar de forma ativa em sala de aula.,1,3,1,7
+Escola,Básico,Cumprimentar um funcionário da escola com respeito.,1,3,1,8
+Escola,Básico,Fazer uma anotação positiva no caderno.,1,3,1,9
+Escola,Básico,Compartilhar material de estudo com um colega.,1,3,1,10
+Escola,Desafio,Elaborar um resumo estruturado de um capítulo.,2,3,2,1
+Escola,Desafio,Resolver uma lista extra de exercícios escolhida por mim.,2,3,2,2
+Escola,Desafio,Criar flashcards e revisar por 15 minutos.,2,3,2,3
+Escola,Desafio,Formar um grupo de estudo e combinar um encontro.,2,3,2,4
+Escola,Desafio,Produzir um mapa mental de um tema difícil.,2,3,2,5
+Escola,Desafio,Assistir uma videoaula e anotar pontos-chave.,2,3,2,6
+Escola,Desafio,Agendar e comparecer a horário de dúvidas com professor.,2,3,2,7
+Escola,Desafio,Aplicar técnica Pomodoro por 1 hora de estudo.,2,3,2,8
+Escola,Desafio,Planejar a semana acadêmica em uma agenda digital.,2,3,2,9
+Escola,Desafio,Fazer um simulado breve (10–15 questões).,2,3,2,10
+Escola,Desafio,Reescrever anotações tornando-as mais claras.,2,3,2,11
+Escola,Desafio,Explicar um conceito a um colega até ele entender.,2,3,2,12
+Escola,Avançado,Montar plano de estudos de 3 semanas com metas e revisões.,3,3,3,1
+Escola,Avançado,Executar 3 ciclos Pomodoro/dia por 5 dias seguidos.,3,3,3,2
+Escola,Avançado,Produzir resumos de 3 capítulos e mapas mentais completos.,3,3,3,3
+Escola,Avançado,Realizar 2 simulados completos com correção de erros.,3,3,3,4
+Escola,Avançado,Apresentar um seminário curto com slides originais.,3,3,3,5
+Escola,Avançado,Construir portfólio com melhores exercícios/projetos.,3,3,3,6
+Escola,Avançado,Solicitar e aplicar feedback de professor em trabalho.,3,3,3,7
+Escola,Avançado,Tutorar um colega por 3 encontros (30–45 min).,3,3,3,8
+Escola,Avançado,Implementar técnica Feynman para 3 conceitos difíceis.,3,3,3,9
+Escola,Avançado,Elaborar formulário de autoavaliação semanal de estudos.,3,3,3,10
+Escola,Avançado,Fazer revisão espaçada (SRS) por 21 dias.,3,3,3,11
+Escola,Avançado,Criar guia de prova com questões-chave e gabarito comentado.,3,3,3,12
+Escola,Avançado,Manter rotina de sono e alimentação focada no aprendizado.,3,3,3,13
+Escola,Avançado,Estudar em ambiente controlado (sem distrações) por 2 semanas.,3,3,3,14
+Escola,Avançado,"Praticar escrita acadêmica: introdução, desenvolvimento, conclusão.",3,3,3,15
+Amigos,Básico,Mandar uma mensagem positiva para um amigo.,1,4,1,1
+Amigos,Básico,Ouvir sem interromper quando um amigo fala.,1,4,1,2
+Amigos,Básico,"Convidar alguém novo para almoçar, jogar ou estudar junto.",1,4,1,3
+Amigos,Básico,Ajudar um amigo em uma tarefa difícil.,1,4,1,4
+Amigos,Básico,"Compartilhar algo que tenho (lanche, material, tempo).",1,4,1,5
+Amigos,Básico,Pedir desculpa se eu magoei alguém.,1,4,1,6
+Amigos,Básico,Dar uma palavra de incentivo a quem está triste.,1,4,1,7
+Amigos,Básico,Fazer um elogio verdadeiro a um amigo.,1,4,1,8
+Amigos,Básico,Sorrir e cumprimentar alguém que costumo ignorar.,1,4,1,9
+Amigos,Básico,Estar disponível para ouvir um amigo sem pressa.,1,4,1,10
+Amigos,Desafio,Organizar um encontro saudável sem gastos excessivos.,2,4,2,1
+Amigos,Desafio,Medir e reduzir fofoca/negatividade em conversas.,2,4,2,2
+Amigos,Desafio,Apoiar um amigo em um objetivo pessoal com check-ins.,2,4,2,3
+Amigos,Desafio,Criar um pequeno grupo para leitura/estudo conjunto.,2,4,2,4
+Amigos,Desafio,Planejar e cumprir um dia sem redes com um amigo.,2,4,2,5
+Amigos,Desafio,Ensinar uma habilidade que eu domino a um amigo.,2,4,2,6
+Amigos,Desafio,Iniciar uma conversa difícil com empatia e respeito.,2,4,2,7
+Amigos,Desafio,Escrever um bilhete ou e-mail de apreciação sincera.,2,4,2,8
+Amigos,Desafio,Acompanhar um amigo a uma consulta/compromisso.,2,4,2,9
+Amigos,Desafio,Oferecer carona compartilhada ou dividir custos.,2,4,2,10
+Amigos,Desafio,Organizar fotos/momentos e compartilhar um álbum.,2,4,2,11
+Amigos,Desafio,Praticar escuta ativa e refletir o que o outro disse.,2,4,2,12
+Amigos,Avançado,Coordenar grupo de responsabilidade mútua com metas semanais.,3,4,3,1
+Amigos,Avançado,Conduzir reconciliação entre dois amigos com neutralidade.,3,4,3,2
+Amigos,Avançado,Planejar viagem/saída com orçamento e segurança.,3,4,3,3
+Amigos,Avançado,Apoiar amigo em mudança/necessidade logística complexa.,3,4,3,4
+Amigos,Avançado,Criar tradição positiva semanal com amigos (sem telas).,3,4,3,5
+Amigos,Avançado,Realizar projeto de serviço com amigos na comunidade.,3,4,3,6
+Amigos,Avançado,Construir pactos de comunicação não-violenta no grupo.,3,4,3,7
+Amigos,Avançado,Mentorear um amigo mais novo por 3 semanas.,3,4,3,8
+Amigos,Avançado,Organizar campanha de arrecadação entre amigos.,3,4,3,9
+Amigos,Avançado,"Produzir conteúdo colaborativo (vídeo, blog, podcast) edificante.",3,4,3,10
+Amigos,Avançado,Criar e manter calendário de aniversários com ações concretas.,3,4,3,11
+Amigos,Avançado,Estabelecer noite de leitura/estudo conjunto recorrente.,3,4,3,12
+Amigos,Avançado,Planejar desafio de saúde entre amigos com acompanhamento.,3,4,3,13
+Amigos,Avançado,Praticar jejum de redes com o grupo por 7 dias.,3,4,3,14
+Amigos,Avançado,"Conduzir check-ins semanais (objetivos, vitórias, ajustes).",3,4,3,15
+Comunidade,Básico,Recolher um lixo da rua e jogar no lugar certo.,1,5,1,1
+Comunidade,Básico,Cumprimentar educadamente vizinhos.,1,5,1,2
+Comunidade,Básico,Ajudar alguém a carregar algo pesado.,1,5,1,3
+Comunidade,Básico,Ceder lugar no ônibus ou assento.,1,5,1,4
+Comunidade,Básico,Guardar silêncio em locais públicos.,1,5,1,5
+Comunidade,Básico,Respeitar filas sem reclamar.,1,5,1,6
+Comunidade,Básico,Agradecer a um trabalhador do bairro.,1,5,1,7
+Comunidade,Básico,Participar de uma ação social da igreja ou escola.,1,5,1,8
+Comunidade,Básico,Doar uma peça de roupa em bom estado.,1,5,1,9
+Comunidade,Básico,Segurar a porta aberta para alguém.,1,5,1,10
+Comunidade,Desafio,Pesquisar e participar de um voluntariado local.,2,5,2,1
+Comunidade,Desafio,Apoiar uma campanha de doação (alimentos/agasalhos).,2,5,2,2
+Comunidade,Desafio,"Ajudar a pintar, consertar ou limpar um espaço público.",2,5,2,3
+Comunidade,Desafio,Mapear necessidades do bairro e sugerir ações.,2,5,2,4
+Comunidade,Desafio,Criar um pequeno mutirão de limpeza com amigos.,2,5,2,5
+Comunidade,Desafio,Aprender o nome de 5 trabalhadores do bairro.,2,5,2,6
+Comunidade,Desafio,Apoiar um pequeno comércio local conscientemente.,2,5,2,7
+Comunidade,Desafio,Ajudar na segurança ao atravessar crianças/idosos.,2,5,2,8
+Comunidade,Desafio,Participar de reunião de moradores/representação estudantil.,2,5,2,9
+Comunidade,Desafio,Registrar e reportar um problema público corretamente.,2,5,2,10
+Comunidade,Desafio,Produzir um cartaz ou post de utilidade pública.,2,5,2,11
+Comunidade,Desafio,Praticar gentilezas diárias por 7 dias seguidos.,2,5,2,12
+Comunidade,Avançado,Propor e liderar mutirão de limpeza por 3 semanas.,3,5,3,1
+Comunidade,Avançado,Criar e executar campanha de doação com metas e prestação de contas.,3,5,3,2
+Comunidade,Avançado,Articular parceria com comércio local para benefício social.,3,5,3,3
+Comunidade,Avançado,Organizar aula/oficina gratuita (tema que domino).,3,5,3,4
+Comunidade,Avançado,Criar projeto de segurança viária local com mapeamento de riscos.,3,5,3,5
+Comunidade,Avançado,Escrever carta formal à prefeitura com sugestões fundamentadas.,3,5,3,6
+Comunidade,Avançado,Formar rede de apoio a idosos/crianças com cronograma.,3,5,3,7
+Comunidade,Avançado,Implantar ponto fixo de coleta de recicláveis em parceria.,3,5,3,8
+Comunidade,Avançado,Produzir guia local (serviços úteis) e distribuir digitalmente.,3,5,3,9
+Comunidade,Avançado,Criar boletim comunitário mensal com atualizações.,3,5,3,10
+Comunidade,Avançado,Capacitar 5 pessoas em uma habilidade prática.,3,5,3,11
+Comunidade,Avançado,Mapear ONGs locais e alinhar voluntariado recorrente.,3,5,3,12
+Comunidade,Avançado,Conduzir pesquisa de satisfação sobre serviços do bairro.,3,5,3,13
+Comunidade,Avançado,"Registrar indicadores (lixo, iluminação, segurança) por 3 semanas.",3,5,3,14
+Comunidade,Avançado,Formalizar grupo em rede social para mobilização positiva.,3,5,3,15
+Eu mesmo,Básico,Arrumar minha cama ao acordar.,1,6,1,1
+Eu mesmo,Básico,Tomar água antes de usar o celular de manhã.,1,6,1,2
+Eu mesmo,Básico,Fazer 10 minutos de exercício físico.,1,6,1,3
+Eu mesmo,Básico,Separar 5 minutos para respirar ou orar sozinho.,1,6,1,4
+Eu mesmo,Básico,Dormir no horário combinado.,1,6,1,5
+Eu mesmo,Básico,Anotar três coisas boas do meu dia.,1,6,1,6
+Eu mesmo,Básico,Evitar usar celular durante a refeição.,1,6,1,7
+Eu mesmo,Básico,Escutar música que me eleve espiritualmente.,1,6,1,8
+Eu mesmo,Básico,Repetir uma frase motivacional escolhida por mim.,1,6,1,9
+Eu mesmo,Básico,Organizar minha mesa de estudo.,1,6,1,10
+Eu mesmo,Desafio,Fazer 30 minutos de atividade física contínua.,2,6,2,1
+Eu mesmo,Desafio,Praticar alongamento/ mobilidade por 15 minutos.,2,6,2,2
+Eu mesmo,Desafio,Planejar cardápio saudável de 2 dias e seguir.,2,6,2,3
+Eu mesmo,Desafio,Realizar jejum digital por 6 horas no dia.,2,6,2,4
+Eu mesmo,Desafio,Estabelecer meta SMART semanal e monitorar.,2,6,2,5
+Eu mesmo,Desafio,Praticar journaling de 10 minutos com perguntas guias.,2,6,2,6
+Eu mesmo,Desafio,Aprender uma técnica de respiração e praticar 10 minutos.,2,6,2,7
+Eu mesmo,Desafio,Dormir 3 noites seguidas no mesmo horário.,2,6,2,8
+Eu mesmo,Desafio,Ler 20 páginas de um livro edificante.,2,6,2,9
+Eu mesmo,Desafio,Fazer uma tarefa pendente importante sem procrastinar.,2,6,2,10
+Eu mesmo,Desafio,Reduzir açúcar/refrigerante por 3 dias seguidos.,2,6,2,11
+Eu mesmo,Desafio,Organizar e manter uma rotina matinal simples.,2,6,2,12
+Eu mesmo,Avançado,Completar rotina de exercícios 5x/semana por 3 semanas.,3,6,3,1
+Eu mesmo,Avançado,Implantar plano alimentar com preparo antecipado (meal prep).,3,6,3,2
+Eu mesmo,Avançado,Zerar notificações e estabelecer janelas de uso por 21 dias.,3,6,3,3
+Eu mesmo,Avançado,Ler um livro inteiro e produzir resenha.,3,6,3,4
+Eu mesmo,Avançado,Praticar meditação/oração guiada 15 min por 21 dias.,3,6,3,5
+Eu mesmo,Avançado,Criar e seguir rotina matinal e noturna consistentes.,3,6,3,6
+Eu mesmo,Avançado,"Realizar projeto pessoal (música, arte, código) com entregável.",3,6,3,7
+Eu mesmo,Avançado,Implementar método GTD/Kanban para tarefas por 3 semanas.,3,6,3,8
+Eu mesmo,Avançado,Estabelecer orçamento pessoal básico e registrar gastos.,3,6,3,9
+Eu mesmo,Avançado,Eliminar um hábito ruim substituindo por um bom (21 dias).,3,6,3,10
+Eu mesmo,Avançado,Fazer check-up de saúde e montar plano de autocuidado.,3,6,3,11
+Eu mesmo,Avançado,Estudar um tema novo com plano e avaliação.,3,6,3,12
+Eu mesmo,Avançado,Praticar gratidão diária com 3 registros por 21 dias.,3,6,3,13
+Eu mesmo,Avançado,Executar detox de açúcar ultraprocessado por 14 dias.,3,6,3,14
+Eu mesmo,Avançado,Documentar minha vocação/talentos e próximo passo concreto.,3,6,3,15

@@ -1,0 +1,8 @@
+{% extends 'sonho_de_serbase_sonhodeser.html' %}
+{% block conteudo %}
+<h2>Meu Perfil</h2>
+<p><strong>Nome:</strong> {{ request.user.nome|default:request.user.email }}</p>
+<p><strong>Escola:</strong> {{ perfil.escola.nome }}</p>
+<p><strong>Trilha atual:</strong> {{ perfil.trilha_atual.nome }}</p>
+<p><strong>Progresso:</strong> Dia {{ perfil.progresso }}</p>
+{% endblock %}

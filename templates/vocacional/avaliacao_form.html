@@ -1,0 +1,97 @@
+{% extends "vocacional/base_vocacional.html" %}
+{% load static %}
+
+{% block page_title %}Avaliação Vocacional{% endblock %}
+
+{% block header_title %}Avaliação Vocacional{% endblock %}
+{% block header_subtitle %}
+Responda às afirmações pensando em você hoje. Leva cerca de 10–15 minutos.
+{% endblock %}
+
+{% block page_content %}
+
+<div class="vocacional-main-card">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} mb-3">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% if ultima_concluida %}
+    <p class="text-muted mb-3">
+      Você já concluiu uma avaliação.
+      <a href="{% url 'vocacional:resultado' ultima_concluida.pk %}"
+         class="btn btn-sm btn-primary ms-2">
+        Ver meu resultado
+      </a>
+    </p>
+  {% endif %}
+
+  <div class="vocacional-card">
+    <h2 class="vocacional-section-title">Como responder</h2>
+    <ul class="instructions">
+      <li>Marque de <strong>1 a 5</strong> (1 = discordo totalmente · 5 = concordo totalmente).</li>
+      <li>Use as teclas <kbd>←</kbd> / <kbd>→</kbd> para voltar/avançar e as teclas <kbd>1–5</kbd> para marcar a resposta.</li>
+      <li>Você não pode pular questões em branco.</li>
+      <li>Ao fechar a aba, suas respostas são salvas automaticamente.</li>
+      <li>Depois de responder todas as questões, clique no botão <strong>Finalizar</strong> para ver o resultado.</li>
+    </ul>
+
+    <form id="quiz-form" method="post">
+      {% csrf_token %}
+
+      <div class="quiz-shell">
+        <div class="quiz-body">
+
+          <div class="progress">
+            <div class="bar">
+              <div id="progress-bar" class="bar-fill" style="width: 0%"></div>
+            </div>
+            <div id="progress-text">0/{{ total_perguntas }} (0%)</div>
+          </div>
+
+          <div id="quiz-container" class="quiz-container">
+            Questão 0/0
+          </div>
+          
+          <div class="progress" style="margin:.8rem 0 .5rem 0">
+            <div class="bar" id="progress-bar"></div>
+          </div>
+          <!-- texto inicial zerado; JS atualiza depois -->
+          <div id="progress-text">0/0 (0%)</div>
+
+          <div id="quiz-container">
+            <!-- Pergunta + escala serão injetadas via JS -->
+          </div>
+
+          <div class="quiz-toolbar">
+            <div class="quiz-toolbar-left">
+              <span class="text-muted small">
+                Questão
+                <span id="counter">0/0</span>
+              </span>
+            </div>
+            <div class="quiz-toolbar-right">
+              <button id="prev-button" type="button" class="btn btn-sm btn-secondary">← Anterior</button>
+              <button type="submit" name="salvar" value="1" class="btn btn-sm btn-outline-light">Salvar</button>
+              <button type="submit" name="finalizar" value="1" class="btn btn-sm btn-success">Finalizar</button>
+              <button id="next-button" type="button" class="btn btn-sm btn-primary">Próxima →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+{% block vocacional_extra_js %}
+  <script>
+    window.quizData = {{ perguntas|safe }};
+    window.quizInterleaveKey = 'dimensao';
+  </script>
+  <script src="{% static 'vocacional/js/quiz.js' %}?v=20251112"></script>
+
+{% endblock %}

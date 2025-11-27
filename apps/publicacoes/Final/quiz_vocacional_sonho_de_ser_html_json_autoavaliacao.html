@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sonho de Ser — Quiz Vocacional (Autoavaliação)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-feature-settings: "liga", "kern"; }
+    .card { @apply rounded-2xl border border-slate-200 shadow-sm bg-white; }
+    .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium transition; }
+    .btn-primary { @apply bg-blue-600 text-white hover:bg-blue-700; }
+    .btn-soft { @apply bg-slate-100 text-slate-800 hover:bg-slate-200; }
+    .radio-card { @apply flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 hover:bg-slate-50 cursor-pointer; }
+    .progress { height: 10px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <header class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
+    <div class="max-w-5xl mx-auto px-6 py-10">
+      <h1 class="text-3xl font-bold tracking-tight">Sonho de Ser — Quiz Vocacional</h1>
+      <p class="mt-2 text-slate-100 max-w-3xl">Responda 5 grupos de 12 perguntas (total 60). O sistema calcula automaticamente seu perfil predominante entre Criador, Cuidador, Conector, Construtor, Visionário e Autodesenvolvedor.</p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <button id="btnStart" class="btn btn-primary">Começar</button>
+        <button id="btnImport" class="btn btn-soft" title="Importa perguntas via JSON">Importar JSON</button>
+        <button id="btnTemplate" class="btn btn-soft" title="Baixa um modelo de JSON">Modelo JSON</button>
+        <button id="btnExport" class="btn btn-soft" title="Exporta respostas e pontuações em JSON">Exportar JSON</button>
+        <button id="btnCSV" class="btn btn-soft" title="Exporta respostas e pontuações em CSV">Exportar CSV</button>
+        <input id="fileInput" type="file" accept="application/json" class="hidden" />
+      </div>
+      <input id="fileImport" type="file" accept="application/json" class="hidden" />
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-6 py-8 space-y-6">
+    <!-- Progresso -->
+    <div class="card p-4">
+      <div class="flex items-center justify-between text-sm">
+        <span id="progressLabel">Progresso: 0/60</span>
+        <span id="groupLabel" class="font-medium">Grupo 1 de 5</span>
+      </div>
+      <div class="w-full bg-slate-200 rounded-full overflow-hidden mt-2 progress">
+        <div id="progressBar" class="h-full bg-blue-600" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Área do Questionário -->
+    <section id="quiz" class="card p-6">
+      <h2 id="groupTitle" class="text-xl font-semibold">Grupo 1</h2>
+      <p class="text-sm text-slate-600 mb-4">Marque uma opção por pergunta. Escala: <span class="font-medium">Sempre/Quase sempre</span> (2 pts), <span class="font-medium">Às vezes</span> (1 pt), <span class="font-medium">Nunca/Quase nunca</span> (0 pt).</p>
+      <div id="questions" class="space-y-4"></div>
+      <div class="mt-6 flex items-center gap-3">
+        <button id="btnPrev" class="btn btn-soft" disabled>Voltar</button>
+        <button id="btnNext" class="btn btn-primary">Próximo grupo</button>
+      </div>
+    </section>
+
+    <!-- Resultado -->
+    <section id="results" class="card p-6 hidden">
+      <h2 class="text-xl font-semibold">Resultado</h2>
+      <p class="text-sm text-slate-600 mb-4">Veja a pontuação por perfil e o predominante. Você pode exportar os dados acima em JSON/CSV.</p>
+      <div id="bars" class="grid sm:grid-cols-2 gap-4"></div>
+      <div id="winner" class="mt-4 text-lg font-semibold"></div>
+    </section>
+  </main>
+
+  <script>
+  // ==========================
+  //  JSON DE CONFIGURAÇÃO
+  // ==========================
+  const CONFIG = {
+    profiles: [
+      { id: 'criador', label: 'Criador' },
+      { id: 'cuidador', label: 'Cuidador' },
+      { id: 'conector', label: 'Conector' },
+      { id: 'construtor', label: 'Construtor' },
+      { id: 'visionario', label: 'Visionário' },
+      { id: 'autodesenvolvedor', label: 'Autodesenvolvedor' }
+    ],
+    profileDescriptions: {
+      criador: 'Gosta de imaginar, experimentar e dar forma a ideias novas. Pode se destacar em artes, design, comunicação, produtos.',
+      cuidador: 'Empático, atento e disposto a apoiar. Áreas como saúde, educação e serviço social costumam fazer sentido.',
+      conector: 'Facilita relações e colaborações. Pode se destacar em liderança, RH, mediação, vendas e comunidade.',
+      construtor: 'Mão na massa, prático e detalhista. Engenharia, tecnologia, manutenção, produção e logística são naturais.',
+      visionario: 'Enxerga cenários futuros e estratégias. Planejamento, inovação, pesquisa e empreendedorismo combinam.',
+      autodesenvolvedor: 'Foco em evolução contínua, metas e métricas. Coaching, análise, processos e melhoria contínua se alinham.'
+    },
+    scale: [
+      { id: 'sempre', label: 'Sempre / Quase sempre', points: 2 },
+      { id: 'as_vezes', label: 'Às vezes', points: 1 },
+      { id: 'nunca', label: 'Nunca / Quase nunca', points: 0 }
+    ],
+    groups: [
+      // ===== Grupo 1 =====
+      {
+        id: 'G1', title: 'Grupo 1', questions: [
+          { id: 'G1Q1', area: 'criador', text: 'Quando enfrenta um problema, você prefere criar uma solução inovadora ou seguir métodos já testados?' },
+          { id: 'G1Q2', area: 'construtor', text: 'Em um projeto de construção, você prefere planejar a estrutura ou executar a obra?' },
+          { id: 'G1Q3', area: 'conector', text: 'Você costuma conectar pessoas que podem se ajudar mutuamente?' },
+          { id: 'G1Q4', area: 'autodesenvolvedor', text: 'Se tivesse um dia livre, preferiria explorá-lo para autoconhecimento ou descansar sem compromissos?' },
+          { id: 'G1Q5', area: 'cuidador', text: 'Ao cuidar de alguém doente, você se sente energizado ou exausto?' },
+          { id: 'G1Q6', area: 'visionario', text: 'Você costuma visualizar cenários futuros detalhados?' },
+          { id: 'G1Q7', area: 'conector', text: 'Você se sente confortável organizando grupos para trabalhar juntos?' },
+          { id: 'G1Q8', area: 'criador', text: 'Prefere criar algo do zero ou melhorar algo que já existe?' },
+          { id: 'G1Q9', area: 'visionario', text: 'Gosta de imaginar soluções para problemas que ainda não existem?' },
+          { id: 'G1Q10', area: 'construtor', text: 'Quando algo quebra, sua primeira reação é tentar consertar você mesmo?' },
+          { id: 'G1Q11', area: 'autodesenvolvedor', text: 'Costuma refletir sobre como melhorar seu desempenho pessoal?' },
+          { id: 'G1Q12', area: 'cuidador', text: 'Você se sente à vontade cuidando de animais ou plantas?' }
+        ]
+      },
+      // ===== Grupo 2 =====
+      {
+        id: 'G2', title: 'Grupo 2', questions: [
+          { id: 'G2Q1', area: 'visionario', text: 'Você se vê como alguém que prevê tendências?' },
+          { id: 'G2Q2', area: 'construtor', text: 'Prefere trabalhos manuais ou intelectuais?' },
+          { id: 'G2Q3', area: 'criador', text: 'Gosta de experimentar técnicas diferentes para criar algo?' },
+          { id: 'G2Q4', area: 'conector', text: 'Você gosta de promover eventos que reúnem diferentes perfis de pessoas?' },
+          { id: 'G2Q5', area: 'autodesenvolvedor', text: 'Faz anotações sobre aprendizados importantes para revisitar no futuro?' },
+          { id: 'G2Q6', area: 'cuidador', text: 'Ajuda espontaneamente quando vê alguém em dificuldade?' },
+          { id: 'G2Q7', area: 'construtor', text: 'É mais cuidadoso com detalhes ou com prazos?' },
+          { id: 'G2Q8', area: 'criador', text: 'Gosta de trabalhar com arte, música ou escrita criativa?' },
+          { id: 'G2Q9', area: 'visionario', text: 'Consegue imaginar como seria o mundo em 50 anos?' },
+          { id: 'G2Q10', area: 'cuidador', text: 'Aprecia atividades que envolvem cuidar do bem-estar emocional dos outros?' },
+          { id: 'G2Q11', area: 'conector', text: 'Prefere trabalhar sozinho ou em equipe?' },
+          { id: 'G2Q12', area: 'autodesenvolvedor', text: 'Você busca constantemente se superar?' }
+        ]
+      },
+      // ===== Grupo 3 =====
+      {
+        id: 'G3', title: 'Grupo 3', questions: [
+          { id: 'G3Q1', area: 'conector', text: 'Gosta de ser o mediador quando há conflitos em grupo?' },
+          { id: 'G3Q2', area: 'criador', text: 'Sente prazer em transformar ideias em algo concreto?' },
+          { id: 'G3Q3', area: 'cuidador', text: 'Ao ouvir um problema pessoal, você tende a oferecer apoio prático?' },
+          { id: 'G3Q4', area: 'visionario', text: 'Se interessa por assuntos relacionados a inovação e futuro?' },
+          { id: 'G3Q5', area: 'autodesenvolvedor', text: 'Tem hábitos diários para seu desenvolvimento pessoal?' },
+          { id: 'G3Q6', area: 'construtor', text: 'Prefere organizar ferramentas antes de começar uma tarefa?' },
+          { id: 'G3Q7', area: 'criador', text: 'Gosta de explorar formas únicas de resolver problemas?' },
+          { id: 'G3Q8', area: 'conector', text: 'Sente satisfação ao apresentar pessoas que não se conhecem?' },
+          { id: 'G3Q9', area: 'construtor', text: 'Prefere trabalhar com as mãos ou gerenciar o trabalho de outros?' },
+          { id: 'G3Q10', area: 'autodesenvolvedor', text: 'Faz revisões periódicas sobre suas metas pessoais?' },
+          { id: 'G3Q11', area: 'cuidador', text: 'Encontra alegria em cuidar de ambientes e pessoas?' },
+          { id: 'G3Q12', area: 'visionario', text: 'Gosta de pensar em possibilidades além do presente imediato?' }
+        ]
+      },
+      // ===== Grupo 4 =====
+      {
+        id: 'G4', title: 'Grupo 4', questions: [
+          { id: 'G4Q1', area: 'autodesenvolvedor', text: 'Analisa os erros cometidos para melhorar no futuro?' },
+          { id: 'G4Q2', area: 'conector', text: 'Você costuma incentivar pessoas a colaborarem?' },
+          { id: 'G4Q3', area: 'criador', text: 'Sente satisfação ao criar algo totalmente novo?' },
+          { id: 'G4Q4', area: 'cuidador', text: 'Tem paciência para cuidar de alguém em recuperação?' },
+          { id: 'G4Q5', area: 'visionario', text: 'Se considera mais visionário do que prático?' },
+          { id: 'G4Q6', area: 'construtor', text: 'Gosta de montar ou desmontar objetos para entender seu funcionamento?' },
+          { id: 'G4Q7', area: 'conector', text: 'É bom em criar conexões entre diferentes ideias?' },
+          { id: 'G4Q8', area: 'construtor', text: 'Prefere seguir um plano ou improvisar no trabalho manual?' },
+          { id: 'G4Q9', area: 'criador', text: 'Busca originalidade em tudo o que faz?' },
+          { id: 'G4Q10', area: 'cuidador', text: 'Se envolve emocionalmente com as causas que apoia?' },
+          { id: 'G4Q11', area: 'visionario', text: 'Sonha com soluções para problemas globais?' },
+          { id: 'G4Q12', area: 'autodesenvolvedor', text: 'Cria estratégias para alcançar objetivos pessoais?' }
+        ]
+      },
+      // ===== Grupo 5 =====
+      {
+        id: 'G5', title: 'Grupo 5', questions: [
+          { id: 'G5Q1', area: 'visionario', text: 'Consegue imaginar um cenário ideal para sua comunidade?' },
+          { id: 'G5Q2', area: 'construtor', text: 'Prefere realizar trabalhos que exigem força física ou precisão técnica?' },
+          { id: 'G5Q3', area: 'conector', text: 'Sabe identificar rapidamente afinidades entre pessoas?' },
+          { id: 'G5Q4', area: 'criador', text: 'Se sente motivado quando tem liberdade para criar?' },
+          { id: 'G5Q5', area: 'cuidador', text: 'Encontra satisfação em ajudar voluntariamente?' },
+          { id: 'G5Q6', area: 'autodesenvolvedor', text: 'Mantém um registro de suas conquistas para se motivar?' },
+          { id: 'G5Q7', area: 'construtor', text: 'Se sente confortável em consertar ou melhorar algo quebrado?' },
+          { id: 'G5Q8', area: 'criador', text: 'Gosta de desafiar limites com novas ideias?' },
+          { id: 'G5Q9', area: 'conector', text: 'Prefere trabalhos em rede ou independentes?' },
+          { id: 'G5Q10', area: 'visionario', text: 'É capaz de criar um plano para atingir um objetivo de longo prazo?' },
+          { id: 'G5Q11', area: 'cuidador', text: 'Gosta de atividades de cuidado que exigem atenção constante?' },
+          { id: 'G5Q12', area: 'autodesenvolvedor', text: 'Adapta seus métodos para se tornar mais eficiente?' }
+        ]
+      }
+    ]
+  };
+
+  // Estado
+  const state = {
+    current: 0, // índice do grupo
+    answers: {}, // { questionId: 'sempre|as_vezes|nunca' }
+  };
+
+  // Helpers
+  const byId = (id) => document.getElementById(id);
+  const fmtPct = (n) => `${Math.round(n)}%`;
+
+  function renderGroup() {
+    const group = CONFIG.groups[state.current];
+    byId('groupTitle').textContent = group.title;
+    byId('groupLabel').textContent = `Grupo ${state.current+1} de ${CONFIG.groups.length}`;
+
+    const cont = byId('questions');
+    cont.innerHTML = '';
+
+    group.questions.forEach((q, idx) => {
+      const qWrap = document.createElement('div');
+      qWrap.className = 'space-y-2';
+      qWrap.innerHTML = `
+        <div class="flex items-start gap-2">
+          <div class="shrink-0 mt-1 h-6 w-6 rounded-full bg-slate-100 flex items-center justify-center text-xs font-semibold">${idx+1}</div>
+          <div>
+            <div class="font-medium">${q.text}</div>
+            <div class="text-xs text-slate-500">Área: ${labelFromArea(q.area)}</div>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-2" role="radiogroup" aria-label="${q.id}">
+          ${CONFIG.scale.map(opt => `
+            <label class="radio-card">
+              <input type="radio" name="${q.id}" value="${opt.id}" class="sr-only" ${state.answers[q.id]===opt.id?'checked':''}>
+              <span class="text-sm">${opt.label}</span>
+            </label>
+          `).join('')}
+        </div>
+      `;
+
+      // add change handlers
+      qWrap.querySelectorAll(`input[name='${q.id}']`).forEach(input => {
+        input.addEventListener('change', (e) => {
+          state.answers[q.id] = e.target.value;
+          updateProgress();
+        });
+      });
+
+      cont.appendChild(qWrap);
+    });
+
+    // Prev/Next
+    byId('btnPrev').disabled = state.current === 0;
+    byId('btnNext').textContent = state.current === CONFIG.groups.length-1 ? 'Finalizar' : 'Próximo grupo';
+
+    updateProgress();
+  }
+
+  function labelFromArea(areaId){
+    const map = {
+      criador: 'Criador',
+      cuidador: 'Cuidador',
+      conector: 'Conector',
+      construtor: 'Construtor',
+      visionario: 'Visionário',
+      autodesenvolvedor: 'Autodesenvolvedor',
+    };
+    return map[areaId] || areaId;
+  }
+
+  function updateProgress(){
+    const total = CONFIG.groups.reduce((acc,g)=> acc + g.questions.length, 0);
+    const answered = Object.keys(state.answers).length;
+    const pct = (answered/total)*100;
+    byId('progressLabel').textContent = `Progresso: ${answered}/${total}`;
+    byId('progressBar').style.width = fmtPct(pct);
+    // autosave
+    localStorage.setItem('quiz_sonhodeser_state', JSON.stringify(state));
+  }/${total}`;
+    byId('progressBar').style.width = fmtPct(pct);
+  }
+
+  function computeScores(){
+    // init scores
+    const scores = {
+      criador: 0, cuidador: 0, conector: 0, construtor: 0, visionario: 0, autodesenvolvedor: 0
+    };
+    const scalePoints = Object.fromEntries(CONFIG.scale.map(s => [s.id, s.points]));
+
+    CONFIG.groups.forEach(g => {
+      g.questions.forEach(q => {
+        const ans = state.answers[q.id];
+        if(ans!=null){
+          scores[q.area] += scalePoints[ans] || 0;
+        }
+      })
+    });
+    return scores;
+  }
+
+  function renderResults(){
+    const scores = computeScores();
+    const bars = byId('bars');
+    bars.innerHTML = '';
+
+    const max = Math.max(...Object.values(scores));
+    const items = [
+      {k:'criador', label:'Criador'},
+      {k:'cuidador', label:'Cuidador'},
+      {k:'conector', label:'Conector'},
+      {k:'construtor', label:'Construtor'},
+      {k:'visionario', label:'Visionário'},
+      {k:'autodesenvolvedor', label:'Autodesenvolvedor'}
+    ];
+
+    items.forEach(it => {
+      const pct = max>0 ? (scores[it.k]/max)*100 : 0;
+      const wrap = document.createElement('div');
+      wrap.innerHTML = `
+        <div class="flex items-center justify-between text-sm">
+          <div class="font-medium">${it.label}</div>
+          <div>${scores[it.k]} pts</div>
+        </div>
+        <div class="w-full bg-slate-200 rounded-full overflow-hidden h-2 mt-1">
+          <div class="h-2 bg-blue-600" style="width:${pct}%"></div>
+        </div>
+      `;
+      bars.appendChild(wrap);
+    });
+
+    const winnerKey = items.sort((a,b)=> scores[b.k]-scores[a.k])[0].k;
+    const winnerLabel = items.find(i=>i.k===winnerKey).label;
+    const desc = CONFIG.profileDescriptions[winnerKey] || '';
+    byId('winner').innerHTML = `<div>Perfil predominante: <span class="font-semibold">${winnerLabel}</span></div><p class="text-slate-600 text-sm mt-1">${desc}</p>`;
+
+    byId('results').classList.remove('hidden');
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  },
+      {k:'cuidador', label:'Cuidador'},
+      {k:'conector', label:'Conector'},
+      {k:'construtor', label:'Construtor'},
+      {k:'visionario', label:'Visionário'},
+      {k:'autodesenvolvedor', label:'Autodesenvolvedor'}
+    ];
+
+    items.forEach(it => {
+      const pct = max>0 ? (scores[it.k]/max)*100 : 0;
+      const wrap = document.createElement('div');
+      wrap.innerHTML = `
+        <div class="flex items-center justify-between text-sm">
+          <div class="font-medium">${it.label}</div>
+          <div>${scores[it.k]} pts</div>
+        </div>
+        <div class="w-full bg-slate-200 rounded-full overflow-hidden h-2 mt-1">
+          <div class="h-2 bg-blue-600" style="width:${pct}%"></div>
+        </div>
+      `;
+      bars.appendChild(wrap);
+    });
+
+    // winner
+    const winnerKey = items.sort((a,b)=> scores[b.k]-scores[a.k])[0].k;
+    const winnerLabel = items.find(i=>i.k===winnerKey).label;
+    byId('winner').textContent = `Perfil predominante: ${winnerLabel}`;
+
+    byId('results').classList.remove('hidden');
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+
+  function nextGroup(){
+    // valida respostas do grupo atual
+    const grp = CONFIG.groups[state.current];
+    const total = grp.questions.length;
+    const answered = grp.questions.filter(q=> state.answers[q.id]).length;
+    if(answered < total){
+      alert(`Você respondeu ${answered} de ${total} perguntas deste grupo. Complete para avançar.`);
+      return;
+    }
+    if(state.current < CONFIG.groups.length-1){
+      state.current++;
+      renderGroup();
+    } else {
+      renderResults();
+    }
+  } else {
+      // finalizar
+      renderResults();
+    }
+  }
+
+  function prevGroup(){
+    if(state.current>0){
+      state.current--;
+      renderGroup();
+    }
+  }
+
+  function exportJSON(){
+    const payload = {
+      meta: { generatedAt: new Date().toISOString() },
+      answers: state.answers,
+      scores: computeScores(),
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'resultado_quiz_sonhodeser.json'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportCSV(){
+    const scalePoints = Object.fromEntries(CONFIG.scale.map(s => [s.id, s.points]));
+    const rows = [['questionId','grupo','area','answer','points']];
+    CONFIG.groups.forEach(g=>{
+      g.questions.forEach(q=>{
+        const ans = state.answers[q.id] || '';
+        const pts = ans? scalePoints[ans] : '';
+        rows.push([q.id, g.id, q.area, ans, pts]);
+      })
+    });
+    const csv = rows.map(r=> r.map(x=>`"${String(x).replaceAll('"','""')}"`).join(',')).join('
+');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'resultado_quiz_sonhodeser.csv'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Import/Template helpers
+  function downloadTemplate(){
+    const tpl = { profiles: CONFIG.profiles, scale: CONFIG.scale, groups: CONFIG.groups };
+    const blob = new Blob([JSON.stringify(tpl, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'modelo_quiz_sonhodeser.json'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function handleImport(evt){
+    const file = evt.target.files[0]; if(!file) return;
+    const text = await file.text();
+    try{
+      const data = JSON.parse(text);
+      if(Array.isArray(data.groups) && data.groups.length){
+        CONFIG.groups = data.groups;
+      }
+      if(Array.isArray(data.profiles)) CONFIG.profiles = data.profiles;
+      if(Array.isArray(data.scale)) CONFIG.scale = data.scale;
+      // reset estado e re-render
+      state.current = 0; state.answers = {};
+      localStorage.removeItem('quiz_sonhodeser_state');
+      renderGroup();
+      alert('Importação concluída!');
+    }catch(e){ alert('Arquivo JSON inválido.'); }
+  })
+    });
+    const csv = rows.map(r=> r.map(x=>`"${String(x).replaceAll('"','""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'resultado_quiz_sonhodeser.csv'; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // ===== Import / Export de configuração =====
+  function validateConfig(cfg){
+    if(!cfg || typeof cfg !== 'object') throw new Error('JSON inválido.');
+    if(!Array.isArray(cfg.profiles) || cfg.profiles.length === 0) throw new Error('Campo "profiles" ausente ou vazio.');
+    if(!Array.isArray(cfg.scale) || cfg.scale.length === 0) throw new Error('Campo "scale" ausente ou vazio.');
+    if(!Array.isArray(cfg.groups) || cfg.groups.length === 0) throw new Error('Campo "groups" ausente ou vazio.');
+    cfg.groups.forEach((g,i)=>{
+      if(!g.id || !g.title || !Array.isArray(g.questions)) throw new Error(`Grupo ${i+1} malformado.`);
+      g.questions.forEach((q,j)=>{
+        if(!q.id || !q.area || !q.text) throw new Error(`Questão ${g.id}#${j+1} malformada.`);
+      })
+    });
+    return true;
+  }
+
+  function downloadJSON(obj, filename){
+    const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function makeTemplate(){
+    const tpl = {
+      profiles: CONFIG.profiles,
+      scale: CONFIG.scale,
+      groups: [
+        { id: 'G1', title: 'Grupo 1', questions: [ { id: 'G1Q1', area: 'criador', text: 'Exemplo de pergunta 1' } ] }
+      ]
+    };
+    downloadJSON(tpl, 'modelo_quiz_sonhodeser.json');
+  }
+
+  function handleImportFile(file){
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      try{
+        const cfg = JSON.parse(e.target.result);
+        validateConfig(cfg);
+        Object.assign(CONFIG, cfg);
+        state.current = 0; state.answers = {};
+        renderGroup();
+        byId('results').classList.add('hidden');
+        alert('Banco de questões importado com sucesso!');
+      }catch(err){
+        alert('Erro ao importar JSON: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Eventos
+  byId('btnStart').addEventListener('click', ()=>{ window.scrollTo({top:0}); renderGroup(); });
+  byId('btnNext').addEventListener('click', nextGroup);
+  byId('btnPrev').addEventListener('click', prevGroup);
+  byId('btnExport').addEventListener('click', exportJSON);
+  byId('btnCSV').addEventListener('click', exportCSV);
+  byId('btnTemplate').addEventListener('click', downloadTemplate);
+  byId('btnImport').addEventListener('click', ()=> byId('fileInput').click());
+  byId('fileInput').addEventListener('change', handleImport);
+  
+  // Autosave: carregar se existir
+  const saved = localStorage.getItem('quiz_sonhodeser_state');
+  if(saved){
+    try { const parsed = JSON.parse(saved); Object.assign(state, parsed); } catch(e){}
+  }
+  renderGroup(); });
+  byId('btnNext').addEventListener('click', nextGroup);
+  byId('btnPrev').addEventListener('click', prevGroup);
+  byId('btnExport').addEventListener('click', exportJSON);
+  byId('btnCSV').addEventListener('click', exportCSV);
+  byId('btnTemplate').addEventListener('click', makeTemplate);
+  byId('btnImport').addEventListener('click', ()=> byId('fileImport').click());
+  byId('fileImport').addEventListener('change', (e)=>{
+    const file = e.target.files && e.target.files[0];
+    if(file) handleImportFile(file);
+    e.target.value = '';
+  });
+  
+  // Render inicial
+  renderGroup();
+  </script>
+</body>
+</html>

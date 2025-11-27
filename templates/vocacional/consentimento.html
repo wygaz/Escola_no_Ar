@@ -1,0 +1,21 @@
+{# templates/vocacional/consentimento.html #}
+{% extends "vocacional/base_vocacional.html" %}
+{% block vocacional_content %}
+<h1>Consentimento e Acesso</h1>
+<p>Para continuar, precisamos do seu consentimento conforme a LGPD.</p>
+
+<form method="post" action="{% url 'vocacional:consentimento_aceitar' %}">
+  {% csrf_token %}
+  <div class="field">
+    <label>Nome</label>
+    <input type="text" name="nome" value="{{ nome }}" required>
+  </div>
+  <div class="field">
+    <label>E-mail</label>
+    <input type="email" name="email" value="{{ email }}" required readonly>
+  </div>
+  <button class="btn ok" type="submit">Aceitar e continuar</button>
+</form>
+{% endblock %}
+
+
