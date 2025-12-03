@@ -33,10 +33,10 @@ SECRET_KEY = os.getenv("SECRET_KEY", "chave-padrao-insegura")
 #DEBUG = os.getenv("DEBUG", "False") == "True"
 DEBUG=True
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "escolanoar-production.up.railway.app,localhost,127.0.0.1").split(",")
 CSRF_TRUSTED_ORIGINS = os.getenv(
     "CSRF_TRUSTED_ORIGINS",
-    "http://localhost:8000,http://127.0.0.1:8000"
+    "https://escolanoar-production.up.railway.app,http://localhost:8000,http://127.0.0.1:8000"
 ).split(",")
 
 
@@ -124,29 +124,35 @@ WSGI_APPLICATION = "escola_no_ar_site.wsgi.application"
 # -----------------------------------------------------------------------------
 # Banco de Dados
 # -----------------------------------------------------------------------------
-DATABASES = {
-    "default": dj_database_url.config(conn_max_age=600)
-}
+# -----------------------------------------------------------------------------
+# Banco de Dados
+# -----------------------------------------------------------------------------
+import dj_database_url
+import os
 
-'''
-DATABASES ={
-    "default":{
-        "ENGINE":"django.db.backends.postgresql",
-        "NAME":"escola_no_ar_local",
-        "USER":"postgres",
-        "PASSWORD":"",
-        "HOST":"localhost",
-        "PORT":"5432",
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    # Produção (Railway) – usa a URL do Postgres
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+        )
     }
-}
+else:
+    # Ambiente local – usa seu Postgres de desenvolvimento
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "escola_no_ar_local",
+            "USER": "postgres",
+            "PASSWORD": "",
+            "HOST": "localhost",
+            "PORT": "5432",
+        }
+    }
 
-DATABASES = {
-    "default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3"),
-}
-if DATABASES["default"]["ENGINE"].endswith("postgresql") or "postgres" in DATABASES["default"]["ENGINE"]:
-    DATABASES["default"].setdefault("OPTIONS", {})
-    DATABASES["default"]["OPTIONS"].setdefault("options", "-c client_encoding=UTF8")
-'''
 # -----------------------------------------------------------------------------
 # Usuário custom + Autenticação
 # -----------------------------------------------------------------------------
