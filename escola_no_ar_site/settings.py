@@ -125,7 +125,7 @@ WSGI_APPLICATION = "escola_no_ar_site.wsgi.application"
 # Banco de Dados
 # -----------------------------------------------------------------------------
 DATABASES = {
-    "default": dj_database_url.config(env="DATABASE_URL", conn_max_age=600)
+    "default": dj_database_url.config(conn_max_age=600)
 }
 
 '''
