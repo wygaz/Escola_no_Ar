@@ -14,8 +14,11 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-os.environ.pop("DATABASE_URL", None)
-load_dotenv(BASE_DIR / ".env", override=True)
+
+# Em produção (Railway) as variáveis já vêm do ambiente.
+# Em desenvolvimento, carregamos o .env local se ele existir.
+load_dotenv(BASE_DIR / ".env")  # sem override e sem pop
+
 
 # -----------------------------------------------------------------------------
 # Caminhos base
@@ -124,14 +127,28 @@ WSGI_APPLICATION = "escola_no_ar_site.wsgi.application"
 # -----------------------------------------------------------------------------
 # Banco de Dados
 # -----------------------------------------------------------------------------
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Produção (Railway) – usa a URL do Postgres
-DATABASES = {
-    "default": dj_database_url.config(
-        default=DATABASE_URL,
-        conn_max_age=600,
-    )
-}
+if DATABASE_URL:
+    # Produção (Railway) – usa a URL do Postgres vinda do ambiente
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+        )
+    }
+else:
+    # Ambiente local – usa seu Postgres de desenvolvimento
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "escola_no_ar_local",
+            "USER": "postgres",
+            "PASSWORD": "",
+            "HOST": "localhost",
+            "PORT": "5432",
+        }
+    }
 
 # -----------------------------------------------------------------------------
 # Usuário custom + Autenticação
