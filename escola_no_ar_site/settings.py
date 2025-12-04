@@ -124,13 +124,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "escola_no_ar_site.wsgi.application"
 
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------------
 # Banco de Dados
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------------
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
-    # Produção (Railway) – usa a URL do Postgres vinda do ambiente
+    # Produção (Railway)
     DATABASES = {
         "default": dj_database_url.config(
             default=DATABASE_URL,
@@ -138,7 +139,7 @@ if DATABASE_URL:
         )
     }
 else:
-    # Ambiente local – usa seu Postgres de desenvolvimento
+    # Ambiente local
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -149,6 +150,7 @@ else:
             "PORT": "5432",
         }
     }
+
 
 # -----------------------------------------------------------------------------
 # Usuário custom + Autenticação
