@@ -124,34 +124,14 @@ WSGI_APPLICATION = "escola_no_ar_site.wsgi.application"
 # -----------------------------------------------------------------------------
 # Banco de Dados
 # -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# Banco de Dados
-# -----------------------------------------------------------------------------
-import dj_database_url
-import os
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-
-if DATABASE_URL:
-    # Produção (Railway) – usa a URL do Postgres
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-        )
-    }
-else:
-    # Ambiente local – usa seu Postgres de desenvolvimento
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "escola_no_ar_local",
-            "USER": "postgres",
-            "PASSWORD": "",
-            "HOST": "localhost",
-            "PORT": "5432",
-        }
-    }
+# Produção (Railway) – usa a URL do Postgres
+DATABASES = {
+    "default": dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=600,
+    )
+}
 
 # -----------------------------------------------------------------------------
 # Usuário custom + Autenticação
