@@ -36,12 +36,35 @@ SECRET_KEY = os.getenv("SECRET_KEY", "chave-padrao-insegura")
 #DEBUG = os.getenv("DEBUG", "False") == "True"
 DEBUG=True
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "escolanoar-production.up.railway.app,localhost,127.0.0.1").split(",")
-CSRF_TRUSTED_ORIGINS = os.getenv(
-    "CSRF_TRUSTED_ORIGINS",
-    "https://escolanoar-production.up.railway.app,http://localhost:8000,http://127.0.0.1:8000"
-).split(",")
+# ------- ALLOWED_HOSTS -------
 
+_default_allowed = (
+    "www.sonhemaisalto.com.br,"
+    "sonhemaisalto.com.br,"
+    "escolanoar-production.up.railway.app,"
+    "localhost,127.0.0.1"
+)
+
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.getenv("ALLOWED_HOSTS", _default_allowed).split(",")
+    if h.strip()
+]
+
+# ------- CSRF_TRUSTED_ORIGINS -------
+
+_default_csrf = (
+    "https://www.sonhemaisalto.com.br,"
+    "https://escolanoar-production.up.railway.app,"
+    "http://localhost:8000,"
+    "http://127.0.0.1:8000"
+)
+
+CSRF_TRUSTED_ORIGINS = [
+    o.strip()
+    for o in os.getenv("CSRF_TRUSTED_ORIGINS", _default_csrf).split(",")
+    if o.strip()
+]
 
 # -----------------------------------------------------------------------------
 # Apps
@@ -124,32 +147,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "escola_no_ar_site.wsgi.application"
 
-# -------------------------------------------------------------------
-# Banco de Dados
-# -------------------------------------------------------------------
+import os
+from pathlib import Path
+import dj_database_url
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-if DATABASE_URL:
-    # Produção (Railway)
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-        )
-    }
-else:
-    # Ambiente local
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "escola_no_ar_local",
-            "USER": "postgres",
-            "PASSWORD": "",
-            "HOST": "localhost",
-            "PORT": "5432",
-        }
-    }
+# -------------------------------------------------------------------
+# BANCO DE DADOS – sempre usar DATABASE_URL se existir
+# -------------------------------------------------------------------
+DATABASES = {
+    "default": dj_database_url.config(
+        default=os.getenv(
+            "DATABASE_URL",
+            "sqlite:///" + str(BASE_DIR / "db.sqlite3"),
+        ),
+        conn_max_age=600,
+    )
+}
 
 
 # -----------------------------------------------------------------------------
