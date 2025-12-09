@@ -13,11 +13,43 @@ import dj_database_url
 from dotenv import load_dotenv
 from pathlib import Path
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Em produção (Railway) as variáveis já vêm do ambiente.
-# Em desenvolvimento, carregamos o .env local se ele existir.
-load_dotenv(BASE_DIR / ".env")  # sem override e sem pop
+# ---------------------------------------------
+# ENV / Banco de Dados (Escola no Ar)
+# ---------------------------------------------
+
+# ENV_NAME escolhe qual .env carregar *se* existir (local/remote/prod)
+ENV_NAME = os.getenv("ENV_NAME", "local")
+env_file = BASE_DIR / f".env.{ENV_NAME}"
+if env_file.exists():
+    # override=True garante que o .env *sempre* vence no ambiente local
+    load_dotenv(env_file, override=True)
+
+# Escolhe a URL do banco por prioridade:
+# 1) DATABASE_URL (sempre preferida)
+# 2) DATABASE_PUBLIC_URL (fallback para acesso externo quando estiver rodando local)
+_db_url = os.getenv("DATABASE_URL") or os.getenv("DATABASE_PUBLIC_URL")
+
+if not _db_url:
+    raise RuntimeError(
+        "DATABASE_URL não definido. "
+        "Defina DATABASE_URL (produção/contêiner) ou use o valor de "
+        "DATABASE_PUBLIC_URL quando for acessar remotamente a partir do Django local."
+    )
+
+# Railway/Postgres normalmente requer SSL (obrigatório fora de redes 100% locais)
+DB_SSL_REQUIRE = os.getenv("DB_SSL_REQUIRE", "1").strip().lower() in ("1", "true", "yes")
+
+DATABASES = {
+    "default": dj_database_url.parse(
+        _db_url,
+        conn_max_age=int(os.getenv("DB_CONN_MAX_AGE", "600")),
+        ssl_require=DB_SSL_REQUIRE,
+    )
+}
+
 
 
 # -----------------------------------------------------------------------------
@@ -146,22 +178,6 @@ TEMPLATES = [
 
 
 WSGI_APPLICATION = "escola_no_ar_site.wsgi.application"
-
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# -------------------------------------------------------------------
-# BANCO DE DADOS – sempre usar DATABASE_URL se existir
-# -------------------------------------------------------------------
-DATABASES = {
-    "default": dj_database_url.config(
-        default=os.getenv(
-            "DATABASE_URL",
-            "sqlite:///" + str(BASE_DIR / "db.sqlite3"),
-        ),
-        conn_max_age=600,
-    )
-}
 
 
 # -----------------------------------------------------------------------------

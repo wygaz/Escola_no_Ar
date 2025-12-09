@@ -1,44 +1,243 @@
-{% extends "contas/base.html" %}  {# ou "core/base.html" / "base.html" do site #}
+{% extends "base.html" %}
+{% load static %}
+{% load tz %}
+
+{% block title %}Entrar · Sonhe + Alto{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* wrapper da página de login – fundo claro + menos espaço no topo */
+  .auth-wrapper {
+    min-height: calc(100vh - 40px);
+    display: flex;
+    align-items: flex-start;                 /* card encostando mais em cima */
+    justify-content: center;
+    padding: 0.4rem 1.25rem 1.8rem;         /* bem pouco padding superior */
+    background: radial-gradient(circle at top, #fef3c7 0%, #e0f2fe 40%, #e5e7eb 100%);
+  }
+
+  /* card principal */
+  .auth-main {
+    max-width: 900px;
+    width: 100%;
+    margin: 0.3rem auto 1.8rem;             /* quase nada de margem em cima */
+    padding: 1.6rem 2.1rem 1.9rem;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+    color: #0f172a;
+  }
+
+  /* cabeçalho com logo + textos em linha */
+  .auth-hero {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .auth-hero-logo img {
+    max-width: 170px;
+    height: auto;
+    display: block;
+  }
+
+  .auth-hero-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .auth-hero-subtitle {
+    font-size: 0.9rem;
+    color: #64748b;
+  }
+
+  .auth-hero-tagline {
+    margin-top: 0.4rem;
+    color: #1d4ed8;
+    font-size: 0.95rem;
+  }
+
+  .auth-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-top: 1.2rem;          /* antes era maior */
+    margin-bottom: 0.6rem;
+  }
+
+  .auth-form label {
+    font-weight: 500;
+  }
+
+  .auth-form input[type="email"],
+  .auth-form input[type="password"] {
+    border-radius: 0.75rem;
+    border: 1px solid #cbd5e1;
+    padding: 0.45rem 0.7rem;
+  }
+
+  .auth-form button,
+  .auth-form input[type="submit"] {
+    border-radius: 999px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+  }
+
+  /* linha com formulário + CTA ao lado */
+  .auth-form-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.6rem;
+    margin-top: 0.4rem;
+  }
+
+  .auth-form {
+    flex: 1 1 0;
+  }
+
+  /* cardzinho “Criar conta gratuita” à direita */
+  .auth-secondary-cta {
+    flex: 0 0 230px;
+    padding-left: 1.1rem;
+    border-left: 1px dashed rgba(148, 163, 184, 0.7);
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .auth-secondary-cta span {
+    color: #475569;
+  }
+
+  .auth-secondary-cta a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid #0ea5e9;
+    background: rgba(56, 189, 248, 0.08);
+    color: #0369a1;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease-in-out;
+  }
+
+  .auth-secondary-cta a:hover {
+    background: #0ea5e9;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(14, 165, 233, 0.35);
+  }
+
+  /* bullets um pouco mais compactos */
+  .auth-intro {
+    font-size: 0.95rem;
+    color: #475569;
+    max-width: 640px;
+    margin: 0.4rem auto 1.1rem auto;
+  }
+
+  .auth-intro-list {
+    font-size: 0.9rem;
+    color: #475569;
+    max-width: 640px;
+    margin: 0 auto 1.4rem auto;
+  }
+
+  @media (max-width: 768px) {
+    .auth-main {
+      padding: 1.6rem 1.4rem 1.8rem;
+    }
+
+    .auth-hero {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .auth-form-row {
+      flex-direction: column;
+    }
+
+    .auth-secondary-cta {
+      border-left: none;
+      padding-left: 0;
+      margin-top: 0.8rem;
+      border-top: 1px dashed rgba(148, 163, 184, 0.7);
+      padding-top: 0.7rem;
+    }
+  }
+
+</style>
+{% endblock %}
+
+
 
 {% block content %}
-<style>
-  /* Esconde o primeiro <header> da página só nesta tela */
-  body > header {
-    display: none;
-  }
-</style>
 
-<h1>Login</h1>
+<div class="auth-wrapper">
+  <div class="auth-main">
 
-<form method="post">
-  {% csrf_token %}
+    <div class="auth-hero">
+      <div class="auth-hero-logo">
+        <img src="{% static 'img/logo-sonhe-mais-alto.png' %}"
+             alt="Sonhe + Alto">
+      </div>
+      <div>
+        <div class="auth-hero-title">Sonhe + Alto</div>
+        <div class="auth-hero-subtitle">Escola no Ar</div>
+        <div class="auth-hero-tagline">
+          🐠 Surgiu uma vaga no aquário de cima. Corre lá!
+        </div>
+      </div>
+    </div>
 
-  {# Se o LoginView recebeu ?next=..., ele já passa "next" pro template #}
-  {% if next %}
-    <input type="hidden" name="next" value="{{ next }}">
-  {% endif %}
+    <p class="auth-intro">
+      Aqui é o espaço seguro para você treinar hábitos, testar estratégias e descobrir até onde pode ir
+      quando sonha mais alto com Deus.
+    </p>
 
-  <label for="{{ form.username.id_for_label }}">E-mail</label>
-  {{ form.username }}   {# USERNAME_FIELD=email #}
+    <ol class="auth-intro-list">
+      <li>Monte seu plano de 21 dias com estratégias práticas.</li>
+      <li>Acompanhe a sua evolução em cada área da vida.</li>
+      <li>Volte sempre que quiser ajustar o que está dando certo.</li>
+    </ol>
 
-  <label for="{{ form.password.id_for_label }}">Senha</label>
-  {{ form.password }}
+    <ol class="auth-intro-list">
+      <li>Monte seu plano de 21 dias com estratégias práticas.</li>
+      <li>Acompanhe a sua evolução em cada área da vida.</li>
+      <li>Volte sempre que quiser ajustar o que está dando certo.</li>
+    </ol>
 
-  <label style="display:inline-flex; gap:.5rem; align-items:center; margin:.5rem 0;">
-    <input type="checkbox" name="remember_me">
-    Manter-me conectado
-  </label>
+    <div class="auth-title">Entrar na sua conta</div>
 
-  <button type="submit">Entrar</button>
-</form>
+    <div class="auth-form-row">
+      <form method="post" class="auth-form">
+        {% csrf_token %}
+        {{ form.as_p }}
 
-<p><a href="{% url 'contas:password_reset' %}">Esqueceu a senha?</a></p>
+        <div style="margin-top:0.7rem;">
+          <button type="submit" class="btn btn-primary">
+            Entrar
+          </button>
+        </div>
 
-<p>Não tem conta?
-  <a href="{% url 'contas:registrar' %}{% if next %}?next={{ next|urlencode }}{% endif %}">
-    Criar conta
-  </a>
-</p>
+        <p style="margin-top:0.5rem; font-size:0.85rem;">
+          <a href="{% url 'contas:password_reset' %}">Esqueceu a senha?</a>
+        </p>
+      </form>
 
-<p><a href="{% url 'portal' %}">Voltar ao Portal</a></p>  {# se sua rota "portal" existir #}
+      <div class="auth-secondary-cta">
+        <span>Primeira vez aqui?</span>
+        <a href="{% url 'contas:registrar' %}">
+          Criar conta gratuita
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 {% endblock %}
