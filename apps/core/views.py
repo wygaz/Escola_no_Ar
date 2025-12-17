@@ -8,6 +8,22 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django import forms
 
+def sonhe_mais_alto_landing(request):
+    context = {
+        "hide_global_header": True,  # esconde o cabeçalho azul marinho
+    }
+    return render(request, "core/sonhe_mais_alto_landing.html", context)
+
+def home_funil(request):
+    """Entrada do site:
+    - Usuário anônimo: vai para tela de login
+    - Usuário logado: vai direto para Projeto 21
+    """
+    if request.user.is_authenticated:
+        # Se você tiver um nome de url para essa página, use reverse:
+        # return redirect("projeto21:home")
+        return redirect("/projeto21/")
+    return redirect("contas:login")
 
 class ContatoForm(forms.Form):
     nome = forms.CharField(label="Nome", max_length=100)

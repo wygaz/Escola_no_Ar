@@ -22,7 +22,7 @@
     width: 100%;
     margin: 0.3rem auto 1.8rem;             /* quase nada de margem em cima */
     padding: 1.6rem 2.1rem 1.9rem;
-    background: rgba(255, 255, 255, 0.96);
+    background: #F5DEB3;
     border-radius: 24px;
     box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
     color: #0f172a;
@@ -182,7 +182,7 @@
 
     <div class="auth-hero">
       <div class="auth-hero-logo">
-        <img src="{% static 'img/logo-sonhe-mais-alto.png' %}"
+        <img src="{% static 'core/img/logo-sonhe-mais-alto.png' %}"
              alt="Sonhe + Alto">
       </div>
       <div>
@@ -199,17 +199,12 @@
       quando sonha mais alto com Deus.
     </p>
 
-    <ol class="auth-intro-list">
+    <ul class="auth-intro-list">
       <li>Monte seu plano de 21 dias com estratégias práticas.</li>
       <li>Acompanhe a sua evolução em cada área da vida.</li>
       <li>Volte sempre que quiser ajustar o que está dando certo.</li>
-    </ol>
+    </ul>
 
-    <ol class="auth-intro-list">
-      <li>Monte seu plano de 21 dias com estratégias práticas.</li>
-      <li>Acompanhe a sua evolução em cada área da vida.</li>
-      <li>Volte sempre que quiser ajustar o que está dando certo.</li>
-    </ol>
 
     <div class="auth-title">Entrar na sua conta</div>
 
@@ -230,7 +225,7 @@
       </form>
 
       <div class="auth-secondary-cta">
-        <span>Primeira vez aqui?</span>
+        <span><div class = "auth-title">Primeira vez aqui?</div></span>
         <a href="{% url 'contas:registrar' %}">
           Criar conta gratuita
         </a>

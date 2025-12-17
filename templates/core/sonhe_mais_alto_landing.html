@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sonhe + Alto · Plano de 21 dias{% endblock %}
+
+{% block extra_head %} {% endblock %}
+
+{% block content %}
+
+    <div class="sma-section">
+      <div>
+        <h2>Para quem é o Sonhe + Alto?</h2>
+        <p>
+          Para adolescentes, jovens e adultos que querem crescer com propósito – unindo fé, rotina
+          e pequenos passos práticos. Ideal para quem:
+        </p>
+        <ul class="sma-list">
+          <li>quer organizar a vida, mas se perde em tantas ideias;</li>
+          <li>já tentou mudar hábitos, mas não conseguiu manter por muito tempo;</li>
+          <li>deseja alinhar seus planos com os valores do Reino de Deus;</li>
+          <li>gosta de materiais simples, diretos e visuais.</li>
+        </ul>
+
+        <h2 style="margin-top:1.6rem;">O que você vai viver nos 21 dias</h2>
+        <ul class="sma-list">
+          <li>Escolher objetivos reais em 6 áreas importantes da vida.</li>
+          <li>Transformar cada objetivo em estratégias práticas e mensuráveis.</li>
+          <li>Acompanhar diariamente o que foi feito, o que funcionou e o que precisa ajustar.</li>
+          <li>Celebrar pequenas vitórias e descobrir seu ritmo de crescimento.</li>
+        </ul>
+
+        <!-- HINT DE ROLAGEM -->
+        <div class="sma-scroll-hint">
+          <span class="sma-scroll-hint-text">role para ver mais</span>
+          <span class="sma-scroll-arrow">⬇️</span>
+        </div>
+        
+      </div>
+
+      <aside class="sma-price-card">
+        <div class="sma-price-tag">Pacote completo</div>
+        <div class="sma-price-total">
+          Valor somado dos itens: <span>R$ 218,00</span>
+        </div>
+        <div class="sma-price-launch">
+          Lançamento: R$ 47,00
+        </div>
+        <div class="sma-price-small">
+          pelo acesso ao guia + portal Sonhe + Alto e bônus.
+        </div>
+
+        <ul class="sma-price-items">
+          <li><strong>Guia digital “Quem sou eu? Como descobrir minha vocação”</strong> – R$ 57,00</li>
+          <li><strong>Acesso ao programa Sonhe + Alto</strong> (plano de 21 dias que você pode refazer) – R$ 97,00</li>
+          <li><strong>Cupom para um teste básico de vocação online</strong> – R$ 37,00</li>
+          <li><strong>Modelos e materiais de acompanhamento</strong> (planilhas simples, planos em branco etc.) – R$ 27,00</li>
+        </ul>
+
+        <p class="sma-price-small" style="margin-top:0.8rem;">
+          Você recebe tudo isso por apenas R$ 47,00 no lançamento.<br>
+          Depois, o valor poderá ser reajustado.
+        </p>
+      </aside>
+    </div>
+
+
+<div class="sma-page">
+  <div class="sma-hero-card">
+
+    <div class="sma-hero-left">
+      <img src="{% static 'core/img/logo-sonhe-mais-alto.png' %}" alt="Sonhe + Alto">
+      <p><br>Escola no Ar</p>
+    </div>
+
+    <div class="sma-hero-right">
+      <div class="sma-kicker">Plano prático de 21 dias</div>
+      <div class="sma-title">Treine hábitos e descubra até onde você pode ir quando sonha mais alto com Deus.</div>
+      <div class="sma-subtitle">
+        Um espaço seguro para organizar sua rotina, experimentar estratégias simples e acompanhar sua evolução
+        em cada área da vida – dia após dia, com propósito.
+      </div>
+
+      <div class="sma-badges">
+        <div class="sma-badge"><span>📅</span>Plano guiado de 21 dias</div>
+        <div class="sma-badge"><span>🎯</span>Foco em 6 áreas da vida</div>
+        <div class="sma-badge"><span>📊</span>Acompanhamento simples e visual</div>
+      </div>
+      <div class="guia-offer">
+        <a class="guia-cover-link"
+          href="https://pay.hotmart.com/Q103340890M?bid=1765338293599"
+          target="_blank" rel="noopener">
+          <img
+            class="guia-cover-lg"
+            src="{% static 'core/img/capa_guia_vocacao.png' %}"
+            alt="Capa do Guia"
+          >
+        </a>
+      </div>
+
+      <div class="sma-cta-row sma-cta-row--double">
+        <a href="https://pay.hotmart.com/Q103340890M?bid=1765338293599"
+          target="_blank" rel="noopener"
+          class="btn btn-outline-primary">
+          Quero adquirir o Guia
+        </a>
+
+        <a href="{% url 'contas:login' %}?next=/projeto21/"
+          class="btn btn-outline-primary">
+          Já tenho o Guia
+        </a>
+      </div>
+        <!-- HINT DE ROLAGEM -->
+      <div class="sma-scroll-hint">
+        <span class="sma-scroll-hint-text">role para ver mais</span>
+        <span class="sma-scroll-arrow">⬇️</span>
+      </div>
+      <div class="sma-cover-note">
+        <p>
+          O Guia digital é entregue pela Hotmart logo após a confirmação do pagamento,
+          no e-mail que você cadastrar na compra.
+        </p>
+      </div>
+    <div class="sma-cta-note">
+        Acesso ao portal online + guia digital + bônus exclusivos.
+    </div>
+  </div>
+</div>
+
+<div class="sma-faq">
+  <h2>Perguntas rápidas</h2>
+  <dl>
+    <dt>Quanto tempo tenho para usar o material?</dt>
+    <dd>
+      O plano é pensado para 21 dias, mas você pode refazer quantas vezes quiser, ajustando
+      os objetivos e estratégias ao seu momento.
+    </dd>
+
+    <dt>Preciso ser especialista em planejamento?</dt>
+    <dd>
+      Não. O Sonhe + Alto foi criado justamente para quem quer começar de forma simples,
+      com orientações passo a passo.
+    </dd>
+
+    <dt>Como recebo meu acesso?</dt>
+    <dd>
+      Após a confirmação da compra na Hotmart, você recebe o link de acesso ao portal e ao guia
+      no e-mail cadastrado. Em poucos minutos já consegue entrar e montar seu primeiro plano.
+    </dd>
+  </dl>
+</div>
+{% endblock %}

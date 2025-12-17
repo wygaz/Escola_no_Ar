@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Guia de Descoberta · Sonhe + Alto{% endblock %}
+
+{% block extra_head %}
+<style>
+  .funnel-wrapper {
+    padding: 2.5rem 0 3.5rem 0;
+  }
+
+  .funnel-card {
+    max-width: 1040px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 26px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.15);
+    padding: 2.5rem 2.75rem;
+  }
+
+  .funnel-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr);
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  /* bloco esquerdo: logo + frase */
+  .funnel-hero-left {
+    text-align: left;
+  }
+
+  .funnel-logo-row {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .funnel-logo-row img {
+    max-width: 120px;
+    height: auto;
+    display: block;
+  }
+
+  .funnel-logo-text-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .funnel-logo-text-sub {
+    font-size: 0.9rem;
+    color: #64748b;
+  }
+
+  .funnel-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin-top: .5rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.7);
+    font-size: 0.86rem;
+    color: #0369a1;
+  }
+
+  .funnel-hero-left p {
+    margin-top: 1rem;
+    font-size: 0.96rem;
+    color: #475569;
+  }
+
+  /* bloco direito: texto + CTAs */
+  .funnel-hero-right h1 {
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+    color: #0f172a;
+  }
+
+  .funnel-hero-right p {
+    font-size: 0.96rem;
+    color: #475569;
+    margin-bottom: 0.85rem;
+  }
+
+  .funnel-hero-right ul {
+    margin: 0.4rem 0 1.4rem 1.2rem;
+    font-size: 0.9rem;
+    color: #4b5563;
+  }
+
+  .funnel-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+
+  .btn-funnel-main {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1.7rem;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, #f97316, #fb923c);
+    color: #111827;
+    font-weight: 700;
+    font-size: 0.96rem;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 12px 30px rgba(248, 171, 84, 0.5);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+  }
+
+  .btn-funnel-main:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    box-shadow: 0 16px 36px rgba(248, 171, 84, 0.6);
+  }
+
+  .btn-funnel-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+    border: 1px solid #0ea5e9;
+    background: #ecfeff;
+    color: #0369a1;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+  }
+
+  .btn-funnel-secondary:hover {
+    background: #0ea5e9;
+    color: #ffffff;
+    box-shadow: 0 10px 22px rgba(14, 165, 233, 0.4);
+  }
+
+  .funnel-note {
+    font-size: 0.82rem;
+    color: #6b7280;
+  }
+
+  @media (max-width: 860px) {
+    .funnel-card {
+      padding: 1.9rem 1.6rem;
+    }
+    .funnel-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .funnel-hero-left {
+      text-align: center;
+    }
+    .funnel-logo-row {
+      justify-content: center;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="funnel-wrapper">
+  <div class="funnel-card">
+    <div class="funnel-grid">
+      <!-- Lado esquerdo: logo + mensagem -->
+      <div class="funnel-hero-left">
+        <div class="funnel-logo-row">
+          <img src="{% static 'img/logo-sonhe-mais-alto.png' %}"
+               alt="Sonhe + Alto">
+          <div>
+            <div class="funnel-logo-text-title">Sonhe + Alto</div>
+            <div class="funnel-logo-text-sub">Projeto 21 · Escola no Ar</div>
+          </div>
+        </div>
+
+        <div class="funnel-badge">
+          🐠 <span>Surgiu uma vaga no aquário de cima. Corre lá!</span>
+        </div>
+
+        <p>
+          Um guia simples e direto para ajudar você a se conhecer melhor,
+          escolher prioridades e dar os primeiros passos em direção
+          a uma vida alinhada com os sonhos de Deus para você.
+        </p>
+      </div>
+
+      <!-- Lado direito: oferta + botões -->
+      <div class="funnel-hero-right">
+        <h1>Guia de Descoberta + Programa Sonhe&nbsp;+&nbsp;Alto</h1>
+        <p>
+          Ao adquirir o Guia de Descoberta, você recebe o e-book em PDF
+          e ganha acesso ao programa <strong>Sonhe&nbsp;+&nbsp;Alto</strong>,
+          um espaço seguro para treinar hábitos e montar seu plano de 21 dias.
+        </p>
+
+        <ul>
+          <li>Guia prático de autoconhecimento e vocação.</li>
+          <li>Plano de 21 dias com estratégias simples e aplicáveis.</li>
+          <li>Acompanhamento das áreas da vida dentro do portal.</li>
+          <li>Acesso imediato após a confirmação da compra.</li>
+        </ul>
+
+        <div class="funnel-ctas">
+          <!-- TROCAR pela URL real do checkout Hotmart -->
+          <a href="https://pay.hotmart.com/SEU_CODIGO_AQUI"
+             class="btn-funnel-main"
+             target="_blank"
+             rel="noopener">
+            Quero meu guia agora
+          </a>
+
+          <a href="{% url 'contas:login' %}"
+             class="btn-funnel-secondary">
+            Já comprei / Já tenho conta
+          </a>
+        </div>
+
+        <div class="funnel-note">
+          Pagamento seguro via Hotmart · Acesso imediato ao PDF + bônus Sonhe&nbsp;+&nbsp;Alto.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

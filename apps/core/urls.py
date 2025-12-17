@@ -7,4 +7,5 @@ urlpatterns = [
     path("hotmart/", hotmart_webhook, name="hotmart_webhook"),
     path("sobre/", views.sobre, name="sobre"),
     path("contato/", views.contato, name="contato"),
+    path("sonhe-mais-alto/", views.sonhe_mais_alto_landing, name="sonhe_mais_alto"),
 ]

@@ -187,8 +187,8 @@ AUTH_USER_MODEL = "contas.Usuario"
 
 # URLs de login/logout (ajuste para casar com suas rotas de contas/)
 LOGIN_URL = "contas:login"
-LOGIN_REDIRECT_URL = "portal"
-LOGOUT_REDIRECT_URL = "portal"   # fallback se não vier ?next
+LOGIN_REDIRECT_URL = "/projeto21/"  # novo alvo depois de logar
+LOGOUT_REDIRECT_URL = "contas:login" # fallback se não vier ?next
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},

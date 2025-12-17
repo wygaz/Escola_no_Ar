@@ -8,7 +8,11 @@
     "peso": 1,
     "OrdemArea": 1,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.286
   },
   {
     "area": "Família",
@@ -19,7 +23,11 @@
     "peso": 1,
     "OrdemArea": 1,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O02",
+    "desc_objetivo": "Ajudar nas tarefas de casa com regularidade",
+    "score_alinhamento": 0.5
   },
   {
     "area": "Família",
@@ -30,7 +38,11 @@
     "peso": 1,
     "OrdemArea": 1,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Família",
@@ -41,7 +53,11 @@
     "peso": 1,
     "OrdemArea": 1,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Família",
@@ -52,7 +68,11 @@
     "peso": 1,
     "OrdemArea": 1,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -63,7 +83,11 @@
     "peso": 1,
     "OrdemArea": 1,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.286
   },
   {
     "area": "Família",
@@ -74,7 +98,11 @@
     "peso": 1,
     "OrdemArea": 1,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O04",
+    "desc_objetivo": "Ser mais paciente com meus irmãos ou parentes",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Família",
@@ -85,7 +113,11 @@
     "peso": 1,
     "OrdemArea": 1,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Família",
@@ -96,7 +128,11 @@
     "peso": 1,
     "OrdemArea": 1,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.1
   },
   {
     "area": "Família",
@@ -107,7 +143,11 @@
     "peso": 1,
     "OrdemArea": 1,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Família",
@@ -118,7 +158,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Família",
@@ -129,7 +173,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O02",
+    "desc_objetivo": "Ajudar nas tarefas de casa com regularidade",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Família",
@@ -140,7 +188,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -151,7 +203,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -162,7 +218,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Família",
@@ -173,7 +233,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O03",
+    "desc_objetivo": "Passar tempo de qualidade com minha família",
+    "score_alinhamento": 0.182
   },
   {
     "area": "Família",
@@ -184,7 +248,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -195,7 +263,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -206,7 +278,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Família",
@@ -217,7 +293,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Família",
@@ -228,7 +308,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O02",
+    "desc_objetivo": "Ajudar nas tarefas de casa com regularidade",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Família",
@@ -239,7 +323,11 @@
     "peso": 2,
     "OrdemArea": 1,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Família",
@@ -250,7 +338,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -261,7 +353,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -272,7 +368,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O06",
+    "desc_objetivo": "Evitar discussões desnecessárias",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Família",
@@ -283,7 +383,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -294,7 +398,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O04",
+    "desc_objetivo": "Ser mais paciente com meus irmãos ou parentes",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Família",
@@ -305,7 +413,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O02",
+    "desc_objetivo": "Ajudar nas tarefas de casa com regularidade",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Família",
@@ -316,7 +428,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -327,7 +443,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.1
   },
   {
     "area": "Família",
@@ -338,7 +458,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Família",
@@ -349,7 +473,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O03",
+    "desc_objetivo": "Passar tempo de qualidade com minha família",
+    "score_alinhamento": 0.1
   },
   {
     "area": "Família",
@@ -360,7 +488,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -371,7 +503,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Família",
@@ -382,7 +518,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 13
+    "OrdemEstrategia": 13,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O07",
+    "desc_objetivo": "Orar com minha família regularmente",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Família",
@@ -393,7 +533,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 14
+    "OrdemEstrategia": 14,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Família",
@@ -404,7 +548,11 @@
     "peso": 3,
     "OrdemArea": 1,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 15
+    "OrdemEstrategia": 15,
+    "cod_area": "A01",
+    "cod_objetivo": "A01O01",
+    "desc_objetivo": "Melhorar a comunicação com meus pais",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -415,7 +563,11 @@
     "peso": 1,
     "OrdemArea": 2,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O04",
+    "desc_objetivo": "Orar e ler a Bíblia diariamente",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Igreja",
@@ -426,7 +578,11 @@
     "peso": 1,
     "OrdemArea": 2,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -437,7 +593,11 @@
     "peso": 1,
     "OrdemArea": 2,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O05",
+    "desc_objetivo": "Testemunhar minha fé com sabedoria",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Igreja",
@@ -448,7 +608,11 @@
     "peso": 1,
     "OrdemArea": 2,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O02",
+    "desc_objetivo": "Participar ativamente do ministério de jovens",
+    "score_alinhamento": 0.333
   },
   {
     "area": "Igreja",
@@ -459,7 +623,11 @@
     "peso": 1,
     "OrdemArea": 2,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -470,7 +638,11 @@
     "peso": 1,
     "OrdemArea": 2,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O03",
+    "desc_objetivo": "Servir em algum ministério da igreja",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Igreja",
@@ -481,7 +653,11 @@
     "peso": 1,
     "OrdemArea": 2,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -492,7 +668,11 @@
     "peso": 1,
     "OrdemArea": 2,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -503,7 +683,11 @@
     "peso": 1,
     "OrdemArea": 2,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O03",
+    "desc_objetivo": "Servir em algum ministério da igreja",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Igreja",
@@ -514,7 +698,11 @@
     "peso": 1,
     "OrdemArea": 2,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O03",
+    "desc_objetivo": "Servir em algum ministério da igreja",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Igreja",
@@ -525,7 +713,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -536,7 +728,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O06",
+    "desc_objetivo": "Apoiar os novos membros e visitantes",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Igreja",
@@ -547,7 +743,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -558,7 +758,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -569,7 +773,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O02",
+    "desc_objetivo": "Participar ativamente do ministério de jovens",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Igreja",
@@ -580,7 +788,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -591,7 +803,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -602,7 +818,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -613,7 +833,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O06",
+    "desc_objetivo": "Apoiar os novos membros e visitantes",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Igreja",
@@ -624,7 +848,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Igreja",
@@ -635,7 +863,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -646,7 +878,11 @@
     "peso": 2,
     "OrdemArea": 2,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -657,7 +893,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -668,7 +908,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -679,7 +923,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -690,7 +938,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -701,7 +953,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -712,7 +968,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -723,7 +983,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -734,7 +998,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -745,7 +1013,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -756,7 +1028,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O03",
+    "desc_objetivo": "Servir em algum ministério da igreja",
+    "score_alinhamento": 0.286
   },
   {
     "area": "Igreja",
@@ -767,7 +1043,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -778,7 +1058,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O06",
+    "desc_objetivo": "Apoiar os novos membros e visitantes",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Igreja",
@@ -789,7 +1073,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 13
+    "OrdemEstrategia": 13,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -800,7 +1088,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 14
+    "OrdemEstrategia": 14,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O01",
+    "desc_objetivo": "Frequentar os cultos com regularidade",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Igreja",
@@ -811,7 +1103,11 @@
     "peso": 3,
     "OrdemArea": 2,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 15
+    "OrdemEstrategia": 15,
+    "cod_area": "A02",
+    "cod_objetivo": "A02O02",
+    "desc_objetivo": "Participar ativamente do ministério de jovens",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Escola",
@@ -822,7 +1118,11 @@
     "peso": 1,
     "OrdemArea": 3,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O02",
+    "desc_objetivo": "Melhorar minha participação nas aulas",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Escola",
@@ -833,7 +1133,11 @@
     "peso": 1,
     "OrdemArea": 3,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -844,7 +1148,11 @@
     "peso": 1,
     "OrdemArea": 3,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -855,7 +1163,11 @@
     "peso": 1,
     "OrdemArea": 3,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O06",
+    "desc_objetivo": "Respeitar professores e colegas",
+    "score_alinhamento": 0.167
   },
   {
     "area": "Escola",
@@ -866,7 +1178,11 @@
     "peso": 1,
     "OrdemArea": 3,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -877,7 +1193,11 @@
     "peso": 1,
     "OrdemArea": 3,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O02",
+    "desc_objetivo": "Melhorar minha participação nas aulas",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Escola",
@@ -888,7 +1208,11 @@
     "peso": 1,
     "OrdemArea": 3,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O07",
+    "desc_objetivo": "Evitar distrações em sala de aula",
+    "score_alinhamento": 0.286
   },
   {
     "area": "Escola",
@@ -899,7 +1223,11 @@
     "peso": 1,
     "OrdemArea": 3,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -910,7 +1238,11 @@
     "peso": 1,
     "OrdemArea": 3,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -921,7 +1253,11 @@
     "peso": 1,
     "OrdemArea": 3,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O06",
+    "desc_objetivo": "Respeitar professores e colegas",
+    "score_alinhamento": 0.167
   },
   {
     "area": "Escola",
@@ -932,7 +1268,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -943,7 +1283,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -954,7 +1298,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -965,7 +1313,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O08",
+    "desc_objetivo": "Montar um plano de estudos realista",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Escola",
@@ -976,7 +1328,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -987,7 +1343,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -998,7 +1358,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1009,7 +1373,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O08",
+    "desc_objetivo": "Montar um plano de estudos realista",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Escola",
@@ -1020,7 +1388,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1031,7 +1403,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1042,7 +1418,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1053,7 +1433,11 @@
     "peso": 2,
     "OrdemArea": 3,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O06",
+    "desc_objetivo": "Respeitar professores e colegas",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Escola",
@@ -1064,7 +1448,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O08",
+    "desc_objetivo": "Montar um plano de estudos realista",
+    "score_alinhamento": 0.429
   },
   {
     "area": "Escola",
@@ -1075,7 +1463,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1086,7 +1478,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1097,7 +1493,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1108,7 +1508,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O06",
+    "desc_objetivo": "Respeitar professores e colegas",
+    "score_alinhamento": 0.091
   },
   {
     "area": "Escola",
@@ -1119,7 +1523,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1130,7 +1538,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1141,7 +1553,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O06",
+    "desc_objetivo": "Respeitar professores e colegas",
+    "score_alinhamento": 0.167
   },
   {
     "area": "Escola",
@@ -1152,7 +1568,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1163,7 +1583,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O08",
+    "desc_objetivo": "Montar um plano de estudos realista",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Escola",
@@ -1174,7 +1598,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1185,7 +1613,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1196,7 +1628,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 13
+    "OrdemEstrategia": 13,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Escola",
@@ -1207,7 +1643,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 14
+    "OrdemEstrategia": 14,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O07",
+    "desc_objetivo": "Evitar distrações em sala de aula",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Escola",
@@ -1218,7 +1658,11 @@
     "peso": 3,
     "OrdemArea": 3,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 15
+    "OrdemEstrategia": 15,
+    "cod_area": "A03",
+    "cod_objetivo": "A03O01",
+    "desc_objetivo": "Organizar melhor meus estudos e prazos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1229,7 +1673,11 @@
     "peso": 1,
     "OrdemArea": 4,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.167
   },
   {
     "area": "Amigos",
@@ -1240,7 +1688,11 @@
     "peso": 1,
     "OrdemArea": 4,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Amigos",
@@ -1251,7 +1703,11 @@
     "peso": 1,
     "OrdemArea": 4,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1262,7 +1718,11 @@
     "peso": 1,
     "OrdemArea": 4,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.167
   },
   {
     "area": "Amigos",
@@ -1273,7 +1733,11 @@
     "peso": 1,
     "OrdemArea": 4,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1284,7 +1748,11 @@
     "peso": 1,
     "OrdemArea": 4,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1295,7 +1763,11 @@
     "peso": 1,
     "OrdemArea": 4,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O03",
+    "desc_objetivo": "Dar bons conselhos quando for procurado",
+    "score_alinhamento": 0.091
   },
   {
     "area": "Amigos",
@@ -1306,7 +1778,11 @@
     "peso": 1,
     "OrdemArea": 4,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.4
   },
   {
     "area": "Amigos",
@@ -1317,7 +1793,11 @@
     "peso": 1,
     "OrdemArea": 4,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1328,7 +1808,11 @@
     "peso": 1,
     "OrdemArea": 4,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Amigos",
@@ -1339,7 +1823,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1350,7 +1838,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O05",
+    "desc_objetivo": "Evitar fofocas e julgamentos",
+    "score_alinhamento": 0.182
   },
   {
     "area": "Amigos",
@@ -1361,7 +1853,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Amigos",
@@ -1372,7 +1868,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1383,7 +1883,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Amigos",
@@ -1394,7 +1898,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.167
   },
   {
     "area": "Amigos",
@@ -1405,7 +1913,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1416,7 +1928,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1427,7 +1943,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.167
   },
   {
     "area": "Amigos",
@@ -1438,7 +1958,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1449,7 +1973,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O02",
+    "desc_objetivo": "Ser mais presente nos momentos difíceis",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Amigos",
@@ -1460,7 +1988,11 @@
     "peso": 2,
     "OrdemArea": 4,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1471,7 +2003,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1482,7 +2018,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Amigos",
@@ -1493,7 +2033,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1504,7 +2048,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Amigos",
@@ -1515,7 +2063,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Amigos",
@@ -1526,7 +2078,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Amigos",
@@ -1537,7 +2093,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1548,7 +2108,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.167
   },
   {
     "area": "Amigos",
@@ -1559,7 +2123,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.167
   },
   {
     "area": "Amigos",
@@ -1570,7 +2138,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1581,7 +2153,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O04",
+    "desc_objetivo": "Manter contato com amigos antigos",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Amigos",
@@ -1592,7 +2168,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1603,7 +2183,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 13
+    "OrdemEstrategia": 13,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Amigos",
@@ -1614,7 +2198,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 14
+    "OrdemEstrategia": 14,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Amigos",
@@ -1625,7 +2213,11 @@
     "peso": 3,
     "OrdemArea": 4,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 15
+    "OrdemEstrategia": 15,
+    "cod_area": "A04",
+    "cod_objetivo": "A04O01",
+    "desc_objetivo": "Valorizar os verdadeiros amigos",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1636,7 +2228,11 @@
     "peso": 1,
     "OrdemArea": 5,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1647,7 +2243,11 @@
     "peso": 1,
     "OrdemArea": 5,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O05",
+    "desc_objetivo": "Tratar bem os vizinhos",
+    "score_alinhamento": 0.25
   },
   {
     "area": "Comunidade",
@@ -1658,7 +2258,11 @@
     "peso": 1,
     "OrdemArea": 5,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O06",
+    "desc_objetivo": "Ajudar idosos ou crianças quando possível",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Comunidade",
@@ -1669,7 +2273,11 @@
     "peso": 1,
     "OrdemArea": 5,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1680,7 +2288,11 @@
     "peso": 1,
     "OrdemArea": 5,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1691,7 +2303,11 @@
     "peso": 1,
     "OrdemArea": 5,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1702,7 +2318,11 @@
     "peso": 1,
     "OrdemArea": 5,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1713,7 +2333,11 @@
     "peso": 1,
     "OrdemArea": 5,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Comunidade",
@@ -1724,7 +2348,11 @@
     "peso": 1,
     "OrdemArea": 5,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1735,7 +2363,11 @@
     "peso": 1,
     "OrdemArea": 5,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1746,7 +2378,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.333
   },
   {
     "area": "Comunidade",
@@ -1757,7 +2393,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1768,7 +2408,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O06",
+    "desc_objetivo": "Ajudar idosos ou crianças quando possível",
+    "score_alinhamento": 0.1
   },
   {
     "area": "Comunidade",
@@ -1779,7 +2423,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Comunidade",
@@ -1790,7 +2438,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1801,7 +2453,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1812,7 +2468,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1823,7 +2483,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O06",
+    "desc_objetivo": "Ajudar idosos ou crianças quando possível",
+    "score_alinhamento": 0.429
   },
   {
     "area": "Comunidade",
@@ -1834,7 +2498,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Comunidade",
@@ -1845,7 +2513,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1856,7 +2528,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O04",
+    "desc_objetivo": "Cumprir regras e responsabilidades públicas",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Comunidade",
@@ -1867,7 +2543,11 @@
     "peso": 2,
     "OrdemArea": 5,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1878,7 +2558,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1889,7 +2573,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1900,7 +2588,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1911,7 +2603,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1922,7 +2618,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1933,7 +2633,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1944,7 +2648,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O06",
+    "desc_objetivo": "Ajudar idosos ou crianças quando possível",
+    "score_alinhamento": 0.222
   },
   {
     "area": "Comunidade",
@@ -1955,7 +2663,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1966,7 +2678,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1977,7 +2693,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1988,7 +2708,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -1999,7 +2723,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Comunidade",
@@ -2010,7 +2738,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 13
+    "OrdemEstrategia": 13,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -2021,7 +2753,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 14
+    "OrdemEstrategia": 14,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O01",
+    "desc_objetivo": "Participar de ações sociais ou voluntariado",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Comunidade",
@@ -2032,7 +2768,11 @@
     "peso": 3,
     "OrdemArea": 5,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 15
+    "OrdemEstrategia": 15,
+    "cod_area": "A05",
+    "cod_objetivo": "A05O07",
+    "desc_objetivo": "Usar redes sociais com responsabilidade",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Eu mesmo",
@@ -2043,7 +2783,11 @@
     "peso": 1,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O02",
+    "desc_objetivo": "Cuidar da minha saúde física",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Eu mesmo",
@@ -2054,7 +2798,11 @@
     "peso": 1,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O03",
+    "desc_objetivo": "Controlar meu tempo no celular e redes",
+    "score_alinhamento": 0.1
   },
   {
     "area": "Eu mesmo",
@@ -2065,7 +2813,11 @@
     "peso": 1,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2076,7 +2828,11 @@
     "peso": 1,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2087,7 +2843,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2098,7 +2858,11 @@
     "peso": 1,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2109,7 +2873,11 @@
     "peso": 1,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O03",
+    "desc_objetivo": "Controlar meu tempo no celular e redes",
+    "score_alinhamento": 0.1
   },
   {
     "area": "Eu mesmo",
@@ -2120,7 +2888,11 @@
     "peso": 1,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O07",
+    "desc_objetivo": "Evitar comparações e inveja",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Eu mesmo",
@@ -2131,7 +2903,11 @@
     "peso": 1,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2142,7 +2918,11 @@
     "peso": 1,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2153,7 +2933,11 @@
     "peso": 1,
     "OrdemArea": 6,
     "OrdemNivel": 1,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O02",
+    "desc_objetivo": "Cuidar da minha saúde física",
+    "score_alinhamento": 0.143
   },
   {
     "area": "Eu mesmo",
@@ -2164,7 +2948,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O02",
+    "desc_objetivo": "Cuidar da minha saúde física",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Eu mesmo",
@@ -2175,7 +2963,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2186,7 +2978,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2197,7 +2993,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2208,7 +3008,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O08",
+    "desc_objetivo": "Desenvolver um plano de vida com metas claras",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Eu mesmo",
@@ -2219,7 +3023,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2230,7 +3038,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O04",
+    "desc_objetivo": "Aprender a lidar com minhas emoções",
+    "score_alinhamento": 0.125
   },
   {
     "area": "Eu mesmo",
@@ -2241,7 +3053,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2252,7 +3068,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2263,7 +3083,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2274,7 +3098,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2285,7 +3113,11 @@
     "peso": 2,
     "OrdemArea": 6,
     "OrdemNivel": 2,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2296,7 +3128,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 1
+    "OrdemEstrategia": 1,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2307,7 +3143,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 2
+    "OrdemEstrategia": 2,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O08",
+    "desc_objetivo": "Desenvolver um plano de vida com metas claras",
+    "score_alinhamento": 0.091
   },
   {
     "area": "Eu mesmo",
@@ -2318,7 +3158,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 3
+    "OrdemEstrategia": 3,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2329,7 +3173,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 4
+    "OrdemEstrategia": 4,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2340,7 +3188,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 5
+    "OrdemEstrategia": 5,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2351,7 +3203,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 6
+    "OrdemEstrategia": 6,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O05",
+    "desc_objetivo": "Criar hábitos saudáveis (sono, alimentação)",
+    "score_alinhamento": 0.1
   },
   {
     "area": "Eu mesmo",
@@ -2362,7 +3218,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 7
+    "OrdemEstrategia": 7,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2373,7 +3233,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 8
+    "OrdemEstrategia": 8,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2384,7 +3248,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 9
+    "OrdemEstrategia": 9,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2395,7 +3263,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 10
+    "OrdemEstrategia": 10,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O05",
+    "desc_objetivo": "Criar hábitos saudáveis (sono, alimentação)",
+    "score_alinhamento": 0.1
   },
   {
     "area": "Eu mesmo",
@@ -2406,7 +3278,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 11
+    "OrdemEstrategia": 11,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O02",
+    "desc_objetivo": "Cuidar da minha saúde física",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Eu mesmo",
@@ -2417,7 +3293,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 12
+    "OrdemEstrategia": 12,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O08",
+    "desc_objetivo": "Desenvolver um plano de vida com metas claras",
+    "score_alinhamento": 0.111
   },
   {
     "area": "Eu mesmo",
@@ -2428,7 +3308,11 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 13
+    "OrdemEstrategia": 13,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
@@ -2439,17 +3323,25 @@
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 14
+    "OrdemEstrategia": 14,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O01",
+    "desc_objetivo": "Me conhecer melhor e valorizar minhas qualidades",
+    "score_alinhamento": 0.0
   },
   {
     "area": "Eu mesmo",
     "nivel": "Avançado",
-    "codigo": "EuA015-1d0d",
+    "codigo": "EuA015-1d1d",
     "estrategia": "Documentar minha vocação/talentos e próximo passo concreto.",
-    "dosagem": "Uma vez por dia por um período de 0 dias",
+    "dosagem": "Pelo menos uma vez",
     "peso": 3,
     "OrdemArea": 6,
     "OrdemNivel": 3,
-    "OrdemEstrategia": 15
+    "OrdemEstrategia": 15,
+    "cod_area": "A06",
+    "cod_objetivo": "A06O02",
+    "desc_objetivo": "Cuidar da minha saúde física",
+    "score_alinhamento": 0.1
   }
 ]

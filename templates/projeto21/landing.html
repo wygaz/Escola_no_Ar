@@ -3,12 +3,14 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Guia Como Descobrir Minha Vocação • Escola no Ar</title>
+  <title>Projeto Sonhe + Alto</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     :root {
     /* Paleta em tons de amarelo → laranja */
+      /* Laranja do Sonhe + Alto (ajuste se quiser outro tom) */
+      --sma-laranja: #f97316;  /* um laranja vivo, tipo peixinho mesmo */
       --bg-gradient: linear-gradient(135deg, #ffe66d 0%, #ffca3a 40%, #ff9f43 100%);
       --bg-soft: #fff9ed;
       --accent: #ffb347;
@@ -21,12 +23,11 @@
       --radius-lg: 18px;
       --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.12);
       --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
-/* Cores extras para a seção Johari */
+    /* Cores extras para a seção Johari */
       --sonhe-azul-escuro: #051647;
       --sonhe-azul-medio:  #0b2274;
       --sonhe-texto-escuro: #0f172a;
       --sonhe-bg-suave:    #f5f5fb;
-
     }
 
     * {
@@ -45,6 +46,183 @@
     a {
       text-decoration: none;
       color: inherit;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 0.75rem;
+      padding-bottom: 0.25rem;
+    }
+
+    /* Pílula do usuário logado (topo) */
+    .top-user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      background: #ffe7b3;         /* amarelo suave */
+      font-size: 0.82rem;
+      color: #6a3b00;
+    }
+
+    .top-user-label {
+      font-weight: 500;
+    }
+
+    /* Área dos botões Sair / Entrar com outra conta */
+    .top-user-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .top-user-actions form {
+      margin: 0;
+    }
+
+    /* Botõezinhos em formato de pílula */
+    .top-user-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 183, 77, 0.95); /* laranja dos peixinhos */
+      background: #fffaf0;
+      padding: 0.15rem 0.7rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: #6a3b00;
+      cursor: pointer;
+      transition:
+        background 0.15s ease,
+        color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+    }
+
+    .top-user-btn-outline {
+      background: transparent;
+    }
+
+    .top-user-btn:hover {
+      background: #ffb347;
+      color: #2c1c00;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1px);
+    }
+
+    /* Remove espaçamento estranho de form inline */
+    .top-user-actions form {
+      margin: 0;
+    }
+
+
+    /* Navegação rápida fixa nas seções do Sonhe + Alto */
+    .sma-subnav {
+      position: sticky;
+      top: 72px;                 /* ajuste se o cabeçalho for mais alto ou mais baixo */
+      z-index: 40;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.75rem 0 1rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      background: #ffe9b5;       /* tom amarelado da landing interna */
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    /* HEADER mais compacto (opcional, se quiser enxugar um pouco) */
+    .sma-header {
+      padding-top: 0.75rem;
+      padding-bottom: 0.25rem;
+    }
+
+    /* === Navegação rápida fixa – versão compacta e em pílulas === */
+    .sma-subnav-wrapper {
+      position: sticky;
+      top: 70px; /* ajusta a altura para não ocupar tanto espaço */
+      z-index: 40;
+      background: rgba(255, 233, 181, 0.9); /* fundo suave da amarelona */
+      padding: 0.2rem 0;
+      text-align: center;         /* centraliza o conteúdo */
+    }
+
+    .sma-subnav {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;       /* pílula */
+      background: #ffe9b5;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    /* "Navegação rápida:" também vira pílula menor */
+    .sma-subnav-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #7c2d12;
+      white-space: nowrap;
+    }
+
+    /* Cada link é uma pílula */
+    .sma-subnav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      background: #ffffff;
+      font-size: 0.78rem;
+      text-decoration: none;
+      color: #1d2a4a;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+
+    /* Hint de rolagem (setinha móvel) ----------------------------------- */
+    .sma-scroll-hint {
+      margin: 1.4rem 0 0.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      font-size: 0.82rem;
+      color: #aa1199;
+      opacity: 0.9;
+    }
+
+    .sma-scroll-hint-text {
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .sma-scroll-arrow {
+      display: inline-block;
+      font-size: 1.3rem;
+      animation: scroll-bounce 1.4s infinite ease-in-out;
+    }
+
+    @keyframes scroll-bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(6px);
+      }
     }
 
     .page {
@@ -70,11 +248,70 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     }
 
-    .header-inner {
-      display: flex;
+    .sma-header {
+      padding-top: 0.75rem;
+      padding-bottom: 0.25rem;
+    }
+
+    /* Container da barra de navegação (vira uma grande pílula) */
+    .sma-subnav {
+      display: inline-flex;
+      flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
+      gap: 0.4rem;
+      padding: 0.25rem 0.75rem;
+      margin: 0 auto;
+      border-radius: 999px;
+      background: #ffe9b5;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    /* "Navegação rápida" também como pílula */
+    .sma-subnav-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #7c2d12;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      white-space: nowrap;
+    }
+
+    /* Botões de seção – pílulas menores */
+    .sma-subnav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      background: #4682B4;
+      font-size: 0.78rem;
+      text-decoration: none;
+      color: #FFD700;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+
+    .sma-subnav-btn:hover {
+      transform: translateY(-1px);
+      text-decoration: none;
+      color: #1d2a4a;
+      background: #ffa50c;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+    }
+
+    /* Mobile: quebra bonitinho em duas ou mais linhas */
+    @media (max-width: 768px) {
+      .sma-subnav {
+        justify-content: center;
+        row-gap: 0.25rem;
+      }
+
+      .sma-subnav-label {
+        flex-basis: 100%;
+        text-align: center;
+      }
     }
 
     .brand {
@@ -87,7 +324,7 @@
       /* logo em um retângulo arredondado */
       height: 120px;
       width: 230px;
-      border-radius: 16px;
+      border-radius: 1px;
       background: #ffffff;
       display: flex;
       align-items: center;
@@ -106,7 +343,7 @@
     .brand-title {
       display: flex;
       flex-direction: column;
-      font-size: 1.5rem;
+      font-size: 2.2rem;
     }
 
     .header-cta {
@@ -120,7 +357,163 @@
       color: #a36815;
       padding: 0.3rem 0.6rem;
       border-radius: 999px;
-      font-size: 0.75rem;
+      font-size: 0.85rem;
+    }
+
+
+    /* Cartões (pílulas) */
+    .plano-ident-card,
+    .plano-form-card,
+    .plano-sugestoes-card {
+      background: #ffffff;
+      border-radius: 26px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12);
+      padding: 1.5rem 1.6rem 1.7rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .plano-form-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.9rem;
+    }
+
+    /* Grid de identificação e do plano */
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.5rem;
+    }
+
+    .form-group {
+      flex: 1 1 220px;
+      min-width: 0;
+    }
+
+    /* Campos e rótulos (rótulo mais forte) */
+    .form-group label,
+    .field-sugestoes label {
+      display: block;
+      font-weight: 700;      /* mais destaque */
+      font-size: 0.95rem;    /* um tiquinho maior */
+      color: #111827;        /* levemente mais escuro */
+      margin-bottom: 0.25rem;
+    }
+
+    .plano-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));  /* 50% / 50% */
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .plano-grid {
+        grid-template-columns: 1fr;  /* no celular fica uma coluna só */
+      }
+    }
+
+
+    /* Campos e rótulos */
+    .form-group label,
+    .field-sugestoes label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .form-input,
+    .form-select,
+    .field-sugestoes textarea {
+      width: 100%;
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #d0d5f2;
+      font-size: 0.95rem;
+    }
+
+    /* Estratégias em cards */
+    .estrategias-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.7rem;
+    }
+
+    .estrategia-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      background: #f8f4ff;
+      border-radius: 18px;
+      padding: 0.55rem 0.8rem;
+      cursor: pointer;
+    }
+
+    .estrategia-card input[type="checkbox"] {
+      margin-top: 0.3rem;
+    }
+
+    .estrategia-content {
+      flex: 1;
+    }
+
+    .estrategia-titulo {
+      font-size: 0.93rem;
+      font-weight: 600;
+    }
+
+    .estrategia-dosagem,
+    .estrategia-meta {
+      font-size: 0.82rem;
+      color: #4b4b63;
+    }
+
+    /* Erro visual nos campos */
+    .form-group.field-error label {
+      color: #b3251f;
+    }
+
+    .form-group.field-error .form-input,
+    .form-group.field-error .form-select {
+      border-color: #b3251f;
+      box-shadow: 0 0 0 1px rgba(179, 37, 31, 0.25);
+    }
+
+    /* Alerta central (modalzinho simples) */
+    .plano-alert-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.28);
+      z-index: 9998;
+    }
+
+    .plano-alert {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 420px;
+      width: 90%;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 1.2rem 1.4rem;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+      z-index: 9999;
+      font-size: 0.95rem;
+    }
+
+    .plano-alert strong {
+      color: #b3251f;
+    }
+
+    .plano-alert button {
+      margin-top: 0.9rem;
+      border-radius: 999px;
+      border: none;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.9rem;
+      cursor: pointer;
     }
 
     .btn-small {
@@ -777,17 +1170,20 @@
       background: rgba(255, 255, 255, 0.7);
     }
 
+    /* Layout do card "Dados para o plano" */
     .trilha-form {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.6rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));  /* 50% / 50% */
+      gap: 2rem;
+      align-items: flex-start;
     }
 
     @media (max-width: 800px) {
       .trilha-form {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr;  /* no celular vira 1 coluna só */
       }
     }
+
 
     .trilha-divider {
       border: none;
@@ -857,6 +1253,14 @@
       font-size: 0.72rem;
       color: var(--muted);
       margin-top: 0.1rem;
+    }
+
+    /* Texto de apoio abaixo dos campos (small) */
+    .form-text,
+    .field-sugestoes small {
+      display: block;
+      font-size: 0.78rem;    /* MENOR que o texto normal */
+      color: #6b7280;        /* cinza suave */
     }
 
     .field {
@@ -1011,7 +1415,7 @@
 
     /* texto “Estratégias sugeridas – escolha de 3 a 5…” */
     .plano-form-card .estrategias-title {
-      font-weight: 700;
+      font-weight: 900;
       margin-top: .3rem;
     }
 
@@ -1043,6 +1447,23 @@
       text-decoration: underline;
       text-decoration-style: dotted;
     }
+
+    /* Compensar a altura do cabeçalho + barra fixa ao rolar para os anchors */
+    #sec-hero-amarelo,
+    #sec-como-usar,
+    #sec-entender-projeto,
+    #sec-o-que-encontra,
+    #sec-kits-projeto,
+    #sec-plano-estrategias {
+      scroll-margin-top: 120px;  /* ajuste fino se ainda “comer” um pouquinho */
+    }
+
+   /* Se preferir exatamente o mesmo da barra: */
+   .hero.hero-interna {
+      background: rgba(255, 233, 181, 0.9);
+      background-image: none;
+    } 
+
   </style>
 </head>
 <body>
@@ -1053,27 +1474,59 @@
     <div class="container header-inner">
       <div class="brand">
         <div class="brand-logo">
-          <img src="{% static 'core/img/logo_escola_no_ar.jpg' %}"
-               alt="Escola no Ar" class="brand-logo-img">
+          <img src="{% static 'core\img\logo-sonhe-mais-alto.png' %}"
+               alt="Sonhe + Alto" class="brand-logo-img">
         </div>
 
         <div class="brand-title">
-          Guia Como Descobrir Minha Vocação &amp;<br>Sonhe + Alto
+          Projeto Sonhe + Alto
         </div>
       </div>
 
-      <div class="header-cta">
-        <div class="tag">Se você já tem o Guia ------></div>
-        <a href="{% url 'contas:login' %}" class="btn-small">
-          <span class="icon">👤</span>
-          <span>Login</span>
-        </a>
+      <!-- cabeçalho sem botão de login, já que a view exige @login_required -->
+      {% if request.user.is_authenticated %}
+        <div class="top-user-pill">
+          <span class="top-user-label">
+            Você está logado como {{ request.user.first_name|default:request.user.email }}.
+          </span>
+
+          <div class="top-user-actions">
+            {# Botão Sair normal #}
+            <form method="post" action="{% url 'contas:logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="top-user-btn">
+                Sair
+              </button>
+            </form>
+
+            {# Botão Sair + ir para tela de login (trocar de conta) #}
+            <form method="post" action="{% url 'contas:logout' %}">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{% url 'contas:login' %}">
+              <button type="submit" class="top-user-btn top-user-btn-outline">
+                Entrar com outra conta
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+     <!-- NOVO: barra de navegação fixa da landing interna -->
+    <div class="sma-subnav-wrapper">
+      <div class="container sma-subnav">
+        <span class="sma-subnav-label">Navegação rápida:</span>
+
+        <a href="#sec-como-usar"          class="sma-subnav-btn">Como usar esta página</a>
+        <a href="#sec-hero-amarelo"       class="sma-subnav-btn">Entender o Projeto</a>
+        <a href="#sec-kits"               class="sma-subnav-btn">Kits do Projeto</a>
+        <a href="#sec-plano"              class="sma-subnav-btn">Montar meu plano</a>
+        <a href="#sec-o-que-encontra"     class="sma-subnav-btn">Tudo o que está incluído</a>
       </div>
     </div>
   </header>
-
-  <!-- HERO -->
-  <section class="hero">
+  
+  <!-- SEÇÃO 1 - “amarelona”, a principal do Sonhe+Alto -->
+  <section id="sec-hero-amarelo" class="hero hero-interna">
     <div class="container hero-inner">
 
       <div class="hero-left">
@@ -1105,29 +1558,25 @@
 
       <div class="hero-actions">
         {% if user.is_authenticated %}
-          {# Já logado: levar direto pro plano e kits #}
-          <a href="#plano-estrategias" class="btn-primary">
+          <a href="#sec-plano" class="btn-primary">
             <span>🧭 Montar meu plano de estratégias</span>
           </a>
-
-          <a href="#kits-projeto21" class="btn-ghost">
+          <a href="#sec-kits" class="btn-ghost">
             <span>📄 Ver kits para impressão</span>
           </a>
         {% else %}
-          {# Visitante: login ou comprar o Guia #}
-          <a href="{% url 'contas:login' %}?next={{ request.path }}#plano-estrategias"
+          <a href="{% url 'contas:login' %}?next={{ request.path|urlencode }}%23sec-plano"
             class="btn-primary">
             <span>🔑 Já tenho o Guia – entrar com minha conta</span>
           </a>
 
-          <a href="https://SEU-LINK-HOTMART-AQUI"
-            class="btn-ghost"
-            target="_blank" rel="noopener">
+          <a href="https://pay.hotmart.com/Q103340890M"
+            class="btn-ghost" target="_blank" rel="noopener">
             <span>✨ Ainda não tenho o Guia</span>
           </a>
         {% endif %}
       </div>
-
+      </div>
       <div class="hero-right">
         <div class="hero-monitor-shell">
           <div class="hero-card hero-card-steps">
@@ -1151,7 +1600,7 @@
               <li>
                 <strong>Baixe seus Kits.</strong><br>
                 Depois do login, role até a seção
-                <a href="#kits-projeto21">Kits do Projeto Sonhe + Alto</a> para imprimir a papelada.
+                <a href="#sec-plano">Kits do Projeto Sonhe + Alto</a> para imprimir a papelada.
               </li>
               <li>
                 <strong>Monte seu plano.</strong><br>
@@ -1165,12 +1614,16 @@
           </div>
         </div>
       </div>
-
     </div>
+    <!-- HINT DE ROLAGEM -->
+    <div class="sma-scroll-hint">
+      <span class="sma-scroll-hint-text">role para ver mais</span>
+      <span class="sma-scroll-arrow">⬇️</span>
+    </div>    
   </section>
 
-  <!-- JANELA DE JOHARI -->
-  <section id="johari-hero" class="hero-johari">
+  <!-- SEÇÃO 2 - Quanto você realmente se conhece? -->
+  <section id="sec-quanto-se-conhece" class="quiz-teaser">
     <div class="container hero-johari-inner">
 
       <header class="hero-johari-header">
@@ -1202,7 +1655,7 @@
           </figure>
           <h3>Ponto cego</h3>
           <p>
-            O que os vêem em mim, mas eu não percebi, ainda.
+            O que os outros vêem em mim, mas eu não percebi, ainda.
           </p>
         </article>
 
@@ -1237,16 +1690,19 @@
           alinhando vocação, hábitos e projeto de vida.
         </p>
       </div>
-
+      <!-- HINT DE ROLAGEM -->
+      <div class="sma-scroll-hint">
+        <span class="sma-scroll-hint-text">role para ver mais</span>
+        <span class="sma-scroll-arrow">⬇️</span>
+      </div>    
     </div>
   </section>
 
-
-
-  <!-- ROTEIRO RÁPIDO DE NAVEGAÇÃO -->
-  <section class="howto">
+  <!-- SEÇÃO 3 - Como usar esta página -->
+  <section id="sec-como-usar" class="howto">
     <div class="container">
       <h2 class="section-title">Como usar esta página</h2>
+
       <p class="section-subtitle">
         Em três passos simples você chega onde precisa.
       </p>
@@ -1290,8 +1746,14 @@
     </div>
   </section>
 
+  <!-- HINT DE ROLAGEM -->
+  <div class="sma-scroll-hint">
+    <span class="sma-scroll-hint-text">role para ver mais</span>
+    <span class="sma-scroll-arrow">⬇️</span>
+  </div>    
+  
   <!-- BENEFÍCIOS -->
-  <section>
+     <section>
     <div class="container">
       <h2 class="section-title">O que você encontra aqui</h2>
       <p class="section-subtitle">
@@ -1351,9 +1813,14 @@
       </div>
     </div>
   </section>
+  <!-- HINT DE ROLAGEM -->
+  <div class="sma-scroll-hint">
+    <span class="sma-scroll-hint-text">role para ver mais</span>
+    <span class="sma-scroll-arrow">⬇️</span>
+  </div>    
 
-  <!-- DOWNLOAD DOS KITS -->
-  <section id="kits-projeto21">
+  <!-- SEÇÃO 5 - Kits disponíveis -->
+  <section id="sec-kits" class="kits">
     <div class="container">
       <h2 class="section-title">Kits disponíveis para quem tem o Guia</h2>
       <p class="section-subtitle">
@@ -1361,66 +1828,68 @@
         liberado pela compra do guia Como Descobrir Minha Vocação na Hotmart.
       </p>
 
-      <div class="panel-sonhe kits-panel">
-        <div class="kits-grid">
-          <!-- KIT 1 ESSENCIAL -->
-          <article class="kit-card kit-card-main">
-            <div class="kit-title"><strong>Kit Projeto Sonhe + Alto Essencial</strong></div>
-            <div class="kit-sub">Comece com o básico bem feito.</div>
-            <ul class="kit-list">
-              <li>Capa do Projeto Sonhe + Alto com seus dados.</li>
-              <li>Plano geral com as 6 áreas da vida.</li>
-              <li>Folhas de estratégias para os objetivos principais.</li>
-            </ul>
-            <div class="kit-footer">
-              <button class="btn-primary">
-                <span>🧩 Baixar Kit Essencial</span>
-              </button>
-              <span class="kit-note">Requer login e acesso liberado.</span>
-            </div>
-          </article>
-
-          <!-- KIT 2 COMPLETO -->
-          <article class="kit-card kit-card-main">
-            <div class="kit-badge">+ usado</div>
-            <div class="kit-title"><strong>Kit Projeto Sonhe + Alto Completo</strong></div>
-            <div class="kit-sub">Tudo o que você precisa para os 21 dias.</div>
-            <ul class="kit-list">
-              <li>Todos os papéis do Projeto Sonhe + Alto (capa, plano geral, estratégias).</li>
-              <li>Diários semanais para 21 dias.</li>
-              <li>Painel de pontos e níveis.</li>
-            </ul>
-            <div class="kit-footer">
-              <button class="btn-primary">
-                <span>🚀 Baixar Kit Completo</span>
-              </button>
-              <span class="kit-note">Sugestão para uso individual.</span>
-            </div>
-          </article>
-
-          <!-- KIT 3 GRUPOS -->
-          <article class="kit-card kit-card-main">
-            <div class="kit-title"><strong>Kit para Grupos</strong></div>
-            <div class="kit-sub">Ideal para escolas, igrejas e clubes.</div>
-            <ul class="kit-list">
-              <li>Modelos para cópia em grupo (múltiplos alunos).</li>
-              <li>Campos extras para nome da turma e mentor.</li>
-              <li>Indicadores simples para acompanhamento coletivo.</li>
-            </ul>
-            <div class="kit-footer">
-              <button class="btn-primary">
-                <span>📦 Baixar Kit para Grupos</span>
-              </button>
-              <span class="kit-note">Perfeito para projetos em sala ou igreja.</span>
-            </div>
-          </article>
+      <!-- KIT 1 ESSENCIAL -->
+      <article class="kit-card kit-card-main">
+        <div class="kit-title"><strong>Kit Projeto Sonhe + Alto Essencial</strong></div>
+        <div class="kit-sub">Comece com o básico bem feito.</div>
+        <ul class="kit-list">
+          <li>Capa do Projeto Sonhe + Alto com seus dados.</li>
+          <li>Plano geral com as 6 áreas da vida.</li>
+          <li>Folhas de estratégias para os objetivos principais.</li>
+        </ul>
+        <div class="kit-footer">
+          <button type="button" id="btn-kit-essencial" class="btn-primary">
+            <span>🧩 Baixar Kit Essencial</span>
+          </button>
+          <span class="kit-note">Requer login e acesso liberado.</span>
         </div>
-      </div>
+      </article>
+
+      <!-- KIT 2 COMPLETO -->
+      <article class="kit-card kit-card-main">
+        <div class="kit-badge">+ usado</div>
+        <div class="kit-title"><strong>Kit Projeto Sonhe + Alto Completo</strong></div>
+        <div class="kit-sub">Tudo o que você precisa para os 21 dias.</div>
+        <ul class="kit-list">
+          <li>Todos os papéis do Projeto Sonhe + Alto (capa, plano geral, estratégias).</li>
+          <li>Diários semanais para 21 dias.</li>
+          <li>Painel de pontos e níveis.</li>
+        </ul>
+        <div class="kit-footer">
+          <button type="button" id="btn-kit-completo" class="btn-primary">
+            <span>🚀 Baixar Kit Completo</span>
+          </button>
+          <span class="kit-note">Sugestão para uso individual.</span>
+        </div>
+      </article>
+
+      <!-- KIT 3 GRUPOS -->
+      <article class="kit-card kit-card-main">
+        <div class="kit-title"><strong>Kit para Grupos</strong></div>
+        <div class="kit-sub">Ideal para escolas, igrejas e clubes.</div>
+        <ul class="kit-list">
+          <li>Modelos para cópia em grupo (múltiplos alunos).</li>
+          <li>Campos extras para nome da turma e mentor.</li>
+          <li>Indicadores simples para acompanhamento coletivo.</li>
+        </ul>
+        <div class="kit-footer">
+          <button type="button" id="btn-kit-grupos" class="btn-primary">
+            <span>📦 Baixar Kit para Grupos</span>
+          </button>
+          <span class="kit-note">Perfeito para projetos em sala ou igreja.</span>
+        </div>
+      </article>
     </div>
   </section>
 
-  <!-- PLANO PERSONALIZADO DE ESTRATÉGIAS -->
-  <section id="plano-estrategias">
+  <!-- HINT DE ROLAGEM -->
+  <div class="sma-scroll-hint">
+    <span class="sma-scroll-hint-text">role para ver mais</span>
+    <span class="sma-scroll-arrow">⬇️</span>
+  </div>    
+
+  <!-- SEÇÃO 6 - Montar meu plano de estratégias -->
+  <section id="sec-plano" class="plano-estrategias">
     <div class="container">
       <h2 class="section-title">Montar meu plano de estratégias</h2>
       <p class="section-subtitle">
@@ -1428,97 +1897,102 @@
         que quer praticar. Depois é só gerar o plano e imprimir.
       </p>
 
-      <div class="kits-download-wrapper">
-        <div class="plano-identificacao-title">
-          Dados de identificação
-        </div>
+        <!-- 1) Card com dados de identificação -->
+        <div class="plano-form-card">
+          <h3 class="plano-form-title">Dados de identificação</h3>
 
-        <!-- 1) Card com dados pessoais -->
-        <div class="plano-identificacao-card">
-          <div class="plano-main-grid">
-            <div>
-              <label class="required" for="id_nome">Nome</label>
-              <input
-                type="text"
-                id="plano-nome"
-                placeholder="Seu nome"
-                value="{% if user.is_authenticated %}{% firstof user.first_name user.nome user.email %}{% endif %}"
-                {% if user.is_authenticated %}readonly{% endif %}
-              >
+          <div class="form-row">
+            <div class="form-group">
+              <label for="plano-nome">Nome</label>
+                <input
+                  id="plano-nome"
+                  name="nome"
+                  type="text"
+                  class="form-input"
+                  value="{% firstof request.user.first_name request.user.nome request.user.email %}"
+                >
             </div>
 
-            <div class="field">
+            <div class="form-group">
               <label for="plano-escola">Escola / Turma (opcional)</label>
-              <input
-                type="text"
-                id="plano-escola"
-                placeholder="Ex.: Colégio X – 8º ano"
-              >
+              <input id="plano-escola" name="escola" type="text" class="form-input">
             </div>
           </div>
         </div>
+
 
         <!-- 2) Card com dados do plano + estratégias -->
         <div class="plano-form-card">
           <h3 class="plano-form-title">Dados para o plano</h3>
 
-          <div class="trilha-form">
-            <div class="field">
-              <label for="plano-area">Área da vida</label>
-              <select id="plano-area">
-                <option value="">Selecione...</option>
-                <option value="Família">Família</option>
-                <option value="Escola">Escola</option>
-                <option value="Amigos">Amigos</option>
-                <option value="Comunidade">Comunidade</option>
-                <option value="Igreja">Igreja</option>
-                <option value="Eu mesmo">Eu mesmo</option>
-              </select>
-              <small>Campo obrigatório: Escolha uma área para montar o plano agora.</small>
+          <div class="trilha-form plano-grid">
+            <!-- Coluna esquerda: Área / Nível / Objetivo -->
+            <div class="plano-col-esquerda">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="area-select">Área da vida</label>
+                  <select id="area-select" name="area" class="form-select" required>
+                    <option value="">Selecione...</option>
+                    {# As opções serão preenchidas via JS usando o estrategias.json #}
+                  </select>
+                  <small class="form-text">
+                    Campo obrigatório: escolha uma área para montar o plano agora.
+                  </small>
+                </div>
+
+                <div class="form-group">
+                  <label for="nivel-select">Nível</label>
+                  <select id="nivel-select" name="nivel" class="form-select">
+                    <option value="">Selecione...</option>
+                    <option value="Básico">Básico</option>
+                    <option value="Desafio">Desafio</option>
+                    <option value="Avançado">Avançado</option>
+                  </select>
+                  <small class="form-text">
+                    O Básico é um bom começo. Desafio e Avançado exigem mais constância.
+                  </small>
+                </div>
+
+                <div class="form-group">
+                  <label for="objetivo-select">Objetivo sugerido</label>
+                  <select id="objetivo-select" name="objetivo" class="form-select">
+                    <option value="">Selecione a área para ver os objetivos</option>
+                  </select>
+                  <small class="form-text">
+                    Escolha um objetivo sugerido para esta área.
+                  </small>
+                </div>
+              </div>
             </div>
 
-            <div class="field">
-              <label for="plano-nivel">Nível</label>
-              <select id="plano-nivel">
-                <option value="">Selecione...</option>
-                <option value="Básico">Básico</option>
-                <option value="Desafio">Desafio</option>
-                <option value="Avançado">Avançado</option>
-              </select>
-              <small>Campo obrigatório: O Básico é um bom começo. Desafio e Avançado exigem mais constância.</small>
-            </div>
+            <!-- Coluna direita: Estratégias + botão -->
+            <div class="plano-col-direita">
+              <h3>Estratégias sugeridas</h3>
+              <p>Marque de 3 a 5 estratégias que você quer praticar nesta área.</p>
 
-            <div class="field">
-              <label for="plano-objetivo-sugerido">Objetivo sugerido</label>
-              <select id="plano-objetivo-sugerido" disabled>
-                <option value="">Selecione a área para ver os objetivos</option>
-              </select>
-              <small>Escolha um objetivo sugerido para esta área.</small>
-            </div>
-          </div>
+              <div id="estrategias-container" class="estrategias-grid">
+                <!-- O JS vai preencher os cards de estratégias aqui -->
+              </div>
 
-          <div class="estrategias-col">
-            <div class="estrategias-header">
-              <strong>Estratégias sugeridas</strong>
-              <span>Escolha de 3 a 5 estratégias para o seu plano nesta área.</span>
-            </div>
-
-            <div id="estrategias-lista" class="estrategias-lista">
-              <p class="placeholder">
-                Escolha a área e o nível para ver as estratégias disponíveis.
-              </p>
-            </div>
-
-            <div class="trilha-actions">
-              <span class="info">
-                Marque de 3 a 5 estratégias que você quer praticar nesta área.
-              </span>
-              <button type="button" id="btn-gerar-plano" class="btn-primary">
-                Gerar meu plano de estratégias
-              </button>
+              <div class="trilha-actions">
+                <button type="button" id="btn-gerar-plano" class="btn-primary">
+                  Gerar meu plano de estratégias
+                </button>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- 3) Card com sugestões -->
+        <div class="plano-sugestoes-card">
+          <div class="field field-sugestoes">
+            <label for="plano-sugestoes">Minhas sugestões (opcional)</label>
+            <textarea id="plano-sugestoes" rows="6"
+              placeholder="Use este espaço para sugerir novos objetivos ou estratégias que ainda não aparecem na lista. Essas sugestões não entram neste plano automaticamente, mas podem nos ajudar a melhorar o Projeto Sonhe + Alto."></textarea>
+            <small></small>
+          </div>
+        </div>
+
 
         <!-- 3) Card com sugestões -->
         <div class="plano-sugestoes-card">
@@ -1544,189 +2018,225 @@
       </div>
     </div>
   </footer>
+</div>
 
+<div id="plano-alert-backdrop" class="plano-alert-backdrop" hidden></div>
+<div id="plano-alert" class="plano-alert" hidden>
+  <div id="plano-alert-text"></div>
+  <button type="button" id="plano-alert-close">Ok, entendi</button>
 </div>
 
 <script>
   (function () {
-    // URL do JSON de estratégias
     const ESTRATEGIAS_URL = "{% static 'projeto21/data/estrategias.json' %}";
+    const USER_NOME = "{{ request.user.first_name|default:request.user.nome|default:request.user.email|escapejs }}";
 
-    // Referências ao DOM
-    const areaSelect   = document.getElementById("plano-area");
-    const nivelSelect  = document.getElementById("plano-nivel");
-    const objetivoSugeridoSelect = document.getElementById("plano-objetivo-sugerido");
-    const sugestoesTextarea      = document.getElementById("plano-sugestoes");
-    const listaDiv     = document.getElementById("estrategias-lista");
-    const btnGerar     = document.getElementById("btn-gerar-plano");
 
-    if (!areaSelect || !nivelSelect || !listaDiv || !btnGerar) return;
+    const areaSelect     = document.getElementById("area-select");
+    const nivelSelect    = document.getElementById("nivel-select");
+    const objetivoSelect = document.getElementById("objetivo-select");
+    const listaDiv       = document.getElementById("estrategias-container");
+    const btnGerar       = document.getElementById("btn-gerar-plano");
+    const sugestoesTextarea = document.getElementById("plano-sugestoes");
 
-    // Objetivos sugeridos por área
-    const OBJETIVOS_SUGERIDOS = {
-      "Família": [
-        "Melhorar a comunicação com meus pais",
-        "Ajudar nas tarefas de casa com regularidade",
-        "Passar tempo de qualidade com minha família",
-        "Ser mais paciente com meus irmãos ou parentes",
-        "Expressar gratidão e carinho dentro de casa",
-        "Evitar discussões desnecessárias",
-        "Orar com minha família regularmente",
-        "Respeitar os horários e regras do lar"
-      ],
-      "Escola": [
-        "Organizar melhor meus estudos e prazos",
-        "Melhorar minha participação nas aulas",
-        "Cuidar do meu comportamento escolar",
-        "Buscar ajuda quando tiver dificuldades",
-        "Aumentar minha média em pelo menos uma disciplina",
-        "Respeitar professores e colegas",
-        "Evitar distrações em sala de aula",
-        "Montar um plano de estudos realista"
-      ],
-      "Amigos": [
-        "Valorizar os verdadeiros amigos",
-        "Ser mais presente nos momentos difíceis",
-        "Dar bons conselhos quando for procurado",
-        "Manter contato com amigos antigos",
-        "Evitar fofocas e julgamentos",
-        "Incluir colegas que ficam isolados",
-        "Desenvolver amizades saudáveis",
-        "Orar por meus amigos regularmente"
-      ],
-      "Comunidade": [
-        "Participar de ações sociais ou voluntariado",
-        "Cuidar do ambiente ao meu redor",
-        "Ser respeitoso com todos, mesmo os diferentes",
-        "Cumprir regras e responsabilidades públicas",
-        "Tratar bem os vizinhos",
-        "Ajudar idosos ou crianças quando possível",
-        "Usar redes sociais com responsabilidade",
-        "Representar bem minha fé e meus valores"
-      ],
-      "Igreja": [
-        "Frequentar os cultos com regularidade",
-        "Participar ativamente do ministério de jovens",
-        "Servir em algum ministério da igreja",
-        "Orar e ler a Bíblia diariamente",
-        "Testemunhar minha fé com sabedoria",
-        "Apoiar os novos membros e visitantes",
-        "Ser pontual e comprometido nas atividades",
-        "Buscar conselhos com líderes espirituais"
-      ],
-      "Eu mesmo": [
-        "Me conhecer melhor e valorizar minhas qualidades",
-        "Cuidar da minha saúde física",
-        "Controlar meu tempo no celular e redes",
-        "Aprender a lidar com minhas emoções",
-        "Criar hábitos saudáveis (sono, alimentação)",
-        "Buscar crescimento espiritual",
-        "Evitar comparações e inveja",
-        "Desenvolver um plano de vida com metas claras"
-      ]
-    };
+    const alertBox      = document.getElementById("plano-alert");
+    const alertBackdrop = document.getElementById("plano-alert-backdrop");
+    const alertText     = document.getElementById("plano-alert-text");
+    const alertClose    = document.getElementById("plano-alert-close");
 
-    // Preenche o select de objetivos quando a área muda
-    function atualizarObjetivosSugeridos() {
-      if (!objetivoSugeridoSelect) return;
-
-      const area = areaSelect.value;
-      objetivoSugeridoSelect.innerHTML = "";
-
-      if (!area || !OBJETIVOS_SUGERIDOS[area]) {
-        objetivoSugeridoSelect.disabled = true;
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "Selecione a área para ver os objetivos";
-        objetivoSugeridoSelect.appendChild(opt);
-        return;
-      }
-
-      objetivoSugeridoSelect.disabled = false;
-
-      const optPadrao = document.createElement("option");
-      optPadrao.value = "";
-      optPadrao.textContent = "Selecione um objetivo...";
-      objetivoSugeridoSelect.appendChild(optPadrao);
-
-      OBJETIVOS_SUGERIDOS[area].forEach((texto) => {
-        const opt = document.createElement("option");
-        opt.value = texto;
-        opt.textContent = texto;
-        objetivoSugeridoSelect.appendChild(opt);
-      });
+    if (!areaSelect || !objetivoSelect || !listaDiv || !btnGerar) {
+      console.warn("[Projeto21] Campos do plano não encontrados na página.");
+      return;
     }
 
-    // Cache do JSON
-    let estrategiasCache = null;
+    function norm(v) {
+      return (v ?? "").toString().trim();
+    }
+    function getCodArea(e) {
+      return norm(e.cod_area ?? e.area_cod ?? e.codigo_area ?? e.codArea);
+    }
+    function getNomeArea(e) {
+      return norm(e.area ?? e.desc_area ?? e.nome_area ?? e.descArea);
+    }
+
+    let estrategiasCache = [];
+
+    function showAlert(html) {
+      if (!alertBox || !alertBackdrop || !alertText) {
+        alert(html.replace(/<[^>]+>/g, ""));
+        return;
+      }
+      alertText.innerHTML = html;
+      alertBox.hidden = false;
+      alertBackdrop.hidden = false;
+    }
+
+    function hideAlert() {
+      if (alertBox) alertBox.hidden = true;
+      if (alertBackdrop) alertBackdrop.hidden = true;
+    }
+
+    if (alertClose) {
+      alertClose.addEventListener("click", hideAlert);
+    }
+    if (alertBackdrop) {
+      alertBackdrop.addEventListener("click", hideAlert);
+    }
+
+    function clearFieldErrors() {
+      document
+        .querySelectorAll(".form-group.field-error")
+        .forEach((el) => el.classList.remove("field-error"));
+    }
+
+    function markFieldError(el) {
+      const group = el.closest(".form-group");
+      if (group) group.classList.add("field-error");
+    }
 
     async function carregarEstrategias() {
-      if (estrategiasCache) return estrategiasCache;
+      if (estrategiasCache.length) return estrategiasCache;
 
       try {
-        const resp = await fetch(ESTRATEGIAS_URL);
+        const resp = await fetch(ESTRATEGIAS_URL, { cache: "no-store" });
+
         if (!resp.ok) {
           console.error("Erro ao buscar estrategias.json", resp.status, resp.statusText);
           listaDiv.innerHTML =
-            "<p>Não foi possível carregar as estratégias (erro " +
-            resp.status +
-            "). Confira se o arquivo <strong>estrategias.json</strong> está em <code>static/projeto21/data</code>.</p>";
-          estrategiasCache = [];
-          return estrategiasCache;
+            "<p>Não foi possível carregar as estratégias. Confira se o arquivo <strong>estrategias.json</strong> está em <code>static/projeto21/data</code>.</p>";
+          return [];
         }
-        estrategiasCache = await resp.json();
+
+        const raw = await resp.json();
+
+        estrategiasCache = Array.isArray(raw) ? raw : (raw.data || raw.items || []);
+        console.log("[Projeto21] estratégias carregadas:", estrategiasCache.length);
+
+        return estrategiasCache;
       } catch (err) {
         console.error("Erro ao ler/parsear estrategias.json", err);
         listaDiv.innerHTML =
           "<p>Ocorreu um erro ao ler o arquivo de estratégias. Veja o console do navegador (F12) para mais detalhes.</p>";
-        estrategiasCache = [];
+        return [];
       }
-      return estrategiasCache;
     }
 
-    // Atualiza lista de estratégias conforme área + nível
-    async function atualizarLista() {
-      const area  = areaSelect.value;
-      const nivel = nivelSelect.value;
+    function prepararFiltros(dados) {
+      console.log("[Projeto21] prepararFiltros: dados =", dados.length, dados[0]);
 
-      if (!area || !nivel) {
-        listaDiv.innerHTML = "<p>Escolha a área e o nível para ver as estratégias sugeridas.</p>";
-        return;
+      const mapaAreas = new Map();
+
+      dados.forEach((e) => {
+        const cod = getCodArea(e);
+        const nomeArea = getNomeArea(e);   // <-- era "nome"
+        if (!cod || !nomeArea) return;
+        if (!mapaAreas.has(cod)) mapaAreas.set(cod, nomeArea); // <-- era "nome"
+      });
+
+      areaSelect.innerHTML = '<option value="">Selecione...</option>';
+      mapaAreas.forEach((nomeArea, cod) => { // <-- pode manter assim também
+        const opt = document.createElement("option");
+        opt.value = cod;
+        opt.textContent = nomeArea;
+        areaSelect.appendChild(opt);
+      });
+
+      // níveis (igual ao seu)
+      if (nivelSelect) {
+        const niveis = Array.from(
+          new Set(dados.map((e) => norm(e.nivel)).filter(Boolean))
+        );
+
+        if (niveis.length) {
+          nivelSelect.innerHTML = '<option value="">Selecione...</option>';
+          niveis.forEach((nv) => {
+            const opt = document.createElement("option");
+            opt.value = nv;
+            opt.textContent = nv;
+            nivelSelect.appendChild(opt);
+          });
+        }
       }
+    }
 
-      listaDiv.innerHTML = "<p>Carregando estratégias...</p>";
+    function atualizarObjetivos() {
+      const codArea = areaSelect.value;
+      const nivel   = nivelSelect ? nivelSelect.value : "";
 
-      const dados = await carregarEstrategias();
-      if (!dados || !dados.length) return;
+      objetivoSelect.innerHTML =
+        '<option value="">Selecione um objetivo...</option>';
+      listaDiv.innerHTML = "";
 
-      const filtradas = dados.filter(
-        (e) => e.area === area && e.nivel === nivel
-      );
+      if (!codArea) return;
 
-      if (!filtradas.length) {
+      const dados = estrategiasCache;
+
+      const filtrado = dados.filter((e) => {
+        if (e.cod_area !== codArea) return false;
+        if (nivel && e.nivel !== nivel) return false;
+        return !!e.cod_objetivo;
+      });
+
+      const mapaObj = new Map();
+      filtrado.forEach((e) => {
+        if (!e.cod_objetivo) return;
+        if (!mapaObj.has(e.cod_objetivo)) {
+          mapaObj.set(e.cod_objetivo, e.desc_objetivo || e.cod_objetivo);
+        }
+      });
+
+      mapaObj.forEach((desc, cod) => {
+        const opt = document.createElement("option");
+        opt.value = cod;
+        opt.textContent = desc;
+        objetivoSelect.appendChild(opt);
+      });
+    }
+
+    function renderizarEstrategias() {
+      const codArea = areaSelect.value;
+      const codObj  = objetivoSelect.value;
+      const nivel   = nivelSelect ? nivelSelect.value : "";
+
+      listaDiv.innerHTML = "";
+
+      if (!codArea || !codObj) return;
+
+      const dados = estrategiasCache;
+      const filtrado = dados.filter((e) => {
+        if (e.cod_area !== codArea) return false;
+        if (e.cod_objetivo !== codObj) return false;
+        if (nivel && e.nivel !== nivel) return false;
+        return true;
+      });
+
+      if (!filtrado.length) {
         listaDiv.innerHTML =
-          "<p>Não encontramos estratégias para essa combinação de área e nível. Confira a planilha / JSON.</p>";
+          '<p class="sem-estrategias">Nenhuma estratégia encontrada para esse objetivo/nível. Confira a planilha/JSON.</p>';
         return;
       }
 
       const container = document.createElement("div");
       container.className = "estrategias-cards";
 
-      filtradas.forEach((est) => {
+      filtrado.forEach((est) => {
         const card = document.createElement("label");
         card.className = "estrategia-card";
 
-        const pesoTxt = (est.peso != null) ? (" · Peso: " + est.peso) : "";
+        const pesoTxt = est.peso != null ? " · Peso: " + est.peso : "";
+        const dosagemTxt = est.dosagem || "";
 
         card.innerHTML = `
-          <input type="checkbox"
-                 class="estrategia-check"
-                 data-codigo="${est.codigo}"
-                 data-estrategia="${est.estrategia}"
-                 data-dosagem="${est.dosagem}">
+          <input
+            type="checkbox"
+            class="estrategia-check"
+            data-codigo="${est.codigo}"
+            data-estrategia="${est.estrategia}"
+            data-dosagem="${dosagemTxt}"
+          >
           <div class="estrategia-content">
             <div class="estrategia-titulo">${est.estrategia}</div>
-            <div class="estrategia-dosagem">${est.dosagem}</div>
+            <div class="estrategia-dosagem">${dosagemTxt}</div>
             <div class="estrategia-meta">Código: ${est.codigo}${pesoTxt}</div>
           </div>
         `;
@@ -1737,19 +2247,8 @@
       listaDiv.appendChild(container);
     }
 
-    // Eventos
-    areaSelect.addEventListener("change", function () {
-      atualizarObjetivosSugeridos();
-      atualizarLista();
-    });
-
-    nivelSelect.addEventListener("change", atualizarLista);
-
-    // Inicializa estado do select de objetivos
-    atualizarObjetivosSugeridos();
-
-    // Utilitário para escapar HTML
     function escapeHtml(text) {
+      if (!text) return "";
       const map = {
         "&": "&amp;",
         "<": "&lt;",
@@ -1760,47 +2259,72 @@
       return text.replace(/[&<>"']/g, (m) => map[m]);
     }
 
-    // Geração do plano
     btnGerar.addEventListener("click", function () {
+      hideAlert();
+      clearFieldErrors();
+
       const checks = Array.from(
         document.querySelectorAll(".estrategia-check:checked")
       );
 
-      if (!checks.length) {
-        alert("Marque pelo menos uma estratégia para gerar o plano.");
+      const erros = [];
+
+      if (!areaSelect.value) {
+        erros.push("Escolher uma <strong>Área da vida</strong>.");
+        markFieldError(areaSelect);
+      }
+      if (!nivelSelect.value) {
+        erros.push("Escolher um <strong>Nível</strong> para o plano.");
+        markFieldError(nivelSelect);
+      }
+      if (!objetivoSelect.value) {
+        erros.push("Escolher um <strong>Objetivo sugerido</strong>.");
+        markFieldError(objetivoSelect);
+      }
+      if (checks.length === 0) {
+        erros.push("Marcar pelo menos uma <strong>estratégia</strong>.");
+      }
+
+      if (erros.length) {
+        showAlert(
+          "<p>Para gerar o plano, você precisa:</p><ul><li>" +
+            erros.join("</li><li>") +
+            "</li></ul>"
+        );
         return;
       }
 
       const nomeInput   = document.getElementById("plano-nome");
       const escolaInput = document.getElementById("plano-escola");
 
-      const nome     = nomeInput ? nomeInput.value.trim() : "";
-      const escola   = escolaInput ? escolaInput.value.trim() : "";
-      const area     = areaSelect.value;
-      const nivel    = nivelSelect.value;
+      const nome   = nomeInput ? nomeInput.value.trim() : "";
+      const escola = escolaInput ? escolaInput.value.trim() : "";
 
-      const objetivoSelecionado =
-        (objetivoSugeridoSelect && objetivoSugeridoSelect.value)
-          ? objetivoSugeridoSelect.value.trim()
-          : "";
+      const areaCod   = areaSelect.value;
+      const areaLabel = areaSelect.selectedOptions[0]
+        ? areaSelect.selectedOptions[0].textContent
+        : areaCod;
 
-      const sugestoes =
-        sugestoesTextarea && sugestoesTextarea.value
-          ? sugestoesTextarea.value.trim()
-          : "";
+      const nivel = nivelSelect ? (nivelSelect.value || "") : "";
+
+      const objetivoSelecionado = objetivoSelect && objetivoSelect.value
+        ? objetivoSelect.selectedOptions[0].textContent
+        : "";
+
+      const sugestoes = sugestoesTextarea && sugestoesTextarea.value
+        ? sugestoesTextarea.value.trim()
+        : "";
 
       let linhas = "";
       checks.forEach((chk, idx) => {
-        const est = chk.getAttribute("data-estrategia");
-        const dos = chk.getAttribute("data-dosagem");
-        const cod = chk.getAttribute("data-codigo");
-
+        const est = chk.getAttribute("data-estrategia") || "";
+        const dos = chk.getAttribute("data-dosagem") || "";
+       
         linhas += `
           <tr>
             <td style="text-align:center;">${idx + 1}</td>
             <td>${escapeHtml(est)}</td>
             <td>${escapeHtml(dos)}</td>
-            <td>${escapeHtml(cod)}</td>
           </tr>
         `;
       });
@@ -1871,7 +2395,7 @@
         </head>
         <body>
           <h1>MEU PLANO DE ESTRATÉGIAS</h1>
-          <div class="sub">Projeto Sonhe + Alto • Área: ${escapeHtml(area)} • Nível: ${escapeHtml(nivel)}</div>
+          <div class="sub">Projeto Sonhe + Alto • Área: ${escapeHtml(areaLabel)} • Nível: ${escapeHtml(nivel)}</div>
 
           <div class="dados">
             <p><strong>Nome:</strong> ${nomeHtml}</p>
@@ -1881,13 +2405,12 @@
           ${objetivoHtml}
 
           <h2>Estratégias que escolhi para praticar</h2>
-          <table>
+          <table border=1>
             <thead>
               <tr>
                 <th style="width:40px;">#</th>
                 <th>Estratégia</th>
-                <th style="width:180px;">Dosagem</th>
-                <th style="width:100px;">Código</th>
+                <th style="width:40%;">Dosagem</th>
               </tr>
             </thead>
             <tbody>
@@ -1909,6 +2432,364 @@
 
       doc.close();
     });
+
+    (async function init() {
+      const dados = await carregarEstrategias();
+      if (!dados.length) return;
+      prepararFiltros(dados);
+    })();
+
+    areaSelect.addEventListener("change", () => {
+      atualizarObjetivos();
+      listaDiv.innerHTML =
+        "<p>Selecione também o objetivo e o nível (se desejar) para ver as estratégias.</p>";
+    });
+
+    if (nivelSelect) {
+      nivelSelect.addEventListener("change", () => {
+        atualizarObjetivos();
+        if (objetivoSelect.value) {
+          renderizarEstrategias();
+        }
+      });
+    }
+    objetivoSelect.addEventListener("change", renderizarEstrategias);
+        // ------------------------------------------------
+    // KITS PERSONALIZADOS – Geração de páginas de apoio
+    // ------------------------------------------------
+
+function coletarContextoParaKit() {
+  const nomeInput   = document.getElementById("plano-nome");
+  const escolaInput = document.getElementById("plano-escola");
+
+  const nome = (nomeInput && nomeInput.value.trim())
+    ? nomeInput.value.trim()
+    : (typeof USER_NOME !== "undefined" ? (USER_NOME || "") : "");
+
+  const escola = (escolaInput && escolaInput.value.trim())
+    ? escolaInput.value.trim()
+    : "";
+
+  const areaCod = areaSelect && areaSelect.value;
+  const areaLabel =
+    areaSelect && areaSelect.selectedOptions && areaSelect.selectedOptions[0]
+      ? areaSelect.selectedOptions[0].textContent
+      : (areaCod || "");
+
+  const nivel = (nivelSelect && nivelSelect.value) ? nivelSelect.value : "";
+
+  const objetivoLabel =
+    objetivoSelect && objetivoSelect.value &&
+    objetivoSelect.selectedOptions && objetivoSelect.selectedOptions[0]
+      ? objetivoSelect.selectedOptions[0].textContent
+      : "";
+
+  return { nome, escola, areaLabel, nivel, objetivoLabel };
+}
+
+    function abrirJanelaKit(tituloPagina, corpoHtml) {
+      const win = window.open("", "_blank");
+      if (!win) {
+        showAlert(
+          "<p>Não foi possível abrir o kit em uma nova aba. Verifique se o bloqueador de pop-ups está ativado.</p>"
+        );
+        return;
+      }
+      const doc = win.document;
+      doc.write(`
+        <!DOCTYPE html>
+        <html lang="pt-br">
+        <head>
+          <meta charset="UTF-8">
+          <title>${tituloPagina}</title>
+          <style>
+            body {
+              font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+              margin: 1.5cm;
+              color: #111827;
+            }
+            h1 {
+              font-size: 1.6rem;
+              margin-bottom: 0.3rem;
+            }
+            h2 {
+              font-size: 1.25rem;
+              margin-top: 1.2rem;
+              margin-bottom: 0.2rem;
+            }
+            h3 {
+              font-size: 1rem;
+              margin-top: 0.6rem;
+              margin-bottom: 0.2rem;
+            }
+            .sub {
+              font-size: 0.9rem;
+              color: #4b5563;
+              margin-bottom: 0.8rem;
+            }
+            .dados {
+              font-size: 0.9rem;
+              margin-bottom: 0.6rem;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 0.4rem;
+              font-size: 0.85rem;
+            }
+            th, td {
+              border: 1px solid #d1d5db;
+              padding: 0.22rem 0.3rem;
+            }
+            th {
+              background: #f3f4ff;
+              text-align: left;
+            }
+            .espaco-assinatura {
+              margin-top: 1.2rem;
+              font-size: 0.9rem;
+            }
+            .linha {
+              display: inline-block;
+              min-width: 220px;
+              border-bottom: 1px solid #111827;
+              margin: 0 0.3rem;
+            }
+            .nota {
+              font-size: 0.8rem;
+              color: #6b7280;
+              margin-top: 0.6rem;
+            }
+          </style>
+        </head>
+        <body>
+          ${corpoHtml}
+        </body>
+        </html>
+      `);
+      doc.close();
+    }
+
+    function gerarKitEssencial() {
+      const ctx = coletarContextoParaKit();
+      const nome   = ctx.nome   ? escapeHtml(ctx.nome)   : "____________________________";
+      const escola = ctx.escola ? escapeHtml(ctx.escola) : "________________________________________";
+      const area   = ctx.areaLabel ? escapeHtml(ctx.areaLabel) : "____________________";
+      const nivel  = ctx.nivel ? escapeHtml(ctx.nivel) : "____________";
+
+      const corpo = `
+        <h1>Kit Projeto Sonhe + Alto – Essencial</h1>
+        <div class="sub">
+          Use estas páginas para organizar o Projeto Sonhe + Alto com seu grupo ou individualmente.
+        </div>
+
+        <div class="dados">
+          <p><strong>Nome:</strong> ${nome}</p>
+          <p><strong>Escola / Turma:</strong> ${escola}</p>
+          <p><strong>Área atual de foco:</strong> ${area} • <strong>Nível:</strong> ${nivel}</p>
+        </div>
+
+        <h2>Plano geral com as 6 áreas da vida</h2>
+        <p class="nota">
+          Sugestão: escolha pelo menos um objetivo para cada área e anote as estratégias principais.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:130px;">Área da vida</th>
+              <th>Objetivo principal</th>
+              <th>Estratégias principais</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Família</td><td></td><td></td></tr>
+            <tr><td>Escola</td><td></td><td></td></tr>
+            <tr><td>Amigos</td><td></td><td></td></tr>
+            <tr><td>Comunidade</td><td></td><td></td></tr>
+            <tr><td>Igreja</td><td></td><td></td></tr>
+            <tr><td>Eu mesmo</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+
+        <h2>Folhas de estratégias para os objetivos principais</h2>
+        <p class="nota">
+          Use as linhas abaixo para detalhar as estratégias que serão praticadas em cada área.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:130px;">Área</th>
+              <th>Objetivo</th>
+              <th>Estratégias que vou praticar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td style="height:40px;"></td></tr>
+            <tr><td></td><td></td><td style="height:40px;"></td></tr>
+            <tr><td></td><td></td><td style="height:40px;"></td></tr>
+            <tr><td></td><td></td><td style="height:40px;"></td></tr>
+          </tbody>
+        </table>
+
+        <div class="espaco-assinatura">
+          <p>Assinatura do participante: <span class="linha">&nbsp;</span></p>
+          <p>Assinatura do mentor(a): <span class="linha">&nbsp;</span></p>
+        </div>
+      `;
+      abrirJanelaKit("Kit Projeto Sonhe + Alto – Essencial", corpo);
+    }
+
+    function gerarKitCompleto() {
+      const ctx = coletarContextoParaKit();
+      const nome   = ctx.nome   ? escapeHtml(ctx.nome)   : "____________________________";
+      const escola = ctx.escola ? escapeHtml(ctx.escola) : "________________________________________";
+
+      const linhasDiario = Array.from({ length: 21 }, (_, i) =>
+        `<tr><td>Dia ${i + 1}</td><td style="height:26px;"></td></tr>`
+      ).join("");
+
+      const linhasPontos = Array.from({ length: 21 }, (_, i) =>
+        `<tr><td>${i + 1}</td><td></td><td></td></tr>`
+      ).join("");
+
+      const corpo = `
+        <h1>Kit Projeto Sonhe + Alto – Completo</h1>
+        <div class="sub">
+          Inclui plano geral, diário de 21 dias e painel simples de pontos.
+        </div>
+
+        <div class="dados">
+          <p><strong>Nome:</strong> ${nome}</p>
+          <p><strong>Escola / Turma:</strong> ${escola}</p>
+        </div>
+
+        <h2>Resumo do plano de estratégias</h2>
+        <p class="nota">
+          Use esta tabela para registrar as áreas e estratégias escolhidas no seu plano.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:130px;">Área</th>
+              <th>Objetivo</th>
+              <th>Estratégias principais</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td style="height:40px;"></td></tr>
+            <tr><td></td><td></td><td style="height:40px;"></td></tr>
+            <tr><td></td><td></td><td style="height:40px;"></td></tr>
+            <tr><td></td><td></td><td style="height:40px;"></td></tr>
+          </tbody>
+        </table>
+
+        <h2>Diário de 21 dias</h2>
+        <p class="nota">
+          Marque com ✓ os dias em que conseguiu praticar suas estratégias.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:80px;">Dia</th>
+              <th>Como foi a prática hoje?</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${linhasDiario}
+          </tbody>
+        </table>
+
+        <h2>Painel simples de pontos e níveis</h2>
+        <p class="nota">
+          Use este painel para registrar quantos pontos conseguiu por dia.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Dia</th>
+              <th>Pontos do dia</th>
+              <th>Comentários rápidos</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${linhasPontos}
+          </tbody>
+        </table>
+      `;
+      abrirJanelaKit("Kit Projeto Sonhe + Alto – Completo", corpo);
+    }
+
+    function gerarKitGrupos() {
+      const ctx = coletarContextoParaKit();
+      const escola = ctx.escola ? escapeHtml(ctx.escola) : "________________________________________";
+
+      const linhasParticipantes = Array.from({ length: 20 }, (_, i) =>
+        `<tr><td>${i + 1}</td><td></td><td></td></tr>`
+      ).join("");
+
+      const corpo = `
+        <h1>Kit Projeto Sonhe + Alto – Grupos</h1>
+        <div class="sub">
+          Modelos para acompanhar vários participantes ao mesmo tempo.
+        </div>
+
+        <div class="dados">
+          <p><strong>Escola / Igreja / Clube:</strong> ${escola}</p>
+          <p><strong>Turma / Grupo:</strong> ____________________________</p>
+          <p><strong>Mentor(a):</strong> ____________________________</p>
+        </div>
+
+        <h2>Lista de participantes</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px;">#</th>
+              <th>Nome do participante</th>
+              <th>Contato</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${linhasParticipantes}
+          </tbody>
+        </table>
+
+        <h2>Painel de acompanhamento coletivo</h2>
+        <p class="nota">
+          Use um código para cada estratégia (ex.: F1, E2, A3) e marque os dias praticados.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Estratégia / Código</th>
+              <th>Dias praticados / Observações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="height:32px;"></td><td></td><td></td></tr>
+            <tr><td style="height:32px;"></td><td></td><td></td></tr>
+            <tr><td style="height:32px;"></td><td></td><td></td></tr>
+            <tr><td style="height:32px;"></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      `;
+      abrirJanelaKit("Kit Projeto Sonhe + Alto – Grupos", corpo);
+    }
+
+    const btnKitEssencial = document.getElementById("btn-kit-essencial");
+    const btnKitCompleto  = document.getElementById("btn-kit-completo");
+    const btnKitGrupos    = document.getElementById("btn-kit-grupos");
+
+    if (btnKitEssencial) {
+      btnKitEssencial.addEventListener("click", gerarKitEssencial);
+    }
+    if (btnKitCompleto) {
+      btnKitCompleto.addEventListener("click", gerarKitCompleto);
+    }
+    if (btnKitGrupos) {
+      btnKitGrupos.addEventListener("click", gerarKitGrupos);
+    }
+
   })();
 </script>
 </body>

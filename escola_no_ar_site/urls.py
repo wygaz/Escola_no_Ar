@@ -3,10 +3,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from apps.core.views import raiz_inteligente, PortalDashboardView
+from apps.core import views as core_views
 
 urlpatterns = [
+    path("", core_views.sonhe_mais_alto_landing, name="home"), # home temporária para o Projeto Sonhe + Alto
     path("admin/", admin.site.urls),
-    path("", raiz_inteligente, name="raiz"),
+    #path("", raiz_inteligente, name="raiz"), - Home geral para Escola no Ar
     path("portal/", PortalDashboardView.as_view(), name="portal"),
 
     # Foco no Vocacional
@@ -20,3 +22,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    

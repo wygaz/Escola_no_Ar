@@ -27,6 +27,7 @@ media/
 
 # Arquivos de ambiente e segredos
 .env
+.env.local
 Apenas_Local
 z/
 

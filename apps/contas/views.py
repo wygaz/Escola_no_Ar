@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, resolve_url, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -11,20 +11,31 @@ from django.urls import reverse
 from django.conf import settings
 from django.views.decorators.http import require_POST
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.contrib.auth import login
+
 
 def registrar(request):
+    default_next = "/projeto21/"
+    next_url = request.POST.get("next") or request.GET.get("next") or default_next
+
     if request.method == "POST":
         form = UsuarioCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, "Conta criada com sucesso. Bem-vindo(a)!")
-            # redireciona para ?next=... se vier
-            next_url = request.GET.get("next") or request.POST.get("next")
-            return redirect(next_url or reverse("portal"))
+
+            # evita open redirect
+            if not url_has_allowed_host_and_scheme(
+                next_url,
+                allowed_hosts={request.get_host()},
+                require_https=request.is_secure(),
+            ):
+                next_url = default_next
+
+            return redirect(next_url)
     else:
         form = UsuarioCreationForm()
-    return render(request, "contas/criar_conta.html", {"form": form, "next": request.GET.get("next", "")})
+    return render(request, "contas/criar_conta.html", {"form": form, "next": next_url})
 
 
 def testar_template(request):
@@ -69,9 +80,23 @@ def login_view(request):
 
 @require_POST
 def logout_view(request):
-    next_url = request.POST.get("next") or reverse("portal")
+    """
+    Faz logout via POST e, se houver parâmetro `next`,
+    redireciona para essa URL depois de sair.
+    """
+    if request.method != "POST":
+        # opção segura: se alguém der GET direto, manda para login
+        return redirect("contas:login")
+
+    # pega o destino desejado (pode vir por POST ou GET)
+    next_url = request.POST.get("next") or request.GET.get("next")
     logout(request)
-    return redirect(next_url)
+
+    if next_url:
+        return redirect(resolve_url(next_url))
+
+    # fallback padrão
+    return redirect("contas:login")
 
 @login_required
 def perfil_view(request):
