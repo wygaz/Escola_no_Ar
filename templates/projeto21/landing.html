@@ -8,7 +8,9 @@
 
   <style>
     :root {
-    /* Paleta em tons de amarelo → laranja */
+      /* ajuste fino: altura real do cabeçalho + menu */
+      --p21-header-offset: 110px;
+      /* Paleta em tons de amarelo → laranja */
       /* Laranja do Sonhe + Alto (ajuste se quiser outro tom) */
       --sma-laranja: #f97316;  /* um laranja vivo, tipo peixinho mesmo */
       --bg-gradient: linear-gradient(135deg, #ffe66d 0%, #ffca3a 40%, #ff9f43 100%);
@@ -23,11 +25,24 @@
       --radius-lg: 18px;
       --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.12);
       --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
-    /* Cores extras para a seção Johari */
+      /* Cores extras para a seção Johari */
       --sonhe-azul-escuro: #051647;
       --sonhe-azul-medio:  #0b2274;
       --sonhe-texto-escuro: #0f172a;
       --sonhe-bg-suave:    #f5f5fb;
+    }
+
+    html{
+      scroll-padding-top: var(--p21-header-offset);
+    }
+
+    /* cada seção-alvo do menu */
+    #sec-plano,
+    #sec-kits,
+    #sec-entender,
+    #sec-como-usar,
+    #sec-incluso{
+      scroll-margin-top: var(--p21-header-offset);
     }
 
     * {

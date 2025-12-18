@@ -1,151 +1,156 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Sonhe + Alto · Plano de 21 dias{% endblock %}
+{% block title %}Sonhe + Alto{% endblock %}
+{% block body_class %}sma-public{% endblock %}
 
-{% block extra_head %} {% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/sma_public.css' %}">
+{% endblock %}
+
+{# Página pública — sem header padrão do site #}
+{% block site_header %}{% endblock %}
 
 {% block content %}
+<div class="sma-journey">
 
-    <div class="sma-section">
-      <div>
-        <h2>Para quem é o Sonhe + Alto?</h2>
-        <p>
-          Para adolescentes, jovens e adultos que querem crescer com propósito – unindo fé, rotina
-          e pequenos passos práticos. Ideal para quem:
-        </p>
-        <ul class="sma-list">
-          <li>quer organizar a vida, mas se perde em tantas ideias;</li>
-          <li>já tentou mudar hábitos, mas não conseguiu manter por muito tempo;</li>
-          <li>deseja alinhar seus planos com os valores do Reino de Deus;</li>
-          <li>gosta de materiais simples, diretos e visuais.</li>
+  <!-- =========================
+       SEÇÃO 1 — Recepção (Hero)
+       ========================= -->
+  <section class="sma-section sma-bg-hero sma-bg-hero--invert sma-section--right" id="s1">
+    <div class="sma-frame sma-frame--dark sma-frame--fit">
+      <div class="sma-inner sma-inner--fit">
+
+        <div class="sma-chapter">
+          <span class="sma-chip">21</span>
+          <span>Plano prático de 21 dias</span>
+        </div>
+
+        <!-- Brand (fundo branco pro seu logo) -->
+        <div class="sma-brand sma-brand--light">
+          <img src="/static/core/img/logo-sonhe-mais-alto.png" alt="Sonhe + Alto">
+          <div>
+            <div class="sma-brand-title">SONHE + ALTO</div>
+            <div class="sma-brand-sub">Escola no Ar</div>
+            <div class="sma-brand-meta">
+              <span>sonhemaisalto.com.br</span>
+              <a href="mailto:contato@escolanoar.org.br">contato@escolanoar.org.br</a>
+              <a href="https://wa.me/5519999350101" target="_blank" rel="noopener">WhatsApp: (19) 99935-0101</a>
+            </div>
+          </div>
+        </div>
+
+        <h1 class="sma-h1">Sonhe mais alto.<br>Construa hábitos.<br>Viva com propósito.</h1>
+
+        <ul class="sma-bullets">
+          <li>Organize sua vida sem se perder em métodos complicados</li>
+          <li>Desenvolva hábitos vencedores, um passo por vez</li>
+          <li>Descubra até onde você pode chegar quando decide sonhar mais alto.</li>
         </ul>
 
-        <h2 style="margin-top:1.6rem;">O que você vai viver nos 21 dias</h2>
-        <ul class="sma-list">
-          <li>Escolher objetivos reais em 6 áreas importantes da vida.</li>
-          <li>Transformar cada objetivo em estratégias práticas e mensuráveis.</li>
-          <li>Acompanhar diariamente o que foi feito, o que funcionou e o que precisa ajustar.</li>
-          <li>Celebrar pequenas vitórias e descobrir seu ritmo de crescimento.</li>
-        </ul>
+        <div class="sma-actions">
+          <a class="sma-btn sma-btn--primary"
+             href="https://pay.hotmart.com/Q103340890M?bid=1765338293599"
+             target="_blank" rel="noopener">
+            Quero entrar no Sonhe + Alto agora
+          </a>
 
-        <!-- HINT DE ROLAGEM -->
-        <div class="sma-scroll-hint">
-          <span class="sma-scroll-hint-text">role para ver mais</span>
-          <span class="sma-scroll-arrow">⬇️</span>
+          <a class="sma-btn sma-btn--ghost" href="{% url 'contas:login' %}?next=/projeto21/">
+            Já tenho o Guia • Entrar no programa
+          </a>
         </div>
-        
+
+        <div class="sma-microcopy">
+          <span>✔ Acesso imediato após a compra</span>
+          <span>✔ Você pode refazer o plano quantas vezes quiser</span>
+          <span>✔ Funciona no celular, tablet ou computador</span>
+        </div>
+
+        <a class="sma-continue sma-link" href="#s2" data-sma-next="s2">
+          <span class="arrow">↓</span>
+          <span>Role para ver como funciona</span>
+        </a>
+
       </div>
+    </div>
+  </section>
 
-      <aside class="sma-price-card">
-        <div class="sma-price-tag">Pacote completo</div>
-        <div class="sma-price-total">
-          Valor somado dos itens: <span>R$ 218,00</span>
-        </div>
-        <div class="sma-price-launch">
-          Lançamento: R$ 47,00
-        </div>
-        <div class="sma-price-small">
-          pelo acesso ao guia + portal Sonhe + Alto e bônus.
+  <!-- =========================
+       SEÇÃO 2 — Como funciona
+       ========================= -->
+  <section id="s2" class="sma-section sma-bg-light sma-section--right">
+    <div class="sma-frame sma-frame--light sma-frame--fit">
+      <div class="sma-inner sma-inner--fit">
+
+        <!-- Brand (dentro do quadro) -->
+        <div class="sma-brand sma-brand--light sma-brand--light-on-white">
+          <img src="/static/core/img/logo-sonhe-mais-alto.png" alt="Sonhe + Alto">
+          <div>
+            <div class="sma-brand-title">SONHE + ALTO</div>
+            <div class="sma-brand-sub">Escola no Ar</div>
+            <div class="sma-brand-meta">
+              <span>sonhemaisalto.com.br</span>
+              <a href="mailto:contato@escolanoar.org.br">contato@escolanoar.org.br</a>
+              <a href="https://wa.me/5519999350101" target="_blank" rel="noopener">WhatsApp: (19) 99935-0101</a>
+            </div>
+          </div>
         </div>
 
-        <ul class="sma-price-items">
-          <li><strong>Guia digital “Quem sou eu? Como descobrir minha vocação”</strong> – R$ 57,00</li>
-          <li><strong>Acesso ao programa Sonhe + Alto</strong> (plano de 21 dias que você pode refazer) – R$ 97,00</li>
-          <li><strong>Cupom para um teste básico de vocação online</strong> – R$ 37,00</li>
-          <li><strong>Modelos e materiais de acompanhamento</strong> (planilhas simples, planos em branco etc.) – R$ 27,00</li>
-        </ul>
+        <div class="sma-chapter sma-chapter--dark">
+          <span class="sma-chip sma-chip--dark">▶</span>
+          <span>Como funciona</span>
+        </div>
 
-        <p class="sma-price-small" style="margin-top:0.8rem;">
-          Você recebe tudo isso por apenas R$ 47,00 no lançamento.<br>
-          Depois, o valor poderá ser reajustado.
+        <h2 class="sma-h2">Três passos simples para começar hoje</h2>
+        <p class="sma-paragraph">
+          Você compra o Guia, cria sua conta com o mesmo e-mail da compra e monta seu Plano Estratégico de Crescimento Pessoal.
+          Em seguida, é só acompanhar sua evolução e celebrar pequenas vitórias.
         </p>
-      </aside>
-    </div>
 
+        <div class="sma-steps">
+          <div class="sma-step">
+            <h4>1) Compre o Guia</h4>
+            <p>Ao comprar, você recebe o guia digital e libera o bônus de acesso ao programa Sonhe + Alto.</p>
+          </div>
+          <div class="sma-step">
+            <h4>2) Faça seu cadastro</h4>
+            <p>Use o mesmo e-mail da Hotmart para criar/entrar na sua conta e acessar o ambiente do programa.</p>
+          </div>
+          <div class="sma-step">
+            <h4>3) Monte seu plano</h4>
+            <p>Escolha área, nível, objetivo e estratégias. Gere seu plano e imprima/salve em PDF para acompanhar.</p>
+          </div>
+          <div class="sma-step">
+            <h4>Comece leve, avance firme</h4>
+            <p>Não é sobre perfeição. É sobre constância — e propósito. Um passo de cada vez.</p>
+          </div>
+        </div>
 
-<div class="sma-page">
-  <div class="sma-hero-card">
+        <div class="sma-actions" style="margin-top: 14px;">
+          <a class="sma-btn sma-btn--primary"
+             href="https://pay.hotmart.com/Q103340890M?bid=1765338293599"
+             target="_blank" rel="noopener">
+            Comprar o Guia (lançamento)
+          </a>
 
-    <div class="sma-hero-left">
-      <img src="{% static 'core/img/logo-sonhe-mais-alto.png' %}" alt="Sonhe + Alto">
-      <p><br>Escola no Ar</p>
-    </div>
+          <a class="sma-btn sma-btn--ghost sma-btn--ghost-on-white"
+             href="{% url 'contas:login' %}?next=/projeto21/">
+            Já tenho o Guia • Entrar
+          </a>
+        </div>
 
-    <div class="sma-hero-right">
-      <div class="sma-kicker">Plano prático de 21 dias</div>
-      <div class="sma-title">Treine hábitos e descubra até onde você pode ir quando sonha mais alto com Deus.</div>
-      <div class="sma-subtitle">
-        Um espaço seguro para organizar sua rotina, experimentar estratégias simples e acompanhar sua evolução
-        em cada área da vida – dia após dia, com propósito.
-      </div>
-
-      <div class="sma-badges">
-        <div class="sma-badge"><span>📅</span>Plano guiado de 21 dias</div>
-        <div class="sma-badge"><span>🎯</span>Foco em 6 áreas da vida</div>
-        <div class="sma-badge"><span>📊</span>Acompanhamento simples e visual</div>
-      </div>
-      <div class="guia-offer">
-        <a class="guia-cover-link"
-          href="https://pay.hotmart.com/Q103340890M?bid=1765338293599"
-          target="_blank" rel="noopener">
-          <img
-            class="guia-cover-lg"
-            src="{% static 'core/img/capa_guia_vocacao.png' %}"
-            alt="Capa do Guia"
-          >
-        </a>
-      </div>
-
-      <div class="sma-cta-row sma-cta-row--double">
-        <a href="https://pay.hotmart.com/Q103340890M?bid=1765338293599"
-          target="_blank" rel="noopener"
-          class="btn btn-outline-primary">
-          Quero adquirir o Guia
-        </a>
-
-        <a href="{% url 'contas:login' %}?next=/projeto21/"
-          class="btn btn-outline-primary">
-          Já tenho o Guia
-        </a>
-      </div>
-        <!-- HINT DE ROLAGEM -->
-      <div class="sma-scroll-hint">
-        <span class="sma-scroll-hint-text">role para ver mais</span>
-        <span class="sma-scroll-arrow">⬇️</span>
-      </div>
-      <div class="sma-cover-note">
-        <p>
-          O Guia digital é entregue pela Hotmart logo após a confirmação do pagamento,
-          no e-mail que você cadastrar na compra.
+        <p class="sma-help">
+          Precisa de ajuda?
+          <a class="sma-link sma-link--dark" target="_blank" rel="noopener"
+             href="https://wa.me/5519999350101?text=Ol%C3%A1!%20Preciso%20de%20ajuda%20com%20o%20acesso%20ao%20Sonhe%20%2B%20Alto.%20Usei%20o%20mesmo%20e-mail%20da%20compra.">
+            WhatsApp (somente mensagens)
+          </a>
         </p>
+
       </div>
-    <div class="sma-cta-note">
-        Acesso ao portal online + guia digital + bônus exclusivos.
     </div>
-  </div>
-</div>
+  </section>
 
-<div class="sma-faq">
-  <h2>Perguntas rápidas</h2>
-  <dl>
-    <dt>Quanto tempo tenho para usar o material?</dt>
-    <dd>
-      O plano é pensado para 21 dias, mas você pode refazer quantas vezes quiser, ajustando
-      os objetivos e estratégias ao seu momento.
-    </dd>
-
-    <dt>Preciso ser especialista em planejamento?</dt>
-    <dd>
-      Não. O Sonhe + Alto foi criado justamente para quem quer começar de forma simples,
-      com orientações passo a passo.
-    </dd>
-
-    <dt>Como recebo meu acesso?</dt>
-    <dd>
-      Após a confirmação da compra na Hotmart, você recebe o link de acesso ao portal e ao guia
-      no e-mail cadastrado. Em poucos minutos já consegue entrar e montar seu primeiro plano.
-    </dd>
-  </dl>
 </div>
 {% endblock %}
+

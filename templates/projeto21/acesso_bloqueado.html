@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Acesso ao Sonhe + Alto{% endblock %}
+{% block body_class %}sma-public{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/sma_public.css' %}">
+{% endblock %}
+
+{% block site_header %}{% endblock %}
+
+{% block content %}
+<section class="sma-section sma-bg-hero">
+  <div class="sma-frame sma-frame--dark">
+    <div class="sma-inner">
+      <div class="sma-chapter">
+        <span class="sma-chip">🔒</span>
+        <span>Acesso restrito</span>
+      </div>
+
+      <h1 class="sma-h1">Seu acesso ao Sonhe + Alto ainda não está ativo</h1>
+
+      <p class="sma-lead">
+        Para entrar no programa, você precisa do <strong>Guia “Quem Sou Eu?”</strong>,
+        que libera automaticamente o bônus de acesso ao Sonhe + Alto.
+      </p>
+
+      <div class="sma-actions">
+        <a class="sma-btn sma-btn--primary"
+           href="https://pay.hotmart.com/Q103340890M?bid=1765338293599"
+           target="_blank" rel="noopener">
+          Comprar o Guia e liberar acesso
+        </a>
+
+        <a class="sma-btn sma-btn--ghost" href="/contas/login/?next=/projeto21/">
+          Já comprei • Entrar novamente
+        </a>
+      </div>
+
+        <form method="post" action="{% url 'contas:logout' %}" style="margin-top:10px;">
+            {% csrf_token %}
+            <button type="submit" class="sma-btn sma-btn--ghost">
+                Entrar com outro usuário
+            </button>
+        </form>
+
+      <a class="sma-link"
+         href="https://wa.me/5519999350101?text=Ol%C3%A1!%20Estou%20logado%20no%20site%2C%20mas%20meu%20acesso%20ao%20Sonhe%20%2B%20Alto%20ainda%20n%C3%A3o%20apareceu.%20Pode%20me%20ajudar%3F"
+         target="_blank" rel="noopener">
+        Preciso de ajuda (WhatsApp • somente mensagens)
+      </a>
+
+      <div style="opacity:.85; font-size:.95rem;">
+        Dica: use o <strong>mesmo e-mail</strong> da compra para criar/entrar na sua conta.
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
