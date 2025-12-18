@@ -24,6 +24,12 @@ Thumbs.db
 
 # Django – mídia do usuário (imagens de perfil, uploads)
 media/
+# Django – mídia do usuário (imagens de perfil, uploads)
+media/
+!media/projeto21/
+!media/projeto21/midia/
+!media/projeto21/midia/kits/
+!media/projeto21/midia/kits/**
 
 # Arquivos de ambiente e segredos
 .env
