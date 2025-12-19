@@ -68,7 +68,7 @@ html{ scroll-behavior: smooth; }
       rgba(8,18,26,.82) 100%
     ),
     /* foto */
-    url('/static/core/img/hero-lago-sol.jpg');
+    url('/static/core/img/hero-sonhar-e-so-o-comeco-esquerda.png');
 
   background-size: cover;
   background-position: center, center, right center; /* sol à direita */
@@ -90,7 +90,7 @@ html{ scroll-behavior: smooth; }
       rgba(8,18,26,.22) 55%,
       rgba(8,18,26,.82) 100%
     ),
-    url('/static/core/img/hero-lago-sol.jpg');
+    url('/static/core/img/hero-sonhar-e-so-o-comeco-esquerda.png');
 
   background-size: cover;
   background-position: center, center, right center;
@@ -129,37 +129,46 @@ html{ scroll-behavior: smooth; }
 
 $1
 /* =========================
-   CONCILIAÇÃO (menos contraste entre Seção 1 e 2)
-   - Seção 1: vidro um pouco mais leve
-   - Seção 2: vidro um pouco mais escuro
+   EXPERIMENTO — “VIDRO” com ~80% de transparência
+   (mais “see-through” nas duas seções)
+   Obs.: mantemos o lado esquerdo um pouco mais opaco p/ leitura.
    ========================= */
 
-/* Seção 1 (hero): clarear um pouco o vidro escuro */
+/* Seção 1 (hero): vidro mais transparente */
 .sma-bg-hero .sma-frame--dark{
   border-color: rgba(255,255,255,.14);
   background: linear-gradient(90deg,
-    rgba(11,18,32,.70) 0%,
-    rgba(11,18,32,.64) 56%,
-    rgba(11,18,32,.26) 100%
+    rgba(11,18,32,.15) 0%,
+    rgba(11,18,32,.08) 56%,
+    rgba(11,18,32,.18) 100%
   );
-  box-shadow: 0 18px 60px rgba(0,0,0,.22);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  backdrop-filter: blur(14px) saturate(125%);
+  box-shadow: 0 18px 60px rgba(0,0,0,.20);
 }
 
-/* Seção 2: escurecer um pouco o vidro claro */
+/* Seção 2: vidro claro mais transparente e um pouco mais “cinza” */
 .sma-bg-light .sma-frame--light{
   border-color: rgba(255,255,255,.22);
   background: linear-gradient(90deg,
-    rgba(255,255,255,.70) 0%,
-    rgba(255,255,255,.64) 62%,
-    rgba(255,255,255,.34) 100%
+    rgba(255,255,255,.15) 0%,
+    rgba(255,255,255,.08) 62%,
+    rgba(255,255,255,.22) 100%
   );
-  box-shadow: 0 18px 60px rgba(0,0,0,.16);
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  backdrop-filter: blur(14px) saturate(125%);
+  box-shadow: 0 18px 60px rgba(0,0,0,.14);
 }
 
 /* Seção 2: cards internos acompanhando o “vidro” */
 .sma-bg-light .sma-step{
-  border-color: rgba(255,255,255,.30);
-  background: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.52));
+  border-color: rgba(255,255,255,.26);
+  background: linear-gradient(180deg,
+    rgba(255,255,255,.40) 0%,
+    rgba(255,255,255,.32) 100%
+  );
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  backdrop-filter: blur(12px) saturate(120%);
   box-shadow: 0 10px 28px rgba(0,0,0,.12);
 }
 
@@ -323,11 +332,11 @@ $1
 .sma-btn--primary:hover{ box-shadow: 0 18px 36px rgba(245,183,0,.30); }
 
 .sma-btn--ghost{
-  background: rgba(255,255,255,.08);
+  background: rgba(155,155,155,.38);
   border-color: rgba(255,255,255,.18);
   color: #fff;
 }
-.sma-btn--ghost:hover{ background: rgba(255,255,255,.12); }
+.sma-btn--ghost:hover{ background: rgba(255,255,255,.32); }
 
 /* botão “ghost” em fundo branco */
 .sma-btn--ghost-on-white{
@@ -381,12 +390,12 @@ $1
   box-shadow: 0 10px 28px rgba(0,0,0,.10);
 }
 
-.sma-step h4{ margin: 0 0 6px; font-size: 1.02rem; }
-.sma-step p{ margin: 0; color: rgba(11,18,32,.78); line-height: 1.45; }
+.sma-step h4{ margin: 0 0 6px; font-size: 1.02rem;color: rgba(211,88,32,.78)}
+.sma-step p{ margin: 0; color: rgba(71,18,32,.78); line-height: 1.45; }
 
 /* Seção 2: textos auxiliares sem inline-style */
-.sma-paragraph{ margin:0; color: rgba(11,18,32,.74); max-width:76ch; line-height:1.55; }
-.sma-help{ margin:6px 0 0; color: rgba(11,18,32,.62); font-size:.95rem; }
+.sma-paragraph{ margin:0; color: rgba(101,01,01,1); max-width:76ch; line-height:1.55; }
+.sma-help{ margin:6px 0 0; color: rgba(11,18,32,1); font-size:.95rem; }
 
 /* compacta em telas baixas */
 @media (max-height: 820px){

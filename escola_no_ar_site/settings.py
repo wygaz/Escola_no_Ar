@@ -65,8 +65,6 @@ sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 # Segurança & Debug (dotenv + dj_database_url)
 # -----------------------------------------------------------------------------
 SECRET_KEY = os.getenv("SECRET_KEY", "chave-padrao-insegura")
-#DEBUG = os.getenv("DEBUG", "False") == "True"
-DEBUG=True
 
 # ------- ALLOWED_HOSTS -------
 
@@ -219,58 +217,49 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# DEBUG (aceita 0/1, true/false, yes/no, on/off)
+DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes", "on")
+
+def env_bool(name: str, default: str = "0") -> bool:
+    return os.getenv(name, default).strip().lower() in ("1", "true", "yes", "on")
+
 # -----------------------------------------------------------------------------
 # E-mail
 # -----------------------------------------------------------------------------
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND") or (
-    "django.core.mail.backends.console.EmailBackend" if DEBUG
-    else "django.core.mail.backends.smtp.EmailBackend"
+    "django.core.mail.backends.console.EmailBackend"
+    if DEBUG else
+    "django.core.mail.backends.smtp.EmailBackend"
 )
-# 2) Config SMTP (só será usado se EMAIL_BACKEND = smtp)
+
+# Config SMTP (só será usado se EMAIL_BACKEND = smtp)
 EMAIL_HOST = os.getenv("EMAIL_HOST", "")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() == "true"
-EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False").lower() == "true"
 
+# TLS/SSL (aceita 1/0 também)
+EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", "1")   # padrão True (587)
+EMAIL_USE_SSL = env_bool("EMAIL_USE_SSL", "0")   # padrão False
 
-# 3) From padrão
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL") or EMAIL_HOST_USER or "no-reply@escolanoar.com.br"
+# Evita configuração inválida
+if EMAIL_USE_TLS and EMAIL_USE_SSL:
+    raise ValueError("Defina apenas EMAIL_USE_TLS ou EMAIL_USE_SSL (não ambos).")
+
+# From padrão
+DEFAULT_FROM_EMAIL = (
+    os.getenv("DEFAULT_FROM_EMAIL")
+    or EMAIL_HOST_USER
+    or "nao_responda@sonhemaisalto.com.br"
+)
 SERVER_EMAIL = os.getenv("SERVER_EMAIL") or DEFAULT_FROM_EMAIL
 
-# 4) Fallback: se escolheu SMTP mas faltam credenciais, força console para não quebrar em dev
+# Fallback: se escolheu SMTP mas faltam credenciais, força console (útil em dev)
 if EMAIL_BACKEND.endswith("smtp.EmailBackend"):
     if not (EMAIL_HOST and EMAIL_HOST_USER and EMAIL_HOST_PASSWORD):
         EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# 5) Contatos
-DEFAULT_FROM_EMAIL = "nao-responder@escolanoar.com.br"
-EMAIL_CONTATO = "wygazeta@gmail.com.com"
+# Contatos (NÃO sobrescreve o remetente do SMTP)
+EMAIL_CONTATO = os.getenv("EMAIL_CONTATO", "wygazeta@gmail.com")
 
-# -----------------------------------------------------------------------------
-# Defaults de AutoField
-# -----------------------------------------------------------------------------
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# ---- VOCACIONAL (feature flags) ----
-VOCACIONAL_REQUIRE_BONUS = False      # pausa o bônus por enquanto
-VOCACIONAL_REQUIRE_CONSENT = True     # manter aceite obrigatório
-VOCACIONAL_REQUIRE_GUIA = True        # manter avaliação do guia obrigatória
-
-# --- LOGGING (adicionar/mesclar) ---
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "console": {"class": "logging.StreamHandler"},
-    },
-    "loggers": {
-        "vocacional": {
-            "handlers": ["console"],
-            "level": "DEBUG",   # mude para INFO em produção
-            "propagate": False,
-        },
-    },
-}
 
