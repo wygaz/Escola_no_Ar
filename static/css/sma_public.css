@@ -394,7 +394,7 @@ $1
 .sma-step p{ margin: 0; color: rgba(71,18,32,.78); line-height: 1.45; }
 
 /* Seção 2: textos auxiliares sem inline-style */
-.sma-paragraph{ margin:0; color: rgba(101,01,01,1); max-width:76ch; line-height:1.55; }
+.sma-paragraph{ margin:0; color: rgba(255, 255, 255, 0.88); max-width:76ch; line-height:1.55; }
 .sma-help{ margin:6px 0 0; color: rgba(11,18,32,1); font-size:.95rem; }
 
 /* compacta em telas baixas */
@@ -418,4 +418,15 @@ $1
   .sma-bg-hero{
     background-position: center, center, center;
   }
+}
+
+/* HOTFIX: força a cor do texto de apoio acima dos cards */
+.sma-public .sma-journey p.sma-paragraph {
+  color: rgba(255,255,255,0.99) !important;   /* escuro e bem legível */
+  text-shadow: 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* se tiver links dentro do parágrafo, não deixe azul */
+.sma-public .sma-journey p.sma-paragraph a {
+  color: inherit !important;
 }
