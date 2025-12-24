@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-# apps/core/views.py (adicione/ajuste sua PortalView)
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib import messages
 from django import forms
+from django.templatetags.static import static
 
 def sonhe_mais_alto_landing(request):
     context = {
@@ -144,3 +144,30 @@ class VocacionalMentorView(LoginRequiredMixin, TemplateView):
 
 def raiz_inteligente(request):
     return redirect("/portal/") if request.user.is_authenticated else redirect("/contas/login/")
+
+
+HOTMART_GUIA_URL = "https://pay.hotmart.com/Q103340890M?bid=1765338293599"
+
+def guia_redirect_preview(request):
+    """
+    Página com Open Graph para gerar preview (WhatsApp/FB/IG),
+    e redireciona o usuário para a Hotmart.
+    """
+    og_title = "Guia Sonhe + Alto"
+    og_description = (
+        "Menos ansiedade, mais direção: escolhas de curso e profissão para jovens. "
+        "Apoio a pais e mentores."
+    )
+
+    # Coloque sua capa em: static/core/img/capa-guia.jpg
+    og_image = request.build_absolute_uri(static("core/img/capa-guia.jpg"))
+    og_url = request.build_absolute_uri(request.path)
+
+    context = {
+        "hotmart_url": HOTMART_GUIA_URL,
+        "og_title": og_title,
+        "og_description": og_description,
+        "og_image": og_image,
+        "og_url": og_url,
+    }
+    return render(request, "core/guia_redirect.html", context)

@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from apps.core.views import raiz_inteligente, PortalDashboardView
 from apps.core import views as core_views
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path("", core_views.sonhe_mais_alto_landing, name="home"), # home temporária para o Projeto Sonhe + Alto
@@ -15,6 +16,7 @@ urlpatterns = [
     path("vocacional/", include(("apps.vocacional.urls", "vocacional"), namespace="vocacional")),
     path("contas/", include(("apps.contas.urls", "contas"), namespace="contas")),
     path("projeto21/", include(("apps.projeto21.urls", "projeto21"), namespace="projeto21")),
+    path("guia/", core_views.guia_redirect_preview, name="guia"),
 
     # Webhooks (Hotmart)
     path("webhooks/", include("apps.core.urls")),
