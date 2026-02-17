@@ -22,9 +22,8 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Django – mídia do usuário (imagens de perfil, uploads)
-media/
-# Django – mídia do usuário (imagens de perfil, uploads)
+
+# Django – mídia do usuário (uploads)
 media/
 !media/projeto21/
 !media/projeto21/midia/
@@ -34,8 +33,8 @@ media/
 # Arquivos de ambiente e segredos
 .env
 .env.local
-Apenas_Local
+Apenas_Local/
 z/
 
-db.sqlite3
-*.sqlite3
+# Planilhas / exports locais (se você NÃO quer versionar)
+Docs/
