@@ -5,15 +5,19 @@ __pycache__/
 *.pyd
 *.log
 
-# Arquivos de ambiente e segredos
-.env
-.env.*
+# ambientes virtuais
+venv/
+.venv/
+
+# pastas de zip/export locais
+zip/
 
 # Editor de código (VSCode, PyCharm etc.)
 .vscode/
 .idea/
 
 # Arquivos de backup, compressão e sistema
+zip/
 *.bak
 *.zip
 *.tar.gz
@@ -30,9 +34,12 @@ media/
 
 # Arquivos de ambiente e segredos
 .env
-.env.local
+.env*
 Apenas_Local/
 z/
 
 # Planilhas / exports locais (se você NÃO quer versionar)
 Docs/
+!Docs/Sonhe_Mais_Alto/
+!Docs/Sonhe_Mais_Alto/**
+
