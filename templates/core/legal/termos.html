@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Termos de Uso | Escola no Ar{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 900px;">
+  <h1 class="h3 mb-3">Termos de Uso</h1>
+  <p class="text-muted">Última atualização: 11/04/2025</p>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <p>Estes Termos de Uso regem a utilização dos recursos da plataforma Escola no Ar.</p>
+
+      <ul>
+        <li><strong>1. Conta e acesso:</strong> você é responsável por manter a confidencialidade das suas credenciais.</li>
+        <li><strong>2. Uso adequado:</strong> não utilize o serviço para fins ilícitos, abusivos ou que violem direitos de terceiros.</li>
+        <li><strong>3. Conteúdos:</strong> os materiais disponibilizados são para uso pessoal e educacional, conforme a finalidade do projeto.</li>
+        <li><strong>4. Privacidade:</strong> tratamos dados pessoais conforme a Política de Privacidade e o consentimento informado.</li>
+        <li><strong>5. Alterações:</strong> estes termos podem ser atualizados; a versão vigente estará sempre disponível nesta página.</li>
+      </ul>
+
+      <div class="mt-4">
+        <a class="btn btn-primary" href="{% url 'core:legal_aceite' %}">Aceitar Termos e Privacidade</a>
+        <a class="btn btn-outline-secondary ms-2" href="{% url 'portal' %}">Voltar</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -276,6 +276,13 @@ $1
   color: var(--sma-muted);
   max-width: 70ch;
 }
+.sma-lead-1{
+  font-size: clamp(1.02rem, 1.35vw, 1.22rem);
+  line-height: 1.55;
+  color: var(--sma-gold);
+  max-width: 70ch;
+}
+
 .sma-subline{
   font-size: .98rem;
   opacity: .92;
@@ -430,3 +437,6 @@ $1
 .sma-public .sma-journey p.sma-paragraph a {
   color: inherit !important;
 }
+
+.sma-subnav { display: flex; flex-direction: column; gap: 10px; }
+.sma-subnav-buttons { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }

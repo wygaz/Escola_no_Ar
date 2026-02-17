@@ -1,21 +1,59 @@
-{# templates/vocacional/consentimento.html #}
 {% extends "vocacional/base_vocacional.html" %}
-{% block vocacional_content %}
-<h1>Consentimento e Acesso</h1>
-<p>Para continuar, precisamos do seu consentimento conforme a LGPD.</p>
 
-<form method="post" action="{% url 'vocacional:consentimento_aceitar' %}">
-  {% csrf_token %}
-  <div class="field">
-    <label>Nome</label>
-    <input type="text" name="nome" value="{{ nome }}" required>
-  </div>
-  <div class="field">
-    <label>E-mail</label>
-    <input type="email" name="email" value="{{ email }}" required readonly>
-  </div>
-  <button class="btn ok" type="submit">Aceitar e continuar</button>
-</form>
+{% block page_title %}Consentimento{% endblock %}
+{% block header_title %}Consentimento (LGPD){% endblock %}
+{% block header_subtitle %}
+  <p class="vocacional-subtitle">
+    Antes do teste, precisamos do seu consentimento para tratar seus dados e salvar seu histórico.
+  </p>
 {% endblock %}
 
+{% block vocacional_content %}
 
+<div class="vocacional-main-card">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} mb-3">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="card-info">
+    <p style="margin:0">
+      Seus dados serão usados apenas para:
+      <strong>registrar seu consentimento</strong>, <strong>salvar suas respostas</strong> e
+      <strong>exibir seus resultados</strong> dentro da Escola no Ar.
+    </p>
+  </div>
+
+  <form method="post" action="{% url 'vocacional:consentimento_aceitar' %}" style="margin-top:1rem">
+    {% csrf_token %}
+
+    <label style="display:flex; gap:.5rem; align-items:flex-start; margin: 1rem 0;">
+      <input type="checkbox" name="aceite_termos" value="1" required>
+      <span>Li e concordo com os <a href="{% url 'vocacional:termos' %}" target="_blank">Termos de Uso</a>.</span>
+    </label>
+
+
+    <div class="field" style="margin-bottom:.75rem">
+      <label for="id_nome">{{ form.nome.label }}</label>
+      {{ form.nome }}
+    </div>
+
+    <div class="field" style="margin-bottom:1rem">
+      <label for="id_email">{{ form.email.label }}</label>
+      {{ form.email }}
+    </div>
+
+    <div class="actions-row" style="display:flex; gap:.5rem; flex-wrap:wrap">
+      <button class="btn" type="submit">Aceitar e continuar</button>
+      <a class="btn ghost" href="{% url 'core:termos' %}">Ler Termos</a>
+      <a class="btn ghost" href="{% url 'core:privacidade' %}">Privacidade</a>
+    </div>
+  </form>
+
+  <p class="text-muted" style="margin-top: .9rem; opacity:.85">
+    Você poderá revogar o consentimento a qualquer momento em <strong>Privacidade</strong>.
+  </p>
+</div>
+
+{% endblock %}

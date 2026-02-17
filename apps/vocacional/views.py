@@ -11,11 +11,11 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views    # <- FALTAVA ESTA
 from .forms import RespostaForm
 from .models import Avaliacao, Resposta, Pergunta, AvaliacaoGuia
-from .permissions import require_mentor, require_consent, require_guia_feedback
+from .permissions import require_mentor
 from .services import calcular_resultados, classificar_resultados, notificar_resultado
 from urllib.parse import quote, urlencode  # se ainda usar em outras views
 from django.urls import reverse, NoReverseMatch
-from .gating import next_url, next_step, gating_state
+from .gating import next_url, next_step
 from django.conf import settings
 from django.views.decorators.http import require_http_methods
 from .forms import ConsentimentoForm
@@ -24,11 +24,26 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.safestring import mark_safe
 from collections import defaultdict
 from django.views.decorators.http import require_POST
+from apps.core.permissions import require_produto, PROD_VOCACIONAL, require_consent, require_guia_feedback
 
+
+@login_required
+def mentor_dashboard(request):
+    # por enquanto é só a página base; depois a gente coloca dados/histórico
+    return render(request, "vocacional/mentor_home.html")
+
+
+
+@login_required
+@require_produto(PROD_VOCACIONAL)
+def avaliacao_gate(request):
+    return redirect(next_url(request.user))
 
 # --------------------------- FORM (ÚNICO) ---------------------------
+
 @login_required
-@require_consent
+@require_produto(PROD_VOCACIONAL)
+@require_consent()
 @require_guia_feedback
 def avaliacao_form(request: HttpRequest) -> HttpResponse:
     # Se ainda falta algum pré-requisito, redireciona
@@ -49,10 +64,7 @@ def avaliacao_form(request: HttpRequest) -> HttpResponse:
     # perguntas ativas
     perguntas_qs = Pergunta.objects.filter(ativo=True).select_related("dimensao")
 
-    if settings.DEBUG and getattr(request.user, "is_staff", False):
-        messages.info(request, f"[DEBUG] perguntas_qs={perguntas_qs.count()}")
-
-    # -------- 1) Gera ordem estável na primeira vez --------
+        # -------- 1) Gera ordem estável na primeira vez --------
     if not getattr(avaliacao, "ordem_ids", None):
         ids = list(perguntas_qs.values_list("id", flat=True))
         seed = (avaliacao.pk or 0) + (request.user.pk or 0)
@@ -94,8 +106,11 @@ def avaliacao_form(request: HttpRequest) -> HttpResponse:
         if request.headers.get("x-requested-with") == "XMLHttpRequest":
             return JsonResponse({"ok": True, "salvas": salvas})
 
+        action = request.POST.get("action")  # "save" ou "finish"
+        print("POST action=", request.POST.get("action"))
+
         # FINALIZAR
-        if "finalizar" in request.POST:
+        if action == "finish" or "finalizar" in request.POST:
             total_qs = perguntas_qs.count()
             respondidas = Resposta.objects.filter(avaliacao=avaliacao).count()
             if respondidas < total_qs:
@@ -116,20 +131,23 @@ def avaliacao_form(request: HttpRequest) -> HttpResponse:
                 concluidas_qs.count() >= 2
                 and getattr(avaliacao, "status", "rascunho") != "concluida"
             ):
-                calcular_resultados(avaliacao)  # calcula, mas NÃO muda status
+                calcular_resultados(avaliacao)
                 messages.info(
                     request,
                     "Limite de 2 avaliações concluídas atingido. Mostrando o resultado desta tentativa como pré-visualização."
                 )
                 return redirect("vocacional:resultado", pk=avaliacao.pk)
 
-            # fluxo normal quando não atingiu o limite
             calcular_resultados(avaliacao)
             avaliacao.status = "concluida"
             avaliacao.finalizado_em = timezone.now()
             avaliacao.save(update_fields=["status", "finalizado_em"])
             messages.success(request, "Avaliação concluída!")
             return redirect("vocacional:resultado", pk=avaliacao.pk)
+
+        # Se não for finalizar, é salvar normal
+        messages.info(request, f"{salvas} respostas salvas.")
+        return redirect("vocacional:avaliacao_form")
 
     # GET — forms + JSON para o front
     itens: list[tuple[Pergunta, RespostaForm]] = []
@@ -263,8 +281,9 @@ def _avaliacao_stats(user):
         .first()
     )
     return concluidas, disponiveis, ultima
-
+'''
 @login_required
+@require_produto(PROD_VOCACIONAL)
 def index(request):
     # sua dashboard
     concluidas, disponiveis, ultima = _avaliacao_stats(request.user)
@@ -273,20 +292,35 @@ def index(request):
         "disponiveis": disponiveis,
         "ultima": ultima,
     })
+'''
 
 @login_required
-def avaliacao_gate(request):
-    step = next_step(request.user)  # retorna "consent", "guia" ou None
+@require_produto(PROD_VOCACIONAL)
+@require_consent()
+@require_guia_feedback
+def index(request):
+    last_done = (
+        Avaliacao.objects
+        .filter(usuario=request.user, status="concluida")
+        .order_by("-finalizado_em", "-pk")
+        .first()
+    )
+    draft = (
+        Avaliacao.objects
+        .filter(usuario=request.user, status="rascunho")
+        .order_by("-iniciado_em", "-pk")
+        .first()
+    )
+    concluidas = Avaliacao.objects.filter(usuario=request.user, status="concluida").count()
 
-    if step == "consent":
-        return redirect("vocacional:consentimento_check")
-    if step == "guia":
-        return redirect("vocacional:guia_avaliacao")
-    if step == "limit":
-        return redirect("vocacional:index")  # mostra cards de upgrade
+    return render(request, "vocacional/index.html", {
+        "last_done": last_done,
+        "draft": draft,
+        "concluidas": concluidas,
+        "limite": 2,
+    })
 
-    # Se não há pré-requisito, vai direto ao form
-    return redirect("vocacional:avaliacao_form")
+
 
 # --------------------------- util ---------------------------
 def _parse_ids(s: str) -> list[int]:
@@ -305,11 +339,20 @@ def _parse_ids(s: str) -> list[int]:
 # --------------------------- RESULTADO / DEMAIS ---------------------------
 
 
-@require_consent
-@require_guia_feedback
 @login_required
+@require_produto(PROD_VOCACIONAL)
+@require_consent()
+@require_guia_feedback
 def resultado(request, pk):
     av = get_object_or_404(Avaliacao, pk=pk, usuario=request.user)
+
+    def nivel_por_media(m: float) -> str:
+        # ajuste os cortes se quiser
+        if m >= 4.2: return "Muito alto"
+        if m >= 3.4: return "Alto"
+        if m >= 2.6: return "Médio"
+        if m >= 1.8: return "Baixo"
+        return "Muito baixo"
 
     # ---- agrega respostas por dimensão ----
     respostas = (
@@ -337,11 +380,12 @@ def resultado(request, pk):
             "dimensao_nome": getattr(dim, "nome", str(dim)),
             "media": round(media, 2),        # 1..5
             "qtd": n,
-            "pct": round((media / 5.0) * 100),
+            "pct": int(round((media / 5.0) * 100)),
+            "nivel": nivel_por_media(media),
         })
     resultados_full.sort(key=lambda x: x["media"], reverse=True)
 
-    # ---- Top N para exibir ----
+    # ---- Top N (para texto e whatsapp) ----
     TOP_N = 3
     top3 = resultados_full[:TOP_N]
 
@@ -352,15 +396,13 @@ def resultado(request, pk):
     top_names = [r["dimensao_nome"] for r in top3] or ["meu resultado"]
     wh_text = f"Meu resultado da Avaliação Vocacional: {', '.join(top_names)}. Veja aqui: {resultado_url}"
 
-    # ---- contexto final (sem sobrescrever depois) ----
     ctx = {
         "avaliacao": av,
         "total_qs": total_qs,
 
-        # lista que o template deve usar para exibir (Top 3)
-        "resultados": top3,
+        # AGORA o template renderiza TODOS (toggle esconde/mostra)
+        "resultados": resultados_full,
 
-        # listas auxiliares (se quiser usar em outro lugar)
         "resultados_top3": top3,
         "resultados_all": resultados_full,
 
@@ -368,16 +410,18 @@ def resultado(request, pk):
         "wh_text": wh_text,
         "resultado_url": resultado_url,
 
-        # esconde header/rodapé globais, mantendo o corporativo do módulo
         "hide_global_header": True,
         "hide_global_footer": True,
     }
     return render(request, "vocacional/resultado.html", ctx)
 
 
+
 @require_POST
 @login_required
-@require_consent
+@require_produto(PROD_VOCACIONAL)
+@require_consent()
+@require_guia_feedback
 def enviar_resultado_email(request: HttpRequest, pk: int) -> HttpResponse:
     avaliacao = get_object_or_404(Avaliacao, pk=pk, usuario=request.user)
 
@@ -397,6 +441,9 @@ def enviar_resultado_email(request: HttpRequest, pk: int) -> HttpResponse:
     return redirect("vocacional:resultado", pk=pk)
 
 @login_required
+@require_produto(PROD_VOCACIONAL)
+@require_consent()
+@require_guia_feedback
 def meu_resultado(request):
     av = (Avaliacao.objects
           .filter(usuario=request.user, status="concluida")
@@ -408,7 +455,9 @@ def meu_resultado(request):
     return redirect("vocacional:resultado", pk=av.pk)
 
 @login_required
-@require_consent
+@require_produto(PROD_VOCACIONAL)
+@require_consent()
+@require_guia_feedback
 def resultado_whatsapp(request: HttpRequest, pk: int) -> HttpResponse:
     av = get_object_or_404(Avaliacao, pk=pk, usuario=request.user)
 
@@ -441,5 +490,6 @@ def resultado_whatsapp(request: HttpRequest, pk: int) -> HttpResponse:
         av.save(update_fields=["whatsapp_enviado_em"])
 
     # redireciona ao WhatsApp
-    return HttpResponseRedirect("https://wa.me/?" + urlencode({"text": wh_text}))
+    return HttpResponseRedirect("https://api.whatsapp.com/send?" + urlencode({"text": wh_text}))
+
 

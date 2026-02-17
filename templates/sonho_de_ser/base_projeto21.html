@@ -2,6 +2,10 @@
 {% block title %}Projeto 21 · {{ block.super }}{% endblock %}
 {% block content %}
   <div class="container">
+    <div class="d-flex justify-content-end gap-2 my-2">
+      <a class="btn btn-sm btn-outline-primary" href="{% url 'vocacional:avaliacao_gate' %}">Vocacional</a>
+      <a class="btn btn-sm btn-outline-secondary" href="{% url 'portal' %}">Portal</a>
+    </div>
     {% include "includes/_messages.html" %}
     {% block p21_content %}{% endblock %}
   </div>

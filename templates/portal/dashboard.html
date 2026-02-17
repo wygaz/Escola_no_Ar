@@ -1,432 +1,47 @@
 {% extends "base.html" %}
-{% load static auth_tags %}
-
 {% block content %}
+<div style="max-width: 920px; margin: 40px auto; padding: 0 16px;">
+  <h1 style="margin: 0 0 8px;">Portal</h1>
+  <p style="margin: 0 0 24px; opacity: .8;">
+    Você está logado como <strong>{{ request.user.email }}</strong>. Escolha para onde ir.
+  </p>
+  {% if request.user.is_staff or request.user.is_superuser %}
+    <p style="margin: -12px 0 24px;">
+      <a href="{% url 'portal' %}?portal_mode=user" style="text-decoration:none;">
+        Ver Portal do Usuário (modo teste)
+      </a>
+    </p>
+  {% endif %}
 
-<div class="portal-wrap">
-  <div class="container">
-    <style>
-    /* (1) Se o base.html tiver header/footer diretos no body, escondemos nesta página */
-    < body > header,
-    < body > footer {
-        display: none !important;
-        background:#0b1526;             /* navy mais suave que o atual */
-    }
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+    <div style="border: 1px solid rgba(0,0,0,.08); border-radius: 16px; padding: 18px;">
+      <h2 style="margin: 0 0 8px;">Projeto Sonhe + Alto</h2>
+      <p style="margin: 0 0 14px; opacity: .8;">Plano de 21 dias, kits e acompanhamento.</p>
 
-    /* (2) Shell Sonhe + Alto */
-    .sma-shell{
-        min-height: 100vh;
-        display:flex;
-        flex-direction:column;
-        background:#fff6e6;
-    }
-
-    .sma-shell{
-        background: #f7f1e6;            /* bege bem suave (menos saturado) */
-    }
-    .sma-header,
-    .sma-footer{
-        background: #f3e6cf;            /* topo/rodapé mais elegante */
-        border-color: rgba(0,0,0,.05);
-    }
-    
-    .sma-header .inner{
-        max-width:1100px;
-        margin:0 auto;
-        padding:14px 18px;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:16px;
-    }
-    .sma-brand{
-        display:flex;
-        align-items:center;
-        gap:12px;
-        text-decoration:none;
-        color:#1f2937;
-    }
-    .sma-logo{height:100px;width:auto;}
-    .sma-userbar{
-        display:flex;
-        align-items:center;
-        gap:10px;
-        flex-wrap:wrap;
-        justify-content:flex-end;
-    }
-    .sma-pill{
-        background:#ffe8b8;
-        border:1px solid rgba(212,158,37,.7);
-        padding:8px 12px;
-        border-radius:999px;
-        font-size:.9rem;
-    }
-    .sma-linkbtn{
-        border:1px solid rgba(212,158,37,.8);
-        background:#fff;
-        color:#0d6efd;
-        border-radius:999px;
-        padding:6px 10px;
-        font-size:.85rem;
-        cursor:pointer;
-    }
-    .sma-linkbtn:hover{background:#fff3cd;}
-
-    .sma-main{flex:1; padding:28px 18px;}
-    .sma-container{max-width:1100px;margin:0 auto;}
-
-    /* Card branco (o “padrão” que você pediu) */
-    .portal-card{
-        background:#fff;
-        border-radius:28px;
-        border:1px solid rgba(0,0,0,.06);
-        box-shadow:0 14px 34px rgba(0,0,0,.12);
-        padding:22px 24px;
-    }
-
-    /* (3) Conteúdo do Portal */
-    .portal-title{
-        font-size:2rem;
-        margin:0 0 10px;
-        color:#0f172a;
-    }
-
-    .kpis{
-        display:grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap:12px;
-        margin: 14px 0 18px;
-    }
-    @media (max-width: 900px){
-        .kpis{grid-template-columns: repeat(2, minmax(0,1fr));}
-    }
-    @media (max-width: 520px){
-        .kpis{grid-template-columns: 1fr;}
-    }
-    .kpi{
-        background:#fffdf6;
-        border:1px solid rgba(212,158,37,.35);
-        border-radius:18px;
-        padding:12px 14px;
-        box-shadow: 0 8px 18px rgba(0,0,0,.06);
-    }
-    .kpi .num{
-        font-size:1.35rem;
-        font-weight:700;
-        margin-top:6px;
-        color:#111827;
-    }
-
-    .grid{
-        display:grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap:14px;
-        margin-top: 6px;
-    }
-    @media (max-width: 900px){
-        .grid{grid-template-columns: 1fr;}
-    }
-
-    .card{
-        background:#ffffff;
-        border:1px solid rgba(0,0,0,.07);
-        border-radius:22px;
-        padding:16px 16px 14px;
-        box-shadow: 0 10px 22px rgba(0,0,0,.08);
-        position:relative;
-        overflow:hidden;
-    }
-    .card h3{
-        margin:8px 0 6px;
-        font-size:1.15rem;
-        color:#0f172a;
-    }
-    .desc{
-        margin:0 0 12px;
-        color:#334155;
-        line-height:1.35;
-    }
-
-    /* “Faixa” superior por perfil (sutil) */
-    .card::before{
-        content:"";
-        position:absolute; left:0; top:0; right:0; height:6px;
-        background: rgba(212,158,37,.55);
-    }
-    .card--admin::before{ background: rgba(239,68,68,.55); }
-    .card--prof::before{ background: rgba(59,130,246,.55); }
-    .card--mentor::before{ background: rgba(16,185,129,.55); }
-    .card--aluno::before{ background: rgba(139,92,246,.55); }
-    .card--usuario::before{ background: rgba(212,158,37,.75); }
-
-    .actions{
-        display:flex;
-        flex-wrap:wrap;
-        gap:10px;
-        margin-top: 10px;
-    }
-    .btn{
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        gap:8px;
-        padding:10px 14px;
-        border-radius:999px;
-        border:1px solid rgba(212,158,37,.8);
-        background:#fff;
-        color:#0d6efd;
-        font-weight:600;
-        text-decoration:none;
-        box-shadow: 0 8px 18px rgba(0,0,0,.08);
-    }
-    .btn:hover{ background:#fff3cd; }
-
-    .portal-next-steps{
-        margin: 12px 0 8px;
-        padding: 12px 14px;
-        border-radius:18px;
-        background:#fff6dc;
-        border:1px solid rgba(212,158,37,.35);
-        color:#000080;
-    }
-    .portal-next-steps ul{
-        margin:8px 0 0 18px;
-    }
-
-    /* (4) Rodapé dentro da área */
-    .sma-footer{
-        background:#fff1d6;
-        border-top:1px solid rgba(0,0,0,.06);
-        padding:18px 0 22px;
-    }
-    .sma-footer .sma-container{
-        padding:0 18px;
-        font-size:.9rem;
-        color:#475569;
-    }
-    .sma-footer a{color:#0d6efd; text-decoration:none;}
-    .sma-footer a:hover{text-decoration:underline;}
-
-    /* ============================
-    PORTAL – melhorar contraste
-    ============================ */
-
-    /* texto padrão dentro da área do portal */
-    .portal-wrap, 
-    .portal-wrap p,
-    .portal-wrap li,
-    .portal-wrap .desc {
-        color: #1f2937; /* cinza bem legível */
-    }
-
-    /* títulos e textos “fortes” */
-    .portal-wrap h1,
-    .portal-wrap h2,
-    .portal-wrap h3,
-    .portal-wrap strong {
-        color: #0f172a; /* quase preto (navy) */
-    }
-
-    /* links (sem afetar botões) */
-    .portal-wrap a:not(.btn):not(.btn-primary):not(.btn-ghost) {
-        color: #0b5ed7;
-        font-weight: 600;
-        text-decoration: none;
-    }
-    .portal-wrap a:not(.btn):not(.btn-primary):not(.btn-ghost):hover {
-        color: #084298;
-        text-decoration: underline;
-    }
-
-    /* rodapé (links) */
-    .portal-wrap .sma-footer a,
-    .portal-wrap footer a {
-        color: #0b5ed7;
-        font-weight: 600;
-    }
-    .portal-wrap .sma-footer a:hover,
-    .portal-wrap footer a:hover {
-        color: #084298;
-        text-decoration: underline;
-    }
-
-    /* 1- Grid responsivo: cria colunas só quando couber */
-    .portal-wrap .grid{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-    gap: 1.2rem;
-    align-items: start;
-    }
-
-    /* 2- Cards podem ocupar toda a largura da coluna */
-    .portal-wrap .grid > .card{
-      width: 100%;
-      max-width: none;
-    }
-
-    /* 3- Se for só o card do usuário, ele pode ocupar a linha inteira */
-    .portal-wrap .card--usuario{
-      grid-column: 1 / -1;
-    }
-    </style>
-
-    <div class="sma-shell">
-
-    <!-- Cabeçalho Sonhe + Alto -->
-    <header class="sma-header">
-        <div class="inner">
-        <a class="sma-brand" >
-            {# ✅ AJUSTE AQUI se o seu logo estiver em outro caminho #}
-            <img class="sma-logo" src="{% static 'core/img/logo-sonhe-mais-alto.png' %}" alt="Sonhe + Alto">
+      {% if can_sonhemaisalto %}
+        <a href="{% url 'projeto21:home' %}" style="display:inline-block; padding:10px 14px; border-radius: 10px; text-decoration:none; border:1px solid rgba(0,0,0,.12);">
+          Entrar no Sonhe + Alto
         </a>
+      {% else %}
+        <span style="display:inline-block; padding:10px 14px; border-radius: 10px; opacity:.55; border:1px dashed rgba(0,0,0,.25);">
+          Acesso não liberado
+        </span>
+      {% endif %}
+    </div>
 
-        <div class="sma-userbar">
-            <span class="sma-pill">
-            Você está logado como {{ request.user.first_name|default:request.user.nome|default:request.user.email }}
-            </span>
+    <div style="border: 1px solid rgba(0,0,0,.08); border-radius: 16px; padding: 18px;">
+      <h2 style="margin: 0 0 8px;">Vocacional</h2>
+      <p style="margin: 0 0 14px; opacity: .8;">Teste vocacional, resultados e histórico.</p>
 
-            <!-- Sair (POST-only) -->
-            <form method="post" action="{% url 'contas:logout' %}" style="display:inline;">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ request.path }}">
-            <button class="sma-linkbtn" type="submit">Sair</button>
-            </form>
-
-            <!-- Entrar com outra conta: logout e redireciona para login -->
-            <form method="post" action="{% url 'contas:logout' %}" style="display:inline;">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{% url 'contas:login' %}?next={{ request.path|urlencode }}">
-            <button class="sma-linkbtn" type="submit">Entrar com outra conta</button>
-            </form>
-        </div>
-        </div>
-    </header>
-
-    <!-- Conteúdo -->
-    <main class="sma-main">
-        <div class="sma-container">
-        <section class="portal-card">
-
-            <h1 class="portal-title">Portal</h1>
-
-            {# KPIs rápidos (renderizam só se vier algo do contexto) #}
-            <div class="kpis">
-            {% if cursos_count %}<div class="kpi"><div>📚 Cursos</div><div class="num">{{ cursos_count }}</div></div>{% endif %}
-            {% if turmas_count %}<div class="kpi"><div>👥 Turmas</div><div class="num">{{ turmas_count }}</div></div>{% endif %}
-            {% if mentorandos_count %}<div class="kpi"><div>🤝 Mentorandos ativos</div><div class="num">{{ mentorandos_count }}</div></div>{% endif %}
-            {% if atividades_pendentes %}<div class="kpi"><div>📝 Atividades pendentes</div><div class="num">{{ atividades_pendentes }}</div></div>{% endif %}
-            </div>
-
-            <div class="grid">
-            {# ADMIN #}
-            {% if user|has_perfil:"ADMIN" or user|in_group:"Admins" %}
-                <div class="card card--acc card--admin">
-                <div>🛠️</div>
-                <h3>Administração</h3>
-                <p class="desc">Governança do portal, usuários, permissões e relatórios globais.</p>
-                <div class="actions">
-                    <a class="btn" href="/admin/">Abrir Admin</a>
-                    <a class="btn" href="/relatorios/">Relatórios</a>
-                    <a class="btn" href="/contas/perfil/">Meu perfil</a>
-                </div>
-                </div>
-            {% endif %}
-
-            {# PROFESSOR #}
-            {% if user|has_perfil:"PROF" or user|in_group:"Professores" or user.is_superuser %}
-                <div class="card card--acc card--prof">
-                <div>👩‍🏫</div>
-                <h3>Professor</h3>
-                <p class="desc">Gerencie cursos, turmas e avaliações dos alunos.</p>
-                <div class="actions">
-                    <a class="btn" href="/cursos/">Meus Cursos</a>
-                    <a class="btn" href="/turmas/">Minhas Turmas</a>
-                    <a class="btn" href="/avaliacoes/">Avaliações</a>
-                </div>
-                </div>
-            {% endif %}
-
-            {# MENTOR #}
-            {% if user|has_perfil:"MENTOR" or user|in_group:"Mentores" or user.is_superuser %}
-                <div class="card card--acc card--mentor">
-                <div>🤝</div>
-                <h3>Mentorias</h3>
-                <p class="desc">
-                    Acompanhe o <strong>Projeto Sonhe + Alto</strong> dos seus mentorandos:
-                    planos, estratégias e evolução dos 21 dias.
-                </p>
-                <div class="actions">
-                    <a class="btn" href="/mentorias/">Mentorias</a>
-                    <a class="btn" href="/projeto21/mentor/">Projeto Sonhe + Alto (Mentor)</a>
-                </div>
-                </div>
-            {% endif %}
-
-            {# ALUNO #}
-            {% if user|has_perfil:"ALUNO" or user|in_group:"Alunos" or user.is_superuser %}
-                <div class="card card--acc card--aluno">
-                <div>🎒</div>
-                <h3>Aluno</h3>
-                <p class="desc">Acesse aulas, atividades e suas notas.</p>
-                <div class="actions">
-                    <a class="btn" href="/meus-cursos/">Meus Cursos</a>
-                    <a class="btn" href="/atividades/">Minhas Atividades</a>
-                    <a class="btn" href="/notas/">Minhas Notas</a>
-                </div>
-                </div>
-            {% endif %}
-
-            {# USUÁRIO (sem matrícula) – FOCO TOTAL NO PROJETO 21 #}
-            {% if user|has_perfil:"USER" or user|in_group:"Usuarios" or user.is_superuser %}
-                <div class="card card--acc card--usuario">
-                <div>🌱</div>
-                <h3>Projeto Sonhe + Alto – uma aventura com propósito</h3>
-                <p class="desc">
-                    Bem-vindo(a) à sua área de <strong>Desenvolvimento Pessoal</strong>.
-                    Aqui você entra no <strong>Projeto Sonhe + Alto</strong>, escolhe suas estratégias
-                    e imprime a papelada para viver 21 dias de mudanças significativas.
-                </p>
-
-                <div class="portal-next-steps">
-                    <strong>Por onde começar?</strong>
-                    <ul>
-                    <li>Clique em <strong>Entrar no Projeto Sonhe + Alto</strong> para ir à página principal.</li>
-                    <li>Lá você poderá <strong>baixar os kits</strong> e <strong>montar seu plano de estratégias</strong>.</li>
-                    <li>Depois é só <strong>imprimir a papelada</strong> e acompanhar os 21 dias.</li>
-                    </ul>
-                </div>
-
-                <div class="guia-offer">
-                    <a class="guia-cover-link"
-                    href="https://pay.hotmart.com/Q103340890M?bid=1765338293599"
-                    target="_blank" rel="noopener">
-                    <img
-                        class="guia-cover-lg"
-                        src="{% static 'core/img/capa_guia_vocacao.png' %}"
-                        alt="Capa do Guia"
-                    >
-                    </a>
-                </div>
-
-
-                <div class="actions">
-                    <a class="btn" href="/projeto21/">Entrar no Projeto Sonhe + Alto</a>
-                </div>
-                </div>
-            {% endif %}
-            </div>
-
-        </section>
-        </div>
-    </main>
-
-    <!-- Rodapé dentro -->
-    <footer class="sma-footer">
-        <div class="sma-container">
-        © Escola no Ar · <a href="/sobre/">Sobre</a> · <a href="/contato/">Contato</a> · <a href="/privacidade/">Política de Privacidade</a>
-        </div>
-    </footer>
-
+      {% if can_vocacional %}
+        <a href="{% url 'vocacional:avaliacao_gate' %}" style="display:inline-block; padding:10px 14px; border-radius: 10px; text-decoration:none; border:1px solid rgba(0,0,0,.12);">
+          Entrar no Vocacional
+        </a>
+      {% else %}
+        <span style="display:inline-block; padding:10px 14px; border-radius: 10px; opacity:.55; border:1px dashed rgba(0,0,0,.25);">
+          Acesso não liberado
+        </span>
+      {% endif %}
     </div>
   </div>
 </div>

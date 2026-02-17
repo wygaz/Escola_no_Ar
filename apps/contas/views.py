@@ -9,7 +9,8 @@ from django.template.loader import get_template
 from django.http import HttpResponse
 from django.urls import reverse
 from django.conf import settings
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib.auth import login
 
@@ -78,17 +79,26 @@ def login_view(request):
     ctx = {"next": request.GET.get("next", "")}
     return render(request, "contas/login.html", ctx)
 
-@require_POST
+@require_http_methods(["GET", "POST"])
 def logout_view(request):
-    """
-    Faz logout via POST e, se houver parâmetro `next`,
-    redireciona para essa URL depois de sair.
-    """
-    if request.method != "POST":
-        # opção segura: se alguém der GET direto, manda para login
-        return redirect("contas:login")
+    """Logout simples.
 
-    # pega o destino desejado (pode vir por POST ou GET)
+    - Aceita GET e POST (evita 405 em botões/link antigos).
+    - Se vier ?next=/... ou POST next, redireciona com segurança.
+    """
+    next_url = request.POST.get("next") or request.GET.get("next")
+
+    logout(request)
+
+    if next_url and url_has_allowed_host_and_scheme(
+        next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return redirect(next_url)
+
+    return redirect("portal")
+# pega o destino desejado (pode vir por POST ou GET)
     next_url = request.POST.get("next") or request.GET.get("next")
     logout(request)
 

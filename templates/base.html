@@ -1,3 +1,4 @@
+<!-- templates/base.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -39,14 +40,16 @@
     </main>
 
     {% block footer %}
-      <footer class="site-footer">
-        <div class="container">
-          © Escola no Ar ·
-          <a href="{% url 'sobre' %}">Sobre</a> ·
-          <a href="{% url 'contato' %}">Contato</a> ·
-          <a href="{% url 'vocacional:privacidade' %}">Política de Privacidade</a>
-        </div>
-      </footer>
+      {% if not hide_global_footer %}
+        <footer class="site-footer">
+          <div class="container">
+            © Escola no Ar ·
+            <a href="{% url 'sobre' %}">Sobre</a> ·
+            <a href="{% url 'contato' %}">Contato</a> ·
+            <a href="{% url 'core:privacidade' %}">Política de Privacidade</a>
+          </div>
+        </footer>
+      {% endif %}
     {% endblock %}
 
     {% block extra_scripts %}{% endblock %}

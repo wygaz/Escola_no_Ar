@@ -8,4 +8,4 @@ register = template.Library()
 def consentimento_ativo(user):
     if not user.is_authenticated:
         return False
-    return Consentimento.objects.filter(user=user, ativo=True).exists()
+    return Consentimento.objects.filter(user=user, aceito=True, revogado_em__isnull=True).exists()

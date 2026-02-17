@@ -49,7 +49,7 @@ class Acesso(models.Model):
 
     def __str__(self) -> str:  # type: ignore[override]
         status = "ativo" if self.ativo else "expirado"
-        return f"{self.user} → {self.produto} ({status})"
+        return f"{self.user} -> {self.produto} ({status})"
 
 
 # ---- helper para o gate de produto ----

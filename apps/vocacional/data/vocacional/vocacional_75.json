@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "labels": ["Nada a ver comigo","Pouco a ver","Indiferente","Tem a ver","Muito a ver"]
+  },
+  "dims": {
+    "DEV_IA":   {"nome":"Desenvolvimento de Software e IA","peso":1},
+    "DESIGN":   {"nome":"Design & Criatividade Digital","peso":1},
+    "SAUDE":    {"nome":"Saúde & Bem-Estar","peso":1},
+    "NEGOCIOS": {"nome":"Negócios & Empreendedorismo","peso":1},
+    "AMBIENTAL":{"nome":"Ciências Ambientais & Sustentabilidade","peso":1},
+    "ENGENHARIA":{"nome":"Engenharia & Inovação","peso":1},
+    "COMUNICACAO":{"nome":"Comunicação & Mídia Digital","peso":1},
+    "SOCIAIS":  {"nome":"Ciências Sociais & Humanas","peso":1},
+    "EDUCACAO": {"nome":"Educação & Formação","peso":1},
+    "DIREITO":  {"nome":"Direito & Governança","peso":1},
+    "TURISMO":  {"nome":"Turismo & Hospitalidade","peso":1},
+    "FINANCAS": {"nome":"Finanças & Investimentos","peso":1},
+    "ESPORTES": {"nome":"Esportes & Performance","peso":1},
+    "MODA":     {"nome":"Moda & Indústria Criativa","peso":1},
+    "ROBOTICA": {"nome":"Robótica & Automação","peso":1}
+  },
+  "grupos": [
+    {
+      "titulo": "Vocacional 75",
+      "itens": [
+        {"id":"DEVIA_01","texto":"Gosto de aprender novas linguagens de programação, mesmo quando são desafiadoras.","dim":"DEV_IA","invert":false},
+        {"id":"DEVIA_02","texto":"Me divirto ajustando um código até tudo funcionar como esperado.","dim":"DEV_IA","invert":false},
+        {"id":"DEVIA_03","texto":"Tenho curiosidade de criar coisas “inteligentes” no computador (ex.: reconhecer imagens ou texto).","dim":"DEV_IA","invert":false},
+        {"id":"DEVIA_05","texto":"Gosto de pensar passo a passo para resolver problemas com o computador.","dim":"DEV_IA","invert":false},
+        {"id":"DEVIA_06","texto":"Desisto quando encontro um erro no computador.","dim":"DEV_IA","invert":true},
+
+        {"id":"DESIGN_01","texto":"Gosto de criar layouts, imagens ou vídeos para comunicar ideias.","dim":"DESIGN","invert":false},
+        {"id":"DESIGN_02","texto":"Tenho prazer em experimentar cores, tipografias e formas.","dim":"DESIGN","invert":false},
+        {"id":"DESIGN_07","texto":"Gosto de pensar na experiência de quem usa um produto (clareza e facilidade).","dim":"DESIGN","invert":false},
+        {"id":"DESIGN_09","texto":"Consigo equilibrar beleza e funcionalidade em um projeto.","dim":"DESIGN","invert":false},
+        {"id":"DESIGN_10","texto":"Fico desmotivado(a) quando preciso fazer várias versões.","dim":"DESIGN","invert":true},
+
+        {"id":"SAUDE_01","texto":"Tenho interesse em entender como o corpo humano funciona.","dim":"SAUDE","invert":false},
+        {"id":"SAUDE_02","texto":"Gosto de cuidar das pessoas e oferecer acolhimento.","dim":"SAUDE","invert":false},
+        {"id":"SAUDE_05","texto":"Consigo manter a calma em situações de pressão.","dim":"SAUDE","invert":false},
+        {"id":"SAUDE_07","texto":"Gosto de estudar continuamente para atualizar conhecimentos.","dim":"SAUDE","invert":false},
+        {"id":"SAUDE_10","texto":"Costumo perder a paciência com quem precisa de mais tempo para se recuperar.","dim":"SAUDE","invert":true},
+
+        {"id":"NEGOCIOS_01","texto":"Gosto de identificar problemas e transformá-los em oportunidades.","dim":"NEGOCIOS","invert":false},
+        {"id":"NEGOCIOS_02","texto":"Tenho curiosidade por como as empresas funcionam e crescem.","dim":"NEGOCIOS","invert":false},
+        {"id":"NEGOCIOS_04","texto":"Gosto de definir metas e acompanhar indicadores simples.","dim":"NEGOCIOS","invert":false},
+        {"id":"NEGOCIOS_07","texto":"Gosto de organizar pessoas e recursos para tirar um plano do papel.","dim":"NEGOCIOS","invert":false},
+        {"id":"NEGOCIOS_10","texto":"Desisto quando os resultados não aparecem de imediato.","dim":"NEGOCIOS","invert":true},
+
+        {"id":"AMBI_01","texto":"Me importo com os impactos das atividades humanas no meio ambiente.","dim":"AMBIENTAL","invert":false},
+        {"id":"AMBI_03","texto":"Tenho interesse em reduzir lixo e reaproveitar materiais no dia a dia.","dim":"AMBIENTAL","invert":false},
+        {"id":"AMBI_04","texto":"Curto acompanhar consumo de água/energia para buscar melhorias.","dim":"AMBIENTAL","invert":false},
+        {"id":"AMBI_07","texto":"Me interesso por energia limpa e soluções sustentáveis na prática.","dim":"AMBIENTAL","invert":false},
+        {"id":"AMBI_10","texto":"Desisto quando uma solução exige mudanças de hábitos.","dim":"AMBIENTAL","invert":true},
+
+        {"id":"ENG_01","texto":"Gosto de entender como as coisas são construídas e como funcionam.","dim":"ENGENHARIA","invert":false},
+        {"id":"ENG_03","texto":"Penso em soluções práticas para problemas do dia a dia.","dim":"ENGENHARIA","invert":false},
+        {"id":"ENG_05","texto":"Gosto de criar modelos de teste com materiais simples para verificar uma ideia.","dim":"ENGENHARIA","invert":false},
+        {"id":"ENG_08","texto":"Gosto de planejar etapas, prazos e custos básicos de um projeto.","dim":"ENGENHARIA","invert":false},
+        {"id":"ENG_10","texto":"Desanimo quando preciso revisar um projeto para ficar mais seguro.","dim":"ENGENHARIA","invert":true},
+
+        {"id":"COM_01","texto":"Gosto de contar histórias por texto, áudio ou vídeo.","dim":"COMUNICACAO","invert":false},
+        {"id":"COM_03","texto":"Consigo adaptar a mensagem para públicos diferentes.","dim":"COMUNICACAO","invert":false},
+        {"id":"COM_04","texto":"Gosto de transformar ideias em roteiros e conteúdos claros para publicar.","dim":"COMUNICACAO","invert":false},
+        {"id":"COM_07","texto":"Gosto de ver o que funcionou (ex.: visualizações, comentários) para melhorar.","dim":"COMUNICACAO","invert":false},
+        {"id":"COM_10","texto":"Desisto quando um conteúdo não dá certo na primeira tentativa.","dim":"COMUNICACAO","invert":true},
+
+        {"id":"SOCIAIS_01","texto":"Gosto de entender como as pessoas se comportam em grupo.","dim":"SOCIAIS","invert":false},
+        {"id":"SOCIAIS_03","texto":"Sei elaborar perguntas neutras para uma pesquisa, sem induzir respostas.","dim":"SOCIAIS","invert":false},
+        {"id":"SOCIAIS_04","texto":"Consigo aplicar questionários simples e registrar respostas com cuidado.","dim":"SOCIAIS","invert":false},
+        {"id":"SOCIAIS_08","texto":"Tenho interesse em projetos que envolvem comunidade e participação.","dim":"SOCIAIS","invert":false},
+        {"id":"SOCIAIS_06","texto":"Pulo a etapa de pedir consentimento quando coleto opiniões.","dim":"SOCIAIS","invert":true},
+
+        {"id":"EDU_01","texto":"Gosto de explicar ideias de um jeito simples.","dim":"EDUCACAO","invert":false},
+        {"id":"EDU_03","texto":"Planejo atividades com começo, meio e fim.","dim":"EDUCACAO","invert":false},
+        {"id":"EDU_04","texto":"Busco diferentes maneiras de ensinar quando alguém não entende.","dim":"EDUCACAO","invert":false},
+        {"id":"EDU_08","texto":"Gosto de avaliar o que foi aprendido e ajustar o próximo passo.","dim":"EDUCACAO","invert":false},
+        {"id":"EDU_10","texto":"Perco a calma quando alguém precisa de mais tempo para aprender.","dim":"EDUCACAO","invert":true},
+
+        {"id":"DIR_01","texto":"Tenho interesse em regras, direitos e deveres das pessoas.","dim":"DIREITO","invert":false},
+        {"id":"DIR_03","texto":"Consigo argumentar com base em fatos e respeito.","dim":"DIREITO","invert":false},
+        {"id":"DIR_04","texto":"Gosto de mediar conflitos e buscar acordos justos.","dim":"DIREITO","invert":false},
+        {"id":"DIR_05","texto":"Tenho atenção aos detalhes para evitar injustiças.","dim":"DIREITO","invert":false},
+        {"id":"DIR_06","texto":"Evito ler textos longos ou documentos oficiais.","dim":"DIREITO","invert":true},
+
+        {"id":"TUR_01","texto":"Gosto de atender pessoas com cordialidade.","dim":"TURISMO","invert":false},
+        {"id":"TUR_02","texto":"Tenho curiosidade por culturas e costumes diferentes.","dim":"TURISMO","invert":false},
+        {"id":"TUR_04","texto":"Gosto de organizar rotas, horários e reservas com atenção.","dim":"TURISMO","invert":false},
+        {"id":"TUR_08","texto":"Consigo explicar rotas e orientações com clareza, mesmo para quem está nervoso(a).","dim":"TURISMO","invert":false},
+        {"id":"TUR_10","texto":"Me recuso a ajustar o atendimento quando há mudanças de voo, clima ou agenda.","dim":"TURISMO","invert":true},
+
+        {"id":"FIN_01","texto":"Gosto de planejar um orçamento simples e acompanhar gastos.","dim":"FINANCAS","invert":false},
+        {"id":"FIN_04","texto":"Consigo entender noções básicas de juros e prazos.","dim":"FINANCAS","invert":false},
+        {"id":"FIN_05","texto":"Gosto de definir metas financeiras, montar um orçamento simples e acompanhar o progresso.","dim":"FINANCAS","invert":false},
+        {"id":"FIN_08","texto":"Procuro informação confiável antes de investir.","dim":"FINANCAS","invert":false},
+        {"id":"FIN_10","texto":"Evito lidar com números sempre que posso.","dim":"FINANCAS","invert":true},
+
+        {"id":"ESP_01","texto":"Gosto de treinar com regularidade para evoluir.","dim":"ESPORTES","invert":false},
+        {"id":"ESP_02","texto":"Defino metas claras e acompanho meus resultados.","dim":"ESPORTES","invert":false},
+        {"id":"ESP_04","texto":"Cuido de descanso e alimentação para render melhor.","dim":"ESPORTES","invert":false},
+        {"id":"ESP_07","texto":"Consigo aprender com derrotas e voltar mais forte.","dim":"ESPORTES","invert":false},
+        {"id":"ESP_10","texto":"Desisto facilmente quando encontro um obstáculo.","dim":"ESPORTES","invert":true},
+
+        {"id":"MODA_01","texto":"Gosto de criar peças ou coleções que expressem uma ideia.","dim":"MODA","invert":false},
+        {"id":"MODA_02","texto":"Curto escolher tecidos, cores e acabamentos combinando estilo e uso.","dim":"MODA","invert":false},
+        {"id":"MODA_03","texto":"Faço ajustes até a peça vestir bem e ficar confortável.","dim":"MODA","invert":false},
+        {"id":"MODA_05","texto":"Busco referências e tendências sem copiar.","dim":"MODA","invert":false},
+        {"id":"MODA_06","texto":"Evito revisar a peça depois do primeiro rascunho.","dim":"MODA","invert":true},
+
+        {"id":"ROBO_01","texto":"Gosto de montar kits com motores e peças que se movimentam.","dim":"ROBOTICA","invert":false},
+        {"id":"ROBO_02","texto":"Curto ligar sensores simples para o sistema reagir ao ambiente.","dim":"ROBOTICA","invert":false},
+        {"id":"ROBO_03","texto":"Consigo planejar passos para um movimento (ex.: levantar, girar, parar).","dim":"ROBOTICA","invert":false},
+        {"id":"ROBO_09","texto":"Entendo a importância de desligar e revisar quando algo estranho acontece.","dim":"ROBOTICA","invert":false},
+        {"id":"ROBO_10","texto":"Desisto quando os fios e conexões ficam confusos.","dim":"ROBOTICA","invert":true}
+      ]
+    }
+  ]
+}

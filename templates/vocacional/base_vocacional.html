@@ -2,6 +2,16 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block site_header %}{% endblock %}
+
+{% block extra_head %}
+  {{ block.super }}
+  <style>
+    .vocacional-nav form { display:inline; margin:0; }
+    .vocacional-nav form button { cursor:pointer; }
+  </style>
+{% endblock %}
+
 {% block title %}
   {% block page_title %}Portal Vocacional{% endblock %} • Escola no Ar
 {% endblock %}
@@ -31,15 +41,24 @@
       <div class="vocacional-user">
         Olá, {{ request.user.first_name|default:request.user.nome|default:request.user.email }}
       </div>
+
       <div class="vocacional-nav">
-        <a href="{% url 'portal' %}" class="btn btn-xs btn-outline-light">Home</a>
-        <a href="{% url 'contas:logout' %}" class="btn btn-xs btn-outline-danger">Sair</a>
+        <a href="{% url 'portal' %}" class="btn btn-xs btn-outline-light">Portal</a>
+        <a href="{% url 'projeto21:home' %}" class="btn btn-xs btn-outline-light">Sonhe + Alto</a>
+
+        <form method="post" action="{% url 'contas:logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-xs btn-outline-danger">Sair</button>
+        </form>
       </div>
     </div>
+
   </header>
 
   <main class="vocacional-main">
-    {% block page_content %}{% endblock %}
+    {% block page_content %}
+      {% block vocacional_content %}{% endblock %}
+    {% endblock %}
   </main>
 
 </div>

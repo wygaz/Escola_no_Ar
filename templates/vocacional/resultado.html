@@ -1,120 +1,154 @@
 {% extends "vocacional/base_vocacional.html" %}
-{% block vocacional_content %}
 {% load static %}
-  <!-- Cabeçalho só na impressão -->
-  <div class="print-only print-header">
-    <div class="ph-row">
-      <div class="ph-left">
-        <img src="{% static 'core/img/escola_no_ar.jpg' %}" alt="Escola no Ar" class="ph-brand">
-      </div>
-      <div class="ph-center">
-        <h1>Resultado da Avaliação Vocacional</h1>
-        <div class="ph-meta">
-          Aluno: {{ request.user.first_name|default:request.user.nome|default:request.user.email }}
-          • Código #{{ avaliacao.pk }}
-          • {{ avaliacao.finalizado_em|default:avaliacao.iniciado_em|date:"d/m/Y H:i" }}
-        </div>
-        <div class="ph-link">{{ resultado_url }}</div>
-      </div>
-      <div class="ph-right"></div>
+{% block vocacional_content %}
+
+<!-- Cabeçalho só na impressão -->
+<div class="print-only print-header">
+  <div class="ph-row">
+    <div class="ph-left">
+      <img src="{% static 'core/img/escola_no_ar.jpg' %}" alt="Escola no Ar" class="ph-brand">
     </div>
+    <div class="ph-center">
+      <h1>Resultado da Avaliação Vocacional</h1>
+      <div class="ph-meta">
+        Aluno: {{ request.user.first_name|default:request.user.nome|default:request.user.email }}
+        • Código #{{ avaliacao.pk }}
+        • {{ avaliacao.finalizado_em|default:avaliacao.iniciado_em|date:"d/m/Y H:i" }}
+      </div>
+      <div class="ph-link">{{ resultado_url }}</div>
+    </div>
+    <div class="ph-right"></div>
   </div>
-  <h1 class="title">Resultado da Avaliação</h1>
+</div>
 
-  <div class="wrap">
-    <div class="card-info" style="margin-bottom:1rem">
-      <p>Parabéns! Sua avaliação foi concluída com sucesso.</p>
-      <p style="opacity:.8"><small>Código #{{ avaliacao.pk }} • Iniciada em {{ avaliacao.iniciado_em|date:"d/m/Y H:i" }}</small></p>
-    </div>
+<h1 class="title">Resultado da Avaliação</h1>
 
-    <div class="actions-row screen-only" style="margin-top:.25rem">
-      <button type="button" id="toggle-top3" class="btn ghost">Ver todos</button>
-    </div>
+<div class="wrap">
 
-    <!-- LISTA / GRADE DE RESULTADOS -->
-    <div id="resultados" class="resultados limit-top3">
-      {% if resultados %}
-        <div id="resultados" class="resultados limit-top3">
-          {% for r in resultados %}
-            <div class="card-quiz" style="margin-bottom:1rem">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
-                <strong>{{ r.dimensao.nome|default:r.dimensao_nome }}</strong>
-                <span>{{ r.percentual|floatformat:2 }}%</span>
-              </div>
-              <div class="bar" style="height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden">
-                <div class="fill" style="height:10px;width:{{ r.percentual|floatformat:0 }}%;background:#3b82f6"></div>
-              </div>
-              <div style="margin-top:.5rem;opacity:.9">Nível: <strong>{{ r.nivel }}</strong></div>
-            </div>
-          {% endfor %}
-          </div>
-      {% else %}
-        {% if resultados %}
-          <div class="resumo">
-            <p>Você respondeu {{ total_qs }} item(ns). Abaixo, suas áreas com maior afinidade (média 1–5):</p>
+  <div class="card-info" style="margin-bottom:1rem">
+    <p>Parabéns! Sua avaliação foi concluída com sucesso.</p>
+    <p style="opacity:.8">
+      <small>Código #{{ avaliacao.pk }} • Iniciada em {{ avaliacao.iniciado_em|date:"d/m/Y H:i" }}</small>
+    </p>
+  </div>
+
+  <!-- Toggle superior (tela) -->
+  <div class="actions-row screen-only" style="margin-top:.25rem">
+    <button type="button" class="btn ghost js-toggle-top3">Ver todos</button>
+  </div>
+
+  <!-- LISTA (renderiza TODOS; o CSS + toggle esconde/mostra) -->
+  <div id="resultados" class="resultados limit-top3">
+    {% if resultados %}
+      {% for r in resultados %}
+        <div class="card-quiz" style="margin-bottom:1rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+            <strong>{{ r.dimensao.nome|default:r.dimensao_nome }}</strong>
+            <span>{{ r.pct }}%</span>
           </div>
 
-          <div class="barras">
-            {% for r in resultados %}
-              <div class="linha">
-                <div class="rotulo">
-                  {{ r.dimensao.nome|default:r.dimensao }}
-                  <span class="nota">{{ r.media }}/5</span>
-                </div>
-                <div class="barra">
-                  <div class="fill" style="width: {{ r.pct }}%"></div>
-                </div>
-                <div class="meta">({{ r.qtd }} itens)</div>
-              </div>
-            {% endfor %}
+          <div class="bar" style="height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden">
+            <div class="fill" style="height:10px;width:{{ r.pct }}%;background:#3b82f6"></div>
           </div>
-        {% else %}
-          <em>Nenhum resultado calculado.</em>
-        {% endif %}
-       {% endif %}    
-    </div>
 
-    <!-- AÇÕES FINAIS -->
-    <div class="actions-row">
-      <a class="btn ghost" href="{% url 'vocacional:avaliacao_form' %}">Repetir teste</a>
-      <a class="btn ghost" href="{% url 'vocacional:index' %}">Voltar ao início</a>
-      <button type="button" id="toggle-top3" class="btn ghost">Ver todos</button>
+          <div style="margin-top:.5rem;opacity:.9">
+            Nível: <strong>{{ r.nivel|default:"" }}</strong>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <em>Nenhum resultado calculado.</em>
+    {% endif %}
+  </div>
 
-      <a class="btn ghost"
-        href="{% url 'vocacional:enviar_resultado_email' avaliacao.pk %}"
+  <!-- AÇÕES FINAIS -->
+  <div class="actions-row screen-only">
+
+    <a class="btn ghost" href="{% url 'vocacional:avaliacao_form' %}">Repetir teste</a>
+    <a class="btn ghost" href="{% url 'vocacional:index' %}">Voltar ao início</a>
+
+    <!-- Toggle inferior (tela) -->
+    <button type="button" class="btn ghost js-toggle-top3">Ver todos</button>
+
+    <!-- Enviar por e-mail (POST => evita 405) -->
+    <form method="post" action="{% url 'vocacional:enviar_resultado_email' avaliacao.pk %}" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn ghost"
         {% if avaliacao.email_enviado_em %}
           title="Já enviado em {{ avaliacao.email_enviado_em|date:'d/m H:i' }}"
-        {% endif %}>
-        Enviar por e-mail
-      </a>
+        {% endif %}
+      >Enviar por e-mail</button>
+    </form>
 
-      <a class="btn ghost"
-        href="{% url 'vocacional:resultado_whatsapp' avaliacao.pk %}"
-        {% if avaliacao.whatsapp_enviado_em %}
-          title="Já compartilhado em {{ avaliacao.whatsapp_enviado_em|date:'d/m H:i' }}"
-        {% endif %}>
-        Compartilhar no WhatsApp
-      </a>
+    <!-- WhatsApp -->
+    <a class="btn ghost"
+      href="{% url 'vocacional:resultado_whatsapp' avaliacao.pk %}"
+      {% if avaliacao.whatsapp_enviado_em %}
+        title="Já compartilhado em {{ avaliacao.whatsapp_enviado_em|date:'d/m H:i' }}"
+      {% endif %}
+    >Compartilhar no WhatsApp</a>
 
-      <button type="button" class="btn ok" onclick="window.print()">Salvar em PDF</button>
-    </div>
+    <!-- PDF -->
+    <button type="button" class="btn ok" onclick="window.print()">Salvar em PDF</button>
+  </div>
 
   <!-- Rodapé só na impressão -->
   <div class="print-only print-footer">
-    © {{ now|date:"Y" }} Escola no Ar • Termos: {{ resultado_url|cut:request.get_full_path }}{% url 'vocacional:termos' %} • Privacidade: {{ resultado_url|cut:request.get_full_path }}{% url 'vocacional:privacidade' %} 
+    © {% now "Y" %} Escola no Ar • Termos: {% url 'core:termos' %} • Privacidade: {% url 'core:privacidade' %}
   </div>
+</div>
 
-    <script>
-      (function(){
-        const box = document.getElementById('resultados');
-        const btn = document.getElementById('toggle-top3');
-        if (box && btn){
-          btn.addEventListener('click', ()=>{
-            box.classList.toggle('limit-top3');
-            btn.textContent = box.classList.contains('limit-top3') ? 'Ver todos' : 'Mostrar Top 3';
-          });
-        }
-      })();
-    </script>
+<script>
+(function(){
+  const box = document.getElementById('resultados');
+  const btns = document.querySelectorAll('.js-toggle-top3');
+  if (!box || !btns.length) return;
+
+  function sync(){
+    const limited = box.classList.contains('limit-top3');
+    btns.forEach(b => b.textContent = limited ? 'Ver todos' : 'Mostrar Top 3');
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => {
+    box.classList.toggle('limit-top3');
+    sync();
+  }));
+
+  sync();
+})();
+</script>
+<style>
+/* ===== Ajustes de impressão (PDF) ===== */
+@media print {
+  html, body {
+    background: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* força texto escuro no PDF (corrige branco no branco) */
+  * {
+    color: #111 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  /* esconde controles de tela */
+  .screen-only, .actions-row { display: none !important; }
+
+  /* mostra cabeçalho/rodapé do PDF */
+  .print-only { display: block !important; }
+
+  /* imprime todos os resultados (mesmo se estiver em Top 3 na tela) */
+  #resultados.limit-top3 .card-quiz:nth-child(n+4) { display: block !important; }
+
+  /* barras legíveis */
+  .bar { background: #e6e6e6 !important; }
+  .fill { background: #1f5eff !important; }
+
+  /* evita quebrar um card no meio da página */
+  .card-quiz { page-break-inside: avoid; }
+}
+</style>
 
 {% endblock %}

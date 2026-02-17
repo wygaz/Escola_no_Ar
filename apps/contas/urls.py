@@ -16,7 +16,7 @@ urlpatterns = [
         name="login",
     ),
 
-    # POST-only
+    # Logout (GET ou POST).
     path("logout/", views.logout_view, name="logout"),
 
     # REGISTRO (criar conta)

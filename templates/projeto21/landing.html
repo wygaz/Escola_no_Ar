@@ -37,11 +37,11 @@
     }
 
     /* cada seção-alvo do menu */
-    #sec-plano,
-    #sec-kits,
-    #sec-entender,
+    #sec-hero-amarelo,
+    #sec-quanto-se-conhece,
     #sec-como-usar,
-    #sec-incluso{
+    #sec-kits,
+    #sec-plano{
       scroll-margin-top: var(--p21-header-offset);
     }
 
@@ -183,11 +183,9 @@
       align-items: center;
       justify-content: center;
       padding: 0.25rem 0.75rem;
-      border-radius: 999px;
-      background: #ffffff;
-      font-size: 0.75rem;
+      font-size: 1.25rem;
       font-weight: 600;
-      color: #7c2d12;
+      color: #3333ff;
       white-space: nowrap;
     }
 
@@ -199,7 +197,7 @@
       padding: 0.25rem 0.9rem;
       border-radius: 999px;
       border: 1px solid rgba(0, 0, 0, 0.06);
-      background: #ffffff;
+      background: #1e90ff;
       font-size: 0.78rem;
       text-decoration: none;
       color: #1d2a4a;
@@ -277,20 +275,20 @@
       padding: 0.25rem 0.75rem;
       margin: 0 auto;
       border-radius: 999px;
-      background: #ffe9b5;
+      background: #1dd8f6;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     }
 
-    /* "Navegação rápida" também como pílula */
+    /* "Navegação rápida" também como pílula 
     .sma-subnav-label {
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      color: #7c2d12;
+      color: #3366ff;
       padding: 0.25rem 0.75rem;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.9);
       white-space: nowrap;
-    }
+    }*/
 
     /* Botões de seção – pílulas menores */
     .sma-subnav-btn {
@@ -300,10 +298,10 @@
       padding: 0.25rem 0.85rem;
       border-radius: 999px;
       border: 1px solid rgba(0, 0, 0, 0.06);
-      background: #4682B4;
-      font-size: 0.78rem;
+      background: #0000CD;
+      font-size: 0.85rem;
       text-decoration: none;
-      color: #FFD700;
+      color: #ffffff;
       box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
       transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
     }
@@ -311,9 +309,17 @@
     .sma-subnav-btn:hover {
       transform: translateY(-1px);
       text-decoration: none;
-      color: #1d2a4a;
-      background: #ffa50c;
+      color: #0000CD;
+      background: #f3ffCD;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+    }
+
+    /* Botão ativo (seção atual): desabilita clique */
+    .sma-subnav-btn.is-active {
+      pointer-events: none;
+      opacity: 0.65;
+      box-shadow: none;
+      transform: none;
     }
 
     /* Mobile: quebra bonitinho em duas ou mais linhas */
@@ -1526,18 +1532,29 @@
         </div>
       {% endif %}
     </div>
-     <!-- NOVO: barra de navegação fixa da landing interna -->
+ 
+
+    <!-- NOVO: barra de navegação fixa da landing interna -->
     <div class="sma-subnav-wrapper">
       <div class="container sma-subnav">
-        <span class="sma-subnav-label">Navegação rápida:</span>
+        <div class="sma-subnav-top">
+          <span class="sma-subnav-label">Navegação rápida:</span>
+        </div>
 
-        <a href="#sec-como-usar"          class="sma-subnav-btn">Como usar esta página</a>
-        <a href="#sec-hero-amarelo"       class="sma-subnav-btn">Entender o Projeto</a>
-        <a href="#sec-kits"               class="sma-subnav-btn">Kits do Projeto</a>
-        <a href="#sec-plano"              class="sma-subnav-btn">Montar meu plano</a>
-        <a href="#sec-o-que-encontra"     class="sma-subnav-btn">Tudo o que está incluído</a>
+        <div class="sma-subnav-buttons">
+          <a href="#sec-hero-amarelo"   class="sma-subnav-btn">Como entender o Projeto</a>
+          <a href="#sec-como-usar"      class="sma-subnav-btn">Como usar esta Página</a>
+          <a href="#sec-kits"           class="sma-subnav-btn">Kits do Projeto</a>
+          <a href="#sec-plano"          class="sma-subnav-btn">Montar meu plano</a>
+          <a href="#sec-quanto-se-conhece" class="sma-subnav-btn">Tudo o que está incluído</a>
+
+          <!-- link cruzado -->
+          <a href="{% url 'vocacional:avaliacao_gate' %}" class="sma-subnav-btn">Vocacional</a>
+        </div>
       </div>
     </div>
+
+
   </header>
   
   <!-- SEÇÃO 1 - “amarelona”, a principal do Sonhe+Alto -->
@@ -1716,8 +1733,7 @@
   <!-- SEÇÃO 3 - Como usar esta página -->
   <section id="sec-como-usar" class="howto">
     <div class="container">
-      <h2 class="section-title">Como usar esta página</h2>
-
+      <h2 class="section-title">Entenda o Sonhe + Alto (em 2 minutos) </h2>
       <p class="section-subtitle">
         Em três passos simples você chega onde precisa.
       </p>
@@ -2804,6 +2820,53 @@ function coletarContextoParaKit() {
     if (btnKitGrupos) {
       btnKitGrupos.addEventListener("click", gerarKitGrupos);
     }
+
+    // --------------------------------------------------------------
+    // Subnav: desabilitar o botão da seção ativa
+    // --------------------------------------------------------------
+    const subnavLinks = Array.from(
+      document.querySelectorAll('.sma-subnav-buttons a.sma-subnav-btn[href^="#"]')
+    );
+    const sections = subnavLinks
+      .map((a) => document.querySelector(a.getAttribute("href")))
+      .filter(Boolean);
+
+    function headerOffsetPx() {
+      const raw = getComputedStyle(document.documentElement)
+        .getPropertyValue("--p21-header-offset")
+        .trim();
+      const n = parseInt(raw.replace("px", ""), 10);
+      return Number.isFinite(n) ? n : 120;
+    }
+
+    function setActive(link) {
+      subnavLinks.forEach((a) => {
+        a.classList.remove("is-active");
+        a.removeAttribute("aria-current");
+      });
+      if (link) {
+        link.classList.add("is-active");
+        link.setAttribute("aria-current", "true");
+      }
+    }
+
+    function onScroll() {
+      if (!sections.length) return;
+      const y = window.scrollY + headerOffsetPx() + 2;
+      let activeIdx = 0;
+      for (let i = 0; i < sections.length; i++) {
+        const s = sections[i];
+        if (s.offsetTop <= y) activeIdx = i;
+      }
+      setActive(subnavLinks[activeIdx]);
+    }
+
+    // clique: já marca como ativo (e o scroll confirma)
+    subnavLinks.forEach((a) => a.addEventListener("click", () => setActive(a)));
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("hashchange", onScroll);
+    onScroll();
 
   })();
 </script>

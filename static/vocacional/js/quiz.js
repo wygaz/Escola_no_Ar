@@ -108,10 +108,10 @@ log('quiz.js carregado');
   const counter = document.getElementById("counter");
   const progressText = document.getElementById("progress-text");
 
-  if (!Array.isArray(data) || !data.length) {
+  if (!Array.isArray(list) || !list.length) {
     if (counter) counter.textContent = "0/0";
     if (progressText) progressText.textContent = "0/0 (0%)";
-    console.warn("quizData vazio ou inválido", data);
+    console.warn("quizData vazio ou inválido", list);
     return;
   }
   
@@ -366,17 +366,32 @@ log('quiz.js carregado');
     }
   });
 
-  // Impede finalizar com perguntas em branco
-  form.addEventListener('submit', (e) => {
-    const submitter = e.submitter;
-    const isFinalizar = submitter && submitter.name === 'finalizar';
-    if (isFinalizar && answers.size < total) {
-      e.preventDefault();
-      showWarn(true);
-      console.warn('[quiz] tentativa de finalizar com perguntas em branco');
-      return;
-    }
+  // fallback p/ quando e.submitter não existir
+  let lastSubmitter = null;
+  form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach((btn) => {
+    btn.addEventListener('click', () => (lastSubmitter = btn));
   });
+
+// Impede finalizar com perguntas em branco
+form.addEventListener('submit', (e) => {
+  const submitter = e.submitter || lastSubmitter;
+
+  // seu botão "Finalizar" é name="action" value="finish"
+  const isFinalizar =
+    submitter &&
+    submitter.name === 'action' &&
+    submitter.value === 'finish';
+
+  if (isFinalizar && answers.size < total) {
+    e.preventDefault();
+    showWarn(true);
+    console.warn('[quiz] tentativa de finalizar com perguntas em branco');
+    return;
+  }
+
+  // se NÃO for finalizar, ou se estiver tudo ok, deixa o submit normal acontecer
+  });
+
 
   // Expor um pequeno hook para inspeção manual
   window.quizDebug = {

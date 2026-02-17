@@ -131,3 +131,5 @@ class RespostaGuia(models.Model):
 
     class Meta:
         unique_together = [("avaliacao","questao")]
+
+from .models_consent import *  # Consentimento, Progresso

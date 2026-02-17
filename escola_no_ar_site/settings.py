@@ -114,9 +114,6 @@ INSTALLED_APPS = [
     # "django_extensions",  # opcional
 
     # Apps internos adicionais
-    "apps.atividades.apps.AtividadesConfig",
-    "apps.comunicacao.apps.ComunicacaoConfig",
-    "apps.cursos.apps.CursosConfig",
     "apps.sonho_de_ser.apps.SonhoDeSerConfig",
     "apps.vocacional.apps.VocacionalConfig",
     "apps.projeto21.apps.Projeto21Config",
@@ -185,7 +182,7 @@ AUTH_USER_MODEL = "contas.Usuario"
 
 # URLs de login/logout (ajuste para casar com suas rotas de contas/)
 LOGIN_URL = "contas:login"
-LOGIN_REDIRECT_URL = "/projeto21/"  # novo alvo depois de logar
+LOGIN_REDIRECT_URL = "/portal/"  # após login, cair no Portal enxuto
 LOGOUT_REDIRECT_URL = "contas:login" # fallback se não vier ?next
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -222,6 +219,20 @@ DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes", "on")
 
 def env_bool(name: str, default: str = "0") -> bool:
     return os.getenv(name, default).strip().lower() in ("1", "true", "yes", "on")
+
+# -----------------------------------------------------------------------------
+# Gating de Bônus / Produtos (Hotmart → Produto/Acesso)
+# -----------------------------------------------------------------------------
+# Obs.: Sonhe + Alto (Projeto21) já valida via Acesso(produto__slug="projeto21_sonhe_alto")
+# Aqui, ligamos o mesmo tipo de proteção para o Vocacional.
+
+# Se True: o Vocacional só fica disponível para quem tem Acesso ao slug "vocacional_bonus".
+VOCACIONAL_REQUIRE_BONUS = env_bool("VOCACIONAL_REQUIRE_BONUS", "1")
+
+# Se quiser pausar etapas do funil do Vocacional (consentimento/avaliação do guia),
+# dá pra desligar separadamente via env.
+VOCACIONAL_REQUIRE_CONSENT = env_bool("VOCACIONAL_REQUIRE_CONSENT", "1")
+VOCACIONAL_REQUIRE_GUIA = env_bool("VOCACIONAL_REQUIRE_GUIA", "1")
 
 # -----------------------------------------------------------------------------
 # E-mail

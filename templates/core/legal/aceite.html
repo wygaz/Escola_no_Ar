@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Aceite | Escola no Ar{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 860px;">
+  <h1 class="h3 mb-2">Termos e Privacidade</h1>
+  <p class="text-muted mb-4">
+    Para usar a plataforma, precisamos do seu aceite dos Termos e da Política de Privacidade.
+  </p>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Aceite</h2>
+
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <div class="mb-3">
+              <label class="form-label" for="id_nome">Nome</label>
+              {{ form.nome }}
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="id_email">E-mail</label>
+              {{ form.email }}
+              <div class="form-text">Usaremos este e-mail para identificar sua conta.</div>
+            </div>
+
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="aceite_termos" name="aceite_termos" value="1" required>
+              <label class="form-check-label" for="aceite_termos">
+                Li e concordo com os <a href="{% url 'core:termos' %}" target="_blank" rel="noopener">Termos de Uso</a>.
+              </label>
+            </div>
+
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" id="aceite_privacidade" name="aceite_privacidade" value="1" required>
+              <label class="form-check-label" for="aceite_privacidade">
+                Li e concordo com a <a href="{% url 'core:privacidade' %}" target="_blank" rel="noopener">Política de Privacidade</a>.
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Aceitar e continuar</button>
+            <a href="{% url 'portal' %}" class="btn btn-outline-secondary ms-2">Voltar</a>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 mb-3">O que isso significa?</h2>
+          <ul class="mb-0">
+            <li>Seus dados são usados apenas para operar o serviço e gerar seus resultados.</li>
+            <li>Você pode revogar o consentimento depois (isso pode limitar funcionalidades).</li>
+            <li>Os documentos ficam disponíveis para leitura a qualquer momento no rodapé do site.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

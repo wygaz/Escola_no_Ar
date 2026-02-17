@@ -1,38 +1,53 @@
 {% extends "vocacional/base_vocacional.html" %}
-{% block vocacional_content %}
-{% load contas_extras %}
+{% load static %}
 
-<h1 class="title">Bônus do Guia Vocacional</h1>
-<div class="wrap">
+{% block page_title %}Acesso ao Vocacional{% endblock %}
+{% block header_title %}Bônus do Guia • Vocacional{% endblock %}
+{% block header_subtitle %}
+  <p class="vocacional-subtitle">
+    O Teste Vocacional é um <strong>bônus exclusivo</strong> para quem adquiriu o Guia.
+  </p>
+{% endblock %}
+
+{% block vocacional_content %}
+
+<div class="vocacional-main-card">
   <div class="card-info">
-    <p>Como comprador do Guia, você tem acesso ao Teste Vocacional completo.</p>
-    <ul>
-      <li>Leva ~10–12 minutos</li>
-      <li>Resultados por dimensão</li>
-      <li>Seu histórico fica salvo</li>
+    <p style="margin:0 0 .5rem 0">
+      Para liberar o acesso, é necessário ter o <strong>Guia</strong> comprado no mesmo e-mail da sua conta.
+    </p>
+    <ul style="margin:.5rem 0 0 1.2rem">
+      <li>Leva ~10–15 minutos</li>
+      <li>Resultado por dimensões + histórico salvo</li>
+      <li>Máximo de 2 avaliações concluídas por usuário</li>
     </ul>
   </div>
 
+  <div class="actions-row" style="margin-top: 1rem; display:flex; gap:.5rem; flex-wrap:wrap; align-items:center;">
+    <a class="btn" href="{% url 'guia' %}" target="_blank" rel="noopener">
+      Comprar o Guia
+    </a>
+    <a class="btn ghost" href="{% url 'vocacional:bonus' %}">
+      Já comprei • Verificar acesso
+    </a>
+    <a class="btn ghost" href="{% url 'contato' %}">Preciso de ajuda</a>
+  </div>
 
-{% if request.user.is_authenticated %}
-    <div class="actions">
-        <a class="btn" href="{{ link_avaliacao }}">Ir para a Avaliação</a>
-        <span class="btn outline">{{ usuario_label }}</span>
-        <a class="btn ghost" href="{% url 'contas:logout' %}?next={% url 'vocacional:bonus' %}">{{ request.user|display_name }} {{ request.user.first_name|default:request.user.email }}</a>
-    </div>
-{% else %}
-    <div class="actions">
-        <a class="btn" href="{% url 'contas:login' %}?next={% url 'vocacional:avaliacao_form' %}">Entrar</a>
-        <a class="btn" href="{% url 'contas:cadastro' %}?next={% url 'vocacional:avaliacao_form' %}">Cadastrar</a>
-    </div>
-{% endif %}
+  <div class="card-info" style="margin-top: 1rem">
+    <p style="margin:0 0 .25rem 0"><strong>Importante:</strong></p>
+    <p style="margin:0; opacity:.9">
+      Use exatamente o mesmo e-mail que você usou na Hotmart.
+      Se você comprou com outro e-mail, a plataforma não vai conseguir vincular automaticamente.
+    </p>
+    <p style="margin:.5rem 0 0 0; opacity:.85">
+      Sua conta atual: <strong>{{ request.user.email }}</strong>
+    </p>
+  </div>
+
+  <p class="text-muted" style="margin-top: .8rem; opacity:.85">
+    Se você acabou de comprar, pode levar alguns instantes para o acesso aparecer.
+    Clique em <strong>“Verificar acesso”</strong> para atualizar.
+  </p>
 </div>
+
 {% endblock %}
-
-
-<h2>Bônus do Guia</h2>
-<p>Para obter o Bônus, adquira o Guia ou resgate seu token:</p>
-<ul>
-  <li><a class="btn" href="LINK_HOTMART">Comprar o Guia</a></li>
-  <li><a class="btn" href="{% url 'vocacional:resgatar_bonus' token='SEU_TOKEN' %}">Resgatar token</a></li>
-</ul>

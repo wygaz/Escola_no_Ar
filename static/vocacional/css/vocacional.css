@@ -370,3 +370,15 @@ body{ background:var(--bg); color:var(--text); }
   display: flex;
   gap: 0.5rem;
 }
+
+/* ====== Overrides finais para PDF/print (cole no FINAL do arquivo) ====== */
+@media print {
+  /* imprime TODOS os resultados (não só Top 3) */
+  .resultados .card-quiz:nth-child(n+4){ display:block !important; }
+
+  /* esconde barra de ações na impressão */
+  .actions-row{ display:none !important; }
+
+  /* garante legibilidade */
+  body{ background:#fff !important; color:#111 !important; }
+}

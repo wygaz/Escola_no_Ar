@@ -1,7 +1,35 @@
-<h2>Validação do Bônus</h2>
-<p>Você já possui o Bônus do Guia. Para liberar o Teste Vocacional, finalize:</p>
-<ul>
-  {% for titulo, rota in pendencias %}
-    <li><a class="btn" href="{% url rota %}">{{ titulo }}</a></li>
-  {% endfor %}
-</ul>
+{% extends "vocacional/base_vocacional.html" %}
+
+{% block page_title %}Validar acesso{% endblock %}
+{% block header_title %}Bônus liberado{% endblock %}
+{% block header_subtitle %}
+  <p class="vocacional-subtitle">
+    Ótimo: seu acesso ao Vocacional já está liberado. Só falta concluir os pré-requisitos.
+  </p>
+{% endblock %}
+
+{% block vocacional_content %}
+
+<div class="vocacional-main-card">
+  <div class="card-info">
+    <p style="margin:0">
+      Para iniciar o teste, complete os itens abaixo (leva menos de 2 minutos):
+    </p>
+  </div>
+
+  <div class="actions-row" style="margin-top:1rem; display:flex; gap:.5rem; flex-wrap:wrap">
+    {% for titulo, rota in pendencias %}
+      <a class="btn" href="{% url rota %}">{{ titulo }}</a>
+    {% empty %}
+      <a class="btn" href="{% url 'vocacional:avaliacao_form' %}">Começar o teste agora</a>
+    {% endfor %}
+  </div>
+
+  <div class="card-info" style="margin-top:1rem">
+    <p style="margin:0; opacity:.9">
+      Depois disso, você será redirecionado automaticamente para o formulário do teste.
+    </p>
+  </div>
+</div>
+
+{% endblock %}

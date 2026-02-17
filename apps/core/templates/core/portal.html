@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Portal | Escola no Ar{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 980px;">
+  <div class="text-center mb-4">
+    <h1 class="display-6 mb-2">Portal de acesso</h1>
+    <p class="lead mb-0">Escolha para onde você quer ir.</p>
+  </div>
+
+  <div class="row g-4">
+    <!-- Sonhe + Alto -->
+    <div class="col-12 col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 mb-2">Projeto Sonhe + Alto</h2>
+          <p class="text-muted mb-3">Plano de vida, metas e acompanhamento (Projeto 21).</p>
+
+          {% if request.user.is_authenticated %}
+            {% if can_sonhemaisalto %}
+              <a class="btn btn-primary w-100" href="{% url 'projeto21:home' %}">Entrar</a>
+            {% else %}
+              <div class="alert alert-warning py-2 mb-2">Acesso não liberado.</div>
+              <a class="btn btn-outline-primary w-100" href="{% url 'guia' %}">Como liberar acesso</a>
+            {% endif %}
+          {% else %}
+            <a class="btn btn-primary w-100" href="{% url 'contas:login' %}?next={% url 'projeto21:home' %}">Entrar</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Vocacional -->
+    <div class="col-12 col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 mb-2">Vocacional</h2>
+          <p class="text-muted mb-3">Avaliação vocacional, relatório e histórico.</p>
+
+          {% if request.user.is_authenticated %}
+            {% if can_vocacional %}
+              <a class="btn btn-success w-100" href="{% url 'vocacional:avaliacao_gate' %}">Entrar</a>
+            {% else %}
+              <div class="alert alert-warning py-2 mb-2">Acesso não liberado.</div>
+              <a class="btn btn-outline-success w-100" href="{% url 'guia' %}">Como liberar acesso</a>
+            {% endif %}
+          {% else %}
+            <a class="btn btn-success w-100" href="{% url 'contas:login' %}?next={% url 'vocacional:avaliacao_gate' %}">Entrar</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    {% if request.user.is_authenticated %}
+      <a class="btn btn-link" href="{% url 'contas:logout' %}">Sair</a>
+      {% if show_governanca_toggle %}
+        <a class="btn btn-outline-secondary me-2" href="{% url 'portal' %}?portal_mode=gov">
+          Ir para governança
+        </a>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

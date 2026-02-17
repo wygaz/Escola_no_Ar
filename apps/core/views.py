@@ -1,3 +1,4 @@
+# apps\core\views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
@@ -7,6 +8,33 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django import forms
 from django.templatetags.static import static
+from apps.core.permissions import user_has_produto, PROD_VOCACIONAL, PROD_SONHEMAISALTO, require_legal
+
+@login_required
+@require_legal()
+def portal_home(request):
+    # toggle para testes (fica salvo na sessão)
+    mode = request.GET.get("portal_mode")
+    if mode in {"user", "gov"}:
+        request.session["portal_mode"] = mode
+
+    u = request.user
+
+    # staff/superuser: por padrão vai para governança, a menos que force modo user
+    if (u.is_staff or u.is_superuser) and request.session.get("portal_mode") != "user":
+        return redirect("portal_dashboard")
+
+    # usuário comum (ou staff em modo user): portal simples (2 opções)
+    ctx = {
+        "hide_global_header": True,
+        "can_sonhemaisalto": user_has_produto(u, PROD_SONHEMAISALTO),
+        "can_vocacional": user_has_produto(u, PROD_VOCACIONAL),
+        "show_governanca_toggle": bool(u.is_staff or u.is_superuser),
+    }
+    return render(request, "core/portal.html", ctx)
+
+
+
 
 def sonhe_mais_alto_landing(request):
     context = {
@@ -22,7 +50,7 @@ def home_funil(request):
     if request.user.is_authenticated:
         # Se você tiver um nome de url para essa página, use reverse:
         # return redirect("projeto21:home")
-        return redirect("/projeto21/")
+        return redirect("portal")
     return redirect("contas:login")
 
 class ContatoForm(forms.Form):
@@ -37,6 +65,17 @@ class ContatoForm(forms.Form):
 def sobre(request):
     return render(request, "sobre.html")
 
+def portal(request):
+    # raiz pública (logado ou não). Se estiver logado, já exibe flags de acesso.
+    ctx = {"hide_global_header": True}
+    if request.user.is_authenticated:
+        u = request.user
+        ctx.update({
+            "can_sonhemaisalto": user_has_produto(u, PROD_SONHEMAISALTO),
+            "can_vocacional": user_has_produto(u, PROD_VOCACIONAL),
+            "show_governanca_toggle": bool(u.is_staff or u.is_superuser),
+        })
+    return render(request, "core/portal.html", ctx)
 
 def contato(request):
     if request.method == "POST":
@@ -79,19 +118,16 @@ TEMPLATE_BY_PERFIL = {
 "ALUNO": "portal/aluno_home.html",
 "USER": "portal/user_home.html",
 }
-
-@login_required
-def portal_home(request):
-    perfil = getattr(request.user, "perfil", "USER")
-    tpl = TEMPLATE_BY_PERFIL.get(perfil, TEMPLATE_BY_PERFIL["USER"])
-    return render(request, tpl, {})
-
 class PortalDashboardView(LoginRequiredMixin, TemplateView):
     template_name = "portal/dashboard.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        u = self.request.user
+
+        u = self.request.user  # <<< PRIMEIRO!
+
+        ctx["can_sonhemaisalto"] = user_has_produto(u, PROD_SONHEMAISALTO)
+        ctx["can_vocacional"] = user_has_produto(u, PROD_VOCACIONAL)
 
         # Tudo opcional: se o app/tabela não existir, simplesmente ignora
         try:
@@ -103,7 +139,6 @@ class PortalDashboardView(LoginRequiredMixin, TemplateView):
             pass
 
         try:
-            # Se já tiver app de cursos/turmas/matrículas
             from apps.cursos.models import Curso, Matricula, Turma
             if getattr(u, "perfil", None) == "PROF":
                 ctx["cursos_count"] = Curso.objects.filter(professor=u).count()
@@ -113,7 +148,6 @@ class PortalDashboardView(LoginRequiredMixin, TemplateView):
         except Exception:
             pass
 
-        # exemplo: atividades pendentes (se existir)
         try:
             from apps.atividades.models import AtividadeResposta
             ctx["atividades_pendentes"] = AtividadeResposta.objects.filter(
@@ -123,6 +157,8 @@ class PortalDashboardView(LoginRequiredMixin, TemplateView):
             pass
 
         return ctx
+
+
 class RelatoriosView(LoginRequiredMixin, TemplateView):
     template_name = "core/relatorios.html"
 class CursosHomeView(LoginRequiredMixin, TemplateView):
@@ -143,7 +179,7 @@ class VocacionalMentorView(LoginRequiredMixin, TemplateView):
     template_name = "vocacional/mentor_home.html"
 
 def raiz_inteligente(request):
-    return redirect("/portal/") if request.user.is_authenticated else redirect("/contas/login/")
+    return redirect("portal") if request.user.is_authenticated else redirect("/contas/login/")
 
 
 HOTMART_GUIA_URL = "https://pay.hotmart.com/Q103340890M?bid=1765338293599"

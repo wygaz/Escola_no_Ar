@@ -1,44 +1,42 @@
+# apps/vocacional/permissions.py
+from __future__ import annotations
+
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
-from .models_consent import Consentimento
-from .models import AvaliacaoGuia
+from django.contrib.auth.views import redirect_to_login
+from functools import wraps
 
-MENTOR_PERFIS = {"MENTOR", "PROF", "ADMIN"}
+from apps.core.permissions import (
+    PROD_VOCACIONAL,
+    require_produto,
+    require_consent,
+    require_guia_feedback,
+    require_termos,
+)
 
-def require_mentor(view):
+# --------------------------------------------------------------------
+# Este módulo ficou só com compatibilidade/uso específico do Vocacional.
+# O gate principal (produto + consent + guia) está centralizado em
+# apps/core/permissions.py
+# --------------------------------------------------------------------
+
+# (LEGADO) Mantido para não quebrar imports antigos.
+# Agora é simplesmente "produto vocacional (slug de referência)".
+def require_vocacional_bonus(view_func):
+    return require_produto(PROD_VOCACIONAL)(view_func)
+
+
+def require_mentor(view_func):
+    """Exige usuário logado com perfil MENTOR/PROF/ADMIN (ajuste conforme seu projeto)."""
+    ALLOWED = {"MENTOR", "PROF", "ADMIN"}
+
+    @wraps(view_func)
     def _wrapped(request, *args, **kwargs):
-        user = request.user
-        if not user.is_authenticated:
-            from django.contrib.auth.views import redirect_to_login
+        u = request.user
+        if not getattr(u, "is_authenticated", False):
             return redirect_to_login(request.get_full_path())
-        perfil = getattr(user, "perfil", None)
-        if perfil in MENTOR_PERFIS:
-            return view(request, *args, **kwargs)
-        return HttpResponseForbidden("Acesso restrito a mentores/professores/administradores.")
+        if getattr(u, "perfil", None) in ALLOWED or getattr(u, "is_superuser", False):
+            return view_func(request, *args, **kwargs)
+        return HttpResponseForbidden("Acesso restrito.")
+
     return _wrapped
-
-def require_consent(view):
-    def _wrapped(request, *args, **kwargs):
-        user = request.user
-        if not user.is_authenticated:
-            from django.contrib.auth.views import redirect_to_login
-            return redirect_to_login(request.get_full_path())
-        if not Consentimento.objects.filter(user=user, aceito=True).exists():
-            return redirect("vocacional:consentimento_check")
-        return view(request, *args, **kwargs)
-    return _wrapped
-
-
-def require_guia_feedback(view_func):
-    def _wrapped(request, *args, **kwargs):
-        user = request.user
-        if not user.is_authenticated:
-            from django.contrib.auth.views import redirect_to_login
-            return redirect_to_login(request.get_full_path())
-        ok = AvaliacaoGuia.objects.filter(user=user, status="concluida", aceite_termos=True).exists()
-        if not ok:
-            from django.shortcuts import redirect
-            return redirect("vocacional:guia_avaliacao")
-        return view_func(request, *args, **kwargs)
-    return _wrapped
-
