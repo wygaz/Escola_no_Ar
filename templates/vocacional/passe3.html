@@ -1,0 +1,82 @@
+{% extends "vocacional/base_vocacional.html" %}
+
+{% block vocacional_content %}
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">Passe 3 • Refinamento e anti-frustração</h2>
+    <p class="card-subtitle">
+      Nesta etapa final, vamos refinar seu Top 3 com cenários práticos (SJT) e algumas preferências de contexto.
+    </p>
+  </div>
+
+  <div class="card-body">
+    {% if top %}
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-body">
+          <strong>Seus candidatos atuais (top):</strong>
+          <div style="margin-top:.5rem; opacity:.9;">
+            {{ top|join:", " }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <form method="post" class="form">
+      {% csrf_token %}
+
+      <h3 style="margin:0 0 .5rem">Cenários (SJT)</h3>
+      <p style="opacity:.85; margin:0 0 1rem">
+        Escolha a alternativa que mais parece com sua reação natural.
+      </p>
+
+      {% for q in sjt %}
+        <div class="card" style="margin-bottom:1rem">
+          <div class="card-body">
+            <div style="font-weight:700; margin-bottom:.25rem">{{ q.titulo }}</div>
+            <div style="opacity:.9; margin-bottom:.75rem">{{ q.texto }}</div>
+
+            {% for opt in q.opcoes %}
+              <label style="display:block; margin:.4rem 0; cursor:pointer">
+                <input type="radio" name="{{ q.id }}" value="{{ opt.0 }}" required>
+                <span style="margin-left:.35rem">{{ opt.1 }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+
+      <h3 style="margin:1.25rem 0 .5rem">Contexto</h3>
+      <p style="opacity:.85; margin:0 0 1rem">
+        Essas respostas ajudam a reduzir frustração e alinhar o resultado ao seu estilo de trabalho.
+      </p>
+
+      {% for q in contexto %}
+        <div class="card" style="margin-bottom:1rem">
+          <div class="card-body">
+            <div style="font-weight:700; margin-bottom:.25rem">{{ q.titulo }}</div>
+            <div style="opacity:.9; margin-bottom:.75rem">{{ q.texto }}</div>
+
+            {% for opt in q.opcoes %}
+              <label style="display:block; margin:.4rem 0; cursor:pointer">
+                <input type="radio" name="{{ q.id }}" value="{{ opt.0 }}" required>
+                <span style="margin-left:.35rem">{{ opt.1 }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+
+      <div style="display:flex; gap:.75rem; align-items:center; margin-top:1.25rem">
+        <button type="submit" class="btn btn-primary">Finalizar e ver resultado</button>
+        <a href="{% url 'vocacional:avaliacao_form' %}" class="btn btn-secondary">Voltar</a>
+      </div>
+    </form>
+
+    <div style="margin-top:1rem; opacity:.85">
+      <small>
+        Observação: este refinamento não promete "certeza" absoluta — ele melhora a convergência e ajuda a evitar um resultado diluído.
+      </small>
+    </div>
+  </div>
+</div>
+{% endblock %}
