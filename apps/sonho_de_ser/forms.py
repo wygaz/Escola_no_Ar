@@ -2,7 +2,7 @@ from django import forms
 from django.db import transaction
 from django.utils import timezone
 
-from .models import Estrategia, Plano, PlanoItem, RegistroDiario
+from .models import Estrategia, JornadaDiaria, Plano, PlanoItem, RegistroDiario
 
 
 # -------------------------------
@@ -59,10 +59,42 @@ class PlanoForm(forms.Form):
 # -------------------------------
 class RegistroForm(forms.Form):
     """
-    Gera um checkbox para cada Estratégia ativa no plano.
-    Campos são dinâmicos no formato e<ID_DO_PLANOITEM>.
+    Gera um check-in diario do aluno com:
+    - reflexao geral do dia
+    - status por estrategia do plano
+    - observacao opcional por estrategia
     """
+    STATUS_CHOICES = (
+        ("", "Nao informar agora"),
+        ("NAO_FIZ", "Nao fiz"),
+        ("PARCIAL", "Fiz parcialmente"),
+        ("FEITO", "Fiz"),
+    )
+
+    intencao_do_dia = forms.CharField(
+        required=False,
+        label="Intencao do dia",
+        widget=forms.Textarea(attrs={"rows": 2, "class": "form-control"}),
+    )
+    principal_vitoria = forms.CharField(
+        required=False,
+        label="Principal vitoria",
+        widget=forms.Textarea(attrs={"rows": 2, "class": "form-control"}),
+    )
+    principal_dificuldade = forms.CharField(
+        required=False,
+        label="Principal dificuldade",
+        widget=forms.Textarea(attrs={"rows": 2, "class": "form-control"}),
+    )
+    observacoes_gerais = forms.CharField(
+        required=False,
+        label="Observacoes gerais",
+        widget=forms.Textarea(attrs={"rows": 3, "class": "form-control"}),
+    )
+
     def __init__(self, plano: Plano, *args, **kwargs):
+        self.data_registro = kwargs.pop("data_registro", timezone.localdate())
+        carregar_existentes = kwargs.pop("carregar_existentes", True)
         super().__init__(*args, **kwargs)
         self.plano = plano
 
@@ -71,43 +103,67 @@ class RegistroForm(forms.Form):
                  .order_by("estrategia__area__inicial", "estrategia__nivel", "estrategia__ordem_nivel"))
         self.itens = list(itens)
 
+        existentes = {}
+        if carregar_existentes:
+            existentes = {
+                registro.estrategia_id: registro
+                for registro in RegistroDiario.objects.filter(
+                    usuario=plano.usuario,
+                    data=self.data_registro,
+                    estrategia_id__in=[item.estrategia_id for item in self.itens],
+                )
+            }
+
         for item in self.itens:
-            self.fields[f"e{item.id}"] = forms.BooleanField(
+            self.fields[f"status_{item.id}"] = forms.ChoiceField(
                 required=False,
-                label=item.estrategia.titulo
+                choices=self.STATUS_CHOICES,
+                label=item.estrategia.titulo,
+                widget=forms.Select(attrs={"class": "form-select"}),
             )
+            self.fields[f"obs_{item.id}"] = forms.CharField(
+                required=False,
+                label=f"Observacao sobre {item.estrategia.titulo}",
+                widget=forms.Textarea(attrs={"rows": 2, "class": "form-control"}),
+            )
+            existente = existentes.get(item.estrategia_id)
+            if existente:
+                self.initial.setdefault(f"status_{item.id}", existente.status)
+                self.initial.setdefault(f"obs_{item.id}", existente.observacao)
 
     def save(self, data_registro=None):
         data_registro = data_registro or timezone.localdate()
-
-        # Quais checkboxes vieram marcados
-        marcados_ids = [
-            int(name[1:]) for name, val in self.cleaned_data.items()
-            if name.startswith("e") and val
-        ]
-
-        # Mapa: planoitem.id -> estrategia_id
-        id_to_estr = {pi.id: pi.estrategia_id for pi in self.itens}
-        estr_do_plano = list(id_to_estr.values())
-        estr_marcadas = [id_to_estr[i] for i in marcados_ids]
-
-        # Zera registros do dia para estratégias do plano (evita duplicidade)
-        RegistroDiario.objects.filter(
+        jornada, _ = JornadaDiaria.objects.get_or_create(
             usuario=self.plano.usuario,
             data=data_registro,
-            estrategia_id__in=estr_do_plano
-        ).delete()
+        )
+        jornada.intencao_do_dia = self.cleaned_data.get("intencao_do_dia", "")
+        jornada.principal_vitoria = self.cleaned_data.get("principal_vitoria", "")
+        jornada.principal_dificuldade = self.cleaned_data.get("principal_dificuldade", "")
+        jornada.observacoes_gerais = self.cleaned_data.get("observacoes_gerais", "")
+        jornada.save()
 
-        # Cria somente as marcadas
-        objs = [
-            RegistroDiario(
+        for item in self.itens:
+            status = self.cleaned_data.get(f"status_{item.id}") or ""
+            observacao = self.cleaned_data.get(f"obs_{item.id}", "")
+
+            if not status:
+                RegistroDiario.objects.filter(
+                    usuario=self.plano.usuario,
+                    data=data_registro,
+                    estrategia=item.estrategia,
+                ).delete()
+                continue
+
+            RegistroDiario.objects.update_or_create(
                 usuario=self.plano.usuario,
                 data=data_registro,
-                estrategia_id=eid,
+                estrategia=item.estrategia,
+                defaults={
+                    "jornada": jornada,
+                    "status": status,
+                    "observacao": observacao,
+                },
             )
-            for eid in estr_marcadas
-        ]
-        if objs:
-            RegistroDiario.objects.bulk_create(objs, ignore_conflicts=True)
 
-        return data_registro
+        return jornada

@@ -1,44 +1,44 @@
 {% extends "sonho_de_ser/base_projeto21.html" %}
 {% block p21_content %}
 
-<h1>Projeto 21 — Meu Plano</h1>
-<p>Selecione as estratégias que deseja trabalhar nos próximos 21 dias.</p>
+<h1>Sonhe + Alto — Meu Plano</h1>
+<p>Escolha a área, o nível, o objetivo e então selecione as estratégias do seu plano ativo.</p>
 
-<form method="post">
+<form method="post" id="plano-form">
   {% csrf_token %}
 
-  <div class="grid">
-    {% for area, itens in grupos.items %}
-      <section class="card">
-        <header class="card__header flex">
-          <span>{{ area.nome }}</span>
-          <span class="spacer"></span>
-          <button type="button" class="btn btn-link" data-area="{{ area.id }}" onclick="toggleArea(this,true)">Selecionar área</button>
-          <button type="button" class="btn btn-link" data-area="{{ area.id }}" onclick="toggleArea(this,false)">Limpar</button>
-        </header>
-        <div class="card__body">
-          <ul class="checklist">
-            {% for e in itens %}
-              <li>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="estrategias"
-                    value="{{ e.id }}"
-                    data-area="{{ area.id }}"
-                    {% if e.id in sel %}checked{% endif %}>
-                  {{ e.titulo }}
-                  <small class="muted">· {{ e.area.inicial }} · N{{ e.nivel }}</small>
-                </label>
-              </li>
-            {% empty %}
-              <li class="muted">Nenhuma estratégia nesta área.</li>
-            {% endfor %}
-          </ul>
+  <section class="card">
+    <div class="card__body">
+      <div class="grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem;">
+        <div>
+          <label for="area-select">Área da vida</label>
+          <select id="area-select" class="form-control">
+            <option value="">Selecione...</option>
+          </select>
         </div>
-      </section>
-    {% endfor %}
-  </div>
+        <div>
+          <label for="nivel-select">Nível</label>
+          <select id="nivel-select" class="form-control">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+        <div>
+          <label for="objetivo-select">Objetivo sugerido</label>
+          <select id="objetivo-select" class="form-control">
+            <option value="">Selecione a área e o nível...</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <header class="card__header">Estratégias sugeridas</header>
+    <div class="card__body">
+      <p id="plano-hint" class="muted">Selecione primeiro a área, o nível e o objetivo.</p>
+      <div id="estrategias-container" class="grid"></div>
+    </div>
+  </section>
 
   <div class="actions mt">
     <button class="btn btn-primary" type="submit">Salvar plano</button>
@@ -46,11 +46,128 @@
   </div>
 </form>
 
+{{ catalogo|json_script:"catalogo-estrategias" }}
 <script>
-function toggleArea(btn, mark) {
-  const id = btn.getAttribute('data-area');
-  document.querySelectorAll('input[type=checkbox][data-area="'+id+'"]').forEach(ch => ch.checked = !!mark);
-}
+  (function () {
+    const catalogo = JSON.parse(document.getElementById("catalogo-estrategias").textContent || "[]");
+    const selecionadas = new Set([{% for id in sel %}{{ id }}{% if not forloop.last %}, {% endif %}{% endfor %}]);
+    const areaSelect = document.getElementById("area-select");
+    const nivelSelect = document.getElementById("nivel-select");
+    const objetivoSelect = document.getElementById("objetivo-select");
+    const container = document.getElementById("estrategias-container");
+    const hint = document.getElementById("plano-hint");
+
+    function uniqueBy(items, keyFn) {
+      const seen = new Set();
+      return items.filter((item) => {
+        const key = keyFn(item);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+
+    function fillAreas() {
+      const areas = uniqueBy(catalogo, (item) => item.area_inicial)
+        .sort((a, b) => a.area_inicial.localeCompare(b.area_inicial));
+      areas.forEach((item) => {
+        const opt = document.createElement("option");
+        opt.value = item.area_inicial;
+        opt.textContent = item.area_nome;
+        areaSelect.appendChild(opt);
+      });
+    }
+
+    function fillLevels() {
+      const area = areaSelect.value;
+      const niveis = uniqueBy(
+        catalogo.filter((item) => !area || item.area_inicial === area),
+        (item) => item.nivel
+      );
+      nivelSelect.innerHTML = '<option value="">Selecione...</option>';
+      niveis.forEach((item) => {
+        const opt = document.createElement("option");
+        opt.value = item.nivel;
+        opt.textContent = item.nivel;
+        nivelSelect.appendChild(opt);
+      });
+    }
+
+    function fillObjectives() {
+      const area = areaSelect.value;
+      const nivel = nivelSelect.value;
+      objetivoSelect.innerHTML = '<option value="">Selecione um objetivo...</option>';
+      container.innerHTML = "";
+
+      if (!area || !nivel) {
+        hint.textContent = "Selecione primeiro a área e o nível.";
+        return;
+      }
+
+      const objetivos = uniqueBy(
+        catalogo.filter((item) => item.area_inicial === area && item.nivel === nivel && item.objetivo_codigo),
+        (item) => item.objetivo_codigo
+      );
+      objetivos.forEach((item) => {
+        const opt = document.createElement("option");
+        opt.value = item.objetivo_codigo;
+        opt.textContent = item.objetivo_descricao || item.objetivo_codigo;
+        objetivoSelect.appendChild(opt);
+      });
+      hint.textContent = objetivos.length
+        ? "Agora escolha o objetivo para ver as estratégias certas."
+        : "Não há objetivos cadastrados para este recorte.";
+    }
+
+    function renderStrategies() {
+      const area = areaSelect.value;
+      const nivel = nivelSelect.value;
+      const objetivo = objetivoSelect.value;
+      container.innerHTML = "";
+
+      if (!area || !nivel || !objetivo) {
+        return;
+      }
+
+      const estrategias = catalogo.filter((item) =>
+        item.area_inicial === area &&
+        item.nivel === nivel &&
+        item.objetivo_codigo === objetivo
+      );
+
+      hint.textContent = estrategias.length
+        ? "Escolha de 3 a 5 estratégias para este objetivo."
+        : "Nenhuma estratégia encontrada para este objetivo.";
+
+      estrategias.forEach((item) => {
+        const checked = selecionadas.has(item.id) ? "checked" : "";
+        const article = document.createElement("article");
+        article.className = "card";
+        article.innerHTML = `
+          <div class="card__body">
+            <label style="display:block;">
+              <input type="checkbox" name="estrategias" value="${item.id}" ${checked}>
+              <strong>${item.titulo}</strong>
+            </label>
+            <div class="muted">Código: ${item.codigo}</div>
+            <div class="muted">Dosagem: ${item.dosagem || "Não informada"}</div>
+          </div>
+        `;
+        container.appendChild(article);
+      });
+    }
+
+    areaSelect.addEventListener("change", function () {
+      fillLevels();
+      fillObjectives();
+    });
+
+    nivelSelect.addEventListener("change", fillObjectives);
+    objetivoSelect.addEventListener("change", renderStrategies);
+
+    fillAreas();
+    fillLevels();
+  })();
 </script>
 
 {% endblock %}

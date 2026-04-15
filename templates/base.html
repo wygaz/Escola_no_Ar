@@ -35,6 +35,17 @@
           </div>
         {% endif %}
 
+        {# Banner global: staff testando como outro usuário (impersonação) #}
+        {% if request.real_user and request.real_user.is_authenticated and request.user.is_authenticated and request.real_user.pk != request.user.pk %}
+          <div class="messages" style="margin-top: .75rem;">
+            <div class="msg info">
+              <strong>Modo teste:</strong>
+              {{ request.real_user.email }} → testando como <strong>{{ request.user.email }}</strong>.
+              <a href="{% url 'portal_impersonar_sair' %}" style="margin-left:.5rem;">Sair do modo teste</a>
+            </div>
+          </div>
+        {% endif %}
+
         {% block content %}{% endblock %}
       </div>
     </main>

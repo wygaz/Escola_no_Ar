@@ -42,4 +42,34 @@ z/
 Docs/
 !Docs/Sonhe_Mais_Alto/
 !Docs/Sonhe_Mais_Alto/**
+!docs/
+docs/*
+!docs/arquitetura/
+docs/arquitetura/*
+!docs/arquitetura/*.md
+!docs/arquitetura/*.txt
+
+# snapshots e artefatos operacionais locais
+_safety_snapshots/
+_snapshot_export/
+_snapshot_export_clean/
+venv_corrompido_backup/
+backup_BD_*.json
+hotfix_entrada_is_ref/
+escopo_vocacional/
+Outros_docs_em_geral/
+Projeto21/
+static/core/img/artigos/
+*.7z
+
+# arquivos avulsos locais de trabalho/acervo
+Logo_Sonhe_mais_alto_1536x1024_RGB .png
+Sonhe_mais_alto_1536x1024_RGB.png
+static/core/img/Logo_Sonhe_mais_alto_1536x1024_RGB .png
+MANIFEST.txt
+Sequencia de comandos para preparacao dos artigos para publicacao e geracao de sermoes.txt
+Gerar_kit_chat_escopo_vocacional.ps1
+empacotar_snapshot_guia_descoberta.ps1
+gerar_kit_chat_vocacional.py
+email_recuperacao_fix.html
 

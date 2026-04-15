@@ -1,55 +1,537 @@
 {% extends "vocacional/base_vocacional.html" %}
 {% load static %}
+{% load vocacional_extras %}
 
 {% block title %}Vocacional — Avaliação do Guia{% endblock %}
+
+{% block header_title %}Avaliação do Guia{% endblock %}
+{% block header_subtitle %}
+  <p class="vocacional-subtitle">Pré‑requisito para liberar o bônus. Ao terminar, você volta ao Portal.</p>
+{% endblock %}
 
 {% block extra_head %}{{ block.super }}
 <style>
   .guia-avaliacao .help-text{ color: var(--muted); font-size:.95rem; margin:6px 0 12px; }
   .guia-avaliacao fieldset{ border:0; margin:0; padding:0; }
-  .guia-avaliacao legend{ font-weight:600; margin-bottom:6px; }
+  .guia-avaliacao legend{ font-weight:600; margin-bottom:8px; }
   .guia-avaliacao .box{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; margin:12px 0; }
-  .guia-avaliacao .radios{ display:flex; gap:14px; align-items:center; margin-top:8px; }
+  .guia-avaliacao .radios{ display:flex; gap:12px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+  .guia-avaliacao .radios label{ display:flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.03); }
   .guia-avaliacao textarea{ width:100%; min-height:120px; resize:vertical; background:#0b1324; color:var(--text); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
-  .guia-avaliacao .actions{ display:flex; gap:10px; margin-top:16px; }
+  .guia-avaliacao .muted{ color:var(--muted); font-size:.95rem; }
+
+  /* Stepper */
+  .js-on .guia-avaliacao .q-step{ display:none; }
+  .js-on .guia-avaliacao .q-step.active{ display:block; }
+  .guia-avaliacao .stepbar{ display:flex; justify-content:space-between; align-items:center; margin:10px 0 18px; }
+  .guia-avaliacao .progress{ height:10px; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:999px; overflow:hidden; flex:1; margin-left:12px; }
+  .guia-avaliacao .progress > span{ display:block; height:100%; background:linear-gradient(90deg, rgba(59,130,246,.9), rgba(34,197,94,.9)); width:0%; }
+
+  /* Ações */
+  .guia-avaliacao .step-actions{ display:flex; gap:10px; justify-content:space-between; margin-top:16px; }
+  .guia-avaliacao .step-actions > button{ flex:1; }
+  .guia-avaliacao .btn.secondary{ background:transparent; border:1px solid var(--line); }
+  .guia-avaliacao .btn[disabled]{ opacity:.55; cursor:not-allowed; }
+
+  .guia-avaliacao .step-warn{ display:none; margin-top:10px; padding:10px 12px; border-radius:10px; border:1px solid rgba(239,68,68,.35); background:rgba(239,68,68,.10); color:#fecaca; font-size:.95rem; }
+  .guia-avaliacao .step-warn.on{ display:block; }
 </style>
 {% endblock %}
 
 {% block vocacional_content %}
-<div class="guia-avaliacao">
-  <h1>Avaliação do Guia (pré-requisito)</h1>
-  <p class="help-text">Responda às perguntas abaixo. Ao final, aceite os termos para liberar o teste vocacional.</p>
+<div class="guia-avaliacao" data-force-start="{{ force_start|default:'0' }}">
+  <h1>Avaliação do Guia (pré‑requisito)</h1>
+  <p class="help-text">
+    Responda às perguntas abaixo. <strong>Você não consegue avançar sem responder</strong> as perguntas obrigatórias.
+  </p>
+  <p class="help-text">
+    <span class="muted">Dica:</span> em perguntas com opções, você pode usar as teclas <strong>1–9</strong> para marcar a opção correspondente,
+    <strong>←/→</strong> para trocar a opção e <strong>Enter</strong> para avançar.
+  </p>
 
-  {% if avaliacao.status == 'concluida' and avaliacao.aceite_termos %}
-    <div class="box">
-      <p>Você já concluiu esta etapa. Siga para o teste.</p>
-      <p><a class="btn" href="{% url 'vocacional:avaliacao_form' %}">Ir para o teste</a></p>
-    </div>
-  {% endif %}
+  <div class="stepbar">
+    <div id="stepLabel" class="muted">Pergunta 1/1</div>
+    <div class="progress"><span id="stepProgress"></span></div>
+  </div>
 
   <form method="post" novalidate>
     {% csrf_token %}
-
-    {% for q in perguntas %}
-      <fieldset class="box">
-        <legend>{{ forloop.counter }}. {{ q.enunciado|safe }}</legend>
+    <input type="hidden" name="guia_q_leitura" id="guia_q_leitura" value="{{ leitura_val|default:'' }}">
+    {% for q in questoes %}
+      {% with r=respostas|get_item:q.id %}
+      <fieldset class="box q-step"
+                data-step="{{ forloop.counter }}"
+                data-qid="{{ q.id }}"
+                data-tipo="{{ q.tipo }}"
+                data-obrig="{{ q.obrigatoria|yesno:'1,0' }}"
+                data-codigo="{{ q.codigo }}">
+        <legend>{{ forloop.counter }}. {{ q.enunciado|safe }}{% if not q.obrigatoria %} <span class="muted">(opcional)</span>{% endif %}</legend>
 
         {% if q.tipo == 'likert' %}
-          <div class="radios">
-            <label><input type="radio" name="q{{ q.id }}" value="1"> 1</label>
-            <label><input type="radio" name="q{{ q.id }}" value="2"> 2</label>
-            <label><input type="radio" name="q{{ q.id }}" value="3"> 3</label>
-            <label><input type="radio" name="q{{ q.id }}" value="4"> 4</label>
-            <label><input type="radio" name="q{{ q.id }}" value="5"> 5</label>
+          <div class="radios" role="radiogroup" aria-label="likert">
+            {% for i in "12345" %}
+              <label><input type="radio" name="q{{ q.id }}" value="{{ i }}" {% if r and r.valor == i|add:0 %}checked{% endif %}> {{ i }}</label>
+            {% endfor %}
           </div>
+
+        {% elif q.tipo == 'nota10' or q.tipo == 'nps' %}
+          <div class="radios" role="radiogroup" aria-label="nota">
+            {% for i in "0123456789" %}
+              <label><input type="radio" name="q{{ q.id }}" value="{{ i }}" {% if r and r.valor == i|add:0 %}checked{% endif %}> {{ i }}</label>
+            {% endfor %}
+            <label><input type="radio" name="q{{ q.id }}" value="10" {% if r and r.valor == 10 %}checked{% endif %}> 10</label>
+          </div>
+
+        {% elif q.tipo == 'radio' %}
+          <div class="radios" role="radiogroup" aria-label="radio">
+            {% for opt in q.opcoes %}
+              <label><input type="radio" name="q{{ q.id }}" value="{{ opt }}" {% if r and r.texto == opt %}checked{% endif %}> {{ opt }}</label>
+            {% endfor %}
+          </div>
+
+        {% elif q.tipo == 'multi' %}
+          <div class="radios" style="align-items:flex-start;">
+            {% for opt in q.opcoes %}
+              <label><input type="checkbox" name="q{{ q.id }}" value="{{ opt }}" {% if r and r.multi and opt in r.multi %}checked{% endif %}> {{ opt }}</label>
+            {% endfor %}
+          </div>
+
         {% else %}
-          <textarea name="q{{ q.id }}_t" placeholder="Escreva aqui..."></textarea>
+          {# Q23 (ABERTA_FALTA): sim/não + texto condicional #}
+          {% if q.codigo == 'ABERTA_FALTA' %}
+            <div class="radios" role="radiogroup" aria-label="aberta_falta">
+              <label><input type="radio" name="q{{ q.id }}_yn" value="nao"> Não</label>
+              <label><input type="radio" name="q{{ q.id }}_yn" value="sim"> Sim</label>
+            </div>
+            <textarea id="aberta_falta_txt_{{ q.id }}" name="q{{ q.id }}_t" placeholder="Se sim, qual assunto?" style="display:none; margin-top:10px;">{% if r %}{{ r.texto }}{% endif %}</textarea>
+            <div class="muted" style="margin-top:8px;">Se marcar <strong>Sim</strong>, escreva o assunto. Se marcar <strong>Não</strong>, registramos "Nenhum".</div>
+          {% else %}
+            <textarea name="q{{ q.id }}_t" placeholder="Escreva aqui...">{% if r %}{{ r.texto }}{% endif %}</textarea>
+          {% endif %}
         {% endif %}
+
+        <div class="step-warn" aria-live="polite"></div>
+
+        <div class="step-actions">
+          <button type="button" class="btn secondary js-home">Início</button>
+          <button type="button" class="btn secondary js-prev">Voltar</button>
+          <button type="button" class="btn js-next">Próxima</button>
+        </div>
       </fieldset>
+      {% endwith %}
     {% endfor %}
-      <input type="checkbox" name="aceite_termos" id="aceite_termos">
-      <label for="aceite_termos">Li e aceito os Termos de Uso e Privacidade</label>
-      <button type="submit" name="finalizar" class="btn">Enviar e liberar teste vocacional</button>
+
+    <fieldset class="box q-step" data-step="{{ questoes|length|add:1 }}" data-codigo="FINAL">
+      <legend>Finalizar</legend>
+      <p class="muted">Clique em <strong>Enviar</strong> para registrar sua avaliação e voltar ao Portal.</p>
+
+      <div class="step-warn" aria-live="polite"></div>
+
+      <div class="step-actions">
+        <button type="button" class="btn secondary js-home">Início</button>
+        <button type="button" class="btn secondary js-prev">Voltar</button>
+        <button type="submit" class="btn js-submit">Enviar</button>
+      </div>
+    </fieldset>
   </form>
 </div>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js-on');
+
+  const root = document.querySelector('.guia-avaliacao');
+  const stepsAll = Array.from(document.querySelectorAll('.guia-avaliacao .q-step'));
+  if(!stepsAll.length) return;
+
+  const stepLabel = document.getElementById('stepLabel');
+  const stepProgress = document.getElementById('stepProgress');
+  const leituraHidden = document.getElementById('guia_q_leitura');
+
+  const FORCE_START = (root?.dataset?.forceStart === '1');
+
+  // chave por usuário (evita “herdar” progresso de outro login no mesmo navegador)
+  const LS_KEY = 'guia_step_idx_v1_u{{ request.user.id }}';
+
+  const AUTOSAVE_URL = "{% url 'vocacional:guia_autosave' %}";
+
+  function getCookie(name){
+    const m = document.cookie.match(new RegExp('(^|; )' + name.replace(/([.$?*|{}()\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'));
+    return m ? decodeURIComponent(m[2]) : '';
+  }
+  const CSRF = getCookie('csrftoken');
+  // Critério mínimo para considerar uma resposta de texto 'preenchida'
+  const MIN_TEXT_CHARS = 3;
+
+  function activeStep(){
+    return stepsAll.find(el => el.classList.contains('active')) || null;
+  }
+
+  function getLeituraVal(){
+    const q1 = stepsAll.find(s => s.dataset.codigo === 'LEITURA_PERC');
+    if(!q1) return '';
+    const inp = q1.querySelector('input[type="radio"]:checked');
+    return inp ? inp.value : '';
+  }
+
+  function shouldHideQ4(){
+    return getLeituraVal() === '76-100%';
+  }
+
+  function applyConditional(){
+    const leituraVal = getLeituraVal();
+    if(leituraHidden) leituraHidden.value = leituraVal;
+
+    const q4 = stepsAll.find(s => s.dataset.codigo === 'LEITURA_MOTIVO_NAO_CONCLUIU');
+    if(q4){
+      q4.style.display = shouldHideQ4() ? 'none' : '';
+    }
+  }
+
+  function visibleSteps(){
+    return stepsAll.filter(el => el.style.display !== 'none');
+  }
+
+  function updateHeader(vSteps, vIdx){
+    const total = vSteps.length;
+    const cur = Math.min(vIdx + 1, total);
+    if(stepLabel) stepLabel.textContent = `Pergunta ${cur}/${total}`;
+    if(stepProgress) stepProgress.style.width = `${Math.round((cur/total)*100)}%`;
+  }
+
+  function showWarn(stepEl, msg){
+    if(!stepEl) return;
+    const w = stepEl.querySelector('.step-warn');
+    if(!w) return;
+    if(!msg){
+      w.classList.remove('on');
+      w.textContent = '';
+      return;
+    }
+    w.textContent = msg;
+    w.classList.add('on');
+  }
+
+  function stepAnswered(stepEl){
+    if(!stepEl) return true;
+    const obrig = stepEl.dataset.obrig === '1';
+    const codigo = stepEl.dataset.codigo || '';
+    if(codigo === 'FINAL') return true;
+
+    // Q23: se o usuário marcou "Sim", exige texto antes de avançar
+    if(codigo === 'ABERTA_FALTA'){
+      const yn = stepEl.querySelector('input[type="radio"][name^="q"][name$="_yn"]:checked');
+      if(yn && yn.value === 'sim'){
+        const ta = stepEl.querySelector('textarea');
+        return ta ? (ta.value || '').trim().length >= MIN_TEXT_CHARS : false;
+      }
+      // não marcou, ou marcou "não" → pode seguir (é opcional)
+      return true;
+    }
+    if(!obrig) return true;
+
+    const tipo = stepEl.dataset.tipo || '';
+    if(['likert','nota10','nps','radio'].includes(tipo)){
+      return !!stepEl.querySelector('input[type="radio"]:checked');
+    }
+    if(tipo === 'multi'){
+      return !!stepEl.querySelector('input[type="checkbox"]:checked');
+    }
+    // texto/aberta
+    const ta = stepEl.querySelector('textarea');
+    if(ta) return (ta.value || '').trim().length >= MIN_TEXT_CHARS;
+    return true;
+  }
+
+  function allRequiredAnswered(){
+    const vSteps = visibleSteps();
+    for(const st of vSteps){
+      if(st.dataset.codigo === 'FINAL') continue;
+      if(!stepAnswered(st)) return false;
+    }
+    return true;
+  }
+
+  function updateButtons(stepEl){
+    if(!stepEl) return;
+    showWarn(stepEl, '');
+    const nextBtn = stepEl.querySelector('.js-next');
+    const submitBtn = stepEl.querySelector('.js-submit');
+
+    if(nextBtn){
+      const ok = stepAnswered(stepEl);
+      nextBtn.disabled = !ok;
+      if(!ok) showWarn(stepEl, 'Responda esta pergunta para avançar.');
+    }
+
+    if(submitBtn){
+      const okAll = allRequiredAnswered();
+      submitBtn.disabled = !okAll;
+      if(!okAll) showWarn(stepEl, 'Ainda há perguntas obrigatórias sem resposta. Volte e complete para enviar.');
+    }
+  }
+
+  let vIdx = {{ start_step|default:0 }};
+
+  function setActiveByVisibleIndex(newIdx){
+    applyConditional();
+
+    const vSteps = visibleSteps();
+    if(!vSteps.length) return;
+
+    // clamp
+    vIdx = Math.max(0, Math.min(vSteps.length - 1, newIdx));
+
+    stepsAll.forEach(el => el.classList.remove('active'));
+    vSteps[vIdx].classList.add('active');
+
+    updateHeader(vSteps, vIdx);
+    updateButtons(vSteps[vIdx]);
+
+    try { localStorage.setItem(LS_KEY, String(vIdx)); } catch(e){}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function restoreProgress(){
+    if(FORCE_START) return;
+    try {
+      const saved = parseInt(localStorage.getItem(LS_KEY) || '', 10);
+      if(!isNaN(saved)) vIdx = saved;
+    } catch(e){}
+  }
+
+  // ---------------- Autosave (debounced)
+  let autosaveTimer = null;
+  function collectAnswer(stepEl){
+    const qid = parseInt(stepEl.dataset.qid || '0', 10);
+    const tipo = stepEl.dataset.tipo || '';
+    if(!qid) return null;
+
+    if(['likert','nota10','nps','radio'].includes(tipo)){
+      const r = stepEl.querySelector('input[type="radio"]:checked');
+      return { qid, tipo, value: r ? r.value : '' };
+    }
+    if(tipo === 'multi'){
+      const vals = Array.from(stepEl.querySelectorAll('input[type="checkbox"]:checked')).map(x => x.value);
+      return { qid, tipo, value: vals };
+    }
+    const ta = stepEl.querySelector('textarea');
+    return { qid, tipo, value: ta ? ta.value : '' };
+  }
+
+  function autosave(stepEl){
+    if(!AUTOSAVE_URL || !CSRF) return;
+    const payload = collectAnswer(stepEl);
+    if(!payload) return;
+
+    fetch(AUTOSAVE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': CSRF
+      },
+      body: JSON.stringify(payload),
+      credentials: 'same-origin'
+    }).catch(()=>{});
+  }
+
+  // ---------------- Click handlers
+  document.addEventListener('click', function(ev){
+    const t = ev.target;
+    if(!t || !t.classList) return;
+
+    if(t.classList.contains('js-next')){
+      ev.preventDefault();
+      const st = activeStep();
+      if(st && !stepAnswered(st)){
+        updateButtons(st);
+        return;
+      }
+      setActiveByVisibleIndex(vIdx + 1);
+    }
+
+    if(t.classList.contains('js-prev')){
+      ev.preventDefault();
+      setActiveByVisibleIndex(vIdx - 1);
+    }
+
+    if(t.classList.contains('js-home')){
+      ev.preventDefault();
+      setActiveByVisibleIndex(0);
+    }
+  });
+
+  // ---------------- Change + keyboard
+  document.addEventListener('change', function(ev){
+    const t = ev.target;
+    if(!t) return;
+
+    const st = t.closest('.q-step');
+    if(!st) return;
+
+    // Q23: sim/não controla textarea e valor
+    if(st.dataset.codigo === 'ABERTA_FALTA' && t.name && t.name.endsWith('_yn')){
+      const ta = st.querySelector('textarea');
+      if(ta){
+        if(t.value === 'sim'){
+          // mostra textarea e limpa "Nenhum" se estava
+          ta.style.display = '';
+          if((ta.value || '').trim().toLowerCase() === 'nenhum') ta.value = '';
+          setTimeout(()=> ta.focus(), 0);
+        }else{
+          // registra explicitamente "Nenhum" e esconde a textarea
+          ta.value = 'Nenhum';
+          ta.style.display = 'none';
+        }
+        // força autosave/validação
+        ta.dispatchEvent(new Event('change', { bubbles:true }));
+      }
+    }
+
+    // Q1 controla esconder/mostrar Q4
+    if(st.dataset.codigo === 'LEITURA_PERC'){
+      applyConditional();
+      // se eu estava em um step que sumiu, reposiciona
+      const a = activeStep();
+      if(a && a.style.display === 'none'){
+        setActiveByVisibleIndex(vIdx); // clamp automático
+        return;
+      }
+    }
+
+    updateButtons(st);
+
+    // autosave
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(()=> autosave(st), 250);
+  });
+  // Para campos de texto: 'input' atualiza em tempo real (sem precisar perder foco)
+  document.addEventListener('input', function(ev){
+    const t = ev.target;
+    if (!t || t.tagName !== 'TEXTAREA') return;
+    const stepEl = t.closest('.q-step');
+    if (!stepEl) return;
+    updateButtons(stepEl);
+    if (autosaveTimer) clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(() => { autosave(stepEl); }, 250);
+  });
+
+
+  document.addEventListener('keydown', function(ev){
+    const st = activeStep();
+    if(!st) return;
+
+    // não interferir em textarea
+    if(ev.target && ev.target.tagName === 'TEXTAREA') return;
+
+    const key = ev.key;
+
+    // números 0–9 para marcar opção (por índice ou por value)
+    if(/^[0-9]$/.test(key)){
+      const radios = Array.from(st.querySelectorAll('input[type="radio"]'));
+      if(radios.length){
+        // 1) tenta value igual
+        let r = radios.find(x => x.value === key);
+        // 2) fallback: por índice (1=primeiro, 2=segundo...)
+        if(!r){
+          const idx = parseInt(key,10) - 1;
+          if(idx >= 0 && idx < radios.length) r = radios[idx];
+        }
+        if(r){
+          r.checked = true;
+          r.dispatchEvent(new Event('change', { bubbles:true }));
+          ev.preventDefault();
+          return;
+        }
+      }
+
+      // checkboxes (multi): 1=primeiro, 2=segundo...
+      const checks = Array.from(st.querySelectorAll('input[type="checkbox"]'));
+      if(checks.length){
+        const idx = parseInt(key,10) - 1;
+        if(idx >= 0 && idx < checks.length){
+          checks[idx].checked = !checks[idx].checked;
+          checks[idx].dispatchEvent(new Event('change', { bubbles:true }));
+          ev.preventDefault();
+          return;
+        }
+      }
+    }
+
+    // setas: troca opção dentro do grupo
+    if(key === 'ArrowLeft' || key === 'ArrowRight'){
+      const radios = Array.from(st.querySelectorAll('input[type="radio"]'));
+      const cur = st.querySelector('input[type="radio"]:checked');
+      if(radios.length){
+        let idx = cur ? radios.indexOf(cur) : -1;
+        idx = key === 'ArrowRight' ? idx + 1 : idx - 1;
+        idx = Math.max(0, Math.min(radios.length-1, idx));
+        radios[idx].checked = true;
+        radios[idx].dispatchEvent(new Event('change', { bubbles:true }));
+        ev.preventDefault();
+        return;
+      }
+    }
+
+    // Enter: avança (ou envia no final)
+    if(key === 'Enter'){
+      const codigo = st.dataset.codigo || '';
+      if(codigo === 'FINAL'){
+        const btn = st.querySelector('.js-submit');
+        if(btn && !btn.disabled){
+          // deixa submeter
+          return;
+        }
+        ev.preventDefault();
+        updateButtons(st);
+        return;
+      }
+      ev.preventDefault();
+      const btn = st.querySelector('.js-next');
+      if(btn && !btn.disabled){
+        btn.click();
+      }else{
+        updateButtons(st);
+      }
+    }
+  });
+
+  // limpa “continuar” ao enviar
+  const form = document.querySelector('.guia-avaliacao form');
+  if(form){
+    form.addEventListener('submit', function(){
+      try { localStorage.removeItem(LS_KEY); } catch(e){}
+    });
+  }
+
+  // inicializa Q23 (ABERTA_FALTA) de acordo com valor já salvo
+  (function initAbertas(){
+    stepsAll.forEach(st => {
+      if(st.dataset.codigo !== 'ABERTA_FALTA') return;
+      const ta = st.querySelector('textarea');
+      const rNo = st.querySelector('input[type="radio"][value="nao"]');
+      const rSim = st.querySelector('input[type="radio"][value="sim"]');
+      if(!ta) return;
+      const v = (ta.value || '').trim();
+      if(!v){
+        if(rNo) rNo.checked = false;
+        if(rSim) rSim.checked = false;
+        ta.style.display = 'none';
+        return;
+      }
+      if(v.toLowerCase() === 'nenhum'){
+        if(rNo) rNo.checked = true;
+        ta.style.display = 'none';
+      }else{
+        if(rSim) rSim.checked = true;
+        ta.style.display = '';
+      }
+    });
+  })();
+
+  restoreProgress();
+  setActiveByVisibleIndex(vIdx);
+})();
+</script>
+
 {% endblock %}

@@ -1,0 +1,366 @@
+.portal-page {
+  --portal-ink: #17324a;
+  --portal-ink-soft: #4d677b;
+  --portal-surface: rgba(255, 255, 255, 0.88);
+  --portal-surface-strong: #ffffff;
+  --portal-line: rgba(23, 50, 74, 0.12);
+  --portal-accent: #1f6c5d;
+  --portal-accent-strong: #0f4c44;
+  --portal-warm: #d79d34;
+  --portal-sky: #eaf4f7;
+  --portal-sand: #f8f4ea;
+  background:
+    radial-gradient(circle at top left, rgba(215, 157, 52, 0.18), transparent 32%),
+    radial-gradient(circle at top right, rgba(31, 108, 93, 0.18), transparent 28%),
+    linear-gradient(180deg, #f7fbfd 0%, #eef5f6 100%);
+  color: var(--portal-ink);
+  padding: 2.5rem 0 4rem;
+}
+
+.portal-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.portal-hero,
+.portal-section,
+.portal-attention,
+.portal-final {
+  background: var(--portal-surface);
+  border: 1px solid var(--portal-line);
+  border-radius: 28px;
+  box-shadow: 0 24px 80px rgba(23, 50, 74, 0.08);
+}
+
+.portal-hero {
+  overflow: hidden;
+  padding: 0;
+}
+
+.portal-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 0;
+  align-items: stretch;
+}
+
+.portal-hero-copy {
+  padding: 3rem;
+}
+
+.portal-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(31, 108, 93, 0.1);
+  color: var(--portal-accent-strong);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.portal-title {
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  line-height: 1.05;
+  margin: 1rem 0 1rem;
+  font-weight: 800;
+}
+
+.portal-lead {
+  font-size: 1.12rem;
+  line-height: 1.75;
+  color: var(--portal-ink-soft);
+  margin-bottom: 1rem;
+  max-width: 42rem;
+}
+
+.portal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+}
+
+.portal-btn,
+.portal-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.85rem 1.35rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+.portal-btn {
+  background: linear-gradient(135deg, var(--portal-accent) 0%, var(--portal-accent-strong) 100%);
+  color: #fff;
+  box-shadow: 0 18px 36px rgba(15, 76, 68, 0.22);
+}
+
+.portal-btn:hover,
+.portal-btn-secondary:hover {
+  transform: translateY(-1px);
+}
+
+.portal-btn-secondary {
+  border: 1px solid rgba(23, 50, 74, 0.16);
+  color: var(--portal-ink);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.portal-hero-side {
+  min-height: 100%;
+  background:
+    linear-gradient(180deg, rgba(23, 50, 74, 0.05) 0%, rgba(23, 50, 74, 0.24) 100%),
+    url("../core/img/hero-lago-sol-original.jpg") center/cover no-repeat;
+}
+
+.portal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+}
+
+.portal-chip {
+  border: 1px solid rgba(23, 50, 74, 0.12);
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.88rem;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.portal-attention {
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.35rem 1rem;
+  background: rgba(255, 249, 237, 0.94);
+}
+
+.portal-attention-title {
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.portal-attention-copy {
+  color: var(--portal-ink-soft);
+  margin-bottom: 0.75rem;
+}
+
+.portal-steps {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.portal-steps li {
+  margin: 0.35rem 0;
+  line-height: 1.6;
+}
+
+.portal-grid {
+  display: grid;
+  gap: 1.35rem;
+  margin-top: 1.6rem;
+}
+
+.portal-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.portal-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.portal-section {
+  margin-top: 1.6rem;
+  padding: 1.6rem;
+}
+
+.portal-section-header {
+  margin-bottom: 1.15rem;
+}
+
+.portal-section-title {
+  font-size: 1.65rem;
+  margin: 0 0 0.35rem;
+  font-weight: 800;
+}
+
+.portal-section-copy {
+  color: var(--portal-ink-soft);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.portal-card {
+  height: 100%;
+  padding: 1.4rem;
+  border-radius: 24px;
+  border: 1px solid rgba(23, 50, 74, 0.1);
+  background: var(--portal-surface-strong);
+  box-shadow: 0 14px 34px rgba(23, 50, 74, 0.06);
+}
+
+.portal-card-kicker {
+  display: inline-flex;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(31, 108, 93, 0.08);
+  color: var(--portal-accent-strong);
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 0.9rem;
+}
+
+.portal-card-title {
+  font-size: 1.25rem;
+  margin: 0 0 0.6rem;
+  font-weight: 800;
+}
+
+.portal-card-copy {
+  color: var(--portal-ink-soft);
+  line-height: 1.7;
+  min-height: 4.5rem;
+}
+
+.portal-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.portal-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(23, 50, 74, 0.16);
+  color: var(--portal-ink);
+  text-decoration: none;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.portal-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  background: linear-gradient(135deg, #275d7b 0%, #17324a 100%);
+}
+
+.portal-primary-btn.portal-primary-btn-green {
+  background: linear-gradient(135deg, var(--portal-accent) 0%, var(--portal-accent-strong) 100%);
+}
+
+.portal-card-note {
+  margin-top: 0.95rem;
+}
+
+.portal-step-list {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1.15rem;
+}
+
+.portal-step {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 0.9rem;
+  align-items: start;
+  padding: 1rem;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(234, 244, 247, 0.86) 0%, rgba(248, 244, 234, 0.82) 100%);
+}
+
+.portal-step-number {
+  width: 50px;
+  height: 50px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--portal-accent-strong);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.portal-step-title {
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.portal-step-copy {
+  color: var(--portal-ink-soft);
+  line-height: 1.65;
+}
+
+.portal-final {
+  margin-top: 1.6rem;
+  padding: 1.8rem;
+  background: linear-gradient(135deg, rgba(23, 50, 74, 0.95) 0%, rgba(31, 108, 93, 0.88) 100%);
+  color: #fff;
+}
+
+.portal-final .portal-section-copy {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.portal-final .portal-btn-secondary {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.portal-admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 991px) {
+  .portal-hero-grid,
+  .portal-grid-3,
+  .portal-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-hero-side {
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 767px) {
+  .portal-page {
+    padding-top: 1.5rem;
+  }
+
+  .portal-hero-copy,
+  .portal-section,
+  .portal-final {
+    padding: 1.35rem;
+  }
+
+  .portal-actions,
+  .portal-card-actions,
+  .portal-admin-actions {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Testar como usuário | Escola no Ar{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 980px;">
+  <div class="text-center mb-4">
+    <h1 class="display-6 mb-2">Testar como usuário</h1>
+    <p class="lead mb-0">Escolha um usuário real para simular o fluxo e permissões (sem sair do staff).</p>
+  </div>
+
+  {% if current_impersonated %}
+    <div class="alert alert-info">
+      <strong>Modo teste ativo:</strong> você está testando como <strong>{{ current_impersonated.email }}</strong>.
+      <a class="btn btn-sm btn-outline-secondary ms-2" href="{% url 'portal_impersonar_sair' %}">Sair do modo teste</a>
+      <a class="btn btn-sm btn-outline-secondary ms-2" href="{% url 'portal_dashboard' %}">Voltar à governança</a>
+    </div>
+  {% else %}
+    <div class="alert alert-secondary">
+      Nenhum usuário selecionado. Use a busca abaixo (ex.: <code>wygazeta2@</code>).
+    </div>
+  {% endif %}
+
+  <form method="get" class="card p-3 mb-3">
+    <label class="form-label" for="q"><strong>Buscar usuário</strong></label>
+    <div class="d-flex gap-2">
+      <input id="q" name="q" value="{{ q }}" class="form-control" placeholder="E-mail, nome, sobrenome…" autofocus>
+      <button class="btn btn-primary" type="submit">Buscar</button>
+    </div>
+    <div class="form-text mt-2">
+      Dica: mantenha algumas contas de teste (ex.: sem termos, com bônus, com passe1) para validar fluxos rapidamente.
+    </div>
+  </form>
+
+  {% if q and not results %}
+    <div class="alert alert-warning">Nenhum usuário encontrado para “{{ q }}”.</div>
+  {% endif %}
+
+  {% if results %}
+    <div class="card">
+      <div class="card-header"><strong>Resultados</strong></div>
+      <div class="list-group list-group-flush">
+        {% for u in results %}
+          <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <div><strong>{{ u.email }}</strong></div>
+              <div class="text-muted" style="font-size:.9rem;">
+                Perfil: {{ u.perfil|default:"—" }} · Staff: {{ u.is_staff|yesno:"sim,não" }} · Ativo: {{ u.is_active|yesno:"sim,não" }}
+              </div>
+            </div>
+            <form method="post" class="m-0">
+              {% csrf_token %}
+              <input type="hidden" name="user_id" value="{{ u.pk }}">
+              <button class="btn btn-success" type="submit">Assumir</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <a class="btn btn-outline-secondary" href="{% url 'portal_dashboard' %}">Voltar à governança</a>
+    <a class="btn btn-link" href="{% url 'portal' %}">Ir ao Portal</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,17 +1,14 @@
 {% extends "vocacional/base_vocacional.html" %}
-{% load consent_tags %}
 
 {% block vocacional_content %}
 
 <div class="actions">
-  {% if request.user|consentimento_ativo %}
-    <a class="btn" href="{% url 'vocacional:avaliacao_form' %}">Iniciar / Continuar Avaliação</a>
-    {% if ultima and ultima.status == 'concluida' %}
-      <a class="btn btn-secondary" href="{% url 'vocacional:resultado' ultima.pk %}">Ver último resultado</a>
-    {% endif %}
-  {% else %}
-    <a class="btn" href="{% url 'vocacional:consentimento_check' %}">Consentimento & Acesso</a>
+  <a class="btn" href="{% url 'vocacional:etapas' %}">Abrir etapas do teste</a>
+
+  {% if last_done %}
+    <a class="btn btn-secondary" href="{% url 'vocacional:resultado' last_done.pk %}">Ver último resultado</a>
   {% endif %}
+
   {% if request.user.perfil in 'MENTOR,PROF,ADMIN' %}
     <a class="btn" href="{% url 'vocacional:mentor_dashboard' %}">Painel do Mentor</a>
   {% endif %}

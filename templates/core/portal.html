@@ -3,60 +3,261 @@
 
 {% block title %}Portal | Escola no Ar{% endblock %}
 
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/core_portal.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container py-4" style="max-width: 980px;">
-  <div class="text-center mb-4">
-    <h1 class="display-6 mb-2">Portal de acesso</h1>
-    <p class="lead mb-0">Escolha para onde você quer ir.</p>
-  </div>
+<div class="portal-page">
+  <div class="portal-shell">
+    <section class="portal-hero">
+      <div class="portal-hero-grid">
+        <div class="portal-hero-copy">
+          <span class="portal-eyebrow">Sua jornada comeca aqui</span>
+          <h1 class="portal-title">Sua jornada comeca aqui</h1>
+          <p class="portal-lead">
+            Conheca os caminhos disponiveis na plataforma e descubra o proximo passo mais adequado para voce.
+          </p>
+          <p class="portal-lead">
+            Aqui voce encontrara recursos pensados para apoiar seu crescimento, ampliar sua compreensao sobre si mesmo e ajudar na construcao do seu proposito.
+          </p>
 
-  <div class="row g-4">
-    <!-- Sonhe + Alto -->
-    <div class="col-12 col-md-6">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h2 class="h5 mb-2">Projeto Sonhe + Alto</h2>
-          <p class="text-muted mb-3">Plano de vida, metas e acompanhamento (Projeto 21).</p>
+          <div class="portal-actions">
+            {% if request.user.is_authenticated %}
+              <a class="portal-btn" href="{{ portal_entry_cta.url }}">{{ portal_entry_cta.label }}</a>
+              <a class="portal-btn-secondary" href="{{ portal_entry_cta.secondary_url }}">{{ portal_entry_cta.secondary_label }}</a>
+            {% else %}
+              <a class="portal-btn" href="{% url 'contas:login' %}?next={% url 'portal' %}">Comecar agora</a>
+              <a class="portal-btn-secondary" href="#como-funciona">Como funciona</a>
+            {% endif %}
+          </div>
 
           {% if request.user.is_authenticated %}
-            {% if can_sonhemaisalto %}
-              <a class="btn btn-primary w-100" href="{% url 'projeto21:home' %}">Entrar</a>
-            {% else %}
-              <div class="alert alert-warning py-2 mb-2">Acesso não liberado.</div>
-              <a class="btn btn-outline-primary w-100" href="{% url 'guia' %}">Como liberar acesso</a>
-            {% endif %}
-          {% else %}
-            <a class="btn btn-primary w-100" href="{% url 'contas:login' %}?next={% url 'projeto21:home' %}">Entrar</a>
+            <div class="portal-meta">
+              <span class="portal-chip">Acesso ativo: <strong>{{ request.user.email }}</strong></span>
+              {% if request.real_user and request.real_user.is_authenticated and request.real_user.pk != request.user.pk %}
+                <span class="portal-chip">Modo teste: <strong>{{ request.real_user.email }}</strong> -> <strong>{{ request.user.email }}</strong></span>
+              {% endif %}
+            </div>
           {% endif %}
         </div>
+        <div class="portal-hero-side" aria-hidden="true"></div>
       </div>
-    </div>
+    </section>
 
-    <!-- Vocacional -->
-    <div class="col-12 col-md-6">
-      <div class="card h-100 shadow-sm">
-        <div class="card-body">
-          <h2 class="h5 mb-2">Vocacional</h2>
-          <p class="text-muted mb-3">Avaliação vocacional, relatório e histórico.</p>
-
-          {% if request.user.is_authenticated %}
-            {% if can_vocacional %}
-              <a class="btn btn-success w-100" href="{% url 'vocacional:avaliacao_gate' %}">Entrar</a>
-            {% else %}
-              <div class="alert alert-warning py-2 mb-2">Acesso não liberado.</div>
-              <a class="btn btn-outline-success w-100" href="{% url 'guia' %}">Como liberar acesso</a>
-            {% endif %}
-          {% else %}
-            <a class="btn btn-success w-100" href="{% url 'contas:login' %}?next={% url 'vocacional:avaliacao_gate' %}">Entrar</a>
+    {% if request.user.is_authenticated and show_attention %}
+      <div class="portal-attention">
+        <div class="portal-attention-title">Antes de seguir</div>
+        <div class="portal-attention-copy">A plataforma mostra apenas o que ainda falta para liberar a sua proxima etapa.</div>
+        <ol class="portal-steps">
+          {% if not has_legal %}
+            <li>
+              Aceite <a class="tt" href="{% url 'core:legal_aceite' %}?next={% url 'portal' %}" data-tt="Etapa obrigatoria: Termos de uso + Privacidade (LGPD).">Termos e Privacidade</a> para continuar.
+            </li>
           {% endif %}
+
+          {% if show_valid_guia_pending %}
+            <li>
+              Obtenha o <a class="tt" href="{% url 'guia' %}" data-tt="O Guia e pre-requisito valido do programa, seja por compra ou por concessao administrativa explicita.">Guia</a> antes de seguir para a Avaliacao do Guia.
+            </li>
+          {% endif %}
+
+          {% if show_guia_feedback_pending %}
+            <li>
+              Responda a <a class="tt" href="{% url 'vocacional:guia_avaliacao' %}?next={% url 'portal' %}" data-tt="Avaliacao curta para qualificar e liberar o acesso ao bonus.">Avaliacao do Guia</a>.
+            </li>
+          {% endif %}
+
+          {% if need_bonus_sma %}
+            <li>
+              Falta liberar o bonus <strong>Sonhe + Alto</strong>. <a class="tt" href="{% url 'guia' %}" data-tt="Para liberar, adquira o Guia (Hotmart) ou solicite liberacao ao administrador.">Ver como liberar</a>.
+            </li>
+          {% endif %}
+
+          {% if need_bonus_voc %}
+            <li>
+              Falta liberar o bonus <strong>Vocacional (Bonus 75)</strong>. <a class="tt" href="{% url 'guia' %}" data-tt="Para liberar, adquira o Guia (Hotmart) ou solicite liberacao ao administrador.">Ver como liberar</a>.
+            </li>
+          {% endif %}
+
+          {% if has_inconsistent_bonus_without_guia %}
+            <li>
+              Detectamos um estado de acesso inconsistente e a equipe administrativa foi notificada para revisao.
+            </li>
+          {% endif %}
+        </ol>
+      </div>
+    {% endif %}
+
+    <section class="portal-section">
+      <div class="portal-section-header">
+        <h2 class="portal-section-title">Bem-vindo ao Guia de Descoberta</h2>
+        <p class="portal-section-copy">
+          Cada pessoa chega aqui de um jeito diferente. Algumas vem por meio do Guia, outras recebem acesso especial a conteudos e bonus. Por isso, sua navegacao pode variar conforme seu momento e seu tipo de acesso.
+        </p>
+      </div>
+      <p class="portal-section-copy">
+        Antes de seguir, conheca rapidamente o que voce vai encontrar aqui.
+      </p>
+    </section>
+
+    <section class="portal-section" id="produtos">
+      <div class="portal-section-header">
+        <h2 class="portal-section-title">O que voce vai encontrar aqui?</h2>
+        <p class="portal-section-copy">
+          Os produtos continuam entrando pelo resolvedor central do core, mas agora a leitura do portal fica mais clara para quem esta chegando.
+        </p>
+      </div>
+
+      <div class="portal-grid portal-grid-3">
+        <article class="portal-card">
+          <span class="portal-card-kicker">Produto</span>
+          <h3 class="portal-card-title">Teste Vocacional</h3>
+          <p class="portal-card-copy">
+            Um espaco para ajudar voce a refletir sobre talentos, interesses, habilidades e possibilidades de futuro.
+          </p>
+          {% if request.user.is_authenticated and not can_vocacional %}
+            <div class="portal-card-note alert alert-warning py-2 mb-0" title="{{ voc_tooltip }}">
+              {{ voc_alert|default:"Acesso nao liberado." }}
+            </div>
+          {% endif %}
+          <div class="portal-card-actions">
+            <a class="portal-link-btn" href="#como-funciona">Saiba mais</a>
+            {% if request.user.is_authenticated %}
+              {% if can_vocacional %}
+                <a class="portal-primary-btn portal-primary-btn-green" href="{% url 'produto_resolver' 'vocacional' %}">Acessar</a>
+              {% else %}
+                <a class="portal-primary-btn portal-primary-btn-green" href="{{ voc_cta_url }}">Liberar acesso</a>
+              {% endif %}
+            {% else %}
+              <a class="portal-primary-btn portal-primary-btn-green" href="{% url 'contas:login' %}?next={% url 'produto_resolver' 'vocacional' %}">Acessar</a>
+            {% endif %}
+          </div>
+        </article>
+
+        <article class="portal-card">
+          <span class="portal-card-kicker">Produto</span>
+          <h3 class="portal-card-title">Sonhe + Alto</h3>
+          <p class="portal-card-copy">
+            Uma jornada de crescimento pessoal, visao de futuro e fortalecimento de proposito.
+          </p>
+          {% if request.user.is_authenticated and not can_sonhemaisalto %}
+            <div class="portal-card-note alert alert-warning py-2 mb-0" title="{{ sonhe_tooltip }}">
+              {{ sonhe_alert|default:"Acesso nao liberado." }}
+            </div>
+          {% endif %}
+          <div class="portal-card-actions">
+            <a class="portal-link-btn" href="#como-funciona">Saiba mais</a>
+            {% if request.user.is_authenticated %}
+              {% if can_sonhemaisalto %}
+                <a class="portal-primary-btn" href="{% url 'produto_resolver' 'sonhe-mais-alto' %}">Conhecer</a>
+              {% else %}
+                <a class="portal-primary-btn" href="{{ sonhe_cta_url }}">Liberar acesso</a>
+              {% endif %}
+            {% else %}
+              <a class="portal-primary-btn" href="{% url 'contas:login' %}?next={% url 'produto_resolver' 'sonhe-mais-alto' %}">Conhecer</a>
+            {% endif %}
+          </div>
+        </article>
+
+        <article class="portal-card">
+          <span class="portal-card-kicker">Jornada</span>
+          <h3 class="portal-card-title">Seu proximo passo</h3>
+          <p class="portal-card-copy">
+            A plataforma pode indicar caminhos diferentes conforme sua etapa atual, seu acesso e o que ja foi concluido.
+          </p>
+          <div class="portal-card-actions">
+            <a class="portal-link-btn" href="#como-funciona">Saiba mais</a>
+            {% if request.user.is_authenticated %}
+              <a class="portal-primary-btn" href="{{ portal_entry_cta.url }}">{{ portal_entry_cta.label }}</a>
+            {% else %}
+              <a class="portal-primary-btn" href="{% url 'contas:login' %}?next={% url 'portal' %}">Ver meu proximo passo</a>
+            {% endif %}
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="portal-section" id="como-funciona">
+      <div class="portal-section-header">
+        <h2 class="portal-section-title">Como sera sua navegacao</h2>
+        <p class="portal-section-copy">
+          Voce nao precisa entender tudo agora. A plataforma foi organizada para mostrar o que faz sentido para o seu momento.
+        </p>
+      </div>
+
+      <div class="portal-step-list">
+        <div class="portal-step">
+          <div class="portal-step-number">1</div>
+          <div>
+            <div class="portal-step-title">Conheca os recursos disponiveis</div>
+            <div class="portal-step-copy">Veja o que existe na plataforma e entenda para que serve cada area.</div>
+          </div>
+        </div>
+        <div class="portal-step">
+          <div class="portal-step-number">2</div>
+          <div>
+            <div class="portal-step-title">Identifique sua etapa atual</div>
+            <div class="portal-step-copy">Dependendo do seu acesso, alguns caminhos podem aparecer primeiro para voce.</div>
+          </div>
+        </div>
+        <div class="portal-step">
+          <div class="portal-step-number">3</div>
+          <div>
+            <div class="portal-step-title">Siga o proximo passo indicado</div>
+            <div class="portal-step-copy">O core continua direcionando a experiencia inicial mais adequada dentro da sua jornada.</div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="text-center mt-4">
+    <section class="portal-section">
+      <div class="portal-grid portal-grid-2">
+        <div>
+          <h2 class="portal-section-title">Cada pessoa pode ter um caminho diferente</h2>
+          <p class="portal-section-copy">
+            Alguns usuarios iniciam pela apresentacao da plataforma. Outros seguem diretamente para uma etapa especifica. Em certos casos, pode haver acessos liberados diretamente pela administracao, sem necessidade de passar por todas as etapas anteriores.
+          </p>
+        </div>
+        <div>
+          <h2 class="portal-section-title">Leveza com clareza</h2>
+          <p class="portal-section-copy">
+            O objetivo deste portal e tornar a navegacao mais clara, leve e intuitiva, sem quebrar a logica centralizada de acesso e de resolucao dos produtos.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="portal-final">
+      <div class="portal-section-header">
+        <h2 class="portal-section-title">Pronto para seguir?</h2>
+        <p class="portal-section-copy">
+          Voce pode explorar os recursos disponiveis ou ir diretamente para o proximo passo sugerido para o seu perfil.
+        </p>
+      </div>
+
+      <div class="portal-actions">
+        {% if request.user.is_authenticated %}
+          <a class="portal-btn" href="{{ portal_entry_cta.url }}">{{ portal_entry_cta.label }}</a>
+          <a class="portal-btn-secondary" href="#produtos">Explorar a plataforma</a>
+        {% else %}
+          <a class="portal-btn" href="{% url 'contas:login' %}?next={% url 'portal' %}">Ir para meu proximo passo</a>
+          <a class="portal-btn-secondary" href="#produtos">Explorar a plataforma</a>
+        {% endif %}
+      </div>
+    </section>
+
     {% if request.user.is_authenticated %}
-      <a class="btn btn-link" href="{% url 'contas:logout' %}">Sair</a>
+      <div class="portal-admin-actions">
+        <a class="btn btn-link" href="{% url 'contas:logout' %}">Sair</a>
+        {% if request.real_user and request.real_user.is_authenticated and request.real_user.pk != request.user.pk %}
+          <a class="btn btn-outline-secondary" href="{% url 'portal_impersonar_sair' %}">Sair do modo teste</a>
+        {% endif %}
+        {% if show_governanca_toggle %}
+          <a class="btn btn-outline-secondary" href="{% url 'portal' %}?portal_mode=gov">Ir para governanca</a>
+          <a class="btn btn-outline-secondary" href="{% url 'portal_impersonar' %}">Testar como usuario</a>
+        {% endif %}
+      </div>
     {% endif %}
   </div>
 </div>

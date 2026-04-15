@@ -222,6 +222,13 @@ def should_stop(ref_data: dict, stage: int, stats: dict) -> Tuple[bool, str]:
     if stage == 1:
         gap_thr = float(getattr(settings, "VOC_REF_GAP_STOP_P1", 0.20) or 0.20)
         top1_thr = float(getattr(settings, "VOC_REF_TOP1_MIN_P1", 0.35) or 0.35)
+        min_q_setting = int(getattr(settings, "VOC_REF_P1_MIN_Q", 150) or 150)
+        pool = len(stats.get("qids") or [])
+        min_q = min(min_q_setting, pool) if pool else min_q_setting
+        answered = sum((stats.get("counts") or {}).values())
+        if answered < min_q:
+            return False, f"CONT_P1(min_q={answered}/{min_q})"
+
         if gap >= gap_thr and top1p >= top1_thr:
             return True, f"STOP_P1(gap>={gap_thr}, top1>={top1_thr})"
         return False, "CONT_P1"
@@ -229,6 +236,13 @@ def should_stop(ref_data: dict, stage: int, stats: dict) -> Tuple[bool, str]:
     if stage == 2:
         gap_thr = float(getattr(settings, "VOC_REF_GAP_STOP_P2", 0.15) or 0.15)
         top1_thr = float(getattr(settings, "VOC_REF_TOP1_MIN_P2", 0.32) or 0.32)
+        min_q_setting = int(getattr(settings, "VOC_REF_P2_MIN_Q", 180) or 180)
+        pool = len(stats.get("qids") or [])
+        min_q = min(min_q_setting, pool) if pool else min_q_setting
+        answered = sum((stats.get("counts") or {}).values())
+        if answered < min_q:
+            return False, f"CONT_P2(min_q={answered}/{min_q})"
+
 
         passes = (ref_data.get("passes") or {})
         prev = passes.get("1", {})

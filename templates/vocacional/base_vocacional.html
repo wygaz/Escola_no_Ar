@@ -46,10 +46,7 @@
         <a href="{% url 'portal' %}" class="btn btn-xs btn-outline-light">Portal</a>
         <a href="{% url 'projeto21:home' %}" class="btn btn-xs btn-outline-light">Sonhe + Alto</a>
 
-        <form method="post" action="{% url 'contas:logout' %}">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-xs btn-outline-danger">Sair</button>
-        </form>
+        <a href="{% url 'contas:logout' %}" class="btn btn-xs btn-outline-danger js-logout-link">Sair</a>
       </div>
     </div>
 
@@ -62,4 +59,22 @@
   </main>
 
 </div>
+{% endblock %}
+
+{% block extra_scripts %}{{ block.super }}
+<script>
+  // Limpa chaves locais (stepper do Guia) ao sair
+  (function(){
+    const a = document.querySelector('.vocacional-nav .js-logout-link');
+    if(!a) return;
+    a.addEventListener('click', function(){
+      try{
+        const ks = Object.keys(localStorage || {});
+        ks.forEach(k => {
+          if(k.startsWith('guia_step_idx_v1_')) localStorage.removeItem(k);
+        });
+      }catch(e){}
+    });
+  })();
+</script>
 {% endblock %}

@@ -30,12 +30,89 @@
     <p style="opacity:.8">
       <small>Código #{{ avaliacao.pk }} • Iniciada em {{ avaliacao.iniciado_em|date:"d/m/Y H:i" }}</small>
     </p>
+
+    {% if stop_info.stage %}
+      <p style="margin-top:.5rem;opacity:.9">
+        <small>
+          <strong>Refinamento Top 3:</strong>
+          {% if stop_info.stop %}
+            concluído no Passe {{ stop_info.stage }} ({{ stop_info.reason }}).
+          {% else %}
+            em andamento.
+          {% endif %}
+        </small>
+      </p>
+    {% endif %}
+
+    {% if final_info.top3 %}
+      <p style="margin-top:.25rem;opacity:.9">
+        <small><strong>Top 3 final:</strong> {{ final_info.top3|join:", " }}</small>
+      </p>
+    {% endif %}
   </div>
 
-  <!-- Toggle superior (tela) -->
-  <div class="actions-row screen-only" style="margin-top:.25rem">
+  {# ===== Precisão / necessidade de continuar ===== #}
+  {% if confidence.needs_refine %}
+    <div class="card-warn" style="margin-bottom:1rem">
+      <h2 style="margin:0 0 .35rem 0;font-size:1.05rem">Seu Top 1 e Top 2 estão muito próximos</h2>
+      <p style="margin:0;opacity:.9">
+        Isso geralmente significa que você tem afinidade real com mais de uma área — e, por isso,
+        o resultado ainda <strong>pode ser melhor apurado</strong>.
+      </p>
+      {% if resultados_top3|length >= 2 %}
+        <p style="margin:.6rem 0 0 0;opacity:.9">
+          <small>Top 1: <strong>{{ resultados_top3.0.dimensao_nome }}</strong> ({{ resultados_top3.0.pct }}%) •
+          Top 2: <strong>{{ resultados_top3.1.dimensao_nome }}</strong> ({{ resultados_top3.1.pct }}%)</small>
+        </p>
+      {% endif %}
+      <p style="margin:.6rem 0 0 0;opacity:.85">
+        <small><strong>Recomendação:</strong> continue o refinamento para aumentar a separação entre as opções e
+        entregar um Top 3 mais confiável.</small>
+      </p>
+      <div class="actions-row screen-only" style="margin-top:.8rem">
+        {% if can_fc %}
+            <a class="btn btn-secondary btn-disabled" href="#">Conclua o Passe 2</a>
+
+        {% endif %}
+        {% if can_refine %}
+          <a class="btn ok" href="{% url 'vocacional:etapas' %}">Continuar refinamento</a>
+        {% else %}
+          <a class="btn ok" href="{% url 'vocacional:ofertas_refinamento' avaliacao.pk %}">Ver opções de melhoria</a>
+        {% endif %}
+      </div>
+    </div>
+  {% else %}
+    <div class="card-ok" style="margin-bottom:1rem">
+      <strong>Confiança: {{ confidence.label }}</strong>
+      <span style="opacity:.85"> — A primeira vocação (Top 1) já aparece com um pouco mais de destaque da segunda vocação (Top 2).</span>
+    </div>
+  {% endif %}
+
+  <!-- AÇÕES (tela) — agrupadas perto do topo -->
+  <div class="actions-row screen-only" style="margin-top:.25rem;flex-wrap:wrap">
+    <a class="btn ghost" href="{% url 'vocacional:avaliacao_form' %}">Repetir teste</a>
+    <a class="btn ghost" href="{% url 'vocacional:index' %}">Voltar ao início</a>
     <button type="button" class="btn ghost js-toggle-top3">Ver todos</button>
+
+    <form method="post" action="{% url 'vocacional:enviar_resultado_email' avaliacao.pk %}" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn ghost"
+        {% if avaliacao.email_enviado_em %}
+          title="Já enviado em {{ avaliacao.email_enviado_em|date:'d/m H:i' }}"
+        {% endif %}
+      >Enviar por e-mail</button>
+    </form>
+
+    <a class="btn ghost"
+      href="{% url 'vocacional:resultado_whatsapp' avaliacao.pk %}"
+      {% if avaliacao.whatsapp_enviado_em %}
+        title="Já compartilhado em {{ avaliacao.whatsapp_enviado_em|date:'d/m H:i' }}"
+      {% endif %}
+    >Compartilhar no WhatsApp</a>
+
+    <button type="button" class="btn ok" onclick="window.print()">Salvar em PDF</button>
   </div>
+
 
   <!-- LISTA (renderiza TODOS; o CSS + toggle esconde/mostra) -->
   <div id="resultados" class="resultados limit-top3">
@@ -61,42 +138,17 @@
     {% endif %}
   </div>
 
-  <!-- AÇÕES FINAIS -->
-  <div class="actions-row screen-only">
-
-    <a class="btn ghost" href="{% url 'vocacional:avaliacao_form' %}">Repetir teste</a>
-    <a class="btn ghost" href="{% url 'vocacional:index' %}">Voltar ao início</a>
-
-    <!-- Toggle inferior (tela) -->
-    <button type="button" class="btn ghost js-toggle-top3">Ver todos</button>
-
-    <!-- Enviar por e-mail (POST => evita 405) -->
-    <form method="post" action="{% url 'vocacional:enviar_resultado_email' avaliacao.pk %}" style="display:inline;">
-      {% csrf_token %}
-      <button type="submit" class="btn ghost"
-        {% if avaliacao.email_enviado_em %}
-          title="Já enviado em {{ avaliacao.email_enviado_em|date:'d/m H:i' }}"
-        {% endif %}
-      >Enviar por e-mail</button>
-    </form>
-
-    <!-- WhatsApp -->
-    <a class="btn ghost"
-      href="{% url 'vocacional:resultado_whatsapp' avaliacao.pk %}"
-      {% if avaliacao.whatsapp_enviado_em %}
-        title="Já compartilhado em {{ avaliacao.whatsapp_enviado_em|date:'d/m H:i' }}"
-      {% endif %}
-    >Compartilhar no WhatsApp</a>
-
-    <!-- PDF -->
-    <button type="button" class="btn ok" onclick="window.print()">Salvar em PDF</button>
-  </div>
 
   <!-- Rodapé só na impressão -->
   <div class="print-only print-footer">
     © {% now "Y" %} Escola no Ar • Termos: {% url 'core:termos' %} • Privacidade: {% url 'core:privacidade' %}
   </div>
 </div>
+
+<style>
+  .card-warn{border:1px solid rgba(231,76,60,.35);background:rgba(231,76,60,.08);border-radius:16px;padding:14px 16px;}
+  .card-ok{border:1px solid rgba(46,204,113,.35);background:rgba(46,204,113,.08);border-radius:16px;padding:12px 16px;}
+</style>
 
 <script>
 (function(){

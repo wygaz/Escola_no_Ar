@@ -1,0 +1,248 @@
+{% extends "vocacional/base_vocacional.html" %}
+{% load static %}
+
+{% block header_title %}Seu progresso no Vocacional{% endblock %}
+{% block header_subtitle %}
+  <p class="vocacional-subtitle">Acompanhe seu resultado, veja o que já está disponível para você e continue sua jornada com mais clareza.</p>
+{% endblock %}
+
+{% block vocacional_content %}
+
+<style>
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
+  .card{grid-column:span 12;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.15);border-radius:18px;padding:16px;}
+  @media(min-width:900px){.card.half{grid-column:span 6;}}
+  .card h3{margin:0 0 6px 0;font-size:1.05rem;}
+  .muted{opacity:.78}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .badge{border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:.2rem .6rem;font-size:.85rem}
+  .badge.ok{background:rgba(46,204,113,.12);border-color:rgba(46,204,113,.35)}
+  .badge.no{background:rgba(231,76,60,.10);border-color:rgba(231,76,60,.35)}
+  .progress{height:10px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin-top:10px}
+  .progress > div{height:100%;background:rgba(255,255,255,.55);width:0%}
+  .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+  .btn-disabled{pointer-events:none;opacity:.55}
+
+  .stepper{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
+  .step{flex:1;position:relative;padding:12px 12px 10px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.10);min-height:82px;min-width:220px}
+  .step:after{content:"";position:absolute;top:50%;right:-12px;width:12px;height:2px;background:rgba(255,255,255,.18)}
+  .step:last-child:after{display:none}
+  .bubble{width:34px;height:34px;border-radius:999px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.18);font-weight:700;opacity:.95}
+  .stepline{display:flex;gap:10px;align-items:center}
+  .steplabel{line-height:1.15}
+  .steplabel strong{display:block}
+  .steplabel span{font-size:.85rem;opacity:.78}
+
+  .step.done{background:rgba(46,204,113,.10);border-color:rgba(46,204,113,.28)}
+  .step.done .bubble{background:rgba(46,204,113,.12);border-color:rgba(46,204,113,.35)}
+  .step.active{background:rgba(52,152,219,.10);border-color:rgba(52,152,219,.32)}
+  .step.active .bubble{background:rgba(52,152,219,.14);border-color:rgba(52,152,219,.40)}
+  .step.locked{opacity:.55}
+</style>
+
+<div class="grid">
+
+  <div class="card">
+    <div class="muted" style="font-size:.92rem">
+      <strong>Importante:</strong> algumas etapas de aprofundamento são adicionais e podem ser liberadas separadamente.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="margin-bottom:10px;">
+      <div>
+        <h3>Seu caminho de aprofundamento</h3>
+        <div class="muted">Cada etapa ajuda a deixar seu Top 3 mais claro, seguro e bem definido.</div>
+      </div>
+      <div class="badges">
+        <span class="badge {% if ref1_ok %}ok{% else %}no{% endif %}">Mapa Inicial</span>
+        <span class="badge {% if ref2_ok %}ok{% else %}no{% endif %}">Aprofundamento</span>
+        <span class="badge {% if ref3_ok %}ok{% else %}no{% endif %}">Cenários Reais</span>
+      </div>
+    </div>
+
+    <div class="stepper" aria-label="Progresso do aprofundamento">
+      <div class="step{% if draft and current_stage > 1 %} done{% elif draft and current_stage == 1 %} active{% endif %}{% if not ref1_ok %} locked{% endif %}">
+        <div class="stepline">
+          <div class="bubble">1</div>
+          <div class="steplabel">
+            <strong>Mapa Inicial</strong>
+            <span>primeira leitura do seu perfil</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step{% if draft and current_stage > 2 %} done{% elif draft and current_stage == 2 %} active{% endif %}{% if not ref2_ok %} locked{% endif %}">
+        <div class="stepline">
+          <div class="bubble">2</div>
+          <div class="steplabel">
+            <strong>Aprofundamento</strong>
+            <span>mais clareza nas áreas mais fortes</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step{% if draft and current_stage == 3 %} active{% endif %}{% if not ref3_ok %} locked{% endif %}">
+        <div class="stepline">
+          <div class="bubble">3</div>
+          <div class="steplabel">
+            <strong>Cenários Reais</strong>
+            <span>ajustes finais com escolhas de vida real</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="muted" style="margin-top:12px;font-size:.92rem">
+      <strong>Como funciona:</strong>
+      primeiro você recebe um mapa inicial; depois aprofunda as áreas mais fortes; por fim, confirma e ajusta seu Top 3 com situações mais próximas da vida real.
+    </div>
+  </div>
+
+  <div class="card half">
+    <div class="row">
+      <div>
+        <h3>Etapa 1 — Mapa Inicial</h3>
+        <div class="muted">
+          {% if not ref1_ok %}
+            Esta etapa ainda não está disponível para você.
+          {% else %}
+            {% if draft %}
+              {% if current_stage == 1 %}Em andamento.{% else %}Concluído.{% endif %}
+            {% else %}
+              Ainda não iniciado.
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+
+      {% if not ref1_ok %}
+        <a class="btn btn-secondary btn-disabled" href="#">Indisponível no momento</a>
+      {% else %}
+        <a class="btn" href="{% url 'vocacional:avaliacao_form' %}">
+          {% if draft %}{% if current_stage == 1 %}Continuar{% else %}Ver progresso{% endif %}{% else %}Iniciar{% endif %}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if draft and progress.1 %}
+      <div class="progress" aria-label="Progresso etapa 1">
+        <div style="width: {{ progress.1.pct }}%"></div>
+      </div>
+      <div class="muted" style="margin-top:6px;">
+        {{ progress.1.respondidas }} / {{ progress.1.total }} ({{ progress.1.pct }}%)
+      </div>
+    {% endif %}
+
+    <div class="muted" style="margin-top:10px;font-size:.92rem">
+      <strong>O que você recebe:</strong> uma primeira leitura do seu Top 3, com base em um conjunto equilibrado de perguntas.
+    </div>
+  </div>
+
+  <div class="card half">
+    <div class="row">
+      <div>
+        <h3>Etapa 2 — Aprofundamento</h3>
+        <div class="muted">
+          {% if not ref2_ok %}
+            Esta etapa ainda não está disponível para você.
+          {% else %}
+            {% if not draft or current_stage < 2 %}
+              Disponível após concluir a etapa anterior.
+            {% elif current_stage == 2 %}
+              Em andamento.
+            {% else %}
+              Concluído.
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+
+      {% if not ref2_ok %}
+        <a class="btn btn-secondary btn-disabled" href="#">Indisponível no momento</a>
+      {% else %}
+        {% if draft and current_stage == 2 %}
+          <a class="btn" href="{% url 'vocacional:avaliacao_form' %}">Continuar</a>
+        {% elif draft and current_stage > 2 %}
+          <a class="btn btn-secondary" href="{% url 'vocacional:avaliacao_form' %}">Ver progresso</a>
+        {% else %}
+          <a class="btn btn-secondary btn-disabled" href="#">Disponível após a etapa anterior</a>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    {% if draft and progress.2 %}
+      <div class="progress" aria-label="Progresso etapa 2">
+        <div style="width: {{ progress.2.pct }}%"></div>
+      </div>
+      <div class="muted" style="margin-top:6px;">
+        {{ progress.2.respondidas }} / {{ progress.2.total }} ({{ progress.2.pct }}%)
+      </div>
+    {% endif %}
+
+    <div class="muted" style="margin-top:10px;font-size:.92rem">
+      <strong>O que você recebe:</strong> mais clareza nas áreas que apareceram com mais força no seu resultado inicial.
+    </div>
+  </div>
+
+  <div class="card half">
+    <div class="row">
+      <div>
+        <h3>Etapa 3 — Cenários Reais</h3>
+        <div class="muted">
+          {% if not ref3_ok %}
+            Esta etapa ainda não está disponível para você.
+          {% else %}
+            {% if not draft or current_stage < 3 %}
+              Disponível após concluir a etapa anterior.
+            {% else %}
+              Pronto para responder situações mais próximas da vida real.
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="btnrow" style="margin-top:0;">
+        {% if not ref3_ok %}
+          <a class="btn btn-secondary btn-disabled" href="#">Indisponível no momento</a>
+        {% else %}
+          {% if draft and current_stage == 3 %}
+            <a class="btn" href="{% url 'vocacional:passe3' %}">Entrar</a>
+            {% if max_stage|default:0 >= 3 or request.user.is_staff or request.user.is_superuser %}
+              <a class="btn ghost" href="{% url 'vocacional:comparacoes_top3' %}">Desempate rápido</a>
+            {% endif %}
+          {% else %}
+            <a class="btn btn-secondary btn-disabled" href="#">Disponível após a etapa anterior</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="muted" style="margin-top:10px;font-size:.92rem">
+      <strong>O que você recebe:</strong> uma confirmação mais próxima da vida real, com escolhas e situações que ajudam a ajustar seu Top 3 final.
+    </div>
+  </div>
+
+  <div class="card half">
+    <div class="row">
+      <div>
+        <h3>Resultado</h3>
+        <div class="muted">Veja o último resultado concluído.</div>
+      </div>
+
+      {% if last_done %}
+        <a class="btn btn-secondary" href="{% url 'vocacional:resultado' last_done.pk %}">Ver último resultado</a>
+      {% else %}
+        <a class="btn btn-secondary btn-disabled" href="#">Sem resultado</a>
+      {% endif %}
+    </div>
+
+    <div class="muted" style="margin-top:10px;font-size:.92rem">
+      <strong>Dica:</strong> você pode parar no resultado inicial, mas cada etapa adicional ajuda a deixar seu Top 3 mais claro e confiável.
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

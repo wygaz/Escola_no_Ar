@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import (
     Area,
     Estrategia,
+    JornadaDiaria,
     RegistroDiario,
     MentorProfile,
     Mentoria,
@@ -41,7 +42,14 @@ class EstrategiaAdmin(admin.ModelAdmin):
 
 @admin.register(RegistroDiario)
 class RegistroDiarioAdmin(admin.ModelAdmin):
-    list_display = ("id", "usuario", "data", "estrategia")
+    list_display = ("id", "usuario", "data", "estrategia", "status")
+    list_filter = ("data", "status")
+    search_fields = ("usuario__email",)
+
+
+@admin.register(JornadaDiaria)
+class JornadaDiariaAdmin(admin.ModelAdmin):
+    list_display = ("id", "usuario", "data", "updated_at")
     list_filter = ("data",)
     search_fields = ("usuario__email",)
 

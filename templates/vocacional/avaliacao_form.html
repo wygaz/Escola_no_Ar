@@ -18,7 +18,7 @@
 
   .vocacional-cards {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    grid-template-columns: minmax(0, 1fr) 320px;
     gap: 18px;
     align-items: start;
   }
@@ -65,6 +65,9 @@
           </div>
         </div>
         <div class="progress-meta">
+          {% if pass_total > 1 %}
+            <span class="muted">Passe <strong>{{ pass_stage }}/{{ pass_total }}</strong></span>
+          {% endif %}
           <span id="progress-text">0/0 (0%)</span>
           <span>Questão <strong id="counter">0/0</strong></span>
         </div>
@@ -77,7 +80,7 @@
         <div class="quiz-actions" style="display:flex;gap:10px;flex-wrap:wrap;">
           <button type="button" id="prev-button" class="btn btn-secondary">&larr; Anterior</button>
           <button type="submit" name="action" value="save" class="btn btn-primary">Salvar</button>
-          <button type="submit" name="action" value="finish" class="btn btn-primary">Finalizar</button>
+          <button type="submit" name="action" value="finish" id="finish-button" class="btn btn-primary">{{ finish_label|default:"Finalizar" }}</button>
           <button type="button" id="next-button" class="btn btn-secondary">Próxima &rarr;</button>
         </div>
       </form>
@@ -92,10 +95,11 @@
     </p>
 
     <ul class="list-disc pl-6 mt-2">
-      <li>Marque de 1 a 5 (1 = discordo totalmente • 5 = concordo totalmente).</li>
+      <li>Marque de 1 a 5 (1 = não tem nada a ver comigo • 5 = tem tudo a ver comigo).</li>
       <li>Use as teclas <strong>← / →</strong> para voltar/avançar e as teclas <strong>1–5</strong> para marcar.</li>
       <li>Você não pode avançar deixando questão em branco.</li>
       <li>Ao fechar a aba, as respostas ficam salvas automaticamente.</li>
+      <li><b>Você pode parar a qualquer momento</b> e voltar depois: o teste retoma automaticamente de onde você parou.</li>
       <li>Ao final, clique em <strong>Finalizar</strong> para ver o resultado.</li>
     </ul>
   </aside>

@@ -7,11 +7,12 @@ from django.conf.urls.static import static
 from apps.core import views as core_views
 
 urlpatterns = [
-    # raiz pública (opcional) — não conflita com o portal pós-login
-    path("", core_views.portal, name="inicio"),
+    # entrada pública: anônimo vai para login; autenticado segue para o portal
+    path("", core_views.home_funil, name="inicio"),
 
     # portal pós-login (o nome 'portal' precisa apontar aqui)
     path("portal/", core_views.portal_home, name="portal"),
+    path("produtos/<slug:produto_slug>/entrar/", core_views.produto_resolver, name="produto_resolver"),
 
     # Termos / Privacidade (módulo geral do Core)
     path("legal/", include(("apps.core.urls_legal", "core"), namespace="core")),
@@ -25,6 +26,10 @@ urlpatterns = [
 
     # governança (dashboard.html)
     path("portal/dashboard/", core_views.PortalDashboardView.as_view(), name="portal_dashboard"),
+
+    # staff: testar como usuário (impersonação)
+    path("portal/impersonar/", core_views.portal_impersonar, name="portal_impersonar"),
+    path("portal/impersonar/sair/", core_views.portal_impersonar_sair, name="portal_impersonar_sair"),
 
     path("guia/", core_views.guia_redirect_preview, name="guia"),
     path("sobre/", core_views.sobre, name="sobre"),

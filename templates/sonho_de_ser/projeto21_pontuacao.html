@@ -1,9 +1,56 @@
 {% extends "sonho_de_ser/base_projeto21.html" %}
-{% block p21_content %}
-<h1>Projeto 21 — Pontuação & Progresso</h1>
-<p>Stub temporário. Acompanhe evolução por área, objetivos e dias.</p>
 
-<div class="actions">
-  <a class="btn" href="/projeto21/">← Voltar ao Projeto 21</a>
+{% block p21_content %}
+<h1>Sonhe + Alto - Pontuacao e progresso</h1>
+<p>Leitura basica da sua adesao semanal com base no plano ativo.</p>
+
+<div class="row g-3 my-3">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-muted small">Adesao geral</div>
+        <div class="fs-3 fw-bold">{{ info.geral }}%</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-muted small">Estrategias no plano</div>
+        <div class="fs-3 fw-bold">{{ plano.total_estrategias }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-sm align-middle">
+        <thead>
+          <tr>
+            <th>Dia</th>
+            <th>Feitos</th>
+            <th>Total</th>
+            <th>Percentual</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in info.serie %}
+            <tr>
+              <td>{{ item.data|date:"d/m" }}</td>
+              <td>{{ item.feitos }}</td>
+              <td>{{ item.total }}</td>
+              <td>{{ item.percentual }}%</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="mt-3">
+  <a class="btn btn-outline-secondary" href="/projeto21/">Voltar</a>
 </div>
 {% endblock %}

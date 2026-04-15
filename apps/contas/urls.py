@@ -8,7 +8,7 @@ app_name = "contas"
 urlpatterns = [
     path(
         "login/",
-        auth_views.LoginView.as_view(
+        views.SafeLoginView.as_view(
             template_name="contas/login.html",
             redirect_authenticated_user=True,
             extra_context={"hide_global_header": True},  # <<< ADICIONE ESTA LINHA

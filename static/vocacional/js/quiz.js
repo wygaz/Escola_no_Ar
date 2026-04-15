@@ -158,6 +158,7 @@ log('quiz.js carregado');
   // Começa na primeira questão ainda não respondida
   const firstMissing = list.findIndex((q) => !answers.has(q.id));
   if (firstMissing >= 0) idx = firstMissing;
+  else idx = total - 1;  // tudo respondido: mostra a última questão (evita 75/75 com Questão 1/75)
   console.log('[quiz] estado inicial:', {
     total,
     respondidas: answers.size,
@@ -373,24 +374,19 @@ log('quiz.js carregado');
   });
 
 // Impede finalizar com perguntas em branco
+
 form.addEventListener('submit', (e) => {
-  const submitter = e.submitter || lastSubmitter;
+  // Só bloqueia quando o usuário clicar em "Finalizar"
+  const submitter = e.submitter;
+  const isFinish = submitter && submitter.value === 'finish';
+  if(!isFinish) return;
 
-  // seu botão "Finalizar" é name="action" value="finish"
-  const isFinalizar =
-    submitter &&
-    submitter.name === 'action' &&
-    submitter.value === 'finish';
-
-  if (isFinalizar && answers.size < total) {
+  if(answers.size !== total){
     e.preventDefault();
-    showWarn(true);
-    console.warn('[quiz] tentativa de finalizar com perguntas em branco');
+    alert('Responda todas as questões antes de finalizar.');
     return;
   }
-
-  // se NÃO for finalizar, ou se estiver tudo ok, deixa o submit normal acontecer
-  });
+});
 
 
   // Expor um pequeno hook para inspeção manual
@@ -404,3 +400,27 @@ form.addEventListener('submit', (e) => {
   // Primeira renderização
   render();
 })();
+function updateFinishState(){
+  const btnFinish = document.getElementById('finish-button');
+  if(!btnFinish) return;
+
+  const isLast = (idx === total - 1);
+  const allAnswered = (answers.size === total);
+  const ready = isLast && allAnswered;
+
+  // Destaque quando estiver tudo respondido e na última questão
+  btnFinish.classList.toggle('btn-finish-ready', ready);
+  btnFinish.classList.toggle('btn-success', ready);
+  btnFinish.classList.toggle('btn-primary', !ready);
+
+  // Em telas pequenas, ajuda a orientar o usuário
+  if(isLast){
+    btnNext.disabled = true;
+    btnNext.classList.add('disabled');
+  }else{
+    btnNext.disabled = false;
+    btnNext.classList.remove('disabled');
+  }
+}
+
+

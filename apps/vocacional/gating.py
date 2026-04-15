@@ -5,12 +5,13 @@ from django.conf import settings
 from django.urls import reverse
 
 from apps.core.permissions import (
+    PROD_GUIA,
     PROD_VOCACIONAL,
     user_has_produto,
 )
 
 # Flags (pode ligar/desligar via settings.py se quiser)
-VOCACIONAL_REQUIRE_BONUS = getattr(settings, "VOCACIONAL_REQUIRE_BONUS", True)
+VOCACIONAL_REQUIRE_BONUS = getattr(settings, "VOCACIONAL_REQUIRE_BONUS", False)
 VOCACIONAL_REQUIRE_TERMOS = getattr(settings, "VOCACIONAL_REQUIRE_TERMOS", True)
 VOCACIONAL_REQUIRE_CONSENT = getattr(settings, "VOCACIONAL_REQUIRE_CONSENT", True)
 VOCACIONAL_REQUIRE_GUIA = getattr(settings, "VOCACIONAL_REQUIRE_GUIA", True)
@@ -18,6 +19,10 @@ VOCACIONAL_REQUIRE_GUIA = getattr(settings, "VOCACIONAL_REQUIRE_GUIA", True)
 
 def bonus_acquired(user) -> bool:
     return user_has_produto(user, PROD_VOCACIONAL)
+
+
+def guia_valid(user) -> bool:
+    return user_has_produto(user, PROD_GUIA)
 
 
 def termos_ok(user) -> bool:
@@ -48,23 +53,27 @@ def guia_done(user) -> bool:
 def next_step(user):
     """Retorna a próxima etapa do funil.
 
-    Regra atual (2026-02):
+    Regra atual:
     - Termos + Privacidade/Consentimento ficam em UMA página (core:legal_aceite).
-    - A Avaliação do Guia é requisito apenas para liberar o bônus.
+    - O Guia é pré-requisito válido do programa.
+    - A Avaliação do Guia só entra depois do Guia válido.
 
-    Ordem: bonus -> legal -> guia -> ok
+    Ordem: legal -> guia válido -> guia -> bônus -> ok
     Retorna None quando está tudo ok.
     """
-
-    if VOCACIONAL_REQUIRE_BONUS and not bonus_acquired(user):
-        return "bonus_acquire"
 
     require_legal = VOCACIONAL_REQUIRE_TERMOS or VOCACIONAL_REQUIRE_CONSENT
     if require_legal and not (termos_ok(user) and consent_ok(user)):
         return "legal"
 
+    if VOCACIONAL_REQUIRE_BONUS and not guia_valid(user):
+        return "bonus_acquire"
+
     if VOCACIONAL_REQUIRE_GUIA and not guia_done(user):
         return "guia"
+
+    if VOCACIONAL_REQUIRE_BONUS and not bonus_acquired(user):
+        return "bonus_acquire"
 
     return None
 

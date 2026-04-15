@@ -1,0 +1,131 @@
+{% extends "vocacional/base_vocacional.html" %}
+{% load static %}
+
+{% block header_title %}Escolha como deseja avançar{% endblock %}
+{% block header_subtitle %}
+  <p class="vocacional-subtitle">
+    Seu resultado ficou muito próximo entre as primeiras opções. Você pode fazer um desempate rápido ou seguir para um aprofundamento mais completo.
+  </p>
+{% endblock %}
+
+{% block vocacional_content %}
+
+<style>
+  .offers-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
+  .offer-card{grid-column:span 12;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.15);border-radius:18px;padding:16px;}
+  @media(min-width:900px){.offer-card.half{grid-column:span 6;}}
+  .muted{opacity:.82}
+  .imgbox{margin-top:12px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.10);}
+  .imgbox img{width:100%;display:block;}
+  .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;align-items:center;}
+  .pill{display:inline-block;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:.25rem .65rem;font-size:.85rem;opacity:.95;}
+  .pill.ok{background:rgba(46,204,113,.12);border-color:rgba(46,204,113,.35);}
+  .pill.no{background:rgba(231,76,60,.10);border-color:rgba(231,76,60,.35);}
+  .pill.neutral{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);}
+  .card-info{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);border-radius:18px;padding:16px;}
+  .benefits{margin-top:12px;display:grid;gap:8px;}
+  .benefits div{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
+</style>
+
+<div class="card-info" style="margin-bottom:1rem">
+  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
+    <div>
+      <strong>Seu resultado até aqui</strong>
+      {% if top1_nome and top2_nome %}
+        <div class="muted" style="margin-top:4px">
+          Primeira opção: <strong>{{ top1_nome }}</strong> • Segunda opção: <strong>{{ top2_nome }}</strong>
+        </div>
+      {% else %}
+        <div class="muted" style="margin-top:4px">
+          Você já pode escolher o próximo passo para ganhar mais clareza no resultado.
+        </div>
+      {% endif %}
+    </div>
+    <div class="btnrow" style="margin-top:0">
+      <a class="btn ghost" href="{% url 'vocacional:resultado' avaliacao.pk %}">Voltar ao resultado</a>
+      <a class="btn ghost" href="{% url 'portal' %}">Voltar ao portal</a>
+    </div>
+  </div>
+</div>
+
+<div class="offers-grid">
+
+  <div class="offer-card half">
+    <div class="pill neutral">Opção rápida</div>
+    <h3 style="margin-top:10px">Desempate rápido (Vocacional 75 Plus)</h3>
+    <div class="muted">
+      Uma etapa curta para ajudar a organizar melhor seu Top 3 quando as primeiras opções ficam muito próximas.
+    </div>
+
+    <div class="benefits">
+      <div><strong>Ideal para:</strong> quem quer uma definição mais clara sem entrar no aprofundamento completo.</div>
+      <div><strong>Como funciona:</strong> você responde comparações rápidas entre opções próximas do seu resultado.</div>
+      <div><strong>O que você recebe:</strong> uma ordenação final mais clara entre as opções que ficaram empatadas ou muito próximas.</div>
+    </div>
+
+    <div class="btnrow">
+      {% if has_plus %}
+        <span class="pill ok">Já disponível</span>
+        <a class="btn btn-primary" href="{% url 'vocacional:comparacoes_top3' %}?reset=1">
+          Fazer desempate rápido
+        </a>
+      {% else %}
+        <span class="pill no">Ainda não liberado</span>
+        <a class="btn btn-primary" href="{% url 'portal' %}">
+          Ver como liberar
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="imgbox">
+      <a href="{% url 'portal' %}">
+        <img src="{% static 'vocacional/img/oferta_vocacional75plus.png' %}" alt="Vocacional 75 Plus" onerror="this.style.display='none'">
+      </a>
+    </div>
+  </div>
+
+  <div class="offer-card half">
+    <div class="pill neutral">Opção completa</div>
+    <h3 style="margin-top:10px">Aprofundamento Premium</h3>
+    <div class="muted">
+      Um caminho mais completo para confirmar e ajustar seu Top 3 com etapas sucessivas de aprofundamento.
+    </div>
+
+    <div class="benefits">
+      <div><strong>Ideal para:</strong> quem quer avançar com mais contexto, segurança e profundidade.</div>
+      <div><strong>Como funciona:</strong> você passa por etapas que ampliam a leitura inicial e ajudam a confirmar as áreas mais fortes.</div>
+      <div><strong>O que você recebe:</strong> um Top 3 mais amadurecido, com ajustes finais baseados em escolhas e situações mais próximas da vida real.</div>
+    </div>
+
+    <div class="btnrow">
+      {% if has_premium %}
+        <span class="pill ok">Já disponível{% if ref_max_stage|default:0 >= 1 %} • {{ ref_max_stage }}/3{% endif %}</span>
+        <a class="btn btn-primary" href="{% url 'vocacional:etapas' %}">
+          Ir para meu progresso
+        </a>
+      {% else %}
+        <span class="pill no">Ainda não liberado</span>
+        <a class="btn btn-primary" href="{% url 'portal' %}">
+          Ver como liberar
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="imgbox">
+      <a href="{% url 'portal' %}">
+        <img src="{% static 'vocacional/img/oferta_premium_passes.png' %}" alt="Premium" onerror="this.style.display='none'">
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<div class="card-info" style="margin-top:16px">
+  <strong>Qual caminho escolher?</strong>
+  <div class="muted" style="margin-top:8px">
+    Se você quer uma resposta mais rápida para separar opções muito próximas, escolha o <strong>Desempate rápido</strong>.
+    Se deseja um processo mais completo de confirmação e aprofundamento, siga pelo <strong>Premium</strong>.
+  </div>
+</div>
+
+{% endblock %}

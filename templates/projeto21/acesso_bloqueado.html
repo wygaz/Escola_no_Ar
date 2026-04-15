@@ -38,12 +38,7 @@
         </a>
       </div>
 
-        <form method="post" action="{% url 'contas:logout' %}" style="margin-top:10px;">
-            {% csrf_token %}
-            <button type="submit" class="sma-btn sma-btn--ghost">
-                Entrar com outro usuário
-            </button>
-        </form>
+        <a href="{% url 'contas:logout' %}?next=/contas/login/?next=/projeto21/" class="sma-btn sma-btn--ghost" style="margin-top:10px;">Entrar com outro usuário</a>
 
       <a class="sma-link"
          href="https://wa.me/5519999350101?text=Ol%C3%A1!%20Estou%20logado%20no%20site%2C%20mas%20meu%20acesso%20ao%20Sonhe%20%2B%20Alto%20ainda%20n%C3%A3o%20apareceu.%20Pode%20me%20ajudar%3F"

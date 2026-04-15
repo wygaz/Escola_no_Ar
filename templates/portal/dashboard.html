@@ -7,8 +7,8 @@
   </p>
   {% if request.user.is_staff or request.user.is_superuser %}
     <p style="margin: -12px 0 24px;">
-      <a href="{% url 'portal' %}?portal_mode=user" style="text-decoration:none;">
-        Ver Portal do Usuário (modo teste)
+      <a href="{% url 'portal_impersonar' %}" style="text-decoration:none;">
+        Testar como usuário (escolher)
       </a>
     </p>
   {% endif %}

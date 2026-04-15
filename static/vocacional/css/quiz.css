@@ -37,10 +37,22 @@
 
 /* ---- pílulas Likert ---- */
 .likert{
-  display:flex; gap:.5rem; flex-wrap:wrap; margin:.5rem 0 .25rem;
+  display:flex;
+  gap:.65rem;
+  flex-wrap:nowrap;
+  margin:1rem 0 1.1rem;
 }
+@media (max-width: 720px){
+  .likert{flex-wrap:wrap;}
+}
+.likert{align-items:stretch;}
 .likert .pill{
-  display:inline-flex; align-items:center; gap:.5rem;
+  flex:1;
+  min-width:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
   background:var(--pill-bg); color:var(--pill-text);
   border:1px solid var(--pill-border);
   border-radius:999px; padding:.4rem .75rem; cursor:pointer;
@@ -53,7 +65,7 @@
 }
 .likert .pill input{ position:absolute; opacity:0; pointer-events:none; }
 .pill-num{ font-weight:700; min-width:1ch; text-align:center; }
-.pill-text{ opacity:.9; font-size:.9rem; }
+.pill-text{white-space:normal;text-align:center;line-height:1.15;}
 
 /* ---- aviso “escolha uma opção” ---- */
 .warn-msg{
@@ -104,7 +116,9 @@
 /* ------- Likert: mais respiro entre as pílulas ------- */
 .likert{
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   gap: .5rem;
 }
 .likert .pill{
@@ -134,3 +148,14 @@
   }
   .quiz-toolbar .slot-center{ grid-column: 1 / span 2; }
 }
+
+
+/* Destaque do botão Finalizar na última pergunta */
+.btn-final{ box-shadow: 0 0 0 3px rgba(60,180,120,.20); }
+.btn-final-ready{ box-shadow: 0 0 0 3px rgba(60,180,120,.35); transform: translateY(-1px); }
+
+.q-text{margin-bottom:1rem; font-weight:600;}
+
+.quiz-actions{margin-top:1.2rem;display:flex;gap:12px;flex-wrap:wrap;}
+
+.btn-finish-ready{box-shadow:0 0 0 3px rgba(5,150,105,.25); transform:translateY(-1px);}

@@ -4,11 +4,89 @@
 {% block title %}Portal | Escola no Ar{% endblock %}
 
 {% block content %}
+<style>
+  /* Tooltips (sem JS) */
+  .tt{position:relative;cursor:help;text-decoration:underline dotted;}
+  .tt::after{content:attr(data-tt);position:absolute;left:0;top:1.5em;min-width:240px;max-width:360px;padding:.65rem .75rem;background:rgba(0,0,0,.92);color:#fff;border-radius:12px;opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .12s ease, transform .12s ease;z-index:30;font-size:.9rem;line-height:1.25rem;}
+  .tt:hover::after{opacity:1;transform:translateY(0);}
+
+  .portal-attention{border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.15);border-radius:16px;padding:1rem 1rem .75rem;margin-bottom:1.25rem;}
+  .portal-attention-title{font-weight:700;letter-spacing:.02em;margin-bottom:.35rem;}
+  .portal-steps{margin:0 0 .75rem 1.2rem;}
+  .portal-steps li{margin:.25rem 0;}
+  .portal-status{display:flex;flex-wrap:wrap;gap:.5rem;}
+  .portal-chip{border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:.25rem .6rem;font-size:.85rem;opacity:.95;}
+  .portal-chip-link{display:inline-flex;align-items:center;gap:.25rem;text-decoration:none;}
+  .portal-chip-link:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.06);} 
+  .portal-chip-link .muted{opacity:.75;font-size:.82rem;}
+</style>
+
 <div class="container py-4" style="max-width: 980px;">
   <div class="text-center mb-4">
     <h1 class="display-6 mb-2">Portal de acesso</h1>
     <p class="lead mb-0">Escolha para onde você quer ir.</p>
   </div>
+  {% if request.user.is_authenticated %}
+  <div class="text-center mb-3">
+    <span class="portal-chip">Acesso ativo: <strong>{{ request.user.email }}</strong></span>
+    <span class="text-muted small ms-2">Se não for você, clique em “Sair”.</span>
+  </div>
+  {% if request.real_user and request.real_user.is_authenticated and request.real_user.pk != request.user.pk %}
+    <div class="text-center mb-3">
+      <span class="portal-chip">Modo teste (staff): <strong>{{ request.real_user.email }}</strong> → <strong>{{ request.user.email }}</strong></span>
+      <a class="btn btn-sm btn-outline-secondary ms-2" href="{% url 'portal_impersonar_sair' %}">Sair do modo teste</a>
+    </div>
+  {% endif %}
+  {% endif %}
+
+
+  {% if request.user.is_authenticated %}
+  <div class="portal-attention">
+    <div class="portal-attention-title">ATENÇÃO — Como liberar os bônus</div>
+
+    <ol class="portal-steps">
+      <li>
+        O <a class="tt" href="{% url 'guia' %}" data-tt="O Guia é o produto principal (Hotmart). Ao comprar, você libera os bônus do Portal.">Guia</a>
+        libera <span class="tt" data-tt="Bônus 75 = o teste vocacional com 75 perguntas, relatório e histórico.">Vocacional (Bônus 75)</span>
+        e <span class="tt" data-tt="Sonhe + Alto = plano de vida, metas e acompanhamento (Projeto 21).">Sonhe + Alto</span>.
+      </li>
+      <li>
+        Para usar o bônus, conclua o <span class="tt" data-tt="Onboarding = Termos + Privacidade (LGPD) + Avaliação do Guia.">onboarding</span>:
+        <a class="tt" href="{% url 'core:legal_aceite' %}?next={% url 'portal' %}" data-tt="Etapa obrigatória: Termos de uso + Privacidade (LGPD).">Termos e Privacidade</a>
+        → <a class="tt" href="{% url 'vocacional:guia_avaliacao' %}" data-tt="Avaliação curta para qualificar e liberar o acesso ao bônus.">Avaliação do Guia</a>.
+      </li>
+      <li>
+        Obs.: Passes 1/2/3 estão temporariamente bloqueados nesta fase.
+      </li>
+    </ol>
+
+    <div class="portal-status">
+      {% if has_legal %}
+      <span class="portal-chip">Termos/LGPD: ✅</span>
+      {% else %}
+      <a class="portal-chip portal-chip-link" href="{% url 'core:legal_aceite' %}?next={% url 'portal' %}">
+        Termos/LGPD: ⬜ <span class="muted">(aceitar)</span>
+      </a>
+      {% endif %}
+      {% if has_guia_feedback %}
+      <span class="portal-chip">Avaliação do Guia: ✅</span>
+      {% else %}
+      <a class="portal-chip portal-chip-link" href="{% url 'vocacional:guia_avaliacao' %}?next={% url 'portal' %}">
+        Avaliação do Guia: ⬜ <span class="muted">(responder)</span>
+      </a>
+      {% endif %}
+      {% if req_bonus_voc or req_bonus_sma %}
+      {% if has_prod_guia_like %}
+      <span class="portal-chip">Produto (Guia): ✅</span>
+      {% else %}
+      <a class="portal-chip portal-chip-link" href="{% url 'guia' %}">
+        Produto (Guia): ⬜ <span class="muted">(comprar)</span>
+      </a>
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
 
   <div class="row g-4">
     <!-- Sonhe + Alto -->
@@ -20,13 +98,17 @@
 
           {% if request.user.is_authenticated %}
             {% if can_sonhemaisalto %}
-              <a class="btn btn-primary w-100" href="{% url 'projeto21:home' %}">Entrar</a>
+              <a class="btn btn-primary w-100" href="{% url 'produto_resolver' 'sonhe-mais-alto' %}">Entrar</a>
             {% else %}
-              <div class="alert alert-warning py-2 mb-2">Acesso não liberado.</div>
-              <a class="btn btn-outline-primary w-100" href="{% url 'guia' %}">Como liberar acesso</a>
+              <div class="alert alert-warning py-2 mb-2" title="{{ sonhe_tooltip }}">
+                {{ sonhe_alert|default:"Acesso não liberado." }}
+              </div>
+              <a class="btn btn-outline-primary w-100" href="{{ sonhe_cta_url }}">
+                {{ sonhe_cta_label|default:"Como liberar acesso" }}
+              </a>
             {% endif %}
           {% else %}
-            <a class="btn btn-primary w-100" href="{% url 'contas:login' %}?next={% url 'projeto21:home' %}">Entrar</a>
+            <a class="btn btn-primary w-100" href="{% url 'contas:login' %}?next={% url 'produto_resolver' 'sonhe-mais-alto' %}">Entrar</a>
           {% endif %}
         </div>
       </div>
@@ -36,18 +118,22 @@
     <div class="col-12 col-md-6">
       <div class="card h-100 shadow-sm">
         <div class="card-body">
-          <h2 class="h5 mb-2">Vocacional</h2>
-          <p class="text-muted mb-3">Avaliação vocacional, relatório e histórico.</p>
+          <h2 class="h5 mb-2">Vocacional (Bônus 75)</h2>
+          <p class="text-muted mb-3">Teste vocacional (75 perguntas), relatório e histórico.</p>
 
           {% if request.user.is_authenticated %}
             {% if can_vocacional %}
-              <a class="btn btn-success w-100" href="{% url 'vocacional:avaliacao_gate' %}">Entrar</a>
+              <a class="btn btn-success w-100" href="{% url 'produto_resolver' 'vocacional' %}">Entrar</a>
             {% else %}
-              <div class="alert alert-warning py-2 mb-2">Acesso não liberado.</div>
-              <a class="btn btn-outline-success w-100" href="{% url 'guia' %}">Como liberar acesso</a>
+              <div class="alert alert-warning py-2 mb-2" title="{{ voc_tooltip }}">
+                {{ voc_alert|default:"Acesso não liberado." }}
+              </div>
+              <a class="btn btn-outline-success w-100" href="{{ voc_cta_url }}">
+                {{ voc_cta_label|default:"Como liberar acesso" }}
+              </a>
             {% endif %}
           {% else %}
-            <a class="btn btn-success w-100" href="{% url 'contas:login' %}?next={% url 'vocacional:avaliacao_gate' %}">Entrar</a>
+            <a class="btn btn-success w-100" href="{% url 'contas:login' %}?next={% url 'produto_resolver' 'vocacional' %}">Entrar</a>
           {% endif %}
         </div>
       </div>
@@ -56,10 +142,17 @@
 
   <div class="text-center mt-4">
     {% if request.user.is_authenticated %}
-      <a class="btn btn-link" href="{% url 'contas:logout' %}">Sair</a>
+      <form method="post" action="{% url 'contas:logout' %}" style="display:inline;">
+        {% csrf_token %}
+        <button class="btn btn-link" type="submit">Sair</button>
+      </form>
+
       {% if show_governanca_toggle %}
-        <a class="btn btn-outline-secondary me-2" href="{% url 'portal' %}?portal_mode=gov">
+        <a class="btn btn-outline-secondary ms-2" href="{% url 'portal' %}?portal_mode=gov">
           Ir para governança
+        </a>
+        <a class="btn btn-outline-secondary ms-2" href="{% url 'portal_impersonar' %}">
+          Testar como usuário
         </a>
       {% endif %}
     {% endif %}

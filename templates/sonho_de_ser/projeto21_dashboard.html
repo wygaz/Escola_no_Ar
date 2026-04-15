@@ -1,56 +1,122 @@
-{% extends "base.html" %}
+{% extends "sonho_de_ser/base_projeto21.html" %}
 
-{% block title %}Projeto 21 – Dashboard{% endblock %}
+{% block title %}Sonhe + Alto - Dashboard{% endblock %}
 
-{% block content %}
-<h1>Projeto 21</h1>
+{% block p21_content %}
+<h1>Sonhe + Alto</h1>
+<p>Seu painel inicial.</p>
 
-<div class="kpis">
-  {% if registros_hoje %}<div class="kpi"><div>🗓️ Registros</div><div class="num">{{ registros_hoje }}</div></div>{% endif %}
-  {% if estrategias_count %}<div class="kpi"><div>🎯 Estratégias</div><div class="num">{{ estrategias_count }}</div></div>{% endif %}
+<div class="row g-3 my-3">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-muted small">Registros hoje</div>
+        <div class="fs-3 fw-bold">{{ registros_hoje }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-muted small">Estrategias ativas</div>
+        <div class="fs-3 fw-bold">{{ estrategias_ativas }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-muted small">Adesao semanal</div>
+        <div class="fs-3 fw-bold">{{ adesao_semana }}%</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="p21-grid">
-  <div class="card p21-card">
-    <h3>🧭 Meu Plano (Áreas → Objetivos → Estratégias)</h3>
-    <p class="desc">Monte ou revise seu plano de 21 dias com base nas 6 áreas e 8 objetivos.</p>
-    <div class="actions">
-      <a class="btn" href="/projeto21/plano/">Abrir plano</a>
-      <span class="p21-tag">Passo 1</span>
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h5">Meu plano</h2>
+        <p>Monte ou revise as estrategias que vai praticar no seu ciclo atual.</p>
+        <a class="btn btn-primary" href="/projeto21/plano/">Abrir plano</a>
+      </div>
     </div>
   </div>
-
-  <div class="card p21-card">
-    <h3>📓 Registro Diário</h3>
-    <p class="desc">Marque o que cumpriu hoje, anote dificuldades e celebre vitórias.</p>
-    <div class="actions">
-      <a class="btn" href="/projeto21/registro/">Registrar hoje</a>
-      <a class="btn" href="/projeto21/historico/">Histórico</a>
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h5">Check-in diario</h2>
+        <p>Registre seu dia, sua rotina e a execucao das estrategias do plano.</p>
+        <a class="btn btn-primary" href="/projeto21/registro/">Fazer check-in</a>
+        <a class="btn btn-outline-secondary" href="/projeto21/historico/">Historico</a>
+      </div>
     </div>
   </div>
-
-  <div class="card p21-card">
-    <h3>🏅 Pontuação & Progresso</h3>
-    <p class="desc">Acompanhe sua evolução por área, objetivos e dias.</p>
-    <div class="actions">
-      <a class="btn" href="/projeto21/pontuacao/">Ver progresso</a>
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h5">Pontuacao e progresso</h2>
+        <p>Veja sua adesao semanal com base no plano ativo.</p>
+        <a class="btn btn-primary" href="/projeto21/pontuacao/">Ver progresso</a>
+      </div>
     </div>
   </div>
-
-  <div class="card p21-card">
-    <h3>🤝 Mentor</h3>
-    <p class="desc">Conecte-se ao seu mentor e receba feedback estruturado.</p>
-    <div class="actions">
-      <a class="btn" href="/mentorias/">Minhas mentorias</a>
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h5">Mentoria</h2>
+        <p>Acompanhe a frente de mentoria e o que ja esta disponivel.</p>
+        <a class="btn btn-outline-secondary" href="/projeto21/mentor/">Area de mentoria</a>
+      </div>
     </div>
-  </div>
-
-  <div class="kpis">
-    <div class="kpi {% if adesao_semana >= 80 %}is-good{% elif adesao_semana >= 50 %}is-warn{% else %}is-bad{% endif %}">
-      <div class="label">📊 Adesão (semana)</div>
-      <div class="num">{% if adesao_semana is not None %}{{ adesao_semana }}%{% else %}—{% endif %}</div>
-    </div>
-    {# os demais KPIs podem ficar neutros, ou você usa .is-good para streak alto etc. #}
   </div>
 </div>
+
+{% if serie_semana %}
+  <div class="card mt-3">
+    <div class="card-body">
+      <h2 class="h5">Semana atual</h2>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Dia</th>
+              <th>Feitos</th>
+              <th>Total</th>
+              <th>Percentual</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in serie_semana %}
+              <tr>
+                <td>{{ item.data|date:"d/m" }}</td>
+                <td>{{ item.feitos }}</td>
+                <td>{{ item.total }}</td>
+                <td>{{ item.percentual }}%</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% if historico_recente %}
+  <div class="card mt-3">
+    <div class="card-body">
+      <h2 class="h5">Ultimos registros</h2>
+      <ul class="list-group list-group-flush">
+        {% for registro in historico_recente %}
+          <li class="list-group-item px-0">
+            <strong>{{ registro.data|date:"d/m/Y" }}</strong>
+            - {{ registro.estrategia.area.nome }}
+            - {{ registro.estrategia.titulo }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}
 {% endblock %}

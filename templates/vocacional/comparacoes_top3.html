@@ -1,0 +1,101 @@
+<!-- TEMPLATE_SIGNATURE: templates/vocacional/comparacoes_top3.html -->
+{% extends "vocacional/base_vocacional.html" %}
+{% load static %}
+{% load vocacional_extras %}
+
+{% block header_title %}Vocacional Plus{% endblock %}
+{% block header_subtitle %}
+  <p class="vocacional-subtitle">Escolha a opção que mais combina com você. Isso ajuda a separar o Top 1 do Top 2 quando estão muito próximos.</p>
+{% endblock %}
+
+{% block vocacional_content %}
+
+<div class="wrap" style="max-width:860px;margin:0 auto">
+
+  {% if mode == "done" %}
+    <div class="card-ok" style="margin-bottom:1rem">
+      <strong>Confrontos concluídos.</strong>
+      <span style="opacity:.85"> Você respondeu {{ n_blocks }} blocos.</span>
+    </div>
+
+    <div class="card-info" style="margin-bottom:1rem">
+      <h2 style="margin:0 0 .35rem 0;font-size:1.1rem">Top 3 antes (escala Likert)</h2>
+      <p style="margin:.25rem 0 0 0;opacity:.9">{{ top3_names|join:", " }}</p>
+    </div>
+
+    <div class="card-quiz" style="margin-bottom:1rem">
+      <h2 style="margin:0 0 .35rem 0;font-size:1.1rem">Ranking após confrontos diretos</h2>
+      <div style="margin-top:.6rem">
+        {% if ordered_fc %}
+          <ol style="margin:0;padding-left:1.25rem">
+            {% for nome, pts in ordered_fc %}
+              <li style="margin:.25rem 0"><strong>{{ nome }}</strong> <span style="opacity:.75">({{ pts }} escolhas)</span></li>
+            {% endfor %}
+          </ol>
+        {% else %}
+          <p style="margin:0;opacity:.8">Sem pontuação suficiente (tente novamente).</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <a class="btn ok" href="{% url 'vocacional:etapas' %}">Voltar às etapas</a>
+      <a class="btn ghost" href="{% url 'vocacional:resultado' avaliacao.pk %}">Ver resultado</a>
+    </div>
+
+  {% else %}
+    <div class="card-info" style="margin-bottom:1rem">
+      <p style="margin:0;opacity:.9">
+        <strong>Progresso:</strong> {{ progress.idx }} / {{ progress.total }}
+      </p>
+      <div class="progress" style="margin-top:.6rem">
+        <div style="width: {{ progress.pct }}%"></div>
+      </div>
+      <p style="margin:.6rem 0 0 0;opacity:.85">
+        <small>Top 3 atual: {{ top3|join:", " }}</small> &nbsp;·&nbsp; <a href="?reset=1" style="opacity:.8">reiniciar</a>
+      </p>
+    </div>
+
+    <form method="post" class="grid" style="gap:14px">
+      {% csrf_token %}
+
+      <div class="card" style="grid-column:span 12">
+        <h2 style="margin:0 0 .6rem 0;font-size:1.1rem">Qual opção mais tem a ver com você?</h2>
+
+        <div class="grid" style="grid-template-columns:repeat(12,1fr);gap:12px">
+          {% with A=fc_block|get_item:"A" B=fc_block|get_item:"B" C=fc_block|get_item:"C" %}
+            <label class="card-quiz" style="grid-column:span 12;border-radius:16px;cursor:pointer">
+              <input type="radio" name="pick" value="A" style="margin-right:.75rem">
+              <strong style="margin-right:.35rem">A.</strong>
+              <span>{% firstof A|get_item:"text" A|get_item:"codigo" "(sem enunciado)" %}</span>
+            </label>
+
+            <label class="card-quiz" style="grid-column:span 12;border-radius:16px;cursor:pointer">
+              <input type="radio" name="pick" value="B" style="margin-right:.75rem">
+              <strong style="margin-right:.35rem">B.</strong>
+              <span>{% firstof B|get_item:"text" B|get_item:"codigo" "(sem enunciado)" %}</span>
+            </label>
+
+            <label class="card-quiz" style="grid-column:span 12;border-radius:16px;cursor:pointer">
+              <input type="radio" name="pick" value="C" style="margin-right:.75rem">
+              <strong style="margin-right:.35rem">C.</strong>
+              <span>{% firstof C|get_item:"text" C|get_item:"codigo" "(sem enunciado)" %}</span>
+            </label>
+          {% endwith %}
+        </div>
+
+        <div class="actions-row" style="margin-top:1rem">
+          <button type="submit" class="btn ok">Continuar</button>
+          <a class="btn ghost" href="{% url 'vocacional:etapas' %}">Cancelar</a>
+        </div>
+
+        <p style="margin:.8rem 0 0 0;opacity:.75">
+          <small>Dica: escolha a opção que você faria naturalmente — não a que "parece" melhor.</small>
+        </p>
+      </div>
+    </form>
+  {% endif %}
+
+</div>
+
+{% endblock %}

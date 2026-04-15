@@ -1,9 +1,107 @@
 {% extends "sonho_de_ser/base_projeto21.html" %}
-{% block p21_content %}
-<h1>Projeto 21 — Registro Diário</h1>
-<p>Stub temporário. Aqui o aluno marca o que cumpriu no dia e adiciona anotações.</p>
 
-<div class="actions">
-  <a class="btn" href="/projeto21/">← Voltar ao Projeto 21</a>
+{% block p21_content %}
+<h1>Sonhe + Alto - Check-in diario</h1>
+<p>Use este espaco para registrar como foi seu dia e como voce praticou as estrategias do plano.</p>
+
+<div class="mb-3">
+  <strong>Data:</strong> {{ hoje|date:"d/m/Y" }}
 </div>
+
+{% if checkin_salvo %}
+  <div class="alert alert-success">
+    Check-in salvo. Seu registro de hoje ja esta guardado no historico.
+  </div>
+{% endif %}
+
+{% if plano_resumo %}
+  <section class="card mb-3">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start gap-3">
+        <div>
+          <h2 class="h5 mb-1">Plano ativo</h2>
+          <p class="text-muted small mb-0">
+            Confira as estrategias que estao orientando o check-in de hoje.
+          </p>
+        </div>
+        <a class="btn btn-outline-primary btn-sm" href="/projeto21/plano/">Alterar plano</a>
+      </div>
+
+      <div class="mt-3">
+        {% for area, objetivos in plano_resumo.items %}
+          <details class="mb-2">
+            <summary><strong>{{ area.nome }}</strong></summary>
+            <div class="mt-2">
+              {% for objetivo in objetivos %}
+                <div class="border rounded p-2 mb-2">
+                  <div class="small text-muted">Objetivo</div>
+                  <strong>{{ objetivo.descricao }}</strong>
+                  <ul class="mb-0 mt-2">
+                    {% for item in objetivo.itens %}
+                      <li>
+                        {{ item.estrategia.titulo }}
+                        {% if item.estrategia.dosagem_texto %}
+                          <span class="text-muted small">- {{ item.estrategia.dosagem_texto }}</span>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endfor %}
+            </div>
+          </details>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+
+  {% if grupos %}
+    {% for area, itens in grupos.items %}
+      <section class="card mb-3">
+        <div class="card-body">
+          <h2 class="h5">{{ area.nome }}</h2>
+          <p class="text-muted small mb-3">Registre o que aconteceu hoje com cada estrategia do seu plano.</p>
+
+          {% for row in itens %}
+            <div class="border rounded p-3 mb-3">
+              <div class="mb-2">
+                <strong>{{ row.item.estrategia.titulo }}</strong>
+                <div class="text-muted small">
+                  Nivel {{ row.item.estrategia.get_nivel_display }} | {{ row.item.estrategia.pontos }} ponto(s)
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="{{ row.status_field.id_for_label }}">{{ row.status_field.label }}</label>
+                {{ row.status_field }}
+              </div>
+              <div>
+                <label class="form-label" for="{{ row.obs_field.id_for_label }}">{{ row.obs_field.label }}</label>
+                {{ row.obs_field }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-info">
+      Nenhuma estrategia ativa no plano. Monte seu plano antes de usar o check-in diario.
+    </div>
+    <div class="d-flex gap-2">
+      <a class="btn btn-primary" href="/projeto21/plano/">Elaborar meu plano de estrategias</a>
+      <a class="btn btn-outline-secondary" href="/projeto21/">Voltar</a>
+    </div>
+  {% endif %}
+
+  {% if grupos %}
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" type="submit">Salvar check-in do dia</button>
+      <a class="btn btn-outline-secondary" href="/projeto21/">Voltar</a>
+    </div>
+  {% endif %}
+</form>
 {% endblock %}

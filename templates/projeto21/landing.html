@@ -1513,21 +1513,10 @@
 
           <div class="top-user-actions">
             {# Botão Sair normal #}
-            <form method="post" action="{% url 'contas:logout' %}">
-              {% csrf_token %}
-              <button type="submit" class="top-user-btn">
-                Sair
-              </button>
-            </form>
+            <a href="{% url 'contas:logout' %}" class="top-user-btn">Sair</a>
 
             {# Botão Sair + ir para tela de login (trocar de conta) #}
-            <form method="post" action="{% url 'contas:logout' %}">
-              {% csrf_token %}
-              <input type="hidden" name="next" value="{% url 'contas:login' %}">
-              <button type="submit" class="top-user-btn top-user-btn-outline">
-                Entrar com outra conta
-              </button>
-            </form>
+            <a href="{% url 'contas:logout' %}?next={% url 'contas:login' %}" class="top-user-btn top-user-btn-outline">Entrar com outra conta</a>
           </div>
         </div>
       {% endif %}
@@ -1545,7 +1534,7 @@
           <a href="#sec-hero-amarelo"   class="sma-subnav-btn">Como entender o Projeto</a>
           <a href="#sec-como-usar"      class="sma-subnav-btn">Como usar esta Página</a>
           <a href="#sec-kits"           class="sma-subnav-btn">Kits do Projeto</a>
-          <a href="#sec-plano"          class="sma-subnav-btn">Montar meu plano</a>
+          <a href="/projeto21/plano/"   class="sma-subnav-btn">Montar meu plano</a>
           <a href="#sec-quanto-se-conhece" class="sma-subnav-btn">Tudo o que está incluído</a>
 
           <!-- link cruzado -->
@@ -1590,14 +1579,14 @@
 
       <div class="hero-actions">
         {% if user.is_authenticated %}
-          <a href="#sec-plano" class="btn-primary">
+          <a href="/projeto21/plano/" class="btn-primary">
             <span>🧭 Montar meu plano de estratégias</span>
           </a>
           <a href="#sec-kits" class="btn-ghost">
             <span>📄 Ver kits para impressão</span>
           </a>
         {% else %}
-          <a href="{% url 'contas:login' %}?next={{ request.path|urlencode }}%23sec-plano"
+          <a href="{% url 'contas:login' %}?next=/projeto21/plano/"
             class="btn-primary">
             <span>🔑 Já tenho o Guia – entrar com minha conta</span>
           </a>

@@ -144,6 +144,10 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Permite staff/superuser "testar como" um usuário real (impersonação)
+    # sem sair do login.
+    "apps.core.middleware.ImpersonateUserMiddleware",
+    "apps.core.middleware.Debug403LoggingMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -229,10 +233,33 @@ def env_bool(name: str, default: str = "0") -> bool:
 # Se True: o Vocacional só fica disponível para quem tem Acesso ao slug "vocacional_bonus".
 VOCACIONAL_REQUIRE_BONUS = env_bool("VOCACIONAL_REQUIRE_BONUS", "1")
 
+# Se True: o Sonhe + Alto só fica disponível para quem tem Acesso ao produto (por equivalência, Guia).
+SONHEMAISALTO_REQUIRE_BONUS = env_bool("SONHEMAISALTO_REQUIRE_BONUS", "1")
+
 # Se quiser pausar etapas do funil do Vocacional (consentimento/avaliação do guia),
 # dá pra desligar separadamente via env.
 VOCACIONAL_REQUIRE_CONSENT = env_bool("VOCACIONAL_REQUIRE_CONSENT", "1")
 VOCACIONAL_REQUIRE_GUIA = env_bool("VOCACIONAL_REQUIRE_GUIA", "1")
+
+# Quantos passes o fluxo de refinamento do Top 3 usa.
+# - 1: fluxo atual (um único questionário)
+# - 3: Passe 1 / Passe 2 / Passe 3 (SJT + contexto + mini-experimentos)
+VOCACIONAL_PASS_TOTAL = int(os.getenv("VOCACIONAL_PASS_TOTAL", "1"))
+
+# ----------------------------------------------------------------------------
+# Refinamento Top 3 (métrica GAP + cobertura + regra de parada)
+# ----------------------------------------------------------------------------
+VOC_REF_PASS1_PER_DIM = int(os.getenv("VOC_REF_PASS1_PER_DIM", "2"))
+VOC_REF_PASS2_PER_DIM = int(os.getenv("VOC_REF_PASS2_PER_DIM", "3"))
+VOC_REF_PASS2_TOPK = int(os.getenv("VOC_REF_PASS2_TOPK", "5"))
+
+VOC_REF_GAP_STOP_P1 = float(os.getenv("VOC_REF_GAP_STOP_P1", "0.20"))
+VOC_REF_GAP_STOP_P2 = float(os.getenv("VOC_REF_GAP_STOP_P2", "0.15"))
+VOC_REF_TOP1_MIN_P1 = float(os.getenv("VOC_REF_TOP1_MIN_P1", "0.35"))
+VOC_REF_TOP1_MIN_P2 = float(os.getenv("VOC_REF_TOP1_MIN_P2", "0.32"))
+
+# Temperatura do softmax (menor => mais "duro"). 0.6–1.0 costuma ser bom.
+VOC_REF_SOFTMAX_TAU = float(os.getenv("VOC_REF_SOFTMAX_TAU", "0.80"))
 
 # -----------------------------------------------------------------------------
 # E-mail
@@ -274,3 +301,14 @@ if EMAIL_BACKEND.endswith("smtp.EmailBackend"):
 EMAIL_CONTATO = os.getenv("EMAIL_CONTATO", "wygazeta@gmail.com")
 
 
+
+
+# -----------------------------------------------------------------------------
+# Sessões (útil em computador compartilhado)
+# - Política padrão: cookie de sessão não persistente
+# - Também expira após 30 min de inatividade
+# - Pode sobrescrever via ENV: SESSION_COOKIE_AGE (em segundos)
+# -----------------------------------------------------------------------------
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = int(os.getenv('SESSION_COOKIE_AGE', '1800'))
+SESSION_SAVE_EVERY_REQUEST = True

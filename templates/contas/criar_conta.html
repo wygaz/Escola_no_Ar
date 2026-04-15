@@ -4,6 +4,19 @@
 {% block title %}Criar conta · Sonhe + Alto{% endblock %}
 {% block body_class %}theme-sma sma-auth{% endblock %}
 
+{% block extra_head %}{{ block.super }}
+<style>
+  .pw-criteria{ list-style:none; padding-left:0; margin:8px 0 0; }
+  .pw-criteria li{ margin:4px 0; color:var(--muted); font-size:.95rem; }
+  .pw-criteria li.ok{ color:#86efac; }
+  .pw-criteria li.ok::before{ content:'✓ '; }
+  .pw-criteria li::before{ content:'• '; }
+  .sma-field input.is-invalid{ border-color: rgba(239,68,68,.8) !important; box-shadow: 0 0 0 3px rgba(239,68,68,.15); }
+  .sma-inline-error{ margin-top:6px; color:#fecaca; font-size:.95rem; display:none; }
+  .sma-inline-error.on{ display:block; }
+</style>
+{% endblock %}
+
 {% block site_header %}
 <header class="sma-topbar sma-topbar--xl">
   <div class="container sma-topbar-inner">
@@ -65,12 +78,20 @@
             {{ form.password1 }}
             {{ form.password1.errors }}
             <div class="sma-help">Use uma senha forte.</div>
+            <ul id="pw-criteria" class="pw-criteria">
+              <li data-crit="len">Pelo menos 8 caracteres</li>
+              <li data-crit="lower">1 letra minúscula</li>
+              <li data-crit="upper">1 letra maiúscula</li>
+              <li data-crit="digit">1 número</li>
+              <li data-crit="match">Confirmação igual à senha</li>
+            </ul>
           </div>
 
           <div class="sma-field">
             <label for="{{ form.password2.id_for_label }}">Confirmar senha</label>
             {{ form.password2 }}
             {{ form.password2.errors }}
+            <div id="pw-match-msg" class="sma-inline-error">Confirmação de senha deve ser igual à senha.</div>
           </div>
         </div>
 
@@ -106,15 +127,48 @@
 <script>
   (function(){
     const ck = document.getElementById("toggle-pass");
-    if (!ck) return;
+    const p1 = document.getElementById("{{ form.password1.id_for_label }}");
+    const p2 = document.getElementById("{{ form.password2.id_for_label }}");
+    const list = document.getElementById("pw-criteria");
+    const matchMsg = document.getElementById("pw-match-msg");
 
-    ck.addEventListener("change", function(){
-      const p1 = document.getElementById("{{ form.password1.id_for_label }}");
-      const p2 = document.getElementById("{{ form.password2.id_for_label }}");
-      const type = ck.checked ? "text" : "password";
-      if (p1) p1.type = type;
-      if (p2) p2.type = type;
-    });
+    function setOk(key, ok){
+      if(!list) return;
+      const li = list.querySelector('li[data-crit="'+key+'"]');
+      if(!li) return;
+      li.classList.toggle('ok', !!ok);
+    }
+
+    function validate(){
+      const v1 = (p1?.value || "");
+      const v2 = (p2?.value || "");
+
+      setOk('len', v1.length >= 8);
+      setOk('lower', /[a-z]/.test(v1));
+      setOk('upper', /[A-Z]/.test(v1));
+      setOk('digit', /[0-9]/.test(v1));
+
+      const match = (v1.length > 0 && v2.length > 0) ? (v1 === v2) : false;
+      setOk('match', match);
+
+      if(p2){
+        const showMismatch = (v2.length > 0 && v1 !== v2);
+        p2.classList.toggle('is-invalid', showMismatch);
+        if(matchMsg) matchMsg.classList.toggle('on', showMismatch);
+      }
+    }
+
+    if(ck){
+      ck.addEventListener("change", function(){
+        const type = ck.checked ? "text" : "password";
+        if(p1) p1.type = type;
+        if(p2) p2.type = type;
+      });
+    }
+
+    if(p1) p1.addEventListener('input', validate);
+    if(p2) p2.addEventListener('input', validate);
+    validate();
   })();
 </script>
 {% endblock %}

@@ -4,6 +4,8 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from .models import Usuario
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
+import re
 
 User = get_user_model()
 
@@ -24,8 +26,35 @@ class UsuarioCreationForm(forms.ModelForm):
     def clean(self):
         cleaned = super().clean()
         p1, p2 = cleaned.get("password1"), cleaned.get("password2")
+
+        # 1) força da senha (usa PASSWORD_VALIDATORS do settings.py)
+        if p1:
+            extra_errors = []
+            # validações extras solicitadas
+            if len(p1) < 8:
+                extra_errors.append("A senha deve ter pelo menos 8 caracteres.")
+            if not re.search(r"[a-z]", p1):
+                extra_errors.append("Inclua pelo menos 1 letra minúscula.")
+            if not re.search(r"[A-Z]", p1):
+                extra_errors.append("Inclua pelo menos 1 letra maiúscula.")
+            if not re.search(r"\d", p1):
+                extra_errors.append("Inclua pelo menos 1 número.")
+
+            # validações do Django (common password, numeric only etc.)
+            try:
+                dummy_user = User(email=(cleaned.get("email") or "").strip().lower())
+                validate_password(p1, user=dummy_user)
+            except ValidationError as e:
+                extra_errors.extend(list(e.messages))
+
+            if extra_errors:
+                for msg in extra_errors:
+                    self.add_error("password1", msg)
+
+        # 2) confirmação igual
         if p1 and p2 and p1 != p2:
-            raise ValidationError("As senhas não conferem.")
+            self.add_error("password2", "Confirmação de senha deve ser igual à senha.")
+
         return cleaned
 
     def save(self, commit=True):

@@ -2,7 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.conf import settings
-from .gating import next_step, next_url, bonus_acquired, consent_ok, guia_done, require_bonus
+from .gating import next_step, next_url, bonus_acquired, consent_ok, guia_done, guia_valid, require_bonus
 
 @login_required
 def bonus(request):
@@ -25,6 +25,8 @@ def bonus_validar(request):
     pendencias = []
     if not consent_ok(request.user):
         pendencias.append(("Aceitar Termos de Uso e Privacidade", "vocacional:consentimento_check"))
+    if not guia_valid(request.user):
+        pendencias.append(("Obter o Guia como pré-requisito válido", "guia"))
     if not guia_done(request.user):
         pendencias.append(("Concluir Avaliação do Guia", "vocacional:guia_avaliacao"))
 

@@ -1,12 +1,12 @@
-from django.conf import settings
+﻿from django.conf import settings
 from django.db import models
 from apps.core.models import TimeStampedModel
 from django.core.exceptions import ValidationError
 
 class Area(models.Model):
-    """Áreas do Projeto 21 (iniciais: F, I, E, A, C, M)."""
+    """Ãreas do Projeto 21 (iniciais: F, I, E, A, C, M)."""
     INICIAIS = (
-        ("F", "Família"),
+        ("F", "FamÃ­lia"),
         ("I", "Igreja"),
         ("E", "Escola"),
         ("A", "Amigos"),
@@ -18,8 +18,8 @@ class Area(models.Model):
 
 
     class Meta:
-        verbose_name = "Área"
-        verbose_name_plural = "Áreas"
+        verbose_name = "Ãrea"
+        verbose_name_plural = "Ãreas"
 
     def __str__(self) -> str:
         return self.nome
@@ -27,35 +27,71 @@ class Area(models.Model):
 
 class Estrategia(TimeStampedModel):
     NIVEL_CHOICES = (
-        ("B", "Básico"),
+        ("B", "BÃ¡sico"),
         ("D", "Desafio"),
-        ("A", "Avançado"),
+        ("A", "AvanÃ§ado"),
     )
 
     area = models.ForeignKey(Area, on_delete=models.CASCADE, related_name="estrategias")
     titulo = models.CharField(max_length=180)
     codigo = models.SlugField(max_length=80, unique=True)
     descricao = models.TextField(blank=True)
+    objetivo_codigo = models.CharField(max_length=20, blank=True, db_index=True)
+    objetivo_descricao = models.CharField(max_length=220, blank=True)
+    frequencia_texto = models.CharField(max_length=80, blank=True)
+    periodo_texto = models.CharField(max_length=80, blank=True)
+    dosagem_texto = models.CharField(max_length=160, blank=True)
 
     nivel = models.CharField(max_length=1, choices=NIVEL_CHOICES, default="B")
-    ordem_nivel = models.PositiveSmallIntegerField(default=1)  # 1..N dentro do nível
+    ordem_area = models.PositiveSmallIntegerField(default=0)
+    ordem_dimensao = models.PositiveSmallIntegerField(default=0)
+    ordem_nivel = models.PositiveSmallIntegerField(default=1)  # 1..N dentro do nÃ­vel
 
     dificuldade = models.PositiveSmallIntegerField(default=1)
     pontos = models.PositiveSmallIntegerField(default=1)
     ativo = models.BooleanField(default=True)
 
     class Meta:
-        # ordena por Área, depois Nível, depois a ordem dentro do nível
-        ordering = ["area__inicial", "nivel", "ordem_nivel", "titulo"]
+        # ordena por area, nivel, objetivo e ordem de apresentacao
+        ordering = ["area__inicial", "nivel", "objetivo_codigo", "ordem_nivel", "titulo"]
+        constraints = []
+
+
+class JornadaDiaria(models.Model):
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="jornadas_diarias",
+        db_index=True,
+    )
+    data = models.DateField()
+    intencao_do_dia = models.TextField(blank=True)
+    principal_vitoria = models.TextField(blank=True)
+    principal_dificuldade = models.TextField(blank=True)
+    observacoes_gerais = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-data", "-id"]
         constraints = [
-            # evita duplicar a mesma posição no mesmo nível e área
             models.UniqueConstraint(
-                fields=["area", "nivel", "ordem_nivel"],
-                name="unq_area_nivel_ordem",
-            ),
+                fields=["usuario", "data"],
+                name="uniq_jornada_por_usuario_data",
+            )
         ]
 
+    def __str__(self) -> str:
+        return f"Jornada de {self.usuario} em {self.data:%d/%m/%Y}"
+
+
 class RegistroDiario(models.Model):
+    STATUS_CHOICES = (
+        ("NAO_FIZ", "Nao fiz"),
+        ("PARCIAL", "Parcial"),
+        ("FEITO", "Feito"),
+    )
+
     usuario = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -63,10 +99,21 @@ class RegistroDiario(models.Model):
         db_index=True,
     )
     data = models.DateField()
+    jornada = models.ForeignKey(
+        "sonho_de_ser.JornadaDiaria",
+        on_delete=models.CASCADE,
+        related_name="registros",
+        null=True,
+        blank=True,
+    )
     estrategia = models.ForeignKey("sonho_de_ser.Estrategia", on_delete=models.CASCADE)
-    # ...
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="FEITO")
+    observacao = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        ordering = ["-data", "estrategia__area__inicial", "estrategia__ordem_nivel", "id"]
         constraints = [
             models.UniqueConstraint(
                 fields=["usuario", "data", "estrategia"],
@@ -74,12 +121,15 @@ class RegistroDiario(models.Model):
             )
         ]
 
+    def __str__(self) -> str:
+        return f"{self.usuario} - {self.estrategia.titulo} - {self.data:%d/%m/%Y}"
+
 # -------- Mentoria --------
 class MentorProfile(models.Model):
     ROLE = (
         ("Professor", "Professor"),
-        ("Responsável", "Responsável"),
-        ("Líder", "Líder religioso"),
+        ("ResponsÃ¡vel", "ResponsÃ¡vel"),
+        ("LÃ­der", "LÃ­der religioso"),
         ("Parente", "Parente"),
         ("Outro", "Outro"),
     )
@@ -103,17 +153,17 @@ class Mentoria(models.Model):
         related_name="mentorias_recebidas",
     )
 
-    # === Permissões granulares (mantidas) ===
+    # === PermissÃµes granulares (mantidas) ===
     pode_ver_registros = models.BooleanField(default=True)
     pode_criar_anotacoes = models.BooleanField(default=True)
 
-    # === Sinalização legacy (mantida) ===
+    # === SinalizaÃ§Ã£o legacy (mantida) ===
     ativo = models.BooleanField(default=True)
 
     # === Datas (mantidas + novas) ===
     criado_em = models.DateTimeField(auto_now_add=True)
-    # OBS: 'consentido_em' existia; mantemos. Em fluxos com aceite explícito,
-    # use também 'aceita_pelo_mentorado_em' (abaixo).
+    # OBS: 'consentido_em' existia; mantemos. Em fluxos com aceite explÃ­cito,
+    # use tambÃ©m 'aceita_pelo_mentorado_em' (abaixo).
     consentido_em = models.DateTimeField(auto_now_add=True)
 
     # === NOVO: ciclo de vida ===
@@ -130,16 +180,16 @@ class Mentoria(models.Model):
         db_index=True,
     )
 
-    # Quando o mentorado aceitou explicitamente o vínculo (se usar convite)
+    # Quando o mentorado aceitou explicitamente o vÃ­nculo (se usar convite)
     aceita_pelo_mentorado_em = models.DateTimeField(null=True, blank=True)
-    # Quando o vínculo foi encerrado/revogado
+    # Quando o vÃ­nculo foi encerrado/revogado
     revogada_em = models.DateTimeField(null=True, blank=True)
 
     # Opcional: foco principal da mentoria (para filtrar dashboards)
     ESCOPO_CHOICES = [
         ("PROJ21", "Projeto 21"),
         ("VOCAC",  "Vocacional"),
-        ("CURSO",  "Curso/Acadêmico"),
+        ("CURSO",  "Curso/AcadÃªmico"),
         ("OUTRO",  "Outro"),
     ]
     escopo = models.CharField(
@@ -149,12 +199,12 @@ class Mentoria(models.Model):
         db_index=True,
     )
 
-    # Observações gerais do vínculo (acordos, metas, etc.)
+    # ObservaÃ§Ãµes gerais do vÃ­nculo (acordos, metas, etc.)
     observacoes = models.TextField(blank=True)
 
     class Meta:
         constraints = [
-            # Mantém unicidade do par
+            # MantÃ©m unicidade do par
             models.UniqueConstraint(
                 fields=["mentor", "mentorado"], name="unique_mentoria_par"
             ),
@@ -167,26 +217,26 @@ class Mentoria(models.Model):
         ]
         ordering = ["-ativo", "-criado_em"]
 
-    # ====== Helpers & validações ======
+    # ====== Helpers & validaÃ§Ãµes ======
     def __str__(self):
-        return f"Mentoria({self.mentor} → {self.mentorado}, {self.status}, escopo={self.escopo})"
+        return f"Mentoria({self.mentor} â†’ {self.mentorado}, {self.status}, escopo={self.escopo})"
 
     def clean(self):
         # Impede auto-mentoria
         if self.mentor_id and self.mentorado_id and self.mentor_id == self.mentorado_id:
-            raise ValidationError("Mentor e mentorado não podem ser a mesma pessoa.")
+            raise ValidationError("Mentor e mentorado nÃ£o podem ser a mesma pessoa.")
 
-        # (Opcional) Regras por perfil — só valide se tiver os perfis configurados
+        # (Opcional) Regras por perfil â€” sÃ³ valide se tiver os perfis configurados
         # Tenta acessar .perfil com fallback seguro
         mentor_perfil = getattr(self.mentor, "perfil", None)
         mentorado_perfil = getattr(self.mentorado, "perfil", None)
 
-        # Se perfis existirem, aplica heurísticas leves (não bloqueia admins)
+        # Se perfis existirem, aplica heurÃ­sticas leves (nÃ£o bloqueia admins)
         if mentor_perfil and mentor_perfil not in {"MENTOR", "PROF", "ADMIN"} and not getattr(self.mentor, "is_superuser", False):
-            raise ValidationError("O usuário definido como mentor não possui perfil de Mentor/Professor/Admin.")
+            raise ValidationError("O usuÃ¡rio definido como mentor nÃ£o possui perfil de Mentor/Professor/Admin.")
 
         if mentorado_perfil and mentorado_perfil not in {"ALUNO", "USER"}:
-            raise ValidationError("O mentorado deve ser um Aluno/Usuário.")
+            raise ValidationError("O mentorado deve ser um Aluno/UsuÃ¡rio.")
 
     @property
     def is_pendente(self):
@@ -210,14 +260,14 @@ class AnotacaoMentor(models.Model):
     visivel_para_aluno = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-# ====== Projeto 21 – Plano do aluno (compatível com seu modelo atual) ======
+# ====== Projeto 21 â€“ Plano do aluno (compatÃ­vel com seu modelo atual) ======
 from django.utils import timezone
 
 class Plano(models.Model):
     """
     Plano ativo do aluno para 21 dias (ou mais).
     Em vez de criar um modelo novo de 'Registro com itens', mantemos o seu
-    RegistroDiario por estratégia e calculamos progresso usando os itens do plano.
+    RegistroDiario por estratÃ©gia e calculamos progresso usando os itens do plano.
     """
     usuario = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -245,8 +295,8 @@ class Plano(models.Model):
 
 class PlanoItem(models.Model):
     """
-    Item do plano apontando para uma Estratégia existente.
-    Mantém seu modelo de Estratégia (área, nível, pontos etc.) sem duplicar nada.
+    Item do plano apontando para uma EstratÃ©gia existente.
+    MantÃ©m seu modelo de EstratÃ©gia (Ã¡rea, nÃ­vel, pontos etc.) sem duplicar nada.
     """
     plano = models.ForeignKey(
         Plano, on_delete=models.CASCADE, related_name="itens"
@@ -272,7 +322,7 @@ class PlanoItem(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.plano_id} · {self.estrategia.titulo}"
+        return f"{self.plano_id} Â· {self.estrategia.titulo}"
 
 
 # ====== Helpers de progresso (usam SEU RegistroDiario existente) ======
@@ -287,7 +337,7 @@ def _semana_atual_range(d: date):
 
 def progresso_do_dia(plano: Plano, quando: date) -> dict:
     """
-    Calcula % do dia considerando as estratégias ATIVAS do plano.
+    Calcula % do dia considerando as estratÃ©gias ATIVAS do plano.
     Usa o seu RegistroDiario (usuario, data, estrategia).
     """
     from .models import RegistroDiario  # evitar import circular
@@ -299,20 +349,27 @@ def progresso_do_dia(plano: Plano, quando: date) -> dict:
     if total == 0:
         return {"data": quando, "feitos": 0, "total": 0, "percentual": 0}
 
-    feitos = (
-        RegistroDiario.objects.filter(
-            usuario=plano.usuario,
-            data=quando,
-            estrategia_id__in=estrategias_ids,
-        ).count()
+    registros = RegistroDiario.objects.filter(
+        usuario=plano.usuario,
+        data=quando,
+        estrategia_id__in=estrategias_ids,
     )
-    perc = int((feitos / total) * 100)
-    return {"data": quando, "feitos": feitos, "total": total, "percentual": perc}
+    feitos = registros.filter(status="FEITO").count()
+    parciais = registros.filter(status="PARCIAL").count()
+    progresso_bruto = feitos + (parciais * 0.5)
+    perc = int((progresso_bruto / total) * 100)
+    return {
+        "data": quando,
+        "feitos": feitos,
+        "parciais": parciais,
+        "total": total,
+        "percentual": perc,
+    }
 
 
 def progresso_da_semana(plano: Plano, hoje: date | None = None) -> dict:
     """
-    Série de adesão por dia + adesão geral da semana atual.
+    SÃ©rie de adesÃ£o por dia + adesÃ£o geral da semana atual.
     """
     hoje = hoje or date.today()
     ini, fim = _semana_atual_range(hoje)

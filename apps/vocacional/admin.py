@@ -35,7 +35,7 @@ class ResultadoAdmin(admin.ModelAdmin):
 class RespostaGuiaInline(admin.TabularInline):
     model = RespostaGuia
     extra = 0
-    fields = ("questao", "valor", "texto", "atualizado_em")
+    fields = ("questao", "valor", "texto", "multi", "atualizado_em")
     readonly_fields = ("atualizado_em",)
     autocomplete_fields = ("questao",)
 
@@ -48,14 +48,14 @@ class AvaliacaoGuiaAdmin(admin.ModelAdmin):
 
 @admin.register(QuestaoGuia)
 class QuestaoGuiaAdmin(admin.ModelAdmin):
-    list_display = ("ordem","tipo","ativo","enunciado")
-    list_filter = ("tipo","ativo")
-    search_fields = ("enunciado",)
+    list_display = ("ordem", "codigo", "tipo", "obrigatoria", "ativo", "enunciado")
+    list_filter = ("tipo", "ativo", "obrigatoria")
+    search_fields = ("codigo", "enunciado",)
     ordering = ("ordem",)
 
 @admin.register(RespostaGuia)
 class RespostaGuiaAdmin(admin.ModelAdmin):
-    list_display = ("id","avaliacao","questao","valor","atualizado_em")
+    list_display = ("id", "avaliacao", "questao", "valor", "atualizado_em")
     list_filter = ("questao__tipo",)
     search_fields = ("avaliacao__user__email","questao__enunciado","texto")
     autocomplete_fields = ("avaliacao","questao")

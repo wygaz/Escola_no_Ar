@@ -8,10 +8,6 @@
 
   {% if request.user.is_authenticated %}
     <span class="hello">Olá, {{ request.user.first_name|default:request.user.email }}</span>
-    <form method="post" action="{% url 'contas:logout' %}" class="inline">
-      {% csrf_token %}
-      <input type="hidden" name="next" value="{{ request.get_full_path }}">
-      <button type="submit" class="btn btn--ghost">Sair</button>
-    </form>
+    <a href="{% url 'contas:logout' %}?next={{ request.get_full_path|urlencode }}" class="btn btn--ghost">Sair</a>
   {% endif %}
 </nav>

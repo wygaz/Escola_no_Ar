@@ -1,0 +1,43 @@
+{% extends "sonho_de_ser/base_projeto21.html" %}
+
+{% block p21_content %}
+<h1>Sonhe + Alto - Historico</h1>
+<p>Ultimos registros do seu plano.</p>
+
+{% if registros %}
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Area</th>
+              <th>Estrategia</th>
+              <th>Status</th>
+              <th>Observacao</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for registro in registros %}
+              <tr>
+                <td>{{ registro.data|date:"d/m/Y" }}</td>
+                <td>{{ registro.estrategia.area.nome }}</td>
+                <td>{{ registro.estrategia.titulo }}</td>
+                <td>{{ registro.get_status_display }}</td>
+                <td>{{ registro.observacao|default:"-" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <div class="alert alert-info">Nenhum registro encontrado.</div>
+{% endif %}
+
+<div class="mt-3">
+  <a class="btn btn-outline-secondary" href="/projeto21/">Voltar</a>
+</div>
+{% endblock %}

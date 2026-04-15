@@ -21,15 +21,21 @@ def classificar(percentual: Decimal) -> str:
         nivel = rotulo
     return nivel
 
-def calcular_resultados(avaliacao: Avaliacao):
+def calcular_resultados(avaliacao: Avaliacao, pergunta_ids: list[int] | None = None, finalize: bool = True):
     soma = defaultdict(Decimal)
     max_por_dim = defaultdict(Decimal)
 
     perguntas = Pergunta.objects.filter(ativo=True).select_related("dimensao")
+    if pergunta_ids:
+        perguntas = perguntas.filter(id__in=pergunta_ids)
     max_likert = Decimal(5)  # escala 1..5
 
     # ---- Soma por dimensão (com inversão em Likert) -------------------------
-    for r in Resposta.objects.filter(avaliacao=avaliacao).select_related("pergunta__dimensao"):
+    respostas_qs = Resposta.objects.filter(avaliacao=avaliacao).select_related("pergunta__dimensao")
+    if pergunta_ids:
+        respostas_qs = respostas_qs.filter(pergunta_id__in=pergunta_ids)
+
+    for r in respostas_qs:
         p = r.pergunta
         d = p.dimensao
         peso = Decimal(getattr(d, "peso", 1) or 1)
@@ -74,9 +80,10 @@ def calcular_resultados(avaliacao: Avaliacao):
             nivel=nivel,
         )
 
-    avaliacao.status = "concluida"
-    avaliacao.finalizado_em = timezone.now()
-    avaliacao.save(update_fields=["status", "finalizado_em"])
+    if finalize:
+        avaliacao.status = "concluida"
+        avaliacao.finalizado_em = timezone.now()
+        avaliacao.save(update_fields=["status", "finalizado_em"])
     return avaliacao
 
 
