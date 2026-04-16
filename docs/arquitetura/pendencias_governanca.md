@@ -1,43 +1,47 @@
 ## Contexto
 
-Arquivo vivo de memória operacional para registrar decisões já fechadas, pendências de governança/admin, bugs confirmados e itens aprovados ainda não implementados.
+Arquivo vivo de memoria operacional para registrar decisoes ja fechadas,
+pendencias de governanca/admin, bugs confirmados e itens aprovados ainda nao
+implementados.
 
-Atualizar este arquivo sempre que uma decisão de negócio mudar ou quando uma pendência relevante for identificada e aceita como real.
+Atualizar este arquivo sempre que uma decisao de negocio mudar ou quando uma
+pendencia relevante for identificada e aceita como real.
 
-## Regras De Negócio Já Definidas
+## Regras De Negocio Ja Definidas
 
-### Guia como pré-requisito
+### Guia como pre-requisito
 
-- A Avaliação do Guia é obrigatória para participantes do programa.
-- O usuário pode possuir o Guia de duas formas:
+- A Avaliacao do Guia e obrigatoria para participantes do programa.
+- O usuario pode possuir o Guia de duas formas:
   - compra do Guia
-  - concessão administrativa explícita do Guia
-- “Possui Guia válido” não é igual a “comprou o Guia”.
-- “Possui Guia válido” também não deve ser inferido automaticamente apenas da existência de bônus.
+  - concessao administrativa explicita do Guia
+- "Possui Guia valido" nao e igual a "comprou o Guia".
+- "Possui Guia valido" tambem nao deve ser inferido automaticamente apenas da
+  existencia de bonus.
 
-### Ordem Semântica Do Gating
+### Ordem Semantica Do Gating
 
-Sequência correta:
+Sequencia correta:
 
 1. `has_legal`
-2. possui Guia válido
+2. possui Guia valido
 3. `has_guia_feedback`
-4. gating específico do produto/bônus
+4. gating especifico do produto/bonus
 
 ### Estado Inconsistente
 
-- “bônus admin sem Guia explícito” não é fluxo normal desejável.
-- Esse caso deve ser tratado como estado inconsistente de governança.
+- "bonus admin sem Guia explicito" nao e fluxo normal desejavel.
+- Esse caso deve ser tratado como estado inconsistente de governanca.
 - O administrador deve ser alertado quando esse estado for detectado.
 
-## Decisões De Gating Já Fechadas
+## Decisoes De Gating Ja Fechadas
 
 - `core` continua sendo o eixo de entrada oficial dos produtos.
 - CTAs principais do portal passam pelo `produto_resolver`.
-- `has_legal` continua com prioridade própria.
-- Usuário sem Guia válido não deve cair em Avaliação do Guia.
-- Usuário com Guia válido, mas sem avaliação, deve cair em Avaliação do Guia.
-- Usuário com Guia válido + avaliação concluída segue para o gating do produto.
+- `has_legal` continua com prioridade propria.
+- Usuario sem Guia valido nao deve cair em Avaliacao do Guia.
+- Usuario com Guia valido, mas sem avaliacao, deve cair em Avaliacao do Guia.
+- Usuario com Guia valido + avaliacao concluida segue para o gating do produto.
 
 ## Bugs Confirmados
 
@@ -46,68 +50,123 @@ Sequência correta:
 - Bug confirmado: `static(...)` sem import em `apps/core/views.py`.
 - Status: corrigido no hotfix isolado do `/guia/`.
 
-### 403 pós-login por `next` herdado de rota restrita
+### 403 pos-login por `next` herdado de rota restrita
 
-- Cenário observado: sair da sessão admin e entrar como usuário comum na mesma navegação gerou `403 Forbidden`.
-- Hipótese forte: o login do usuário comum ocorreu, mas o redirecionamento pós-login herdou `next` de rota administrativa/restrita.
-- Status: causa confirmada por instrumentação.
-- Origem real: preservação indevida de `next=/portal/dashboard/` no fluxo logout -> login.
-- Mitigação aplicada:
-  - logout não reaproveita mais `next`
-  - `SafeLoginView` agora trata `/portal/dashboard/` como destino restrito para usuário não-staff
+- Cenario observado: sair da sessao admin e entrar como usuario comum na mesma
+  navegacao gerou `403 Forbidden`.
+- Hipotese forte: o login do usuario comum ocorreu, mas o redirecionamento
+  pos-login herdou `next` de rota administrativa/restrita.
+- Status: causa confirmada por instrumentacao.
+- Origem real: preservacao indevida de `next=/portal/dashboard/` no fluxo
+  logout -> login.
+- Mitigacao aplicada:
+  - logout nao reaproveita mais `next`
+  - `SafeLoginView` agora trata `/portal/dashboard/` como destino restrito para
+    usuario nao-staff
 - Status final: validado e encerrado funcionalmente.
 
-### Estado residual de impersonação / modo teste
+### Estado residual de impersonacao / modo teste
 
-- Há evidência concreta de duplicação de sinalização de modo teste:
+- Ha evidencia concreta de duplicacao de sinalizacao de modo teste:
   - banner global em `base.html`
   - indicador local no portal
-- A investigação aberta agora precisa cobrir:
-  - logout após admin comum
-  - logout após modo teste
+- A investigacao aberta agora precisa cobrir:
+  - logout apos admin comum
+  - logout apos modo teste
   - logout sem sair antes do modo teste
-  - comparação com janela anônima
-- Status: patch mínimo de limpeza explícita já aplicado em `logout_view()` e `portal_impersonar_sair()`.
-- Próximo passo: revalidação operacional do `403` para confirmar se a causa residual foi neutralizada.
+  - comparacao com janela anonima
+- Status: patch minimo de limpeza explicita ja aplicado em `logout_view()` e
+  `portal_impersonar_sair()`.
+- Proximo passo: revalidacao operacional do `403` para confirmar se a causa
+  residual foi neutralizada.
 
-## Pendências De Governança/Admin
+## Pendencias De Governanca/Admin
 
-- automatizar concessão administrativa do Guia junto com bônus;
-- adicionar checkbox padrão:
-  - `Enviar o Guia para o e-mail do usuário`
-- melhorar visão de status por usuário na governança;
-- criar MVP de visão consolidada do status semântico do usuário;
-- permitir concessão e remoção administrativa explícita do Guia;
-- consolidar política de sessão não persistente no login escolar;
-- reduzir/remover instrumentação detalhada de autenticação ou condicioná-la a `DEBUG=True`;
-- corrigir o `404` do estático `logo-sonhe-mais-alto.png`;
+- implementar busca operacional de usuarios;
+- implementar busca/listagem operacional por produto e entitlement;
+- permitir concessao manual de acesso por produto;
+- permitir remocao manual de acesso por produto;
+- automatizar concessao administrativa do Guia junto com bonus;
+- adicionar checkbox padrao:
+  - `Enviar o Guia para o e-mail do usuario`
+- registrar explicitamente a aquisicao/concessao administrativa do Guia;
+- garantir que a concessao de bonus ao aluno beneficiario permita amarrar:
+  - concessao de Guia valido
+  - envio/preparacao de envio do Guia
+  - exigencia posterior de Avaliacao do Guia
+- melhorar visao de status por usuario na governanca;
+- criar MVP de visao consolidada do status semantico do usuario;
+- permitir concessao e remocao administrativa explicita do Guia;
+- consolidar politica de sessao nao persistente no login escolar;
+- reduzir/remover instrumentacao detalhada de autenticacao ou condiciona-la a
+  `DEBUG=True`;
+- corrigir o `404` do estatico `logo-sonhe-mais-alto.png`;
 - adicionar filtros operacionais para casos inconsistentes;
-- definir tratamento operacional de notificação por e-mail/whatsapp ao admin.
+- definir tratamento operacional de notificacao por e-mail/whatsapp ao admin.
 
-## Automações Desejadas
+## Automacoes Desejadas
 
-- ao conceder bônus por admin, oferecer ação assistida para também conceder Guia explícito;
-- preparar/disparar envio do Guia ao e-mail do usuário;
+- ao conceder bonus por admin, oferecer acao assistida para tambem conceder Guia
+  explicito;
+- preparar/disparar envio do Guia ao e-mail do usuario;
+- registrar a origem da posse do Guia:
+  - compra
+  - concessao administrativa
+- manter rastreavel a data de concessao/envio do Guia para suporte e auditoria;
 - registrar estados inconsistentes relevantes para acompanhamento operacional.
 
-## Itens Aprovados E Ainda Não Implementados
+## Itens Aprovados E Ainda Nao Implementados
 
-- frente específica de governança/admin para concessão assistida do Guia;
-- checkbox padrão de envio do Guia;
-- logout com limpeza explícita de chaves residuais de sessão (`impersonate_user_id`, `portal_mode` e correlatas);
-- melhoria de visão operacional por usuário;
-- possíveis alertas adicionais por whatsapp, se isso entrar no escopo de governança.
+- frente especifica de governanca/admin para concessao assistida do Guia;
+- checkbox padrao de envio do Guia;
+- busca rapida de usuario na governanca;
+- concessao e remocao manual de acesso por produto diretamente na governanca;
+- registro explicito da aquisicao/concessao do Guia para o aluno beneficiario do
+  bonus;
+- amarracao semantica entre bonus administrativo, Guia valido e exigencia do
+  questionario de avaliacao;
+- logout com limpeza explicita de chaves residuais de sessao
+  (`impersonate_user_id`, `portal_mode` e correlatas);
+- melhoria de visao operacional por usuario;
+- possiveis alertas adicionais por whatsapp, se isso entrar no escopo de
+  governanca.
 
-## Mudanças De Entendimento Relevantes
+## MVP Operacional De Governanca
 
-### Correção da interpretação anterior
+Para a governanca ser efetiva no estado atual do projeto, o MVP precisa incluir:
+
+1. busca de usuario;
+2. leitura resumida do estado semantico do usuario;
+3. visualizacao dos produtos/acessos atuais;
+4. concessao manual por produto;
+5. remocao manual por produto;
+6. concessao explicita do Guia;
+7. opcao padrao para envio do Guia ao aluno;
+8. registro da origem e da data da posse do Guia;
+9. garantia de que o aluno com Guia valido continue obrigado a preencher a
+   Avaliacao do Guia;
+10. filtros para identificar estados inconsistentes.
+
+## Sequencia Minima Recomendada
+
+1. inspecao/busca de usuario;
+2. leitura do estado semantico consolidado;
+3. concessao/remocao manual de produto;
+4. concessao/remocao explicita do Guia;
+5. acao assistida de envio do Guia;
+6. registro e rastreabilidade da posse do Guia;
+7. filtros operacionais para inconsistencia.
+
+## Mudancas De Entendimento Relevantes
+
+### Correcao da interpretacao anterior
 
 Entendimento superado:
 
-- bônus concedido por admin dispensaria Avaliação do Guia
+- bonus concedido por admin dispensaria Avaliacao do Guia
 
 Entendimento correto:
 
-- bônus concedido por admin não dispensa Avaliação do Guia;
-- o que muda é a forma de obtenção do Guia;
-- sem Guia válido, a próxima etapa não é Avaliação do Guia.
+- bonus concedido por admin nao dispensa Avaliacao do Guia;
+- o que muda e a forma de obtencao do Guia;
+- sem Guia valido, a proxima etapa nao e Avaliacao do Guia.
