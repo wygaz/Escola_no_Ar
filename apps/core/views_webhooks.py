@@ -39,13 +39,13 @@ def _mapear_produtos_para_venda(data: dict):
 
     # Produto principal: "Quem sou eu? Como descobrir minha vocação?"
     if "quem sou eu" in product_name or "como descobrir minha vocação" in product_name:
-        produtos.append(("projeto21_sonhe_alto", "Projeto 21 – Sonhe + Alto"))
+        produtos.append(("projeto21_sonhe_alto", "Sonhe + Alto"))
         produtos.append(("vocacional_bonus", "Bônus – Teste Vocacional (atual)"))
         return produtos
 
     # Produto de teste (Hotmart postback2)
     if "postback2" in product_name or "produto test" in product_name:
-        produtos.append(("projeto21_sonhe_alto", "Projeto 21 – Sonhe + Alto"))
+        produtos.append(("projeto21_sonhe_alto", "Sonhe + Alto"))
         produtos.append(("vocacional_bonus", "Bônus – Teste Vocacional (atual)"))
         return produtos
 

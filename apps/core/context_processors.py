@@ -24,12 +24,12 @@ def ui(request):
         if perfil in {"MENTOR", "PROF", "ADMIN"}:
             nav_items += [
             {"label": "Mentorias", "href": "/mentorias/"},
-            {"label": "Projeto 21 (Mentor)", "href": "/projeto21/mentor/"},
+            {"label": "Sonhe + Alto (Mentor)", "href": "/projeto21/mentor/"},
             {"label": "Vocacional (Mentor)", "href": "/vocacional/mentor/"},
             ]
         # produtos (gated)
         if has_cap(user, "p21", level="starter"):
-            nav_items.append({"label": "Projeto 21", "href": "/projeto21/"})
+            nav_items.append({"label": "Sonhe + Alto", "href": "/projeto21/"})
         if has_cap(user, "vocacional", level="starter"):
             nav_items.append({"label": "Vocacional", "href": "/vocacional/"})
     return {
