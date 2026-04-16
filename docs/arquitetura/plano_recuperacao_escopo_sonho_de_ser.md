@@ -138,6 +138,24 @@ O escopo historico previa:
 - area da escola/admin;
 - certificados e reconhecimento.
 
+### 3.3 Requisito institucional de operacao em grupo
+
+Como o produto deve poder atender contratos com escola, igreja, comunidade ou
+outro grupo organizado, a governanca precisa prever operacao institucional em
+lote.
+
+Isso inclui:
+
+- cadastro em grupo;
+- concessao em grupo por produto;
+- concessao em grupo por pacote de produtos;
+- leitura de status por grupo/contrato;
+- possibilidade de amarrar nesses lotes a concessao do Guia, o envio do Guia e
+  a exigencia posterior da Avaliacao do Guia.
+
+Esse requisito nao substitui a governanca individual; ele a amplia para o caso
+institucional.
+
 ## 4. Estado Atual do Codigo
 
 ### 4.1 Ja Recuperado ou em Andamento
@@ -277,6 +295,8 @@ Diretrizes preservadas:
 - a governanca nao deve criar regra paralela de produto;
 - qualquer liberacao administrativa deve respeitar a semantica correta de Guia,
   avaliacao e bonus.
+- a governanca deve crescer para suportar tambem operacoes em lote por grupo
+  institucional, sem criar base paralela de usuarios ou acessos.
 
 MVP coerente:
 
@@ -405,6 +425,10 @@ Objetivo: recuperar o escopo institucional.
 Entregas futuras:
 
 - turmas;
+- contratos/grupos institucionais;
+- cadastro em lote;
+- concessao em lote por produto;
+- concessao em lote por grupo de produtos;
 - relatorios por turma;
 - engajamento;
 - gestao de mentores;

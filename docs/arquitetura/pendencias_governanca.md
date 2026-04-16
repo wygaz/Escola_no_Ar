@@ -84,6 +84,13 @@ Sequencia correta:
 
 - implementar busca operacional de usuarios;
 - implementar busca/listagem operacional por produto e entitlement;
+- implementar operacoes em lote por grupo institucional;
+- permitir cadastro em grupo para contratos com escola, igreja, comunidade e
+  organizacoes equivalentes;
+- permitir concessao em grupo por produto;
+- permitir concessao em grupo por pacote/grupo de produtos;
+- permitir remocao em grupo por produto quando houver necessidade operacional
+  legitima;
 - permitir concessao manual de acesso por produto;
 - permitir remocao manual de acesso por produto;
 - automatizar concessao administrativa do Guia junto com bonus;
@@ -108,6 +115,9 @@ Sequencia correta:
 
 - ao conceder bonus por admin, oferecer acao assistida para tambem conceder Guia
   explicito;
+- ao operar contrato institucional, permitir fluxo assistido de cadastro e
+  concessao em lote;
+- permitir modelos reaproveitaveis de concessao por grupo de produtos;
 - preparar/disparar envio do Guia ao e-mail do usuario;
 - registrar a origem da posse do Guia:
   - compra
@@ -120,6 +130,9 @@ Sequencia correta:
 - frente especifica de governanca/admin para concessao assistida do Guia;
 - checkbox padrao de envio do Guia;
 - busca rapida de usuario na governanca;
+- cadastro em grupo para contratos institucionais;
+- concessao em grupo por produto;
+- concessao em grupo por grupo/pacote de produtos;
 - concessao e remocao manual de acesso por produto diretamente na governanca;
 - registro explicito da aquisicao/concessao do Guia para o aluno beneficiario do
   bonus;
@@ -147,6 +160,12 @@ Para a governanca ser efetiva no estado atual do projeto, o MVP precisa incluir:
    Avaliacao do Guia;
 10. filtros para identificar estados inconsistentes.
 
+Extensao institucional prevista:
+
+11. cadastro e concessao em lote por grupo institucional;
+12. suporte a contrato por escola, igreja, comunidade ou grupo equivalente;
+13. suporte a concessao por pacote de produtos, nao apenas por item isolado.
+
 ## Sequencia Minima Recomendada
 
 1. inspecao/busca de usuario;
@@ -156,6 +175,13 @@ Para a governanca ser efetiva no estado atual do projeto, o MVP precisa incluir:
 5. acao assistida de envio do Guia;
 6. registro e rastreabilidade da posse do Guia;
 7. filtros operacionais para inconsistencia.
+
+Sequencia institucional posterior:
+
+8. cadastro em lote por grupo;
+9. concessao em lote por produto;
+10. concessao em lote por grupo de produtos;
+11. filtros por contrato/grupo institucional.
 
 ## Mudancas De Entendimento Relevantes
 
