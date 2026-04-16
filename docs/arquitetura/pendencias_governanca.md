@@ -48,6 +48,31 @@ Sequencia correta:
 - Esse caso deve ser tratado como estado inconsistente de governanca.
 - O administrador deve ser alertado quando esse estado for detectado.
 
+### Demo institucional nao e compra nem posse do Guia
+
+- o sistema precisa suportar um trilho proprio de demonstracao para prospeccao;
+- esse trilho nao deve marcar:
+  - compra;
+  - posse valida do Guia;
+  - avaliacao do Guia concluida;
+- a demo deve ser rastreavel, temporaria e concedida apenas por staff/superuser;
+- a demo pode servir tanto para conta demo institucional quanto para usuario
+  real da instituicao em prospeccao;
+- a demo deve ser compativel com futura parametrizacao por escola, logo e grupo
+  de usuarios.
+
+### Kit de degustacao institucional
+
+- a prospeccao precisa oferecer uma forma rapida de experimentar o produto sem
+  exigir o preenchimento integral das perguntas reais;
+- o kit de degustacao nao deve expor o banco real de perguntas em lista aberta;
+- o kit pode usar:
+  - perfis demo prontos;
+  - ajustes controlados de perfil;
+  - miniquestionario proprio de demonstracao;
+- o resultado gerado nessa trilha deve ser entendido como resultado demo, nao
+  como avaliacao oficial do produto.
+
 ## Decisoes De Gating Ja Fechadas
 
 - `core` continua sendo o eixo de entrada oficial dos produtos.
@@ -130,6 +155,8 @@ Decisao de compatibilidade:
   - pacote de concessao
   - capacidade interna de acesso/gating;
 - implementar operacoes em lote por grupo institucional;
+- implementar acesso de demonstracao institucional temporario e rastreavel;
+- implementar kit de degustacao institucional acoplado a demo;
 - permitir cadastro em grupo para contratos com escola, igreja, comunidade e
   organizacoes equivalentes;
 - permitir concessao em grupo por produto;
@@ -149,6 +176,8 @@ Decisao de compatibilidade:
 - melhorar visao de status por usuario na governanca;
 - criar MVP de visao consolidada do status semantico do usuario;
 - permitir concessao e remocao administrativa explicita do Guia;
+- substituir a ideia de "conceder Guia" por fluxo proprio de envio promocional
+  registrado, sem marcar posse valida por clique manual;
 - consolidar politica de sessao nao persistente no login escolar;
 - reduzir/remover instrumentacao detalhada de autenticacao ou condiciona-la a
   `DEBUG=True`;
@@ -166,6 +195,13 @@ Decisao de compatibilidade:
   acesso correspondentes, quando houver mapeamento definido;
 - ao operar contrato institucional, permitir fluxo assistido de cadastro e
   concessao em lote;
+- permitir concessao de demo institucional com expiracao automatica;
+- permitir parametrizacao basica da demo por instituicao:
+  - nome;
+  - logo;
+  - identidade visual minima;
+- permitir perfis demo prontos para degustacao institucional;
+- permitir recalculo por ajustes controlados sem expor o questionario real;
 - permitir modelos reaproveitaveis de concessao por grupo de produtos;
 - preparar/disparar envio do Guia ao e-mail do usuario;
 - registrar a origem da posse do Guia:
@@ -187,6 +223,10 @@ Decisao de compatibilidade:
   bonus;
 - amarracao semantica entre bonus administrativo, Guia valido e exigencia do
   questionario de avaliacao;
+- trilho proprio de demo institucional para prospeccao remota, sem falsificar
+  compra, posse do Guia ou avaliacao;
+- kit de degustacao institucional com perfis prontos, ajustes controlados e
+  resultado demo;
 - separacao tecnica entre cadastro de produto e capacidade efetiva de gating,
   sem exigir um decorador novo para cada produto comercial;
 - logout com limpeza explicita de chaves residuais de sessao
@@ -216,6 +256,9 @@ Extensao institucional prevista:
 11. cadastro e concessao em lote por grupo institucional;
 12. suporte a contrato por escola, igreja, comunidade ou grupo equivalente;
 13. suporte a concessao por pacote de produtos, nao apenas por item isolado.
+14. suporte a demo institucional temporaria, rastreavel e parametrizavel.
+15. suporte a kit de degustacao institucional sem exposicao do banco real de
+    perguntas.
 
 ## Sequencia Minima Recomendada
 
@@ -233,6 +276,9 @@ Sequencia institucional posterior:
 9. concessao em lote por produto;
 10. concessao em lote por grupo de produtos;
 11. filtros por contrato/grupo institucional.
+12. demo institucional para prospeccao remota, com expiracao e identidade da
+    instituicao.
+13. kit de degustacao institucional com perfis prontos e simulacao guiada.
 
 ## Mudancas De Entendimento Relevantes
 

@@ -96,6 +96,17 @@
           </div>
         </div>
 
+        {% if governance_inconsistencies %}
+          <div style="display:grid; gap:10px; margin:0 0 16px;">
+            {% for item in governance_inconsistencies %}
+              <div style="border:1px solid #f5c2c7; background:#7f1d1d; color:#fff7f7; border-radius:12px; padding:14px 16px;">
+                <div style="font-weight:700; margin-bottom:6px;">{{ item.title }}</div>
+                <div style="line-height:1.4;">{{ item.message }}</div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin:0 0 16px;">
           {% for product_key, product_state in selected_user_product_states.items %}
             <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
@@ -138,9 +149,51 @@
         </div>
 
         <div style="border-top:1px solid rgba(0,0,0,.08); margin-top:16px; padding-top:16px;">
+          <h3 style="margin:0 0 8px;">Guia</h3>
+          <p style="margin:0 0 14px; opacity:.78;">
+            A posse valida do Guia nao deve ser marcada manualmente. Ela so deve vir da compra no Hotmart ou de um fluxo proprio de envio promocional registrado.
+          </p>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
+            <span style="font-weight:600; color:{% if governance_guia_active %}#18794e{% else %}#b26a00{% endif %};">
+              {% if governance_guia_active %}Guia ativo{% else %}Guia não ativo{% endif %}
+            </span>
+            {% if governance_guia_products %}
+              <span style="opacity:.78;">Produtos do Guia cadastrados: {{ governance_guia_products|length }}</span>
+            {% else %}
+              <span style="color:#c62828; font-weight:600;">Nenhum produto do Guia cadastrado</span>
+            {% endif %}
+          </div>
+          {% if governance_guia_products %}
+            <div style="display:grid; gap:8px; margin-bottom:12px;">
+              {% for produto in governance_guia_products %}
+                <div style="border:1px solid rgba(0,0,0,.08); border-radius:10px; padding:10px 12px;">
+                  <strong>{{ produto.nome }}</strong>
+                  <span style="opacity:.78;">({{ produto.slug }})</span>
+                  {% if produto.id in selected_user_active_access_product_ids %}
+                    <span style="color:#18794e; font-weight:600;"> - ativo</span>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <form method="post" style="display:flex; gap:12px; flex-wrap:wrap;">
+            {% csrf_token %}
+            <input type="hidden" name="q" value="{{ governance_search_query }}">
+            <input type="hidden" name="user_id" value="{{ selected_user.id }}">
+            <button type="submit" name="action" value="grant_guia" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(178,106,0,.22); background:#fff7e8; color:#b26a00; font-weight:600;">
+              Fluxo de envio do Guia
+            </button>
+            <button type="submit" name="action" value="revoke_guia" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(198,40,40,.22); background:#fff3f3; color:#c62828; font-weight:600;">
+              Corrigir marcacao do Guia
+            </button>
+          </form>
+        </div>
+
+        <div style="border-top:1px solid rgba(0,0,0,.08); margin-top:16px; padding-top:16px;">
           <h3 style="margin:0 0 8px;">Ações de acesso</h3>
           <p style="margin:0 0 14px; opacity:.78;">
             Marque os produtos pertinentes ao usuário inspecionado e faça a operação em lote.
+            A organização abaixo já segue as 3 famílias canônicas: Básico, Intermediário e Premium.
           </p>
           <form method="post" style="display:grid; gap:12px;">
             {% csrf_token %}
@@ -152,26 +205,73 @@
                 [+] Adicionar produto
               </a>
             </div>
-            <div style="display:grid; gap:8px; border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
-              {% for produto in governance_available_products %}
-                <label style="display:flex; align-items:center; gap:10px; padding:6px 0;">
-                  <input
-                    type="checkbox"
-                    name="produto_ids"
-                    value="{{ produto.id }}"
-                    {% if produto.id in selected_user_active_access_product_ids %}checked{% endif %}
-                  >
-                  <span>
-                    <strong>{{ produto.nome }}</strong>
-                    <span style="opacity:.78;">({{ produto.slug }})</span>
-                    {% if produto.id in selected_user_active_access_product_ids %}
-                      <span style="color:#18794e; font-weight:600;"> - ativo</span>
-                    {% endif %}
-                  </span>
-                </label>
-              {% empty %}
-                <p style="margin:0; opacity:.78;">Nenhum produto cadastrado na tabela de produtos.</p>
+            <div style="display:grid; gap:12px;">
+              {% for family in governance_product_groups %}
+                <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
+                  <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
+                    <div>
+                      <strong>{{ family.label }}</strong>
+                      <div style="opacity:.78; margin-top:4px;">{{ family.description }}</div>
+                    </div>
+                    <span style="font-weight:600; color:{% if family.active %}#18794e{% else %}#b26a00{% endif %};">
+                      {% if family.active %}Ativo{% else %}Não ativo{% endif %}
+                    </span>
+                  </div>
+                  {% if family.products %}
+                    <div style="display:grid; gap:8px;">
+                      {% for produto in family.products %}
+                        <label style="display:flex; align-items:center; gap:10px; padding:6px 0;">
+                          <input
+                            type="checkbox"
+                            name="produto_ids"
+                            value="{{ produto.id }}"
+                            {% if produto.id in selected_user_active_access_product_ids %}checked{% endif %}
+                          >
+                          <span>
+                            <strong>{{ produto.nome }}</strong>
+                            <span style="opacity:.78;">({{ produto.slug }})</span>
+                            {% if produto.id in selected_user_active_access_product_ids %}
+                              <span style="color:#18794e; font-weight:600;"> - ativo</span>
+                            {% endif %}
+                          </span>
+                        </label>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    <p style="margin:0; opacity:.78;">Nenhum produto desta família está cadastrado na tabela de produtos.</p>
+                  {% endif %}
+                </div>
               {% endfor %}
+
+              {% if governance_uncategorized_products %}
+                <div style="border:1px dashed rgba(0,0,0,.18); border-radius:12px; padding:12px;">
+                  <strong>Outros produtos cadastrados</strong>
+                  <div style="opacity:.78; margin:4px 0 8px;">Itens fora das 3 famílias oficiais atuais. Permanecem disponíveis para governança sem entrar na semântica canônica.</div>
+                  <div style="display:grid; gap:8px;">
+                    {% for produto in governance_uncategorized_products %}
+                      <label style="display:flex; align-items:center; gap:10px; padding:6px 0;">
+                        <input
+                          type="checkbox"
+                          name="produto_ids"
+                          value="{{ produto.id }}"
+                          {% if produto.id in selected_user_active_access_product_ids %}checked{% endif %}
+                        >
+                        <span>
+                          <strong>{{ produto.nome }}</strong>
+                          <span style="opacity:.78;">({{ produto.slug }})</span>
+                          {% if produto.id in selected_user_active_access_product_ids %}
+                            <span style="color:#18794e; font-weight:600;"> - ativo</span>
+                          {% endif %}
+                        </span>
+                      </label>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if not governance_product_groups and not governance_uncategorized_products %}
+                <p style="margin:0; opacity:.78;">Nenhum produto cadastrado na tabela de produtos.</p>
+              {% endif %}
             </div>
             <div style="display:flex; gap:12px; flex-wrap:wrap;">
               <button type="submit" name="action" value="grant" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(24,121,78,.25); background:#eef8f1; color:#18794e; font-weight:600;">

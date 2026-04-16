@@ -18,10 +18,14 @@ from django.templatetags.static import static
 from django.utils import timezone
 
 from apps.core.permissions import (
+    PROD_GUIA,
     user_has_produto,
     onboarding_status,
     PROD_VOCACIONAL_75,
     PROD_SONHEMAISALTO,
+    PROD_VOCACIONAL_150,
+    PROD_VOCACIONAL_PREMIUM,
+    slugs_equivalentes,
 )
 from apps.core.product_registry import (
     SONHE_MAIS_ALTO_KEY,
@@ -804,6 +808,64 @@ def _build_governance_subject_context(request, target_user) -> dict:
     active_access_slugs = {acesso.produto.slug for acesso in active_accesses}
     active_access_product_ids = {acesso.produto_id for acesso in active_accesses}
     available_products = list(Produto.objects.order_by("nome", "slug"))
+    guia_products = [produto for produto in available_products if produto.slug in set(slugs_equivalentes(PROD_GUIA))]
+    family_defs = [
+        {
+            "key": "basic",
+            "label": "Basico",
+            "slug_ref": PROD_VOCACIONAL_75,
+            "description": "Bonus do Guia: Sonhe + Alto e Vocacional 75.",
+        },
+        {
+            "key": "intermediate",
+            "label": "Intermediario",
+            "slug_ref": PROD_VOCACIONAL_150,
+            "description": "Vocacional 150, equivalente ao antigo passe1.",
+        },
+        {
+            "key": "premium",
+            "label": "Premium",
+            "slug_ref": PROD_VOCACIONAL_PREMIUM,
+            "description": "Vocacional Premium, equivalente aos antigos passe2 e passe3.",
+        },
+    ]
+
+    grouped_products = []
+    assigned_product_ids = set()
+    for family in family_defs:
+        accepted_slugs = set(slugs_equivalentes(family["slug_ref"]))
+        products = [produto for produto in available_products if produto.slug in accepted_slugs]
+        assigned_product_ids.update(produto.id for produto in products)
+        grouped_products.append(
+            {
+                **family,
+                "products": products,
+                "active": bool(user_has_produto(target_user, family["slug_ref"], request=request, bypass_staff=False)),
+            }
+        )
+
+    uncategorized_products = [produto for produto in available_products if produto.id not in assigned_product_ids]
+    inconsistencies = []
+    has_valid_guia = bool(status.get("has_valid_guia"))
+    has_intermediate = bool(user_has_produto(target_user, PROD_VOCACIONAL_150, request=request, bypass_staff=False))
+    has_premium = bool(user_has_produto(target_user, PROD_VOCACIONAL_PREMIUM, request=request, bypass_staff=False))
+
+    if (has_intermediate or has_premium) and not has_valid_guia:
+        levels = []
+        if has_intermediate:
+            levels.append("Intermediario")
+        if has_premium:
+            levels.append("Premium")
+        inconsistencies.append(
+            {
+                "level": "critical",
+                "title": "Inconsistencia de governanca",
+                "message": (
+                    f"Produto adicional concedido sem posse valida do Guia: {', '.join(levels)}. "
+                    "O fluxo permanece bloqueado ate regularizar o pre-requisito."
+                ),
+            }
+        )
 
     return {
         "selected_user": target_user,
@@ -812,7 +874,12 @@ def _build_governance_subject_context(request, target_user) -> dict:
         "selected_user_active_accesses": active_accesses,
         "selected_user_active_access_slugs": active_access_slugs,
         "selected_user_active_access_product_ids": active_access_product_ids,
+        "governance_guia_products": guia_products,
+        "governance_guia_active": has_valid_guia,
         "governance_available_products": available_products,
+        "governance_product_groups": grouped_products,
+        "governance_uncategorized_products": uncategorized_products,
+        "governance_inconsistencies": inconsistencies,
         "governance_product_add_url": reverse("admin:contas_produto_add"),
     }
 
@@ -854,11 +921,15 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
         if query_data:
             redirect_url = f"{redirect_url}?{urlencode(query_data)}"
 
-        if action not in {"grant", "revoke"}:
+        if action not in {"grant", "revoke", "grant_guia", "revoke_guia"}:
             messages.error(request, "Ação de governança inválida.")
             return redirect(redirect_url)
 
-        if not user_id.isdigit() or not produto_ids:
+        if not user_id.isdigit():
+            messages.error(request, "Selecione um usuário válido.")
+            return redirect(redirect_url)
+
+        if action in {"grant", "revoke"} and not produto_ids:
             messages.error(request, "Selecione um usuário e pelo menos um produto válido.")
             return redirect(redirect_url)
 
@@ -868,6 +939,42 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
         except User.DoesNotExist:
             messages.error(request, "Usuário não encontrado.")
             return redirect(reverse("portal_dashboard"))
+
+        if action in {"grant_guia", "revoke_guia"}:
+            guia_products = list(
+                Produto.objects.filter(slug__in=slugs_equivalentes(PROD_GUIA)).order_by("nome", "slug")
+            )
+            if not guia_products:
+                messages.error(
+                    request,
+                    "Nenhum produto do Guia está cadastrado. Cadastre o produto correspondente antes de operar essa ação.",
+                )
+                return redirect(redirect_url)
+
+            if action == "grant_guia":
+                messages.warning(
+                    request,
+                    "A posse do Guia nao pode ser concedida por marcacao administrativa direta. "
+                    "Ela so deve ser reconhecida por compra no Hotmart ou apos fluxo proprio de envio promocional registrado.",
+                )
+                return redirect(redirect_url)
+
+            updated = Acesso.objects.filter(
+                user=target_user,
+                produto__slug__in=slugs_equivalentes(PROD_GUIA),
+                expires_at__isnull=True,
+            ).update(expires_at=timezone.now())
+            if updated:
+                messages.success(
+                    request,
+                    f"Posse do Guia removida de {target_user.email}.",
+                )
+            else:
+                messages.info(
+                    request,
+                    f"{target_user.email} não possui produto de Guia ativo para remoção.",
+                )
+            return redirect(redirect_url)
 
         produtos = list(Produto.objects.filter(pk__in=[int(pid) for pid in produto_ids]).order_by("nome", "slug"))
         if not produtos:

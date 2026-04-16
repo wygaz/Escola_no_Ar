@@ -265,6 +265,15 @@ O Sonhe + Alto deve continuar obedecendo ao mesmo trilho semantico:
 - entitlement/liberacao do produto;
 - entrada no fluxo interno.
 
+Excecao planejada:
+
+- a plataforma deve suportar um trilho proprio de demonstracao institucional
+  para prospeccao;
+- essa demo nao substitui compra, posse do Guia ou avaliacao real;
+- a demo serve para apresentar a experiencia a diretores, coordenadores,
+  orientadores e instituicoes parceiras sem adulterar os dados semanticos do
+  produto.
+
 ### 5.5 Produto comercial x gating interno
 
 Um ponto de compatibilizacao importante da fase atual e nao confundir:
@@ -366,6 +375,61 @@ Diretrizes preservadas:
   avaliacao e bonus.
 - a governanca deve crescer para suportar tambem operacoes em lote por grupo
   institucional, sem criar base paralela de usuarios ou acessos.
+
+### 7.1 Demo institucional
+
+Para prospeccao remota e apresentacoes conduzidas a distancia, a governanca
+precisa suportar uma modalidade propria de demo institucional.
+
+Diretrizes:
+
+- concessao apenas por staff/superuser;
+- validade curta e expiracao automatica;
+- origem rastreavel;
+- sem marcar compra;
+- sem marcar posse valida do Guia;
+- sem marcar avaliacao do Guia;
+- compatibilidade com identidade parametrizada da instituicao.
+
+Essa modalidade deve atender dois cenarios:
+
+1. conta demo institucional;
+2. liberacao demo temporaria para usuario real da instituicao.
+
+Evolucao prevista:
+
+- vinculo com escola/comunidade/instituicao;
+- logo personalizado;
+- possivel identidade visual minima;
+- suporte a mais de um usuario por instituicao.
+
+### 7.2 Kit de degustacao institucional
+
+Para reduzir a friccao natural da prospeccao, a plataforma deve prever um kit
+de degustacao institucional acoplado ao trilho de demo.
+
+Objetivo:
+
+- permitir que diretor, coordenadora ou orientadora conheca o valor do produto
+  sem precisar preencher 75, 150 ou 1080 perguntas reais.
+
+Diretrizes:
+
+- nao expor a lista completa de perguntas reais;
+- nao transformar degustacao em copia facil do conteudo proprietario;
+- oferecer experiencia rapida e convincente.
+
+Formato recomendado em camadas:
+
+1. perfis demo prontos;
+2. ajustes controlados de perfil;
+3. miniquestionario proprio de demonstracao, se necessario.
+
+Leitura correta do resultado:
+
+- o kit gera resultado demo;
+- nao substitui avaliacao oficial;
+- nao deve gravar semantica de compra ou posse valida de Guia.
 
 MVP coerente:
 
