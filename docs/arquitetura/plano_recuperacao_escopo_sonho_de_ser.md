@@ -23,6 +23,18 @@ Ele parte de duas fontes principais:
 O objetivo nao e recriar o projeto do zero. O objetivo e recuperar o escopo sem
 perder o que ja funciona hoje no codigo.
 
+Esta versao tambem incorpora o alinhamento posterior da reforma arquitetural
+registrado em `planejamento_geral_reforma_arquitetural.zip`, incluindo:
+
+- `core` como centro oficial de navegacao de produtos;
+- governanca como experiencia propria de staff/superuser;
+- compatibilidade transitoria do portal atual;
+- regra semantica corrigida sobre Guia, avaliacao do Guia e concessao
+  administrativa de acesso;
+- o valor do wireframe da reforma como correcao de fluxo, nao apenas de layout;
+- distincao operacional entre visitante, usuario autenticado comum e
+  staff/superuser.
+
 ## 2. Principio Arquitetural
 
 O projeto deve continuar obedecendo a diretriz atual:
@@ -35,6 +47,34 @@ O projeto deve continuar obedecendo a diretriz atual:
   questionario/avaliacao do Guia.
 
 Nao devemos espalhar regra de acesso, fluxo ou gamificacao em templates.
+
+### 2.2 Estado arquitetural presente
+
+Com base no pacote da reforma estrutural, o estado-alvo imediato da plataforma e
+este:
+
+- existe uma unica entrada oficial de produtos no `core`, mesmo que o `portal`
+  atual ainda exista como camada de compatibilidade;
+- `staff/superuser` nao devem cair por padrao no funil do aluno;
+- a governanca nasce da estrutura atual de dashboard, sem criar base paralela;
+- o `core` orquestra entrada, status, gating agregado e navegacao global;
+- os apps de produto mantem posse de seus fluxos internos;
+- qualquer evolucao do Sonhe + Alto precisa respeitar esse trilho.
+
+### 2.3 Valor do wireframe da reforma
+
+Os wireframes produzidos na etapa da reforma nao devem ser lidos apenas como
+proposta de interface. Eles registram uma correcao de arquitetura de navegacao.
+
+Valor pratico do wireframe:
+
+- recolocar o `core` como centro distribuidor de fluxos e acessos;
+- evitar que cards e templates mandem o usuario diretamente para paginas
+  internas dispersas;
+- diferenciar melhor o percurso de visitante, usuario comum e staff;
+- deixar claro que a governanca nao e uma extensao do funil do aluno;
+- servir como referencia de fluxo para futuras alteracoes no portal e na
+  vitrine oficial.
 
 ### 2.1 Parametrizacao de Identidade
 
@@ -66,6 +106,23 @@ O mapa funcional descreve tres grupos principais:
 - Admin/Escola: gerencia mentores, acompanha desempenho geral, personaliza
   trilhas e emite certificados.
 
+### 3.1.1 Distincao operacional atual de acesso
+
+Para a navegacao e o gating atuais, a plataforma deve considerar pelo menos
+quatro estados operacionais:
+
+- Visitante: nao autenticado. Pode ver paginas publicas, landing e informacoes
+  institucionais, mas nao entra no fluxo protegido.
+- Usuario autenticado comum: possui conta e pode ter pendencias de termos,
+  Guia, avaliacao do Guia e acesso a produto.
+- Usuario autenticado com acesso valido ao produto: cumpriu os pre-requisitos do
+  trilho e pode entrar no fluxo correspondente.
+- Staff/Superuser: por padrao entra na governanca; so percorre o fluxo do aluno
+  quando estiver explicitamente em modo de teste.
+
+Essa distincao e importante porque "usuario autenticado" nao significa "usuario
+autorizado a navegar em qualquer produto".
+
 ### 3.2 Modulos Funcionais
 
 O escopo historico previa:
@@ -86,6 +143,8 @@ O escopo historico previa:
 ### 4.1 Ja Recuperado ou em Andamento
 
 - O `core` controla o acesso pelo portal e resolvedor.
+- O `core` ja possui `product_registry` inicial para centralizar a definicao dos
+  produtos expostos pelo portal.
 - O gating considera cadastro, termos, avaliacao do Guia e acesso ao produto.
 - `/projeto21/` continua como fachada legada.
 - `/projeto21/plano/` aponta para o runtime canonico em `apps/sonho_de_ser`.
@@ -99,6 +158,10 @@ O escopo historico previa:
 ### 4.2 Parcial ou Stub
 
 - Dashboard do aluno existe, mas ainda nao expressa a jornada pedagogica.
+- Vitrine de produtos/portal ainda carrega hardcodes que precisam migrar para o
+  trilho central do `core`.
+- Governanca existe, mas ainda precisa amadurecer o papel de painel de comando
+  da plataforma.
 - Mentor existe como modelos/API parcial, mas a tela web ainda e stub.
 - Registro diario existe, mas ainda precisa ficar mais ergonomico.
 - Historico precisa virar leitura util da evolucao.
@@ -128,7 +191,63 @@ Esses arquivos indicam intencao de produto, mas ainda nao sao implementacao
 confiavel. Alguns possuem `extends` quebrado ou dependem de modelos que nao
 existem no runtime atual.
 
-## 5. Direcao de Produto
+## 5. Regra revisada de acesso, Guia e navegacao
+
+O ponto mais importante da compatibilizacao atual e que o sistema nao pode mais
+confundir:
+
+- compra do Guia;
+- posse valida do Guia;
+- avaliacao do Guia;
+- entitlement de produto/bonus;
+- liberacao administrativa.
+
+### 5.1 Sequencia logica obrigatoria
+
+A ordem semantica correta do gating e:
+
+1. Termos e consentimento legal.
+2. Possui Guia como pre-requisito valido?
+3. Avaliacao do Guia concluida?
+4. Entitlement/liberacao do produto especifico?
+5. Entrada no fluxo interno do produto.
+
+### 5.2 Posse valida do Guia
+
+"Possui Guia" nao significa apenas compra na Hotmart.
+
+O Guia pode se tornar valido por dois caminhos:
+
+- compra regular do Guia;
+- concessao administrativa valida, quando a equipe libera esse pre-requisito.
+
+Consequencia:
+
+- bonus concedido por admin nao dispensa avaliacao do Guia;
+- usuario sem Guia valido nao deve cair na Avaliacao do Guia;
+- primeiro resolve a posse valida do Guia;
+- depois a Avaliacao do Guia passa a ser exigida;
+- depois entram os gates especificos do produto.
+
+### 5.3 Regra de visitante, usuario e staff
+
+- Visitante: pode conhecer os produtos, mas nao executa fluxo protegido.
+- Usuario comum autenticado: pode ver o portal, mas a navegacao real depende do
+  estado de onboarding, Guia e entitlement.
+- Staff/Superuser: entra em governanca por padrao e nao serve como prova de que
+  o gating do aluno esta correto, salvo quando usa modo de teste/persona.
+
+### 5.4 Implicacao para Sonhe + Alto
+
+O Sonhe + Alto deve continuar obedecendo ao mesmo trilho semantico:
+
+- sem pendencia legal;
+- com Guia valido;
+- com avaliacao do Guia, quando exigida como pre-requisito do programa;
+- com entitlement/liberacao do produto correspondente;
+- so entao entra no fluxo operacional do aluno.
+
+## 6. Direcao de Produto
 
 O Sonhe+Alto nao deve ser apenas uma lista de tarefas. Ele deve ser uma
 ferramenta operacional para o aluno transformar descoberta vocacional em pratica
@@ -143,7 +262,32 @@ O ciclo principal deve ser:
 5. recebe incentivo por consistencia;
 6. eventualmente recebe acompanhamento de mentor/escola.
 
-## 6. Gamificacao Recuperada
+## 7. Governanca operacional recuperada
+
+O material da reforma estrutural reforca que a governanca nao e apenas um menu
+de persona. Ela deve funcionar como painel de comando da plataforma.
+
+Diretrizes preservadas:
+
+- superusuario/staff devem cair na governanca por padrao;
+- a governanca deve permitir busca de usuario, inspecao de estado e concessao
+  manual segura;
+- a governanca nao substitui `apps/contas`, apenas opera sobre a base unica de
+  usuarios e acessos;
+- a governanca nao deve criar regra paralela de produto;
+- qualquer liberacao administrativa deve respeitar a semantica correta de Guia,
+  avaliacao e bonus.
+
+MVP coerente:
+
+- cards executivos principais;
+- busca de usuario;
+- estado resumido do usuario;
+- persona de teste;
+- concessao manual controlada de acesso;
+- memoria viva de pendencias e decisoes em `docs/arquitetura/pendencias_governanca.md`.
+
+## 8. Gamificacao Recuperada
 
 O material historico menciona:
 
@@ -158,7 +302,7 @@ O material historico menciona:
 
 Para o MVP, a gamificacao deve ser pessoal e formativa, nao competitiva.
 
-## 7. Plano de Implementacao em Fases
+## 9. Plano de Implementacao em Fases
 
 ### Fase A - Fechar o Ciclo Operacional do Aluno
 
@@ -173,6 +317,11 @@ Entregas:
 - documentar a regra basica de registro.
 
 Status: em andamento.
+
+Dependencia de compatibilidade:
+
+- qualquer melhoria de portal, vitrine ou CTA de entrada deve respeitar a regra
+  revisada de visitante, Guia valido, avaliacao do Guia e entitlement.
 
 ### Fase B - Gamificacao MVP
 
@@ -262,27 +411,51 @@ Entregas futuras:
 - certificados;
 - possivel personalizacao de trilhas.
 
-## 8. Proxima Fatia Recomendada
+## 10. Compatibilizacao imediata obrigatoria
+
+Antes de abrir novas frentes maiores de UX ou gamificacao, o projeto deve
+preservar estas decisoes como contrato:
+
+- o `core` continua sendo a unica entrada oficial de produto;
+- o `portal` atual deve caminhar para compatibilidade, nao para nova fonte de
+  verdade;
+- CTA global de produto deve passar pelo resolvedor central, salvo excecao bem
+  documentada;
+- nao criar camada paralela para status, permissao, onboarding ou governanca;
+- nao tratar concessao administrativa de bonus como liberacao irrestrita do
+  ecossistema;
+- qualquer ajuste de Sonhe + Alto no portal ou na governanca deve ser validado
+  contra essa semantica.
+
+## 11. Proxima Fatia Recomendada
 
 A proxima fatia deve ser pequena e diretamente ligada ao uso real:
 
-1. Na tela `/projeto21/registro/`, exibir um resumo do plano ativo.
-2. Adicionar link claro para alterar o plano.
-3. Manter o check-in focado nas estrategias escolhidas.
-4. Em seguida, melhorar `/projeto21/historico/`.
-5. Depois, formalizar o servico de pontuacao.
+1. Preservar a compatibilidade semantica do gating e da governanca enquanto o
+   `core` consolida a vitrine/entrada oficial.
+2. Tirar hardcodes remanescentes do portal atual usando o `product_registry`.
+3. Manter o resolvedor central como entrada obrigatoria dos produtos.
+4. Na trilha do aluno, continuar com resumo do plano ativo em
+   `/projeto21/registro/` e link claro para alterar o plano.
+5. Em seguida, melhorar `/projeto21/historico/`.
+6. Depois, formalizar o servico de pontuacao.
 
 Essa sequencia preserva a direcao historica sem abrir frentes grandes demais.
 
-## 9. Riscos
+## 12. Riscos
 
 - Reativar a comunidade antes da mentoria e moderacao cria risco operacional.
 - Criar ranking cedo demais pode distorcer o incentivo.
 - Implementar pontos direto no template quebraria a arquitetura.
 - Reaproveitar templates legados sem saneamento pode reintroduzir fluxos mortos.
 - Tratar `projeto21` como runtime principal de novo desfaz a consolidacao atual.
+- Confundir compra do Guia com posse valida do Guia reabre erro semantico de
+  gating.
+- Tratar bonus administrativo como atalho que ignora Avaliacao do Guia quebra a
+  regra de negocio aprovada.
+- Deixar staff navegar como aluno por padrao mascara defeitos de autorizacao.
 
-## 10. Criterio de Sucesso
+## 13. Criterio de Sucesso
 
 Esta recuperacao sera bem-sucedida quando:
 
@@ -291,4 +464,8 @@ Esta recuperacao sera bem-sucedida quando:
 - enxergar progresso e incentivo;
 - o mentor conseguir acompanhar sem depender de planilha;
 - o `core` continuar centralizando acesso e navegacao;
-- `sonho_de_ser` concentrar o dominio real do Sonhe+Alto.
+- `sonho_de_ser` concentrar o dominio real do Sonhe+Alto;
+- visitante, usuario comum e staff tenham comportamento coerente e auditavel;
+- a concessao administrativa respeitar a semantica correta de Guia e avaliacao;
+- a governanca operar como painel proprio, sem virar duplicacao do fluxo do
+  aluno.
