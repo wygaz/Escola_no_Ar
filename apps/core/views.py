@@ -16,11 +16,16 @@ from django.views.decorators.http import require_http_methods
 from django.templatetags.static import static
 
 from apps.core.permissions import (
-    PROD_GUIA,
     user_has_produto,
     onboarding_status,
     PROD_VOCACIONAL_75,
     PROD_SONHEMAISALTO,
+)
+from apps.core.product_registry import (
+    SONHE_MAIS_ALTO_KEY,
+    VOCACIONAL_KEY,
+    get_product_by_key,
+    get_product_by_public_slug,
 )
 
 
@@ -225,29 +230,35 @@ def _apply_portal_attention_flags(ctx: dict) -> dict:
 def _build_portal_user_context(request, user) -> dict:
     bypass_staff = _portal_bypass_staff(request, user)
     st = onboarding_status(user, request=request, bypass_staff=bypass_staff)
+    sonhe_product = get_product_by_key(SONHE_MAIS_ALTO_KEY)
+    vocacional_product = get_product_by_key(VOCACIONAL_KEY)
     sonhe_state = _build_product_state(
         request,
         user,
-        public_slug="sonhe-mais-alto",
-        access_slug=PROD_SONHEMAISALTO,
-        setting_flag="SONHEMAISALTO_REQUIRE_BONUS",
-        resolver_slug="sonhe-mais-alto",
+        public_slug=sonhe_product.public_slug,
+        access_slug=sonhe_product.access_slug,
+        setting_flag=sonhe_product.setting_flag,
+        resolver_slug=sonhe_product.public_slug,
         bypass_staff=bypass_staff,
     )
     voc_state = _build_product_state(
         request,
         user,
-        public_slug="vocacional",
-        access_slug=PROD_VOCACIONAL_75,
-        setting_flag="VOCACIONAL_REQUIRE_BONUS",
-        resolver_slug="vocacional",
+        public_slug=vocacional_product.public_slug,
+        access_slug=vocacional_product.access_slug,
+        setting_flag=vocacional_product.setting_flag,
+        resolver_slug=vocacional_product.public_slug,
         bypass_staff=bypass_staff,
     )
     ctx = {
         "hide_global_header": True,
+        "products": {
+            SONHE_MAIS_ALTO_KEY: sonhe_product,
+            VOCACIONAL_KEY: vocacional_product,
+        },
         "product_states": {
-            "sonhe_mais_alto": sonhe_state,
-            "vocacional": voc_state,
+            sonhe_product.key: sonhe_state,
+            vocacional_product.key: voc_state,
         },
         "can_sonhemaisalto": sonhe_state["can_access"],
         "can_vocacional": voc_state["can_access"],
@@ -366,19 +377,14 @@ def _should_redirect_to_governance(request, user) -> bool:
 
 
 def _resolve_produto_config(produto_slug: str) -> dict | None:
-    produtos = {
-        "vocacional": {
-            "access_slug": PROD_VOCACIONAL_75,
-            "setting_flag": "VOCACIONAL_REQUIRE_BONUS",
-            "entry_url_name": "vocacional:entrada",
-        },
-        "sonhe-mais-alto": {
-            "access_slug": PROD_SONHEMAISALTO,
-            "setting_flag": "SONHEMAISALTO_REQUIRE_BONUS",
-            "entry_url_name": "projeto21:home",
-        },
+    product = get_product_by_public_slug(produto_slug)
+    if product is None:
+        return None
+    return {
+        "access_slug": product.access_slug,
+        "setting_flag": product.setting_flag,
+        "entry_url_name": product.entry_url_name,
     }
-    return produtos.get(produto_slug)
 
 
 @login_required
