@@ -1,5 +1,6 @@
 # apps\core\views.py
 import logging
+from urllib.parse import urlencode
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import TemplateView
@@ -14,6 +15,7 @@ from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_http_methods
 from django.templatetags.static import static
+from django.utils import timezone
 
 from apps.core.permissions import (
     user_has_produto,
@@ -779,7 +781,7 @@ TEMPLATE_BY_PERFIL = {
 
 
 def _build_governance_subject_context(request, target_user) -> dict:
-    from apps.contas.models_acessos import Acesso
+    from apps.contas.models_acessos import Acesso, Produto
 
     product_states = {}
     for product in iter_products():
@@ -799,12 +801,16 @@ def _build_governance_subject_context(request, target_user) -> dict:
         .select_related("produto")
         .order_by("produto__slug", "-granted_at")
     )
+    active_access_slugs = {acesso.produto.slug for acesso in active_accesses}
+    available_products = list(Produto.objects.order_by("nome", "slug"))
 
     return {
         "selected_user": target_user,
         "selected_user_status": status,
         "selected_user_product_states": product_states,
         "selected_user_active_accesses": active_accesses,
+        "selected_user_active_access_slugs": active_access_slugs,
+        "governance_available_products": available_products,
     }
 
 # --------------------------------------------------------------------
@@ -827,6 +833,82 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
                 getattr(getattr(self.request, "real_user", None), "email", None),
             )
         return allowed
+
+    def post(self, request, *args, **kwargs):
+        from apps.contas.models_acessos import Acesso, Produto
+
+        user_id = (request.POST.get("user_id") or "").strip()
+        produto_id = (request.POST.get("produto_id") or "").strip()
+        action = (request.POST.get("action") or "").strip()
+        q = (request.POST.get("q") or "").strip()
+
+        redirect_url = reverse("portal_dashboard")
+        query_data = {}
+        if q:
+            query_data["q"] = q
+        if user_id:
+            query_data["user_id"] = user_id
+        if query_data:
+            redirect_url = f"{redirect_url}?{urlencode(query_data)}"
+
+        if action not in {"grant", "revoke"}:
+            messages.error(request, "Ação de governança inválida.")
+            return redirect(redirect_url)
+
+        if not user_id.isdigit() or not produto_id.isdigit():
+            messages.error(request, "Selecione um usuário e um produto válidos.")
+            return redirect(redirect_url)
+
+        User = get_user_model()
+        try:
+            target_user = User.objects.get(pk=int(user_id))
+        except User.DoesNotExist:
+            messages.error(request, "Usuário não encontrado.")
+            return redirect(reverse("portal_dashboard"))
+
+        try:
+            produto = Produto.objects.get(pk=int(produto_id))
+        except Produto.DoesNotExist:
+            messages.error(request, "Produto não encontrado.")
+            return redirect(redirect_url)
+
+        active_qs = Acesso.objects.filter(
+            user=target_user,
+            produto=produto,
+            expires_at__isnull=True,
+        )
+
+        if action == "grant":
+            if active_qs.exists():
+                messages.info(
+                    request,
+                    f"{target_user.email} já possui acesso ativo a {produto.nome}.",
+                )
+                return redirect(redirect_url)
+
+            Acesso.objects.create(
+                user=target_user,
+                produto=produto,
+                origem="governanca_manual",
+            )
+            messages.success(
+                request,
+                f"Acesso concedido: {target_user.email} -> {produto.nome}.",
+            )
+            return redirect(redirect_url)
+
+        updated = active_qs.update(expires_at=timezone.now())
+        if updated:
+            messages.success(
+                request,
+                f"Acesso removido: {target_user.email} -> {produto.nome}.",
+            )
+        else:
+            messages.info(
+                request,
+                f"{target_user.email} não possui acesso ativo a {produto.nome}.",
+            )
+        return redirect(redirect_url)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

@@ -18,25 +18,43 @@
     <p style="margin: 0 0 14px; opacity: .8;">
       Busque um usuário para inspecionar estado semântico, acessos ativos e pendências principais.
     </p>
-    <form method="get" style="display:flex; gap:12px; flex-wrap:wrap; margin:0 0 14px;">
-      <input type="text" name="q" value="{{ governance_search_query }}" placeholder="E-mail, nome ou sobrenome" style="flex:1 1 320px; min-width:240px; padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;">
-      <button type="submit" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(0,0,0,.12); background:#fff;">
-        Buscar usuário
-      </button>
-    </form>
-
-    {% if governance_search_results %}
-      <div style="display:grid; gap:10px; margin:0 0 16px;">
-        {% for item in governance_search_results %}
-          <a href="?q={{ governance_search_query|urlencode }}&user_id={{ item.id }}" style="text-decoration:none; color:inherit; border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
-            <strong>{{ item.email }}</strong>
-            <div style="opacity:.78; margin-top:4px;">
-              {{ item.nome|default:item.get_full_name|default:"Sem nome" }}{% if item.perfil %} · {{ item.perfil }}{% endif %}
-            </div>
-          </a>
-        {% endfor %}
+    <form method="get" style="display:grid; gap:12px; margin:0 0 14px;">
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <input
+          type="text"
+          name="q"
+          value="{{ governance_search_query }}"
+          placeholder="Digite nome ou e-mail"
+          style="flex:1 1 320px; min-width:240px; padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;"
+        >
+        <button type="submit" title="Buscar usuário" aria-label="Buscar usuário" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(0,0,0,.12); background:#fff; color:#111827; font-weight:600;">
+          Buscar usuário
+        </button>
       </div>
-    {% endif %}
+
+      {% if governance_search_results %}
+        <div style="display:grid; gap:8px;">
+          <label for="user_id" style="font-weight:600;">Selecionar usuário</label>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <select
+              id="user_id"
+              name="user_id"
+              style="flex:1 1 420px; min-width:280px; padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;"
+            >
+              <option value="">Escolha um usuário encontrado</option>
+              {% for item in governance_search_results %}
+                <option value="{{ item.id }}" {% if selected_user and selected_user.id == item.id %}selected{% endif %}>
+                  {{ item.nome|default:item.get_full_name|default:"Sem nome" }} - {{ item.email }}
+                </option>
+              {% endfor %}
+            </select>
+            <button type="submit" title="Inspecionar usuário selecionado" aria-label="Inspecionar usuário selecionado" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(0,0,0,.12); background:#fff; color:#111827; font-weight:600;">
+              Inspecionar
+            </button>
+          </div>
+        </div>
+      {% endif %}
+    </form>
 
     {% if selected_user %}
       <div style="border-top:1px solid rgba(0,0,0,.08); padding-top:16px;">
@@ -54,19 +72,27 @@
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin:0 0 16px;">
           <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
             <div style="opacity:.7; margin-bottom:6px;">Termos / consentimento</div>
-            <strong>{% if selected_user_status.has_legal %}OK{% else %}Pendente{% endif %}</strong>
+            <strong style="color:{% if selected_user_status.has_legal %}#18794e{% else %}#b26a00{% endif %};">
+              {% if selected_user_status.has_legal %}OK{% else %}Pendente{% endif %}
+            </strong>
           </div>
           <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
             <div style="opacity:.7; margin-bottom:6px;">Guia válido</div>
-            <strong>{% if selected_user_status.has_valid_guia %}Sim{% else %}Não{% endif %}</strong>
+            <strong style="color:{% if selected_user_status.has_valid_guia %}#18794e{% else %}#b26a00{% endif %};">
+              {% if selected_user_status.has_valid_guia %}Sim{% else %}Não{% endif %}
+            </strong>
           </div>
           <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
             <div style="opacity:.7; margin-bottom:6px;">Avaliação do Guia</div>
-            <strong>{% if selected_user_status.has_guia_feedback %}Concluída{% else %}Pendente{% endif %}</strong>
+            <strong style="color:{% if selected_user_status.has_guia_feedback %}#18794e{% else %}#b26a00{% endif %};">
+              {% if selected_user_status.has_guia_feedback %}Concluída{% else %}Pendente{% endif %}
+            </strong>
           </div>
           <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
             <div style="opacity:.7; margin-bottom:6px;">Onboarding</div>
-            <strong>{% if selected_user_status.has_onboarding %}Completo{% else %}Incompleto{% endif %}</strong>
+            <strong style="color:{% if selected_user_status.has_onboarding %}#18794e{% else %}#b26a00{% endif %};">
+              {% if selected_user_status.has_onboarding %}Completo{% else %}Incompleto{% endif %}
+            </strong>
           </div>
         </div>
 
@@ -74,9 +100,23 @@
           {% for product_key, product_state in selected_user_product_states.items %}
             <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
               <div style="font-weight:600; margin-bottom:6px;">{{ product_state.public_slug }}</div>
-              <div style="opacity:.78; margin-bottom:4px;">Acesso explícito: {% if product_state.has_access_slug %}Sim{% else %}Não{% endif %}</div>
-              <div style="opacity:.78; margin-bottom:4px;">Guia bloqueando: {% if product_state.guia_feedback_blocking %}Sim{% else %}Não{% endif %}</div>
-              <div><strong>{% if product_state.can_access %}Fluxo liberado{% else %}Fluxo bloqueado{% endif %}</strong></div>
+              <div style="opacity:.78; margin-bottom:4px;">
+                Acesso explícito:
+                <strong style="color:{% if product_state.has_access_slug %}#18794e{% else %}#b26a00{% endif %};">
+                  {% if product_state.has_access_slug %}Sim{% else %}Não{% endif %}
+                </strong>
+              </div>
+              <div style="opacity:.78; margin-bottom:4px;">
+                Guia bloqueando:
+                <strong style="color:{% if product_state.guia_feedback_blocking %}#c62828{% else %}#18794e{% endif %};">
+                  {% if product_state.guia_feedback_blocking %}Sim{% else %}Não{% endif %}
+                </strong>
+              </div>
+              <div>
+                <strong style="color:{% if product_state.can_access %}#18794e{% else %}#c62828{% endif %};">
+                  {% if product_state.can_access %}Fluxo liberado{% else %}Fluxo bloqueado{% endif %}
+                </strong>
+              </div>
             </div>
           {% endfor %}
         </div>
@@ -95,6 +135,38 @@
           {% else %}
             <p style="margin:0; opacity:.78;">Nenhum acesso ativo encontrado para este usuário.</p>
           {% endif %}
+        </div>
+
+        <div style="border-top:1px solid rgba(0,0,0,.08); margin-top:16px; padding-top:16px;">
+          <h3 style="margin:0 0 8px;">Ações de acesso</h3>
+          <p style="margin:0 0 14px; opacity:.78;">
+            Conceda ou remova manualmente um produto para o usuário inspecionado.
+          </p>
+          <form method="post" style="display:grid; gap:12px;">
+            {% csrf_token %}
+            <input type="hidden" name="q" value="{{ governance_search_query }}">
+            <input type="hidden" name="user_id" value="{{ selected_user.id }}">
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <select
+                name="produto_id"
+                style="flex:1 1 360px; min-width:260px; padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;"
+              >
+                <option value="">Selecione um produto</option>
+                {% for produto in governance_available_products %}
+                  <option value="{{ produto.id }}">
+                    {{ produto.nome }} ({{ produto.slug }})
+                    {% if produto.slug in selected_user_active_access_slugs %} - ativo{% endif %}
+                  </option>
+                {% endfor %}
+              </select>
+              <button type="submit" name="action" value="grant" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(24,121,78,.25); background:#eef8f1; color:#18794e; font-weight:600;">
+                Conceder acesso
+              </button>
+              <button type="submit" name="action" value="revoke" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(198,40,40,.22); background:#fff3f3; color:#c62828; font-weight:600;">
+                Remover acesso
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     {% endif %}
