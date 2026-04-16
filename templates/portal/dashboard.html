@@ -13,6 +13,93 @@
     </p>
   {% endif %}
 
+  <div style="border: 1px solid rgba(0,0,0,.08); border-radius: 16px; padding: 18px; margin: 0 0 24px;">
+    <h2 style="margin: 0 0 8px;">Governança</h2>
+    <p style="margin: 0 0 14px; opacity: .8;">
+      Busque um usuário para inspecionar estado semântico, acessos ativos e pendências principais.
+    </p>
+    <form method="get" style="display:flex; gap:12px; flex-wrap:wrap; margin:0 0 14px;">
+      <input type="text" name="q" value="{{ governance_search_query }}" placeholder="E-mail, nome ou sobrenome" style="flex:1 1 320px; min-width:240px; padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;">
+      <button type="submit" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(0,0,0,.12); background:#fff;">
+        Buscar usuário
+      </button>
+    </form>
+
+    {% if governance_search_results %}
+      <div style="display:grid; gap:10px; margin:0 0 16px;">
+        {% for item in governance_search_results %}
+          <a href="?q={{ governance_search_query|urlencode }}&user_id={{ item.id }}" style="text-decoration:none; color:inherit; border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
+            <strong>{{ item.email }}</strong>
+            <div style="opacity:.78; margin-top:4px;">
+              {{ item.nome|default:item.get_full_name|default:"Sem nome" }}{% if item.perfil %} · {{ item.perfil }}{% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if selected_user %}
+      <div style="border-top:1px solid rgba(0,0,0,.08); padding-top:16px;">
+        <h3 style="margin:0 0 8px;">Usuário inspecionado</h3>
+        <p style="margin:0 0 14px;">
+          <strong>{{ selected_user.email }}</strong>
+          {% if selected_user.nome or selected_user.get_full_name %}
+            <span style="opacity:.78;">· {{ selected_user.nome|default:selected_user.get_full_name }}</span>
+          {% endif %}
+          {% if selected_user.perfil %}
+            <span style="opacity:.78;">· {{ selected_user.perfil }}</span>
+          {% endif %}
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin:0 0 16px;">
+          <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
+            <div style="opacity:.7; margin-bottom:6px;">Termos / consentimento</div>
+            <strong>{% if selected_user_status.has_legal %}OK{% else %}Pendente{% endif %}</strong>
+          </div>
+          <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
+            <div style="opacity:.7; margin-bottom:6px;">Guia válido</div>
+            <strong>{% if selected_user_status.has_valid_guia %}Sim{% else %}Não{% endif %}</strong>
+          </div>
+          <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
+            <div style="opacity:.7; margin-bottom:6px;">Avaliação do Guia</div>
+            <strong>{% if selected_user_status.has_guia_feedback %}Concluída{% else %}Pendente{% endif %}</strong>
+          </div>
+          <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
+            <div style="opacity:.7; margin-bottom:6px;">Onboarding</div>
+            <strong>{% if selected_user_status.has_onboarding %}Completo{% else %}Incompleto{% endif %}</strong>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin:0 0 16px;">
+          {% for product_key, product_state in selected_user_product_states.items %}
+            <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
+              <div style="font-weight:600; margin-bottom:6px;">{{ product_state.public_slug }}</div>
+              <div style="opacity:.78; margin-bottom:4px;">Acesso explícito: {% if product_state.has_access_slug %}Sim{% else %}Não{% endif %}</div>
+              <div style="opacity:.78; margin-bottom:4px;">Guia bloqueando: {% if product_state.guia_feedback_blocking %}Sim{% else %}Não{% endif %}</div>
+              <div><strong>{% if product_state.can_access %}Fluxo liberado{% else %}Fluxo bloqueado{% endif %}</strong></div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div>
+          <h3 style="margin:0 0 8px;">Acessos ativos</h3>
+          {% if selected_user_active_accesses %}
+            <div style="display:grid; gap:8px;">
+              {% for acesso in selected_user_active_accesses %}
+                <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
+                  <strong>{{ acesso.produto.slug }}</strong>
+                  <div style="opacity:.78; margin-top:4px;">Origem: {{ acesso.origem }} · Concedido em: {{ acesso.granted_at|date:"d/m/Y H:i" }}</div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p style="margin:0; opacity:.78;">Nenhum acesso ativo encontrado para este usuário.</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
     <div style="border: 1px solid rgba(0,0,0,.08); border-radius: 16px; padding: 18px;">
       <h2 style="margin: 0 0 8px;">Sonhe + Alto</h2>

@@ -24,6 +24,7 @@ from apps.core.permissions import (
 from apps.core.product_registry import (
     SONHE_MAIS_ALTO_KEY,
     VOCACIONAL_KEY,
+    iter_products,
     get_product_by_key,
     get_product_by_public_slug,
 )
@@ -776,6 +777,36 @@ TEMPLATE_BY_PERFIL = {
     "USER": "portal/user_home.html",
 }
 
+
+def _build_governance_subject_context(request, target_user) -> dict:
+    from apps.contas.models_acessos import Acesso
+
+    product_states = {}
+    for product in iter_products():
+        product_states[product.key] = _build_product_state(
+            request,
+            target_user,
+            public_slug=product.public_slug,
+            access_slug=product.access_slug,
+            setting_flag=product.setting_flag,
+            resolver_slug=product.public_slug,
+            bypass_staff=False,
+        )
+
+    status = onboarding_status(target_user, request=request, bypass_staff=False)
+    active_accesses = list(
+        Acesso.objects.filter(user=target_user, expires_at__isnull=True)
+        .select_related("produto")
+        .order_by("produto__slug", "-granted_at")
+    )
+
+    return {
+        "selected_user": target_user,
+        "selected_user_status": status,
+        "selected_user_product_states": product_states,
+        "selected_user_active_accesses": active_accesses,
+    }
+
 # --------------------------------------------------------------------
 # Governança (dashboard.html) — compatibilidade: urls.py espera este CBV
 # --------------------------------------------------------------------
@@ -801,10 +832,38 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
         ctx = super().get_context_data(**kwargs)
 
         u = self.request.user
+        User = get_user_model()
 
         # Reaproveita a mesma regra do Portal simples
         ctx["can_sonhemaisalto"] = _can_access_app(self.request, u, PROD_SONHEMAISALTO, "SONHEMAISALTO_REQUIRE_BONUS")
         ctx["can_vocacional"] = _can_access_app(self.request, u, PROD_VOCACIONAL_75, "VOCACIONAL_REQUIRE_BONUS")
+        q = (self.request.GET.get("q") or "").strip()
+        selected_user = None
+        results = []
+
+        if q:
+            results = list(
+                User.objects.filter(
+                    Q(email__icontains=q)
+                    | Q(first_name__icontains=q)
+                    | Q(last_name__icontains=q)
+                    | Q(nome__icontains=q)
+                ).order_by("email")[:15]
+            )
+
+        selected_user_id = (self.request.GET.get("user_id") or "").strip()
+        if selected_user_id.isdigit():
+            try:
+                selected_user = User.objects.get(pk=int(selected_user_id))
+            except User.DoesNotExist:
+                messages.warning(self.request, "Usuário selecionado não foi encontrado.")
+        elif len(results) == 1:
+            selected_user = results[0]
+
+        ctx["governance_search_query"] = q
+        ctx["governance_search_results"] = results
+        if selected_user is not None:
+            ctx.update(_build_governance_subject_context(self.request, selected_user))
 
         # Tudo opcional: se o app/tabela não existir, ignora
         try:
