@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from functools import wraps
 from urllib.parse import urlencode
-from typing import Iterable
 
 from django.contrib import messages
 from django.contrib.auth.views import redirect_to_login
@@ -14,24 +13,15 @@ from django.urls import reverse
 from apps.contas.acessos import tem_acesso
 
 # --------------------------------------------------------------------
-# "Slugs de referência" (internos)
-# Use SEMPRE estes em @require_produto(...) e em checagens no Portal.
+# Capacidades internas de acesso
+# Use estes slugs em @require_produto(...) e nas checagens do runtime.
+# Produtos novos no admin nao criam fluxo novo automaticamente.
 # --------------------------------------------------------------------
-PROD_GUIA = "guia"  # produto principal (Hotmart) que libera os bônus
-
-# Bônus atual (75 perguntas) — pode evoluir depois para outros pacotes/níveis
+PROD_GUIA = "guia"
 PROD_VOCACIONAL_75 = "vocacional75"
-
-# Nome legado / futuro (mantido para compatibilidade)
-PROD_VOCACIONAL = "vocacional"
-
 PROD_SONHEMAISALTO = "sonhemaisalto"
-
-# Refinamento Top 3 (Passes 1/2/3) — serviço adicional (vendido separadamente)
-PROD_VOCACIONAL_REFINAMENTO1 = "vocacional_refinamento1"
-PROD_VOCACIONAL_REFINAMENTO2 = "vocacional_refinamento2"
-PROD_VOCACIONAL_REFINAMENTO3 = "vocacional_refinamento3"
-PROD_VOCACIONAL75PLUS = "vocacional75plus"
+PROD_VOCACIONAL_150 = "vocacional150"
+PROD_VOCACIONAL_PREMIUM = "vocacionalpremium"
 
 
 # --------------------------------------------------------------------
@@ -61,21 +51,30 @@ EQUIVALENCIAS: dict[str, set[str]] = {
         "projeto21_sonhe_alto",
         "projeto21",
     },
+    PROD_VOCACIONAL_150: {
+        "vocacional150",
+        "passe1",
+        "pass1",
+        "vocacional_refinamento1",
+        "vocacional75plus",
+        "vocacional75Plus",
+        "vocacional75_plus",
+    },
+    PROD_VOCACIONAL_PREMIUM: {
+        "vocacionalpremium",
+        "vocacional_premium",
+        "vocacional_refinamento2",
+        "vocacional_refinamento3",
+        "passe2",
+        "pass2",
+        "passe3",
+        "pass3",
+    },
 }
 
 # O Guia libera os dois bônus
 EQUIVALENCIAS[PROD_VOCACIONAL_75].update(EQUIVALENCIAS[PROD_GUIA])
 EQUIVALENCIAS[PROD_SONHEMAISALTO].update(EQUIVALENCIAS[PROD_GUIA])
-
-# Compat: manter PROD_VOCACIONAL apontando para o mesmo conjunto do bônus 75
-EQUIVALENCIAS[PROD_VOCACIONAL] = set(EQUIVALENCIAS[PROD_VOCACIONAL_75])
-
-# Refinamento (Passes 1/2/3): aceitar slugs curtos cadastrados no Admin (ex.: passe1/passe2/passe3)
-EQUIVALENCIAS.setdefault(PROD_VOCACIONAL_REFINAMENTO1, {PROD_VOCACIONAL_REFINAMENTO1}).update({"passe1", "pass1"})
-EQUIVALENCIAS.setdefault(PROD_VOCACIONAL_REFINAMENTO2, {PROD_VOCACIONAL_REFINAMENTO2}).update({"passe2", "pass2"})
-EQUIVALENCIAS.setdefault(PROD_VOCACIONAL_REFINAMENTO3, {PROD_VOCACIONAL_REFINAMENTO3}).update({"passe3", "pass3"})
-EQUIVALENCIAS.setdefault(PROD_VOCACIONAL75PLUS, {PROD_VOCACIONAL75PLUS}).update({"vocacional75Plus", "vocacional75_plus"})
-
 
 def slugs_equivalentes(slug_ref: str) -> list[str]:
     """Retorna a lista de slugs aceitos para um slug de referência."""

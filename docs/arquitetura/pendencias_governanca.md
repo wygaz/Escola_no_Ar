@@ -19,6 +19,20 @@ pendencia relevante for identificada e aceita como real.
 - "Possui Guia valido" tambem nao deve ser inferido automaticamente apenas da
   existencia de bonus.
 
+### Produto comercial nao e igual a capacidade de acesso
+
+- O cadastro em `Produto` representa o item comercial/administrativo que pode
+  ser vendido, concedido ou removido.
+- O gating do sistema nao deve depender diretamente de qualquer produto novo
+  cadastrado no admin.
+- O runtime precisa trabalhar com um conjunto controlado de capacidades de
+  acesso realmente suportadas no codigo.
+- Um produto pode conceder uma ou mais capacidades de acesso.
+- Produtos novos so podem liberar fluxo real depois de serem explicitamente
+  mapeados para capacidades suportadas.
+- Isso evita que um produto criado no admin pareca pronto sem existir fluxo,
+  decorador, telas ou regras implementadas para ele.
+
 ### Ordem Semantica Do Gating
 
 Sequencia correta:
@@ -42,6 +56,33 @@ Sequencia correta:
 - Usuario sem Guia valido nao deve cair em Avaliacao do Guia.
 - Usuario com Guia valido, mas sem avaliacao, deve cair em Avaliacao do Guia.
 - Usuario com Guia valido + avaliacao concluida segue para o gating do produto.
+- Produtos comerciais e capacidades internas de acesso precisam ser tratados
+  como camadas relacionadas, mas distintas.
+
+### Familias operacionais vigentes
+
+No momento, a operacao deve ser pensada sobre tres familias principais:
+
+1. bonus de aquisicao do Guia:
+   - pode vir da compra ou de concessao administrativa;
+   - inclui acesso ao Sonhe + Alto e ao Vocacional 75;
+2. Vocacional 150 questoes:
+   - refinamento intermediario;
+   - corresponde ao antigo `passe1`;
+3. Vocacional Premium:
+   - pode chegar a 1080 questoes;
+   - combina base vocacional e habilidade profissional.
+   - corresponde ao aprofundamento antes espalhado em `passe2` e `passe3`.
+
+Essas familias operacionais sao a referencia de negocio atual, mesmo que ainda
+existam slugs e equivalencias legadas no codigo.
+
+Decisao de compatibilidade:
+
+- a lista historica mais extensa de slugs internos nao representa mais a
+  semantica oficial de negocio;
+- ela permanece apenas para compatibilidade tecnica do runtime atual;
+- a semantica oficial deve ser lida pelas 3 familias acima.
 
 ## Bugs Confirmados
 
@@ -84,6 +125,10 @@ Sequencia correta:
 
 - implementar busca operacional de usuarios;
 - implementar busca/listagem operacional por produto e entitlement;
+- separar no planejamento e no codigo o conceito de:
+  - produto comercial
+  - pacote de concessao
+  - capacidade interna de acesso/gating;
 - implementar operacoes em lote por grupo institucional;
 - permitir cadastro em grupo para contratos com escola, igreja, comunidade e
   organizacoes equivalentes;
@@ -110,11 +155,15 @@ Sequencia correta:
 - corrigir o `404` do estatico `logo-sonhe-mais-alto.png`;
 - adicionar filtros operacionais para casos inconsistentes;
 - definir tratamento operacional de notificacao por e-mail/whatsapp ao admin.
+- revisar e reduzir a semantica exposta de acessos legados hoje espalhada em
+  slugs de compatibilidade.
 
 ## Automacoes Desejadas
 
 - ao conceder bonus por admin, oferecer acao assistida para tambem conceder Guia
   explicito;
+- ao conceder um produto comercial, expandir automaticamente as capacidades de
+  acesso correspondentes, quando houver mapeamento definido;
 - ao operar contrato institucional, permitir fluxo assistido de cadastro e
   concessao em lote;
 - permitir modelos reaproveitaveis de concessao por grupo de produtos;
@@ -138,6 +187,8 @@ Sequencia correta:
   bonus;
 - amarracao semantica entre bonus administrativo, Guia valido e exigencia do
   questionario de avaliacao;
+- separacao tecnica entre cadastro de produto e capacidade efetiva de gating,
+  sem exigir um decorador novo para cada produto comercial;
 - logout com limpeza explicita de chaves residuais de sessao
   (`impersonate_user_id`, `portal_mode` e correlatas);
 - melhoria de visao operacional por usuario;

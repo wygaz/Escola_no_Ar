@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from apps.core.permissions import (
     PROD_GUIA,
-    PROD_VOCACIONAL,
+    PROD_VOCACIONAL_75,
     user_has_produto,
 )
 
@@ -18,7 +18,7 @@ VOCACIONAL_REQUIRE_GUIA = getattr(settings, "VOCACIONAL_REQUIRE_GUIA", True)
 
 
 def bonus_acquired(user) -> bool:
-    return user_has_produto(user, PROD_VOCACIONAL)
+    return user_has_produto(user, PROD_VOCACIONAL_75)
 
 
 def guia_valid(user) -> bool:

@@ -802,6 +802,7 @@ def _build_governance_subject_context(request, target_user) -> dict:
         .order_by("produto__slug", "-granted_at")
     )
     active_access_slugs = {acesso.produto.slug for acesso in active_accesses}
+    active_access_product_ids = {acesso.produto_id for acesso in active_accesses}
     available_products = list(Produto.objects.order_by("nome", "slug"))
 
     return {
@@ -810,7 +811,9 @@ def _build_governance_subject_context(request, target_user) -> dict:
         "selected_user_product_states": product_states,
         "selected_user_active_accesses": active_accesses,
         "selected_user_active_access_slugs": active_access_slugs,
+        "selected_user_active_access_product_ids": active_access_product_ids,
         "governance_available_products": available_products,
+        "governance_product_add_url": reverse("admin:contas_produto_add"),
     }
 
 # --------------------------------------------------------------------
@@ -838,7 +841,7 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
         from apps.contas.models_acessos import Acesso, Produto
 
         user_id = (request.POST.get("user_id") or "").strip()
-        produto_id = (request.POST.get("produto_id") or "").strip()
+        produto_ids = [pid for pid in request.POST.getlist("produto_ids") if pid and pid.isdigit()]
         action = (request.POST.get("action") or "").strip()
         q = (request.POST.get("q") or "").strip()
 
@@ -855,8 +858,8 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
             messages.error(request, "Ação de governança inválida.")
             return redirect(redirect_url)
 
-        if not user_id.isdigit() or not produto_id.isdigit():
-            messages.error(request, "Selecione um usuário e um produto válidos.")
+        if not user_id.isdigit() or not produto_ids:
+            messages.error(request, "Selecione um usuário e pelo menos um produto válido.")
             return redirect(redirect_url)
 
         User = get_user_model()
@@ -866,47 +869,64 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
             messages.error(request, "Usuário não encontrado.")
             return redirect(reverse("portal_dashboard"))
 
-        try:
-            produto = Produto.objects.get(pk=int(produto_id))
-        except Produto.DoesNotExist:
-            messages.error(request, "Produto não encontrado.")
+        produtos = list(Produto.objects.filter(pk__in=[int(pid) for pid in produto_ids]).order_by("nome", "slug"))
+        if not produtos:
+            messages.error(request, "Nenhum produto válido foi encontrado.")
             return redirect(redirect_url)
-
-        active_qs = Acesso.objects.filter(
-            user=target_user,
-            produto=produto,
-            expires_at__isnull=True,
-        )
 
         if action == "grant":
-            if active_qs.exists():
+            created_names = []
+            already_names = []
+            for produto in produtos:
+                active_qs = Acesso.objects.filter(
+                    user=target_user,
+                    produto=produto,
+                    expires_at__isnull=True,
+                )
+                if active_qs.exists():
+                    already_names.append(produto.nome)
+                    continue
+                Acesso.objects.create(
+                    user=target_user,
+                    produto=produto,
+                    origem="governanca_manual",
+                )
+                created_names.append(produto.nome)
+
+            if created_names:
+                messages.success(
+                    request,
+                    f"Acessos concedidos para {target_user.email}: {', '.join(created_names)}.",
+                )
+            if already_names:
                 messages.info(
                     request,
-                    f"{target_user.email} já possui acesso ativo a {produto.nome}.",
+                    f"Acessos já ativos para {target_user.email}: {', '.join(already_names)}.",
                 )
-                return redirect(redirect_url)
-
-            Acesso.objects.create(
-                user=target_user,
-                produto=produto,
-                origem="governanca_manual",
-            )
-            messages.success(
-                request,
-                f"Acesso concedido: {target_user.email} -> {produto.nome}.",
-            )
             return redirect(redirect_url)
 
-        updated = active_qs.update(expires_at=timezone.now())
-        if updated:
+        revoked_names = []
+        missing_names = []
+        for produto in produtos:
+            updated = Acesso.objects.filter(
+                user=target_user,
+                produto=produto,
+                expires_at__isnull=True,
+            ).update(expires_at=timezone.now())
+            if updated:
+                revoked_names.append(produto.nome)
+            else:
+                missing_names.append(produto.nome)
+
+        if revoked_names:
             messages.success(
                 request,
-                f"Acesso removido: {target_user.email} -> {produto.nome}.",
+                f"Acessos removidos de {target_user.email}: {', '.join(revoked_names)}.",
             )
-        else:
+        if missing_names:
             messages.info(
                 request,
-                f"{target_user.email} não possui acesso ativo a {produto.nome}.",
+                f"Sem acesso ativo para remoção em {target_user.email}: {', '.join(missing_names)}.",
             )
         return redirect(redirect_url)
 

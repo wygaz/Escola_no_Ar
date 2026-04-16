@@ -1,10 +1,10 @@
 {% extends "vocacional/base_vocacional.html" %}
 {% load static %}
 
-{% block header_title %}Escolha como deseja avançar{% endblock %}
+{% block header_title %}Escolha como deseja avancar{% endblock %}
 {% block header_subtitle %}
   <p class="vocacional-subtitle">
-    Seu resultado ficou muito próximo entre as primeiras opções. Você pode fazer um desempate rápido ou seguir para um aprofundamento mais completo.
+    Seu resultado ficou muito proximo entre as primeiras opcoes. Voce pode fazer um refinamento intermediario ou seguir para um aprofundamento mais completo.
   </p>
 {% endblock %}
 
@@ -30,14 +30,14 @@
 <div class="card-info" style="margin-bottom:1rem">
   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
     <div>
-      <strong>Seu resultado até aqui</strong>
+      <strong>Seu resultado ate aqui</strong>
       {% if top1_nome and top2_nome %}
         <div class="muted" style="margin-top:4px">
-          Primeira opção: <strong>{{ top1_nome }}</strong> • Segunda opção: <strong>{{ top2_nome }}</strong>
+          Primeira opcao: <strong>{{ top1_nome }}</strong> - Segunda opcao: <strong>{{ top2_nome }}</strong>
         </div>
       {% else %}
         <div class="muted" style="margin-top:4px">
-          Você já pode escolher o próximo passo para ganhar mais clareza no resultado.
+          Voce ja pode escolher o proximo passo para ganhar mais clareza no resultado.
         </div>
       {% endif %}
     </div>
@@ -51,26 +51,26 @@
 <div class="offers-grid">
 
   <div class="offer-card half">
-    <div class="pill neutral">Opção rápida</div>
-    <h3 style="margin-top:10px">Desempate rápido (Vocacional 75 Plus)</h3>
+    <div class="pill neutral">Opcao intermediaria</div>
+    <h3 style="margin-top:10px">Vocacional 150</h3>
     <div class="muted">
-      Uma etapa curta para ajudar a organizar melhor seu Top 3 quando as primeiras opções ficam muito próximas.
+      Um refinamento intermediario para organizar melhor seu Top 3 quando as primeiras opcoes ficam muito proximas.
     </div>
 
     <div class="benefits">
-      <div><strong>Ideal para:</strong> quem quer uma definição mais clara sem entrar no aprofundamento completo.</div>
-      <div><strong>Como funciona:</strong> você responde comparações rápidas entre opções próximas do seu resultado.</div>
-      <div><strong>O que você recebe:</strong> uma ordenação final mais clara entre as opções que ficaram empatadas ou muito próximas.</div>
+      <div><strong>Ideal para:</strong> quem quer uma definicao mais clara sem entrar no aprofundamento completo.</div>
+      <div><strong>Como funciona:</strong> voce avanca no refinamento intermediario e ganha mais distancia entre as opcoes mais proximas.</div>
+      <div><strong>O que voce recebe:</strong> uma leitura mais clara do resultado antes de seguir para o nivel premium.</div>
     </div>
 
     <div class="btnrow">
-      {% if has_plus %}
-        <span class="pill ok">Já disponível</span>
+      {% if has_vocacional_150 %}
+        <span class="pill ok">Ja disponivel</span>
         <a class="btn btn-primary" href="{% url 'vocacional:comparacoes_top3' %}?reset=1">
-          Fazer desempate rápido
+          Continuar refinamento
         </a>
       {% else %}
-        <span class="pill no">Ainda não liberado</span>
+        <span class="pill no">Ainda nao liberado</span>
         <a class="btn btn-primary" href="{% url 'portal' %}">
           Ver como liberar
         </a>
@@ -79,32 +79,32 @@
 
     <div class="imgbox">
       <a href="{% url 'portal' %}">
-        <img src="{% static 'vocacional/img/oferta_vocacional75plus.png' %}" alt="Vocacional 75 Plus" onerror="this.style.display='none'">
+        <img src="{% static 'vocacional/img/oferta_vocacional75plus.png' %}" alt="Vocacional 150" onerror="this.style.display='none'">
       </a>
     </div>
   </div>
 
   <div class="offer-card half">
-    <div class="pill neutral">Opção completa</div>
-    <h3 style="margin-top:10px">Aprofundamento Premium</h3>
+    <div class="pill neutral">Opcao completa</div>
+    <h3 style="margin-top:10px">Vocacional Premium</h3>
     <div class="muted">
       Um caminho mais completo para confirmar e ajustar seu Top 3 com etapas sucessivas de aprofundamento.
     </div>
 
     <div class="benefits">
-      <div><strong>Ideal para:</strong> quem quer avançar com mais contexto, segurança e profundidade.</div>
-      <div><strong>Como funciona:</strong> você passa por etapas que ampliam a leitura inicial e ajudam a confirmar as áreas mais fortes.</div>
-      <div><strong>O que você recebe:</strong> um Top 3 mais amadurecido, com ajustes finais baseados em escolhas e situações mais próximas da vida real.</div>
+      <div><strong>Ideal para:</strong> quem quer avancar com mais contexto, seguranca e profundidade.</div>
+      <div><strong>Como funciona:</strong> voce passa pelas etapas adicionais de aprofundamento e pode chegar a uma validacao mais completa.</div>
+      <div><strong>O que voce recebe:</strong> um Top 3 mais amadurecido, com ajustes finais baseados em escolhas e situacoes mais proximas da vida real.</div>
     </div>
 
     <div class="btnrow">
       {% if has_premium %}
-        <span class="pill ok">Já disponível{% if ref_max_stage|default:0 >= 1 %} • {{ ref_max_stage }}/3{% endif %}</span>
+        <span class="pill ok">Ja disponivel{% if ref_max_stage|default:0 >= 1 %} - {{ ref_max_stage }}/3{% endif %}</span>
         <a class="btn btn-primary" href="{% url 'vocacional:etapas' %}">
           Ir para meu progresso
         </a>
       {% else %}
-        <span class="pill no">Ainda não liberado</span>
+        <span class="pill no">Ainda nao liberado</span>
         <a class="btn btn-primary" href="{% url 'portal' %}">
           Ver como liberar
         </a>
@@ -113,7 +113,7 @@
 
     <div class="imgbox">
       <a href="{% url 'portal' %}">
-        <img src="{% static 'vocacional/img/oferta_premium_passes.png' %}" alt="Premium" onerror="this.style.display='none'">
+        <img src="{% static 'vocacional/img/oferta_premium_passes.png' %}" alt="Vocacional Premium" onerror="this.style.display='none'">
       </a>
     </div>
   </div>
@@ -123,8 +123,8 @@
 <div class="card-info" style="margin-top:16px">
   <strong>Qual caminho escolher?</strong>
   <div class="muted" style="margin-top:8px">
-    Se você quer uma resposta mais rápida para separar opções muito próximas, escolha o <strong>Desempate rápido</strong>.
-    Se deseja um processo mais completo de confirmação e aprofundamento, siga pelo <strong>Premium</strong>.
+    Se voce quer um refinamento intermediario, siga pelo <strong>Vocacional 150</strong>.
+    Se deseja um processo mais completo de confirmacao e aprofundamento, siga pelo <strong>Vocacional Premium</strong>.
   </div>
 </div>
 

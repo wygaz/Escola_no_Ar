@@ -259,6 +259,75 @@ Consequencia:
 
 O Sonhe + Alto deve continuar obedecendo ao mesmo trilho semantico:
 
+- termos e consentimento;
+- posse valida do Guia;
+- avaliacao do Guia;
+- entitlement/liberacao do produto;
+- entrada no fluxo interno.
+
+### 5.5 Produto comercial x gating interno
+
+Um ponto de compatibilizacao importante da fase atual e nao confundir:
+
+- produto cadastrado na tabela `Produto`;
+- permissao/acesso concedido ao usuario;
+- capacidade de gating realmente suportada no codigo.
+
+Hoje o projeto ainda carrega slugs e equivalencias legadas para preservar
+compatibilidade. Isso nao deve ser lido como catalogo oficial de negocio.
+
+Diretriz segura:
+
+- `Produto` continua sendo o catalogo dinamico do que pode ser vendido ou
+  concedido;
+- a governanca pode operar em cima desse catalogo;
+- o runtime do sistema deve depender apenas de capacidades de acesso
+  explicitamente suportadas;
+- um produto comercial pode liberar uma ou mais capacidades de acesso;
+- um produto novo cadastrado no admin nao deve criar automaticamente um fluxo
+  novo nem exigir um decorador novo por si so.
+
+Consequencia pratica:
+
+- o sistema precisa caminhar para uma camada de mapeamento entre produto
+  comercial e capacidades de acesso;
+- os decoradores e gates devem checar capacidades conhecidas, nao qualquer item
+  dinamico criado no admin;
+- a expansao comercial continua possivel, mas so vira fluxo real quando houver
+  mapeamento e implementacao correspondente.
+
+### 5.6 Familias de produto vigentes no negocio
+
+Na fase atual, a operacao pratica esta concentrada em tres familias:
+
+1. bonus de aquisicao do Guia:
+   inclui Sonhe + Alto e Vocacional 75;
+   pode tambem ser concedido pela administracao;
+2. Vocacional 150 questoes:
+   refinamento intermediario;
+   corresponde ao antigo `passe1`;
+3. Vocacional Premium:
+   pode chegar a 1080 questoes, combinando base vocacional e habilidade
+   profissional;
+   corresponde ao aprofundamento que antes ficou espalhado como `passe2` e
+   `passe3`.
+
+Essas familias devem orientar a governanca e a futura camada de mapeamento,
+mesmo que o codigo ainda contenha slugs historicos de transicao.
+
+Os slugs antigos mais numerosos devem ser tratados apenas como alias tecnicos
+de compatibilidade, nao como expansao oficial do portfolio.
+
+Diretriz de continuidade:
+
+- depois da limpeza semantica e do saneamento de gating/governanca, os tres
+  ambientes comerciais devem receber tratamento proprio mais profissional:
+  - Basico
+  - Intermediario
+  - Premium
+- essa evolucao fica registrada como etapa posterior deliberada, para nao se
+  perder durante a fase de compatibilizacao tecnica.
+
 - sem pendencia legal;
 - com Guia valido;
 - com avaliacao do Guia, quando exigida como pre-requisito do programa;

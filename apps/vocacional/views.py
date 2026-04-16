@@ -43,43 +43,32 @@ from apps.core.permissions import (
     user_has_produto,
     require_consent,
     require_guia_feedback,
-    PROD_VOCACIONAL,
-    PROD_VOCACIONAL_REFINAMENTO1,
-    PROD_VOCACIONAL_REFINAMENTO2,
-    PROD_VOCACIONAL_REFINAMENTO3,
+    PROD_VOCACIONAL_75,
+    PROD_VOCACIONAL_150,
+    PROD_VOCACIONAL_PREMIUM,
 
 )
-
-PROD_VOCACIONAL75PLUS = getattr(settings, "PROD_VOCACIONAL75PLUS", "vocacional75plus")
 # -----------------------------------------------------------------------------
 # Toggle de produto/entitlement
-# - Quando VOCACIONAL_REQUIRE_BONUS=True: exige PROD_VOCACIONAL (Hotmart etc.)
+# - Quando VOCACIONAL_REQUIRE_BONUS=True: exige o Vocacional 75
 # - Quando False (padrão em dev): libera com onboarding (Termos+LGPD+Guia)
 # -----------------------------------------------------------------------------
 
 def maybe_require_produto(view_func):
     if getattr(settings, "VOCACIONAL_REQUIRE_BONUS", False):
-        return require_produto(PROD_VOCACIONAL)(view_func)
+        return require_produto(PROD_VOCACIONAL_75)(view_func)
     return view_func
 
 def _refinement_max_stage(user, request=None) -> int:
-    """Retorna o maior passe de refinamento liberado ao usuário (1..3).
-
-    - Passes 1/2/3 são um serviço adicional (não fazem parte do bônus do Guia).
-    - Usa user_has_produto para respeitar bypass staff e portal_mode=user.
-    """
-    stage = 0
+    """Retorna o limite de etapas liberadas pelos produtos adicionais."""
     try:
-        if user_has_produto(user, PROD_VOCACIONAL_REFINAMENTO1, request=request, bypass_staff=True):
-            stage = 1
-        if user_has_produto(user, PROD_VOCACIONAL_REFINAMENTO2, request=request, bypass_staff=True):
-            stage = 2
-        if user_has_produto(user, PROD_VOCACIONAL_REFINAMENTO3, request=request, bypass_staff=True):
-            stage = 3
+        if user_has_produto(user, PROD_VOCACIONAL_PREMIUM, request=request, bypass_staff=True):
+            return 3
+        if user_has_produto(user, PROD_VOCACIONAL_150, request=request, bypass_staff=True):
+            return 1
     except Exception:
-        # Em caso de falha de import/infra, não bloqueia hard (dev)
-        stage = 3
-    return stage
+        return 3
+    return 0
 
 
 # -----------------------------------------------------------------------------
@@ -183,9 +172,9 @@ def avaliacao_form(request: HttpRequest) -> HttpResponse:
         return redirect(next_url(request.user))
 
     # ---------------------------------------------------------
-    # Refinamento Top 3 (Passes 1–3) é um serviço adicional.
-    # Se o projeto estiver com VOCACIONAL_PASS_TOTAL > 1, exige
-    # liberação mínima do Passe 1 (PROD_VOCACIONAL_REFINAMENTO1).
+    # O Vocacional Premium libera as etapas adicionais de
+    # aprofundamento quando o projeto estiver configurado
+    # com mais de um passe.
     # ---------------------------------------------------------
     pass_total_setting = int(getattr(settings, "VOCACIONAL_PASS_TOTAL", 1) or 1)
     if pass_total_setting > 1:
@@ -193,8 +182,8 @@ def avaliacao_form(request: HttpRequest) -> HttpResponse:
         if max_stage < 1:
             messages.info(
                 request,
-                "O Refinamento Top 3 (Passes 1–3) é um serviço adicional. "
-                "Para continuar, é necessário desbloquear o Passe 1."
+                "O Vocacional 150 e o Vocacional Premium liberam as etapas adicionais de aprofundamento. "
+                "Para continuar, é necessário liberar um desses produtos."
             )
             return redirect("vocacional:etapas")
 
@@ -485,28 +474,20 @@ def avaliacao_form(request: HttpRequest) -> HttpResponse:
 def ofertas_refinamento(request, pk):
     """
     Tela com duas opções quando Top1 e Top2 estão próximos:
-    - Vocacional 75 Plus (A/B/C) -> libera confrontos diretos
+    - Vocacional 150 -> libera confrontos diretos
     - Premium (Passes 1-3) -> refinamento completo
     """
     avaliacao = get_object_or_404(Avaliacao, pk=pk, usuario=request.user)
 
-    # Acesso ao Plus
-    has_plus = user_has_produto(request.user, PROD_VOCACIONAL75PLUS, request=request)
-
-    # Acesso ao Premium (qualquer passe já caracteriza premium)
-    has_premium = (
-        request.user.is_staff
-        or request.user.is_superuser
-        or user_has_produto(request.user, PROD_VOCACIONAL_REFINAMENTO1, request=request)
-        or user_has_produto(request.user, PROD_VOCACIONAL_REFINAMENTO2, request=request)
-        or user_has_produto(request.user, PROD_VOCACIONAL_REFINAMENTO3, request=request)
-    )
+    has_vocacional_150 = user_has_produto(request.user, PROD_VOCACIONAL_150, request=request)
+    has_premium = user_has_produto(request.user, PROD_VOCACIONAL_PREMIUM, request=request)
 
     ctx = {
         "avaliacao": avaliacao,
-        "has_plus": has_plus,
+        "has_vocacional_150": has_vocacional_150,
         "has_premium": has_premium,
-        "plus_slug": PROD_VOCACIONAL75PLUS,
+        "ref_max_stage": _refinement_max_stage(request.user, request=request),
+        "premium_stage_limit": _refinement_max_stage(request.user, request=request),
     }
     return render(request, "vocacional/ofertas_refinamento.html", ctx)
 
@@ -514,7 +495,7 @@ def ofertas_refinamento(request, pk):
 @maybe_require_produto
 @require_consent()
 @require_guia_feedback
-@require_produto(PROD_VOCACIONAL_REFINAMENTO3, redirect_name="vocacional:etapas")
+@require_produto(PROD_VOCACIONAL_PREMIUM, redirect_name="vocacional:etapas")
 def passe3(request):
     """Passe 3 (anti-frustração): SJT + contexto + mini-experimentos.
 
@@ -710,8 +691,12 @@ def index(request):
 @require_guia_feedback
 def etapas(request):
     u = request.user
-    if not (u.is_staff or u.is_superuser or user_has_produto(u, PROD_VOCACIONAL_REFINAMENTO1, request=request)):
-        messages.info(request, "As etapas de refinamento (Passes 1–3) fazem parte do Premium. Comece pelo Vocacional 75.")
+    if not (u.is_staff or u.is_superuser or _refinement_max_stage(u, request=request) >= 1):
+        messages.info(
+            request,
+            "As etapas de aprofundamento fazem parte do Vocacional 150 e do Vocacional Premium. "
+            "Comece pelo Vocacional 75."
+        )
         return redirect("vocacional:avaliacao_gate")  # /vocacional/avaliacao/
     
     """Central de etapas do Vocacional (cards/botões).
@@ -739,18 +724,11 @@ def etapas(request):
         guia_ok = True
 
     
-    # Liberação de refinamento (serviço adicional): Passes 1/2/3
-    ref1_ok = user_has_produto(request.user, PROD_VOCACIONAL_REFINAMENTO1, request=request, bypass_staff=True)
-    ref2_ok = user_has_produto(request.user, PROD_VOCACIONAL_REFINAMENTO2, request=request, bypass_staff=True)
-    ref3_ok = user_has_produto(request.user, PROD_VOCACIONAL_REFINAMENTO3, request=request, bypass_staff=True)
-
-    max_stage = 0
-    if ref1_ok:
-        max_stage = 1
-    if ref2_ok:
-        max_stage = 2
-    if ref3_ok:
-        max_stage = 3
+    premium_stage_limit = _refinement_max_stage(request.user, request=request)
+    ref1_ok = premium_stage_limit >= 1
+    ref2_ok = premium_stage_limit >= 2
+    ref3_ok = premium_stage_limit >= 3
+    max_stage = premium_stage_limit
 
 # Última avaliação em andamento (rascunho)
     draft = (
@@ -1097,11 +1075,7 @@ def entrada(request):
     """
     u = request.user
 
-    has_ref = (
-        user_has_produto(u, PROD_VOCACIONAL_REFINAMENTO1, request=request) or
-        user_has_produto(u, PROD_VOCACIONAL_REFINAMENTO2, request=request) or
-        user_has_produto(u, PROD_VOCACIONAL_REFINAMENTO3, request=request)
-    )
+    has_ref = _refinement_max_stage(u, request=request) >= 1
 
     if has_ref:
         return redirect("vocacional:etapas")
@@ -1142,15 +1116,15 @@ def comparacoes_top3(request):
 
     # Liberação do A/B/C:
     # - Premium (Passe 3) OU
-    # - Vocacional 75 Plus (produto adicional mais barato)
-    has_fc_plus = user_has_produto(request.user, PROD_VOCACIONAL75PLUS, request=request)
+    # - Vocacional 150
+    has_vocacional_150 = user_has_produto(request.user, PROD_VOCACIONAL_150, request=request)
     ref_max = _refinement_max_stage(request.user, request=request)
     has_premium_fc = (ref_max >= 3) or (request.user.is_staff or request.user.is_superuser)
 
-    if not (has_fc_plus or has_premium_fc):
+    if not (has_vocacional_150 or has_premium_fc):
         messages.info(
             request,
-            "Para usar Confrontos Diretos (A/B/C), você pode adquirir o Vocacional 75 Plus "
+            "Para usar Confrontos Diretos (A/B/C), você pode adquirir o Vocacional 150 "
             "ou desbloquear o Premium (Passe 3)."
         )
         # Se existir a tela de ofertas, manda para lá; senão volta ao resultado.

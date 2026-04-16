@@ -7,7 +7,7 @@ from django.contrib.auth.views import redirect_to_login
 from functools import wraps
 
 from apps.core.permissions import (
-    PROD_VOCACIONAL,
+    PROD_VOCACIONAL_75,
     require_produto,
     require_consent,
     require_guia_feedback,
@@ -23,7 +23,7 @@ from apps.core.permissions import (
 # (LEGADO) Mantido para não quebrar imports antigos.
 # Agora é simplesmente "produto vocacional (slug de referência)".
 def require_vocacional_bonus(view_func):
-    return require_produto(PROD_VOCACIONAL)(view_func)
+    return require_produto(PROD_VOCACIONAL_75)(view_func)
 
 
 def require_mentor(view_func):

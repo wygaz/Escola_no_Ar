@@ -77,7 +77,7 @@
             </strong>
           </div>
           <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
-            <div style="opacity:.7; margin-bottom:6px;">Guia válido</div>
+            <div style="opacity:.7; margin-bottom:6px;">Posse do Guia</div>
             <strong style="color:{% if selected_user_status.has_valid_guia %}#18794e{% else %}#b26a00{% endif %};">
               {% if selected_user_status.has_valid_guia %}Sim{% else %}Não{% endif %}
             </strong>
@@ -140,30 +140,45 @@
         <div style="border-top:1px solid rgba(0,0,0,.08); margin-top:16px; padding-top:16px;">
           <h3 style="margin:0 0 8px;">Ações de acesso</h3>
           <p style="margin:0 0 14px; opacity:.78;">
-            Conceda ou remova manualmente um produto para o usuário inspecionado.
+            Marque os produtos pertinentes ao usuário inspecionado e faça a operação em lote.
           </p>
           <form method="post" style="display:grid; gap:12px;">
             {% csrf_token %}
             <input type="hidden" name="q" value="{{ governance_search_query }}">
             <input type="hidden" name="user_id" value="{{ selected_user.id }}">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+              <strong>Produtos disponíveis no momento</strong>
+              <a href="{{ governance_product_add_url }}" target="_blank" rel="noopener" style="display:inline-block; padding:8px 12px; border-radius:10px; border:1px solid rgba(0,0,0,.12); background:#fff; text-decoration:none; color:#111827; font-weight:600;">
+                [+] Adicionar produto
+              </a>
+            </div>
+            <div style="display:grid; gap:8px; border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
+              {% for produto in governance_available_products %}
+                <label style="display:flex; align-items:center; gap:10px; padding:6px 0;">
+                  <input
+                    type="checkbox"
+                    name="produto_ids"
+                    value="{{ produto.id }}"
+                    {% if produto.id in selected_user_active_access_product_ids %}checked{% endif %}
+                  >
+                  <span>
+                    <strong>{{ produto.nome }}</strong>
+                    <span style="opacity:.78;">({{ produto.slug }})</span>
+                    {% if produto.id in selected_user_active_access_product_ids %}
+                      <span style="color:#18794e; font-weight:600;"> - ativo</span>
+                    {% endif %}
+                  </span>
+                </label>
+              {% empty %}
+                <p style="margin:0; opacity:.78;">Nenhum produto cadastrado na tabela de produtos.</p>
+              {% endfor %}
+            </div>
             <div style="display:flex; gap:12px; flex-wrap:wrap;">
-              <select
-                name="produto_id"
-                style="flex:1 1 360px; min-width:260px; padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;"
-              >
-                <option value="">Selecione um produto</option>
-                {% for produto in governance_available_products %}
-                  <option value="{{ produto.id }}">
-                    {{ produto.nome }} ({{ produto.slug }})
-                    {% if produto.slug in selected_user_active_access_slugs %} - ativo{% endif %}
-                  </option>
-                {% endfor %}
-              </select>
               <button type="submit" name="action" value="grant" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(24,121,78,.25); background:#eef8f1; color:#18794e; font-weight:600;">
-                Conceder acesso
+                Conceder marcados
               </button>
               <button type="submit" name="action" value="revoke" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(198,40,40,.22); background:#fff3f3; color:#c62828; font-weight:600;">
-                Remover acesso
+                Remover marcados
               </button>
             </div>
           </form>
