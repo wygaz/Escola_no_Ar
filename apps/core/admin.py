@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import NivelEvolucao
-from .models import PendingAccess
+from .models import GuiaPromotionalDelivery, NivelEvolucao, PendingAccess
 
 ''' Comentado para ativar apenas o mínimo
 @admin.register(NivelEvolucao)
@@ -22,3 +21,11 @@ class PendingAccessAdmin(admin.ModelAdmin):
     list_filter = ("produto_slug", "origem", "processed_at")
     search_fields = ("email",)
     readonly_fields = ("created_at", "processed_at")
+
+
+@admin.register(GuiaPromotionalDelivery)
+class GuiaPromotionalDeliveryAdmin(admin.ModelAdmin):
+    list_display = ("recipient_email", "user", "status", "source", "sent_by", "sent_at")
+    list_filter = ("status", "source", "sent_at")
+    search_fields = ("recipient_email", "user__email")
+    readonly_fields = ("sent_at",)

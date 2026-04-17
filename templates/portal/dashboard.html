@@ -151,7 +151,7 @@
         <div style="border-top:1px solid rgba(0,0,0,.08); margin-top:16px; padding-top:16px;">
           <h3 style="margin:0 0 8px;">Guia</h3>
           <p style="margin:0 0 14px; opacity:.78;">
-            A posse valida do Guia nao deve ser marcada manualmente. Ela so deve vir da compra no Hotmart ou de um fluxo proprio de envio promocional registrado.
+            A posse valida do Guia nao deve ser marcada manualmente. Ela so deve vir da compra no Hotmart ou de um envio promocional realmente disparado e registrado.
           </p>
           <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
             <span style="font-weight:600; color:{% if governance_guia_active %}#18794e{% else %}#b26a00{% endif %};">
@@ -176,12 +176,24 @@
               {% endfor %}
             </div>
           {% endif %}
+          {% if governance_latest_guide_delivery %}
+            <div style="border:1px solid rgba(0,0,0,.08); border-radius:10px; padding:10px 12px; margin-bottom:12px;">
+              <strong>Ultimo envio promocional</strong>
+              <div style="opacity:.78; margin-top:4px;">
+                {{ governance_latest_guide_delivery.sent_at|date:"d/m/Y H:i" }}
+                {% if governance_latest_guide_delivery.sent_by %} · por {{ governance_latest_guide_delivery.sent_by.email }}{% endif %}
+              </div>
+              <div style="opacity:.78; margin-top:4px;">
+                Arquivo: {{ governance_latest_guide_delivery.attachment_name|default:"Guia_de_Descoberta_envio.pdf" }}
+              </div>
+            </div>
+          {% endif %}
           <form method="post" style="display:flex; gap:12px; flex-wrap:wrap;">
             {% csrf_token %}
             <input type="hidden" name="q" value="{{ governance_search_query }}">
             <input type="hidden" name="user_id" value="{{ selected_user.id }}">
-            <button type="submit" name="action" value="grant_guia" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(178,106,0,.22); background:#fff7e8; color:#b26a00; font-weight:600;">
-              Fluxo de envio do Guia
+            <button type="submit" name="action" value="send_guia" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(24,121,78,.25); background:#eef8f1; color:#18794e; font-weight:600;">
+              Enviar Guia por e-mail
             </button>
             <button type="submit" name="action" value="revoke_guia" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(198,40,40,.22); background:#fff3f3; color:#c62828; font-weight:600;">
               Corrigir marcacao do Guia

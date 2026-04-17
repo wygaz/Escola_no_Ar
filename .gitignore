@@ -53,6 +53,7 @@ docs/arquitetura/*
 _safety_snapshots/
 _snapshot_export/
 _snapshot_export_clean/
+storage/
 venv_corrompido_backup/
 backup_BD_*.json
 hotfix_entrada_is_ref/

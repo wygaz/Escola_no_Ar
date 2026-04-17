@@ -1,6 +1,6 @@
 # core/models.py
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils import timezone
 
 class TimeStampedModel(models.Model):
@@ -79,3 +79,36 @@ def claim_pending_access(user):
             p.marcar_processado()
             count += 1
     return count
+
+
+class GuiaPromotionalDelivery(models.Model):
+    STATUS = (
+        ("sent", "Enviado"),
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="guia_promotional_deliveries",
+    )
+    recipient_email = models.EmailField()
+    sent_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="guia_promotional_deliveries_sent",
+    )
+    source = models.CharField(max_length=50, default="governanca_promocional")
+    status = models.CharField(max_length=20, choices=STATUS, default="sent")
+    sent_at = models.DateTimeField(default=timezone.now, db_index=True)
+    attachment_name = models.CharField(max_length=255, blank=True, default="")
+    notes = models.TextField(blank=True, default="")
+
+    class Meta:
+        verbose_name = "Envio promocional do Guia"
+        verbose_name_plural = "Envios promocionais do Guia"
+        ordering = ["-sent_at", "-id"]
+
+    def __str__(self):
+        return f"{self.recipient_email} - {self.get_status_display()} em {self.sent_at:%d/%m/%Y %H:%M}"

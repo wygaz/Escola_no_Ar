@@ -1,5 +1,6 @@
 # apps\core\views.py
 import logging
+from pathlib import Path
 from urllib.parse import urlencode
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -7,7 +8,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import redirect_to_login
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage, send_mail
 from django.contrib import messages
 from django import forms
 from django.urls import reverse
@@ -37,6 +38,54 @@ from apps.core.product_registry import (
 
 
 logger = logging.getLogger(__name__)
+
+GUIA_PROMOTIONAL_FILENAME = "Guia_de_Descoberta_envio.pdf"
+
+
+def _get_promotional_guide_pdf_path() -> Path:
+    configured = getattr(settings, "GUIA_PROMOTIONAL_FILE", "")
+    if configured:
+        return Path(configured)
+    return Path(str(settings.BASE_DIR)) / "storage" / "guia" / GUIA_PROMOTIONAL_FILENAME
+
+
+def _get_preferred_guia_product(produtos):
+    priorities = slugs_equivalentes(PROD_GUIA)
+    by_slug = {produto.slug: produto for produto in produtos}
+    for slug in priorities:
+        if slug in by_slug:
+            return by_slug[slug]
+    return produtos[0] if produtos else None
+
+
+def _send_promotional_guide_email(*, target_user, sent_by):
+    pdf_path = _get_promotional_guide_pdf_path()
+    if not pdf_path.exists():
+        return False, (
+            f"O arquivo promocional do Guia nao foi encontrado em {pdf_path}. "
+            "Coloque o PDF canônico antes de tentar o envio."
+        )
+
+    if not getattr(target_user, "email", ""):
+        return False, "O usuario nao possui e-mail cadastrado para receber o Guia."
+
+    subject = "Guia de Descoberta - envio promocional"
+    body = (
+        f"Ola, {getattr(target_user, 'first_name', '') or target_user.email}!\n\n"
+        "Segue o Guia de Descoberta em envio promocional.\n"
+        "Depois da leitura, a Avaliacao do Guia continua obrigatoria para seguir no fluxo.\n\n"
+        "Atenciosamente,\n"
+        "Equipe Sonhe + Alto"
+    )
+    message = EmailMessage(
+        subject=subject,
+        body=body,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[target_user.email],
+    )
+    message.attach_file(str(pdf_path))
+    message.send(fail_silently=False)
+    return True, pdf_path.name
 
 
 def _can_access_app(request, user, produto_slug: str, setting_flag: str, *, bypass_staff: bool = True) -> bool:
@@ -786,6 +835,7 @@ TEMPLATE_BY_PERFIL = {
 
 def _build_governance_subject_context(request, target_user) -> dict:
     from apps.contas.models_acessos import Acesso, Produto
+    from apps.core.models import GuiaPromotionalDelivery
 
     product_states = {}
     for product in iter_products():
@@ -809,6 +859,12 @@ def _build_governance_subject_context(request, target_user) -> dict:
     active_access_product_ids = {acesso.produto_id for acesso in active_accesses}
     available_products = list(Produto.objects.order_by("nome", "slug"))
     guia_products = [produto for produto in available_products if produto.slug in set(slugs_equivalentes(PROD_GUIA))]
+    latest_guide_delivery = (
+        GuiaPromotionalDelivery.objects.filter(user=target_user)
+        .select_related("sent_by")
+        .order_by("-sent_at", "-id")
+        .first()
+    )
     family_defs = [
         {
             "key": "basic",
@@ -876,6 +932,7 @@ def _build_governance_subject_context(request, target_user) -> dict:
         "selected_user_active_access_product_ids": active_access_product_ids,
         "governance_guia_products": guia_products,
         "governance_guia_active": has_valid_guia,
+        "governance_latest_guide_delivery": latest_guide_delivery,
         "governance_available_products": available_products,
         "governance_product_groups": grouped_products,
         "governance_uncategorized_products": uncategorized_products,
@@ -906,6 +963,7 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
 
     def post(self, request, *args, **kwargs):
         from apps.contas.models_acessos import Acesso, Produto
+        from apps.core.models import GuiaPromotionalDelivery
 
         user_id = (request.POST.get("user_id") or "").strip()
         produto_ids = [pid for pid in request.POST.getlist("produto_ids") if pid and pid.isdigit()]
@@ -921,7 +979,7 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
         if query_data:
             redirect_url = f"{redirect_url}?{urlencode(query_data)}"
 
-        if action not in {"grant", "revoke", "grant_guia", "revoke_guia"}:
+        if action not in {"grant", "revoke", "send_guia", "revoke_guia"}:
             messages.error(request, "Ação de governança inválida.")
             return redirect(redirect_url)
 
@@ -940,7 +998,7 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
             messages.error(request, "Usuário não encontrado.")
             return redirect(reverse("portal_dashboard"))
 
-        if action in {"grant_guia", "revoke_guia"}:
+        if action in {"send_guia", "revoke_guia"}:
             guia_products = list(
                 Produto.objects.filter(slug__in=slugs_equivalentes(PROD_GUIA)).order_by("nome", "slug")
             )
@@ -951,11 +1009,43 @@ class PortalDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView)
                 )
                 return redirect(redirect_url)
 
-            if action == "grant_guia":
-                messages.warning(
+            if action == "send_guia":
+                success, payload = _send_promotional_guide_email(target_user=target_user, sent_by=request.user)
+                if not success:
+                    messages.error(request, payload)
+                    return redirect(redirect_url)
+
+                preferred_product = _get_preferred_guia_product(guia_products)
+                if preferred_product is None:
+                    messages.error(
+                        request,
+                        "Nenhum produto do Guia foi encontrado para registrar a posse valida apos o envio.",
+                    )
+                    return redirect(redirect_url)
+
+                active_qs = Acesso.objects.filter(
+                    user=target_user,
+                    produto=preferred_product,
+                    expires_at__isnull=True,
+                )
+                if not active_qs.exists():
+                    Acesso.objects.create(
+                        user=target_user,
+                        produto=preferred_product,
+                        origem="guia_envio_promocional",
+                    )
+
+                GuiaPromotionalDelivery.objects.create(
+                    user=target_user,
+                    recipient_email=target_user.email,
+                    sent_by=request.user,
+                    source="governanca_promocional",
+                    attachment_name=payload,
+                    notes="Envio promocional do Guia disparado pela governanca.",
+                )
+                messages.success(
                     request,
-                    "A posse do Guia nao pode ser concedida por marcacao administrativa direta. "
-                    "Ela so deve ser reconhecida por compra no Hotmart ou apos fluxo proprio de envio promocional registrado.",
+                    f"Guia enviado por e-mail para {target_user.email}. A posse valida foi registrada e a Avaliacao do Guia continua obrigatoria.",
                 )
                 return redirect(redirect_url)
 
