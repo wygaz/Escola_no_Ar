@@ -279,11 +279,11 @@ log('quiz.js carregado');
               <span class="pill-num">${v}</span>
               <span class="pill-text">${
                 {
-                  1: 'não tem nada a ver comigo',
+                  1: 'Nada a ver comigo',
                   2: 'discordo',
                   3: 'indiferente',
                   4: 'concordo',
-                  5: 'tem tudo a ver comigo'
+                  5: 'Tudo a ver comigo'
                 }[v]
               }</span>
             </label>`
@@ -422,5 +422,6 @@ function updateFinishState(){
     btnNext.classList.remove('disabled');
   }
 }
+
 
 

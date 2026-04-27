@@ -7,8 +7,8 @@
 {% block extra_head %}
   {{ block.super }}
   <style>
-    .vocacional-nav form { display:inline; margin:0; }
-    .vocacional-nav form button { cursor:pointer; }
+    .vocacional-nav form { display: inline; margin: 0; }
+    .vocacional-nav form button { cursor: pointer; }
   </style>
 {% endblock %}
 
@@ -45,11 +45,9 @@
       <div class="vocacional-nav">
         <a href="{% url 'portal' %}" class="btn btn-xs btn-outline-light">Portal</a>
         <a href="{% url 'projeto21:home' %}" class="btn btn-xs btn-outline-light">Sonhe + Alto</a>
-
         <a href="{% url 'contas:logout' %}" class="btn btn-xs btn-outline-danger js-logout-link">Sair</a>
       </div>
     </div>
-
   </header>
 
   <main class="vocacional-main">
@@ -63,17 +61,17 @@
 
 {% block extra_scripts %}{{ block.super }}
 <script>
-  // Limpa chaves locais (stepper do Guia) ao sair
-  (function(){
-    const a = document.querySelector('.vocacional-nav .js-logout-link');
-    if(!a) return;
-    a.addEventListener('click', function(){
-      try{
+  // Limpa chaves locais do stepper do Guia ao sair.
+  (function () {
+    const a = document.querySelector(".vocacional-nav .js-logout-link");
+    if (!a) return;
+    a.addEventListener("click", function () {
+      try {
         const ks = Object.keys(localStorage || {});
-        ks.forEach(k => {
-          if(k.startsWith('guia_step_idx_v1_')) localStorage.removeItem(k);
+        ks.forEach((k) => {
+          if (k.startsWith("guia_step_idx_v1_")) localStorage.removeItem(k);
         });
-      }catch(e){}
+      } catch (e) {}
     });
   })();
 </script>

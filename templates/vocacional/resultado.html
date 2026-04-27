@@ -1,8 +1,8 @@
 {% extends "vocacional/base_vocacional.html" %}
 {% load static %}
+
 {% block vocacional_content %}
 
-<!-- Cabeçalho só na impressão -->
 <div class="print-only print-header">
   <div class="ph-row">
     <div class="ph-left">
@@ -34,9 +34,9 @@
     {% if stop_info.stage %}
       <p style="margin-top:.5rem;opacity:.9">
         <small>
-          <strong>Refinamento Top 3:</strong>
+          <strong>Refinamento do Top 3:</strong>
           {% if stop_info.stop %}
-            concluído no Passe {{ stop_info.stage }} ({{ stop_info.reason }}).
+            concluído na rodada {{ stop_info.stage }} ({{ stop_info.reason }}).
           {% else %}
             em andamento.
           {% endif %}
@@ -51,46 +51,226 @@
     {% endif %}
   </div>
 
-  {# ===== Precisão / necessidade de continuar ===== #}
+  {% if interpretation %}
+    <div id="interpretation-modal" class="interp-modal" aria-hidden="false">
+      <div class="interp-backdrop"></div>
+      <div class="interp-card" role="dialog" aria-modal="true" aria-labelledby="interp-title">
+        <button type="button" class="interp-close" aria-label="Fechar leitura interpretativa">×</button>
+        <div class="interp-seal">Leitura interpretativa do seu resultado</div>
+        <h2 id="interp-title" class="interp-title">{{ interpretation.title }}</h2>
+        {% if resultados_top3 %}
+          <p class="interp-opening">
+            {% if refinement_round <= 0 %}
+              Parabéns, <strong>{{ request.user.first_name|default:request.user.nome|default:request.user.email }}</strong>.
+              Detectamos que você possui maior afinidade com <strong>{{ resultados_top3.0.dimensao_nome }}</strong>
+              {% if resultados_top3|length >= 2 %}
+                , seguida por <strong>{{ resultados_top3.1.dimensao_nome }}</strong>
+              {% endif %}
+              {% if resultados_top3|length >= 3 %}
+                e <strong>{{ resultados_top3.2.dimensao_nome }}</strong>
+              {% endif %}.
+            {% elif refinement_round == 1 %}
+              <strong>{{ request.user.first_name|default:request.user.nome|default:request.user.email }}</strong>,
+              a primeira rodada de refinamento já trouxe uma leitura mais ajustada do seu perfil. Neste momento,
+              <strong>{{ resultados_top3.0.dimensao_nome }}</strong> aparece à frente,
+              {% if resultados_top3|length >= 2 %}
+                seguida por <strong>{{ resultados_top3.1.dimensao_nome }}</strong>
+              {% endif %}
+              {% if resultados_top3|length >= 3 %}
+                e <strong>{{ resultados_top3.2.dimensao_nome }}</strong>
+              {% endif %}.
+            {% else %}
+              <strong>{{ request.user.first_name|default:request.user.nome|default:request.user.email }}</strong>,
+              sua rodada {{ refinement_round }} confirmou e reorganizou melhor as áreas mais fortes do seu resultado.
+              Agora o destaque principal está em <strong>{{ resultados_top3.0.dimensao_nome }}</strong>,
+              {% if resultados_top3|length >= 2 %}
+                com <strong>{{ resultados_top3.1.dimensao_nome }}</strong> logo depois
+              {% endif %}
+              {% if resultados_top3|length >= 3 %}
+                e <strong>{{ resultados_top3.2.dimensao_nome }}</strong> completando este núcleo de possibilidades
+              {% endif %}.
+            {% endif %}
+          </p>
+        {% endif %}
+        {% if resultados_top3 %}
+          <div class="interp-top3">
+            <div class="interp-top3-head">
+              <strong>Seu Top 3 neste momento</strong>
+              <span>
+                {% if final_info.source == "fc_top3" %}
+                  Ordem refinada a partir da rodada mais recente
+                {% elif resultados_top3|length >= 3 %}
+                  {{ resultados_top3.0.dimensao_nome }}, {{ resultados_top3.1.dimensao_nome }} e {{ resultados_top3.2.dimensao_nome }}
+                {% elif resultados_top3|length >= 2 %}
+                  {{ resultados_top3.0.dimensao_nome }} e {{ resultados_top3.1.dimensao_nome }}
+                {% else %}
+                  {{ resultados_top3.0.dimensao_nome }}
+                {% endif %}
+              </span>
+            </div>
+            <div class="interp-top3-list">
+              {% for r in resultados_top3 %}
+                <div class="interp-top3-item">
+                  <div class="interp-top3-meta">
+                    <span class="interp-top3-rank">{{ forloop.counter }}</span>
+                    <strong>{{ r.dimensao_nome }}</strong>
+                    {% if final_info.source == "fc_top3" %}
+                      <span>ordem refinada</span>
+                    {% else %}
+                      <span>{{ r.pct }}%</span>
+                    {% endif %}
+                  </div>
+                  {% if final_info.source != "fc_top3" %}
+                    <div class="interp-top3-bar">
+                      <div class="interp-top3-fill" style="width: {{ r.pct }}%"></div>
+                    </div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          <p class="interp-personal">
+            {% if refinement_round <= 0 %}
+              Este é o primeiro retrato do seu perfil vocacional neste ciclo.
+            {% elif refinement_round == 1 %}
+              Esta leitura já considera as respostas da Rodada 1 e mostra como seu resultado começou a ganhar mais definição.
+            {% else %}
+              Esta leitura já incorpora as rodadas de refinamento feitas até aqui e mostra como o seu resultado está sendo acompanhado com mais precisão.
+            {% endif %}
+          </p>
+        {% endif %}
+        <p class="interp-summary">{{ interpretation.summary }}</p>
+        <p class="interp-core">{{ interpretation.core_message }}</p>
+        <p class="interp-caution">{{ interpretation.caution }}</p>
+
+        {% if interpretation.show_external_factors and interpretation.external_factors %}
+          <div class="interp-panel">
+            <strong>Fatores externos que podem ajudar no desempate</strong>
+            <p>{{ interpretation.external_factors|join:", " }}.</p>
+          </div>
+        {% endif %}
+
+        {% if interpretation.non_recommended_note %}
+          <div class="interp-panel">
+            <strong>Prudência adicional</strong>
+            <p>{{ interpretation.non_recommended_note }}</p>
+          </div>
+        {% endif %}
+
+        <div class="interp-panel interp-method">
+          <strong>Importante</strong>
+          <p>{{ interpretation.method_note }}</p>
+        </div>
+
+        <p class="interp-next"><strong>Próximo passo:</strong> {{ interpretation.next_step }}</p>
+
+        {% if interpretation.show_mentoring_offer %}
+          <p class="interp-mentoring">
+            <strong>Aprofundamento sugerido:</strong> Mentoria Vocacional para comparação mais cuidadosa entre áreas próximas.
+          </p>
+        {% endif %}
+
+        <div class="interp-actions">
+          {% if confidence.needs_refine %}
+            <a class="btn ok" href="{{ fc_entry_url }}">
+              {% if has_fc_progress %}
+                Continuar rodada {{ refinement_round_next }}
+              {% elif can_fc %}
+                Abrir rodada {{ refinement_round_next }}
+              {% elif can_refine %}
+                Abrir trilha de aprofundamento
+              {% else %}
+                Ver opções de refinamento
+              {% endif %}
+            </a>
+          {% else %}
+            <button type="button" class="btn ok js-close-interpretation">Continuar para os detalhes</button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="card-info screen-only" style="margin-bottom:1rem">
+      <strong>{{ interpretation.title }}</strong>
+      <p style="margin:.45rem 0 0 0;opacity:.9">{{ interpretation.summary }}</p>
+      <div class="actions-row" style="margin-top:.8rem">
+        <button type="button" class="btn ghost js-open-interpretation">Ler novamente a interpretação</button>
+        {% if confidence.needs_refine %}
+          <a class="btn ok" href="{{ fc_entry_url }}">
+            {% if has_fc_progress %}
+              Continuar rodada {{ refinement_round_next }}
+            {% elif can_fc %}
+              Abrir rodada {{ refinement_round_next }}
+            {% elif can_refine %}
+              Abrir trilha de aprofundamento
+            {% else %}
+              Ver opções de refinamento
+            {% endif %}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+
   {% if confidence.needs_refine %}
     <div class="card-warn" style="margin-bottom:1rem">
       <h2 style="margin:0 0 .35rem 0;font-size:1.05rem">Seu Top 1 e Top 2 estão muito próximos</h2>
       <p style="margin:0;opacity:.9">
-        Isso geralmente significa que você tem afinidade real com mais de uma área — e, por isso,
-        o resultado ainda <strong>pode ser melhor apurado</strong>.
+        Isso geralmente significa que você tem afinidade real com mais de uma área e que o resultado ainda pode ser melhor apurado.
       </p>
       {% if resultados_top3|length >= 2 %}
         <p style="margin:.6rem 0 0 0;opacity:.9">
-          <small>Top 1: <strong>{{ resultados_top3.0.dimensao_nome }}</strong> ({{ resultados_top3.0.pct }}%) •
-          Top 2: <strong>{{ resultados_top3.1.dimensao_nome }}</strong> ({{ resultados_top3.1.pct }}%)</small>
+          <small>
+            Top 1: <strong>{{ resultados_top3.0.dimensao_nome }}</strong>
+            {% if final_info.source == "fc_top3" and resultados_top3.0.fc_points %}
+              ({{ resultados_top3.0.fc_points }} pts na rodada)
+            {% elif final_info.source == "fc_top3" %}
+              (ordem refinada)
+            {% else %}
+              ({{ resultados_top3.0.pct }}%)
+            {% endif %}
+            •
+            Top 2: <strong>{{ resultados_top3.1.dimensao_nome }}</strong>
+            {% if final_info.source == "fc_top3" and resultados_top3.1.fc_points %}
+              ({{ resultados_top3.1.fc_points }} pts na rodada)
+            {% elif final_info.source == "fc_top3" %}
+              (ordem refinada)
+            {% else %}
+              ({{ resultados_top3.1.pct }}%)
+            {% endif %}
+          </small>
         </p>
       {% endif %}
       <p style="margin:.6rem 0 0 0;opacity:.85">
-        <small><strong>Recomendação:</strong> continue o refinamento para aumentar a separação entre as opções e
-        entregar um Top 3 mais confiável.</small>
+        <small>
+          <strong>Próxima ação recomendada:</strong>
+          faça a rodada {{ refinement_round_next }} de refinamento para aumentar a separação entre as opções e entregar um Top 3 mais confiável.
+        </small>
       </p>
       <div class="actions-row screen-only" style="margin-top:.8rem">
         {% if can_fc %}
-            <a class="btn btn-secondary btn-disabled" href="#">Conclua o Passe 2</a>
-
-        {% endif %}
-        {% if can_refine %}
-          <a class="btn ok" href="{% url 'vocacional:etapas' %}">Continuar refinamento</a>
+          <a class="btn ok" href="{{ fc_entry_url }}">
+            {% if has_fc_progress %}Continuar{% else %}Abrir{% endif %} rodada {{ refinement_round_next }}
+          </a>
+        {% elif can_refine %}
+          <a class="btn ok" href="{% url 'vocacional:etapas' %}">Abrir trilha de aprofundamento</a>
         {% else %}
-          <a class="btn ok" href="{% url 'vocacional:ofertas_refinamento' avaliacao.pk %}">Ver opções de melhoria</a>
+          <a class="btn ok" href="{% url 'vocacional:ofertas_refinamento' avaliacao.pk %}">Ver opções de refinamento</a>
         {% endif %}
       </div>
     </div>
   {% else %}
     <div class="card-ok" style="margin-bottom:1rem">
       <strong>Confiança: {{ confidence.label }}</strong>
-      <span style="opacity:.85"> — A primeira vocação (Top 1) já aparece com um pouco mais de destaque da segunda vocação (Top 2).</span>
+      <span style="opacity:.85"> — A primeira vocação já aparece com mais destaque sobre a segunda.</span>
     </div>
   {% endif %}
 
-  <!-- AÇÕES (tela) — agrupadas perto do topo -->
   <div class="actions-row screen-only" style="margin-top:.25rem;flex-wrap:wrap">
-    <a class="btn ghost" href="{% url 'vocacional:avaliacao_form' %}">Repetir teste</a>
+    <form method="post" action="{% url 'vocacional:reiniciar_teste' %}" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn ghost">Repetir teste</button>
+    </form>
     <a class="btn ghost" href="{% url 'vocacional:index' %}">Voltar ao início</a>
     <button type="button" class="btn ghost js-toggle-top3">Ver todos</button>
 
@@ -113,19 +293,23 @@
     <button type="button" class="btn ok" onclick="window.print()">Salvar em PDF</button>
   </div>
 
-
-  <!-- LISTA (renderiza TODOS; o CSS + toggle esconde/mostra) -->
   <div id="resultados" class="resultados limit-top3">
     {% if resultados %}
       {% for r in resultados %}
         <div class="card-quiz" style="margin-bottom:1rem">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
             <strong>{{ r.dimensao.nome|default:r.dimensao_nome }}</strong>
-            <span>{{ r.pct }}%</span>
+            {% if final_info.source == "fc_top3" and r.fc_points %}
+              <span>{{ r.fc_points }} pts</span>
+            {% elif final_info.source == "fc_top3" and r.fc_pct %}
+              <span>ordem refinada</span>
+            {% else %}
+              <span>{{ r.pct }}%</span>
+            {% endif %}
           </div>
 
           <div class="bar" style="height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden">
-            <div class="fill" style="height:10px;width:{{ r.pct }}%;background:#3b82f6"></div>
+            <div class="fill" style="height:10px;width:{% if final_info.source == "fc_top3" and r.fc_pct %}{{ r.fc_pct }}{% else %}{{ r.pct }}{% endif %}%;background:#3b82f6"></div>
           </div>
 
           <div style="margin-top:.5rem;opacity:.9">
@@ -138,16 +322,143 @@
     {% endif %}
   </div>
 
-
-  <!-- Rodapé só na impressão -->
   <div class="print-only print-footer">
     © {% now "Y" %} Escola no Ar • Termos: {% url 'core:termos' %} • Privacidade: {% url 'core:privacidade' %}
   </div>
 </div>
 
 <style>
-  .card-warn{border:1px solid rgba(231,76,60,.35);background:rgba(231,76,60,.08);border-radius:16px;padding:14px 16px;}
-  .card-ok{border:1px solid rgba(46,204,113,.35);background:rgba(46,204,113,.08);border-radius:16px;padding:12px 16px;}
+  .card-warn { border:1px solid rgba(231,76,60,.35); background:rgba(231,76,60,.08); border-radius:16px; padding:14px 16px; }
+  .card-ok { border:1px solid rgba(46,204,113,.35); background:rgba(46,204,113,.08); border-radius:16px; padding:12px 16px; }
+  .interp-modal { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .interp-modal[aria-hidden="true"] { display: none; }
+  .interp-backdrop { position: absolute; inset: 0; background: rgba(8, 14, 30, .72); backdrop-filter: blur(3px); }
+  .interp-card {
+    position: relative;
+    z-index: 1;
+    width: min(920px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+    background: linear-gradient(180deg, #fff4bf 0%, #ffe79a 100%);
+    color: #15253d;
+    border: 1px solid rgba(21, 37, 61, .18);
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.35);
+    padding: 28px 30px 24px;
+  }
+  .interp-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    border: 0;
+    background: transparent;
+    color: #15253d;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .interp-seal {
+    display: inline-block;
+    margin-bottom: 14px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(21, 37, 61, .10);
+    color: #173457;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+  .interp-title { margin: 0 0 12px 0; font-size: clamp(1.8rem, 3vw, 2.7rem); line-height: 1.05; color: #112946; }
+  .interp-opening {
+    margin: 0 0 16px 0;
+    font-size: 1.08rem;
+    line-height: 1.68;
+    color: #173457;
+  }
+  .interp-top3 {
+    margin: 0 0 18px 0;
+    padding: 14px 16px 16px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.45);
+    border: 1px solid rgba(21, 37, 61, .10);
+  }
+  .interp-top3-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .interp-top3-head strong {
+    font-size: 1.02rem;
+    color: #112946;
+  }
+  .interp-top3-head span {
+    font-size: .96rem;
+    color: rgba(21, 37, 61, .82);
+  }
+  .interp-top3-list {
+    display: grid;
+    gap: 10px;
+  }
+  .interp-top3-item {
+    display: grid;
+    gap: 6px;
+  }
+  .interp-top3-meta {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
+    align-items: center;
+    font-size: .98rem;
+  }
+  .interp-top3-rank {
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(21, 37, 61, .12);
+    font-weight: 700;
+  }
+  .interp-top3-bar {
+    height: 8px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(21, 37, 61, .10);
+  }
+  .interp-top3-fill {
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #1c4f8c 0%, #2b73c6 100%);
+  }
+  .interp-personal {
+    margin: 0 0 14px 0;
+    font-size: 1.03rem;
+    line-height: 1.6;
+    color: #19324f;
+  }
+  .interp-summary, .interp-core, .interp-caution, .interp-next, .interp-mentoring {
+    font-size: 1.1rem;
+    line-height: 1.65;
+    margin: 0 0 14px 0;
+  }
+  .interp-panel {
+    margin: 14px 0;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(255,255,255,.42);
+    border: 1px solid rgba(21, 37, 61, .10);
+  }
+  .interp-panel strong { display: block; margin-bottom: 6px; font-size: 1rem; }
+  .interp-panel p { margin: 0; line-height: 1.6; }
+  .interp-method { background: rgba(21, 37, 61, .08); }
+  .interp-actions { display: flex; justify-content: center; margin-top: 18px; }
+  .interp-actions .btn { font-size: 1rem; padding: .9rem 1.25rem; }
+  @media (max-width: 700px) {
+    .interp-card { padding: 22px 18px 20px; border-radius: 20px; }
+    .interp-summary, .interp-core, .interp-caution, .interp-next, .interp-mentoring { font-size: 1rem; }
+  }
 </style>
 
 <script>
@@ -168,9 +479,28 @@
 
   sync();
 })();
+
+(function(){
+  const modal = document.getElementById('interpretation-modal');
+  if (!modal) return;
+  const closeBtn = modal.querySelector('.interp-close');
+  const closeAction = modal.querySelector('.js-close-interpretation');
+  const openBtns = document.querySelectorAll('.js-open-interpretation');
+  const backdrop = modal.querySelector('.interp-backdrop');
+
+  function closeModal() { modal.setAttribute('aria-hidden', 'true'); }
+  function openModal() { modal.setAttribute('aria-hidden', 'false'); }
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (closeAction) closeAction.addEventListener('click', closeModal);
+  if (backdrop) backdrop.addEventListener('click', closeModal);
+  openBtns.forEach(btn => btn.addEventListener('click', openModal));
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeModal();
+  });
+})();
 </script>
 <style>
-/* ===== Ajustes de impressão (PDF) ===== */
 @media print {
   html, body {
     background: #fff !important;
@@ -178,27 +508,20 @@
     print-color-adjust: exact !important;
   }
 
-  /* força texto escuro no PDF (corrige branco no branco) */
   * {
     color: #111 !important;
     text-shadow: none !important;
     box-shadow: none !important;
   }
 
-  /* esconde controles de tela */
   .screen-only, .actions-row { display: none !important; }
-
-  /* mostra cabeçalho/rodapé do PDF */
   .print-only { display: block !important; }
 
-  /* imprime todos os resultados (mesmo se estiver em Top 3 na tela) */
   #resultados.limit-top3 .card-quiz:nth-child(n+4) { display: block !important; }
 
-  /* barras legíveis */
   .bar { background: #e6e6e6 !important; }
   .fill { background: #1f5eff !important; }
 
-  /* evita quebrar um card no meio da página */
   .card-quiz { page-break-inside: avoid; }
 }
 </style>

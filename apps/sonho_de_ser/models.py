@@ -18,8 +18,8 @@ class Area(models.Model):
 
 
     class Meta:
-        verbose_name = "Ãrea"
-        verbose_name_plural = "Ãreas"
+        verbose_name = "Área"
+        verbose_name_plural = "Áreas"
 
     def __str__(self) -> str:
         return self.nome

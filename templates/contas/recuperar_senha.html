@@ -1,6 +1,27 @@
-<h2>Recuperar Senha</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Enviar link de recuperação</button>
-</form>
+{% extends "base.html" %}
+
+{% block title %}Recuperar senha{% endblock %}
+
+{% block content %}
+<div style="max-width: 760px; margin: 40px auto; padding: 0 16px;">
+  <div style="border:1px solid rgba(0,0,0,.08); border-radius:20px; padding:24px; background:#fff;">
+    <h1 style="margin:0 0 10px;">Recuperar senha</h1>
+    <p style="margin:0 0 18px; color:#475569;">
+      Digite seu usuário ou e-mail. Se existir uma conta elegível para recuperação, o link será enviado para a caixa postal correspondente.
+    </p>
+    <form method="post" style="display:grid; gap:12px;">
+      {% csrf_token %}
+      <div>
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {{ form.email.errors }}
+      </div>
+      <div>
+        <button type="submit" style="padding:10px 16px; border-radius:999px; border:1px solid rgba(0,0,0,.12); background:#1d4ed8; color:#fff; font-weight:600;">
+          Enviar link de recuperação
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -3,18 +3,100 @@
 
 {% block title %}Avaliação Vocacional{% endblock %}
 
-{# 
+{#
   Layout focado em:
   - dar destaque máximo ao questionário
   - deixar instruções menores e separadas
-  - evitar duplicação de cabeçalho (o base_vocacional já mostra logo/título/botões)
+  - evitar duplicação de cabeçalho, porque o base_vocacional já mostra logo, título e botões
 #}
 
 {% block vocacional_content %}
 
 <style>
-  /* Mantém tudo local por enquanto (sem mexer em CSS global).
-     Se preferir, depois movemos isso para um CSS do vocacional. */
+  .voc-onboarding-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(5, 10, 20, 0.78);
+    backdrop-filter: blur(6px);
+  }
+  .voc-onboarding-overlay[hidden] { display: none; }
+  .voc-onboarding-dialog {
+    width: min(760px, 100%);
+    border-radius: 22px;
+    padding: 26px 26px 22px;
+    background: linear-gradient(180deg, rgba(20, 28, 45, 0.98) 0%, rgba(15, 22, 38, 0.98) 100%);
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow: 0 24px 70px rgba(0,0,0,.42);
+  }
+  .voc-onboarding-kicker {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(99, 179, 237, .14);
+    color: #b9e2ff;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .voc-onboarding-title {
+    margin: 14px 0 10px;
+    font-size: clamp(1.55rem, 2vw, 2rem);
+    line-height: 1.2;
+  }
+  .voc-onboarding-copy {
+    margin: 0 0 14px;
+    color: rgba(255,255,255,.84);
+    line-height: 1.65;
+  }
+  .voc-onboarding-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+  }
+  @media (max-width: 760px) {
+    .voc-onboarding-grid { grid-template-columns: 1fr; }
+  }
+  .voc-onboarding-box {
+    border-radius: 16px;
+    padding: 16px 16px 14px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .voc-onboarding-box h3 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+  }
+  .voc-onboarding-box p,
+  .voc-onboarding-box li {
+    color: rgba(255,255,255,.78);
+    line-height: 1.55;
+    font-size: .96rem;
+  }
+  .voc-onboarding-box ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .voc-onboarding-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 18px;
+  }
+  .voc-onboarding-dismiss { min-width: 220px; }
+  .voc-onboarding-inline {
+    color: rgba(255,255,255,.78);
+    font-size: .92rem;
+  }
 
   .vocacional-cards {
     display: grid;
@@ -30,15 +112,11 @@
     border-radius: 16px;
     padding: 18px;
   }
-
-  /* Card do quiz: mais “presença” */
   .voc-card--quiz {
     padding: 20px;
     border: 1px solid rgba(255,255,255,.10);
     box-shadow: 0 10px 30px rgba(0,0,0,.25);
   }
-
-  /* Card das instruções: menor e mais “leve” */
   .voc-card--help {
     padding: 16px;
     border: 1px solid rgba(255,255,255,.08);
@@ -48,14 +126,51 @@
   .voc-card--help ul { margin: 10px 0 0 0; }
   .voc-card--help li { font-size: .95rem; line-height: 1.35rem; }
 
-  /* Dá mais “respiro” dentro do quiz */
   .quiz-shell { margin-top: 6px; }
   .quiz-actions { margin-top: 14px !important; }
 </style>
 
+<div id="voc-onboarding-overlay" class="voc-onboarding-overlay" role="dialog" aria-modal="true" aria-labelledby="voc-onboarding-title">
+  <div class="voc-onboarding-dialog">
+    <span class="voc-onboarding-kicker">Antes de começar</span>
+    <h2 id="voc-onboarding-title" class="voc-onboarding-title">Esta é a trilha Vocacional</h2>
+    <p class="voc-onboarding-copy">
+      Aqui você vai responder a uma sequência de perguntas para ajudar a revelar inclinações,
+      interesses e possibilidades de futuro. O objetivo não é pressionar você, mas aliviar a tensão
+      da escolha pelo medo de errar e dar mais clareza para decidir com segurança.
+    </p>
+
+    <div class="voc-onboarding-grid">
+      <section class="voc-onboarding-box">
+        <h3>O que se espera de você</h3>
+        <ul>
+          <li>Responder com sinceridade, pensando em quem você é hoje.</li>
+          <li>Marcar cada questão sem deixar lacunas.</li>
+          <li>Seguir até o final para receber uma leitura útil do seu perfil.</li>
+        </ul>
+      </section>
+      <section class="voc-onboarding-box">
+        <h3>O que acontece ao final desta etapa</h3>
+        <ul>
+          <li>Você recebe uma primeira leitura das áreas que mais combinam com você.</li>
+          <li>O sistema começa a organizar seu caminho de aprofundamento.</li>
+          <li>As próximas etapas refinam a escolha com mais segurança.</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="voc-onboarding-actions">
+      <label class="voc-onboarding-inline">
+        <input type="checkbox" id="voc-onboarding-hide-next">
+        Não mostrar novamente neste navegador
+      </label>
+      <button type="button" id="voc-onboarding-dismiss" class="btn btn-primary voc-onboarding-dismiss">Entendi. Quero começar a trilha</button>
+    </div>
+  </div>
+</div>
+
 <div class="vocacional-cards">
 
-  <!-- QUIZ (carro-chefe) -->
   <section class="card voc-card voc-card--quiz">
     <div class="quiz-shell">
       <div class="quiz-progress">
@@ -87,19 +202,18 @@
     </div>
   </section>
 
-  <!-- INSTRUÇÕES (menores, separadas) -->
   <aside class="card voc-card voc-card--help">
     <h3>Como responder</h3>
     <p class="muted" style="margin:0;">
-      Leva cerca de 10–15 minutos. Responda pensando em você hoje.
+      Leva cerca de 10-15 minutos. Responda pensando em você hoje.
     </p>
 
     <ul class="list-disc pl-6 mt-2">
-      <li>Marque de 1 a 5 (1 = não tem nada a ver comigo • 5 = tem tudo a ver comigo).</li>
-      <li>Use as teclas <strong>← / →</strong> para voltar/avançar e as teclas <strong>1–5</strong> para marcar.</li>
+      <li>Marque de 1 a 5 (1 = Nada a ver comigo; 5 = Tudo a ver comigo).</li>
+      <li>Use as teclas <strong>&larr; / &rarr;</strong> para voltar/avançar e as teclas <strong>1-5</strong> para marcar.</li>
       <li>Você não pode avançar deixando questão em branco.</li>
       <li>Ao fechar a aba, as respostas ficam salvas automaticamente.</li>
-      <li><b>Você pode parar a qualquer momento</b> e voltar depois: o teste retoma automaticamente de onde você parou.</li>
+      <li><strong>Você pode parar a qualquer momento</strong> e voltar depois: o teste retoma automaticamente de onde você parou.</li>
       <li>Ao final, clique em <strong>Finalizar</strong> para ver o resultado.</li>
     </ul>
   </aside>
@@ -107,9 +221,38 @@
 </div>
 
 <script>
-  // O JS lê "window.quizData" para renderizar o questionário.
   window.quizData = {{ perguntas|safe }};
 </script>
-<script src="{% static 'vocacional/js/quiz.js' %}"></script>
+<script>
+  (function () {
+    const overlay = document.getElementById("voc-onboarding-overlay");
+    const dismiss = document.getElementById("voc-onboarding-dismiss");
+    const hideNext = document.getElementById("voc-onboarding-hide-next");
+    const storageKey = "voc_intro_seen_v2";
+    if (!overlay || !dismiss) return;
+
+    try {
+      if (localStorage.getItem(storageKey) === "1") {
+        overlay.hidden = true;
+      }
+    } catch (e) {}
+
+    function closeOverlay() {
+      if (hideNext && hideNext.checked) {
+        try { localStorage.setItem(storageKey, "1"); } catch (e) {}
+      }
+      overlay.hidden = true;
+    }
+
+    dismiss.addEventListener("click", closeOverlay);
+    overlay.addEventListener("click", function (ev) {
+      if (ev.target === overlay) closeOverlay();
+    });
+    document.addEventListener("keydown", function (ev) {
+      if (!overlay.hidden && ev.key === "Escape") closeOverlay();
+    });
+  })();
+</script>
+<script src="{% static 'vocacional/js/quiz.js' %}?v=20260421b"></script>
 
 {% endblock %}

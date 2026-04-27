@@ -6,9 +6,11 @@ from urllib.parse import urlencode
 
 from django.contrib import messages
 from django.contrib.auth.views import redirect_to_login
+from django.db.models import Q
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils import timezone
 
 from apps.contas.acessos import tem_acesso
 
@@ -109,11 +111,63 @@ def _staff_bypass(user, request=None, bypass_staff: bool = True) -> bool:
     return mode != "user"
 
 
-def user_has_produto(user, slug_ref: str, *, request=None, bypass_staff: bool = True) -> bool:
+def get_active_demo_access(user):
+    if not getattr(user, "is_authenticated", False):
+        return None
+    try:
+        from apps.core.models import InstitutionalDemoAccess
+    except Exception:
+        return None
+
+    now = timezone.now()
+    return (
+        InstitutionalDemoAccess.objects.filter(
+            user=user,
+            starts_at__lte=now,
+            expires_at__gt=now,
+            revoked_at__isnull=True,
+        )
+        .select_related("granted_by")
+        .order_by("-expires_at", "-id")
+        .first()
+    )
+
+
+def user_has_demo_access(user, *, request=None, bypass_staff: bool = True) -> bool:
+    if not getattr(user, "is_authenticated", False):
+        return False
+    if _staff_bypass(user, request=request, bypass_staff=bypass_staff):
+        return False
+    return get_active_demo_access(user) is not None
+
+
+def get_active_access_queryset(user):
+    """Consulta única para acessos ativos reconhecidos pelo runtime e pela governança."""
+    from apps.contas.models_acessos import Acesso
+
+    if not getattr(user, "is_authenticated", False):
+        return Acesso.objects.none()
+
+    now = timezone.now()
+    return Acesso.objects.filter(user=user).filter(
+        Q(expires_at__isnull=True) | Q(expires_at__gt=now)
+    )
+
+
+def user_has_produto(
+    user,
+    slug_ref: str,
+    *,
+    request=None,
+    bypass_staff: bool = True,
+    allow_demo: bool = True,
+) -> bool:
     """Checagem centralizada de acesso (aceita equivalências)."""
     if not getattr(user, "is_authenticated", False):
         return False
     if _staff_bypass(user, request=request, bypass_staff=bypass_staff):
+        return True
+    if allow_demo and user_has_demo_access(user, request=request, bypass_staff=bypass_staff):
         return True
     for s in slugs_equivalentes(slug_ref):
         if tem_acesso(user, s):
@@ -175,7 +229,14 @@ def _has_termos(user) -> bool:
         from apps.vocacional.models import AvaliacaoGuia
     except Exception:
         return True  # se o app não existe, não bloqueia
-    return AvaliacaoGuia.objects.filter(user=user, aceite_termos=True).exists()
+    if AvaliacaoGuia.objects.filter(user=user, aceite_termos=True).exists():
+        return True
+
+    try:
+        from apps.vocacional.models_consent import Consentimento
+    except Exception:
+        return False
+    return Consentimento.objects.filter(user=user, aceito=True, revogado_em__isnull=True).exists()
 
 
 def _has_consent(user) -> bool:
@@ -198,14 +259,22 @@ def _has_legal(user) -> bool:
     return _has_termos(user) and _has_consent(user)
 
 
-def _has_valid_guia(user, *, request=None, bypass_staff: bool = True) -> bool:
-    return user_has_produto(user, PROD_GUIA, request=request, bypass_staff=bypass_staff)
+def _has_valid_guia(user, *, request=None, bypass_staff: bool = True, allow_demo: bool = True) -> bool:
+    return user_has_produto(
+        user,
+        PROD_GUIA,
+        request=request,
+        bypass_staff=bypass_staff,
+        allow_demo=allow_demo,
+    )
 
 
-def onboarding_status(user, *, request=None, bypass_staff: bool = True) -> dict:
+def onboarding_status(user, *, request=None, bypass_staff: bool = True, allow_demo: bool = True) -> dict:
     """Retorna o status de onboarding do usuário, usado pelo Portal."""
     if not getattr(user, "is_authenticated", False):
         return {
+            "has_termos": False,
+            "has_consent": False,
             "has_legal": False,
             "has_valid_guia": False,
             "has_guia_feedback": False,
@@ -214,16 +283,37 @@ def onboarding_status(user, *, request=None, bypass_staff: bool = True) -> dict:
 
     if _staff_bypass(user, request=request, bypass_staff=bypass_staff):
         return {
+            "has_termos": True,
+            "has_consent": True,
             "has_legal": True,
             "has_valid_guia": True,
             "has_guia_feedback": True,
             "has_onboarding": True,
         }
 
-    has_legal = _has_legal(user)
-    has_valid_guia = _has_valid_guia(user, request=request, bypass_staff=bypass_staff)
+    if allow_demo and user_has_demo_access(user, request=request, bypass_staff=bypass_staff):
+        return {
+            "has_termos": True,
+            "has_consent": True,
+            "has_legal": True,
+            "has_valid_guia": True,
+            "has_guia_feedback": True,
+            "has_onboarding": True,
+        }
+
+    has_termos = _has_termos(user)
+    has_consent = _has_consent(user)
+    has_legal = has_termos and has_consent
+    has_valid_guia = _has_valid_guia(
+        user,
+        request=request,
+        bypass_staff=bypass_staff,
+        allow_demo=allow_demo,
+    )
     has_guia = _has_guia_feedback(user)
     return {
+        "has_termos": has_termos,
+        "has_consent": has_consent,
         "has_legal": has_legal,
         "has_valid_guia": has_valid_guia,
         "has_guia_feedback": has_guia,
@@ -238,6 +328,8 @@ def require_legal(view_func=None, redirect_name: str = "core:legal_aceite"):
         @wraps(fn)
         def _wrapped(request, *args, **kwargs):
             if _staff_bypass(request.user, request=request, bypass_staff=True):
+                return fn(request, *args, **kwargs)
+            if user_has_demo_access(request.user, request=request, bypass_staff=True):
                 return fn(request, *args, **kwargs)
 
             if not request.user.is_authenticated:
@@ -275,6 +367,8 @@ def require_guia_feedback(view_func=None, redirect_name: str = "vocacional:guia_
         def _wrapped(request, *args, **kwargs):
             if _staff_bypass(request.user, request=request, bypass_staff=True):
                 return fn(request, *args, **kwargs)
+            if user_has_demo_access(request.user, request=request, bypass_staff=True):
+                return fn(request, *args, **kwargs)
 
             if not request.user.is_authenticated:
                 return redirect_to_login(request.get_full_path())
@@ -290,7 +384,7 @@ def require_guia_feedback(view_func=None, redirect_name: str = "vocacional:guia_
     return decorator(view_func) if callable(view_func) else decorator
 
 
-def user_has_onboarding(user, *, request=None, bypass_staff: bool = True) -> bool:
+def user_has_onboarding(user, *, request=None, bypass_staff: bool = True, allow_demo: bool = True) -> bool:
     """Helper público: onboarding completo (Termos + Consentimento + Avaliação do Guia)."""
-    st = onboarding_status(user, request=request, bypass_staff=bypass_staff)
+    st = onboarding_status(user, request=request, bypass_staff=bypass_staff, allow_demo=allow_demo)
     return bool(st.get("has_onboarding"))

@@ -13,10 +13,11 @@ from django.urls import path, include, reverse_lazy   # se usar reverse_lazy
 from django.contrib import admin
 from django.contrib.auth import views as auth_views    # <- FALTAVA ESTA
 from .forms import RespostaForm
-from .models import Avaliacao, Resposta, Pergunta, AvaliacaoGuia, Dimensao
+from .models import Avaliacao, Resposta, Pergunta, AvaliacaoGuia, Dimensao, Resultado
 from .permissions import require_mentor
 from .services import calcular_resultados, classificar_resultados, notificar_resultado
 from .forced_choice import build_fc_blocks_top3, score_fc_answers
+from .interpretacao import InterpretationInput, build_interpretation_payload
 
 from .refinamento import (
 
@@ -62,13 +63,119 @@ def maybe_require_produto(view_func):
 def _refinement_max_stage(user, request=None) -> int:
     """Retorna o limite de etapas liberadas pelos produtos adicionais."""
     try:
-        if user_has_produto(user, PROD_VOCACIONAL_PREMIUM, request=request, bypass_staff=True):
+        if user_has_produto(
+            user,
+            PROD_VOCACIONAL_PREMIUM,
+            request=request,
+            bypass_staff=True,
+            allow_demo=False,
+        ):
             return 3
-        if user_has_produto(user, PROD_VOCACIONAL_150, request=request, bypass_staff=True):
+        if user_has_produto(
+            user,
+            PROD_VOCACIONAL_150,
+            request=request,
+            bypass_staff=True,
+            allow_demo=False,
+        ):
             return 1
     except Exception:
         return 3
     return 0
+
+
+def _has_forced_choice_access(user, request=None) -> bool:
+    """Libera confrontos diretos para Vocacional 150, Premium ou staff."""
+    if getattr(user, "is_staff", False) or getattr(user, "is_superuser", False):
+        return True
+
+    try:
+        if user_has_produto(
+            user,
+            PROD_VOCACIONAL_150,
+            request=request,
+            bypass_staff=True,
+            allow_demo=False,
+        ):
+            return True
+    except Exception:
+        pass
+
+    return _refinement_max_stage(user, request=request) >= 3
+
+
+def _has_forced_choice_progress(avaliacao: Avaliacao | None) -> bool:
+    if not avaliacao:
+        return False
+
+    ref = getattr(avaliacao, "ref_data", {}) or {}
+    history = (ref.get("fc_top3_history") or {})
+    if history:
+        return True
+
+    fc = (ref.get("fc_top3") or {})
+    if (fc.get("answers") or []) and not fc.get("done"):
+        return True
+
+    rounds_done = int(fc.get("rounds_done", 0) or 0)
+    active_round = int(fc.get("active_round", 0) or 0)
+    return bool(rounds_done > 0 or active_round > 1)
+
+
+def _get_latest_fc_summary(ref_data: dict | None) -> dict:
+    ref = ref_data or {}
+    history = (ref.get("fc_top3_history") or {})
+    if history:
+        try:
+            latest_key = sorted((int(k) for k in history.keys()), reverse=True)[0]
+            summary = history.get(str(latest_key)) or {}
+            if summary:
+                return summary
+        except Exception:
+            pass
+
+    fc = (ref.get("fc_top3") or {})
+    if fc.get("weighted_scores") or fc.get("scores") or fc.get("final_rank_top3"):
+        return fc
+    return {}
+
+
+def _get_latest_result_avaliacao(user) -> Avaliacao | None:
+    """Retorna a avaliação mais recente já apta a reabrir um resultado.
+
+    Inclui:
+    - avaliações concluídas;
+    - pré-visualizações em rascunho que já possuem `Resultado`.
+    """
+    return (
+        Avaliacao.objects
+        .filter(usuario=user)
+        .filter(status="concluida") | Avaliacao.objects.filter(
+            usuario=user,
+            status="rascunho",
+            resultados__isnull=False,
+        )
+    ).distinct().order_by("-finalizado_em", "-iniciado_em", "-pk").first()
+
+
+def _get_vocacional_resume_url(user, request=None) -> str:
+    latest_result = _get_latest_result_avaliacao(user)
+    if latest_result is not None:
+        return reverse("vocacional:resultado", args=[latest_result.pk])
+
+    draft = (
+        Avaliacao.objects
+        .filter(usuario=user, status="rascunho")
+        .order_by("-iniciado_em", "-pk")
+        .first()
+    )
+    if draft is not None:
+        return reverse("vocacional:avaliacao_form")
+
+    if _refinement_max_stage(user, request=request) >= 1:
+        return reverse("vocacional:etapas")
+
+    return reverse("vocacional:avaliacao_gate")
 
 
 # -----------------------------------------------------------------------------
@@ -157,7 +264,7 @@ def mentor_dashboard(request):
 @login_required
 @maybe_require_produto
 def avaliacao_gate(request):
-    return redirect(next_url(request.user))
+    return redirect(next_url(request.user, request=request))
 
 # --------------------------- FORM (ÚNICO) ---------------------------
 
@@ -167,9 +274,9 @@ def avaliacao_gate(request):
 @require_guia_feedback
 def avaliacao_form(request: HttpRequest) -> HttpResponse:
     # Se ainda falta algum pré-requisito, redireciona
-    step = next_step(request.user)
+    step = next_step(request.user, request=request)
     if step is not None:
-        return redirect(next_url(request.user))
+        return redirect(next_url(request.user, request=request))
 
     # ---------------------------------------------------------
     # O Vocacional Premium libera as etapas adicionais de
@@ -481,13 +588,32 @@ def ofertas_refinamento(request, pk):
 
     has_vocacional_150 = user_has_produto(request.user, PROD_VOCACIONAL_150, request=request)
     has_premium = user_has_produto(request.user, PROD_VOCACIONAL_PREMIUM, request=request)
+    can_start_fc = _has_forced_choice_access(request.user, request=request) or _has_forced_choice_progress(avaliacao)
+    ref = getattr(avaliacao, "ref_data", {}) or {}
+    fc_state = (ref.get("fc_top3") or {})
+    has_fc_progress = _has_forced_choice_progress(avaliacao)
+    refinement_round = int(fc_state.get("rounds_done", 0) or 0)
+    refinement_round_max = _fc_round_max()
+    refinement_round_next = min(refinement_round + 1, refinement_round_max)
+    refinement_round_remaining_after_next = max(refinement_round_max - refinement_round_next, 0)
+    fc_entry_url = reverse("vocacional:comparacoes_top3", args=[avaliacao.pk])
+    if not has_fc_progress:
+        fc_entry_url = f"{fc_entry_url}?reset=1"
 
     ctx = {
         "avaliacao": avaliacao,
         "has_vocacional_150": has_vocacional_150,
         "has_premium": has_premium,
+        "can_start_fc": can_start_fc,
+        "has_fc_progress": has_fc_progress,
+        "fc_entry_url": fc_entry_url,
         "ref_max_stage": _refinement_max_stage(request.user, request=request),
         "premium_stage_limit": _refinement_max_stage(request.user, request=request),
+        "refinement_round": refinement_round,
+        "refinement_round_max": refinement_round_max,
+        "refinement_round_next": refinement_round_next,
+        "refinement_round_remaining_after_next": refinement_round_remaining_after_next,
+        "refinement_question_count": int(getattr(settings, "VOC_FC_BLOCKS_TOP3", 10) or 10),
     }
     return render(request, "vocacional/ofertas_refinamento.html", ctx)
 
@@ -633,17 +759,12 @@ def consentimento_aceitar(request):
     # marcar_consent_ok(request.user)
 
     messages.success(request, "Consentimento registrado. Obrigado!")
-    return redirect(next_url(request.user))
+    return redirect(next_url(request.user, request=request))
 
 def _avaliacao_stats(user):
     concluidas = Avaliacao.objects.filter(usuario=user, status="concluida").count()
     disponiveis = max(0, 2 - concluidas)
-    ultima = (
-        Avaliacao.objects
-        .filter(usuario=user, status="concluida")
-        .order_by("-finalizado_em", "-pk")
-        .first()
-    )
+    ultima = _get_latest_result_avaliacao(user)
     return concluidas, disponiveis, ultima
 '''
 @login_required
@@ -663,12 +784,7 @@ def index(request):
 @require_consent()
 @require_guia_feedback
 def index(request):
-    last_done = (
-        Avaliacao.objects
-        .filter(usuario=request.user, status="concluida")
-        .order_by("-finalizado_em", "-pk")
-        .first()
-    )
+    last_done = _get_latest_result_avaliacao(request.user)
     draft = (
         Avaliacao.objects
         .filter(usuario=request.user, status="rascunho")
@@ -710,8 +826,8 @@ def etapas(request):
     """
 
     # Estado do funil (compra/legal/guia)
-    step = next_step(request.user)
-    next_link = next_url(request.user) if step is not None else None
+    step = next_step(request.user, request=request)
+    next_link = next_url(request.user, request=request) if step is not None else None
 
     try:
         from .gating import bonus_acquired, termos_ok, consent_ok, guia_done
@@ -842,7 +958,111 @@ def _parse_ids(s: str) -> list[int]:
     return [int(x) for x in s.split(",") if x.strip().isdigit()]
 
 
+def _nivel_por_media(m: float) -> str:
+    if m >= 4.2:
+        return "Muito alto"
+    if m >= 3.4:
+        return "Alto"
+    if m >= 2.6:
+        return "Médio"
+    if m >= 1.8:
+        return "Baixo"
+    return "Muito baixo"
+
+
+def _build_resultados_full(av: Avaliacao) -> tuple[list[dict], int]:
+    respostas = (
+        Resposta.objects
+        .filter(avaliacao=av)
+        .select_related("pergunta__dimensao")
+    )
+    soma, cont, total_qs = {}, {}, 0
+    for r in respostas:
+        dim = getattr(getattr(r, "pergunta", None), "dimensao", None)
+        if not dim:
+            continue
+        p = getattr(r, "pergunta", None)
+        if not p:
+            continue
+
+        if getattr(p, "tipo", "likert") == "single":
+            v = float(getattr(getattr(r, "opcao", None), "valor", 0) or 0)
+        else:
+            v = float(getattr(r, "valor", 0) or 0)
+            if getattr(p, "invert", False) and v:
+                v = 6.0 - v
+        soma[dim] = soma.get(dim, 0) + v
+        cont[dim] = cont.get(dim, 0) + 1
+        total_qs += 1
+
+    resultados_full = []
+    for dim, s in soma.items():
+        n = cont[dim] or 1
+        media = s / n
+        resultados_full.append({
+            "dimensao": dim,
+            "dimensao_nome": getattr(dim, "nome", str(dim)),
+            "media": round(media, 2),
+            "qtd": n,
+            "pct": int(round((media / 5.0) * 100)),
+            "nivel": _nivel_por_media(media),
+        })
+    resultados_full.sort(key=lambda x: x["media"], reverse=True)
+
+    ref = getattr(av, "ref_data", {}) or {}
+    final_rank = ((ref.get("final") or {}).get("ranking") or [])
+    if final_rank:
+        pos = {slug: i for i, slug in enumerate(final_rank)}
+        resultados_full.sort(
+            key=lambda x: (pos.get(getattr(x["dimensao"], "slug", ""), 999), -x["media"])
+        )
+
+    return resultados_full, total_qs
+
+
+def _canonical_top3_slugs(av: Avaliacao) -> list[str]:
+    resultados_full, _total_qs = _build_resultados_full(av)
+    top3 = [
+        getattr(item.get("dimensao"), "slug", "")
+        for item in resultados_full[:3]
+        if getattr(item.get("dimensao"), "slug", "")
+    ]
+    if top3:
+        return top3
+
+    ref = getattr(av, "ref_data", {}) or {}
+    final_rank = ((ref.get("final") or {}).get("ranking") or [])
+    if final_rank:
+        return [str(slug) for slug in final_rank[:3] if str(slug).strip()]
+
+    return []
+
+
+def _create_fresh_avaliacao(usuario) -> Avaliacao:
+    (
+        Avaliacao.objects
+        .filter(usuario=usuario, status="rascunho")
+        .update(status="cancelada", finalizado_em=timezone.now())
+    )
+    return Avaliacao.objects.create(usuario=usuario, status="rascunho")
+
+
+def _fc_round_max() -> int:
+    return int(getattr(settings, "VOC_FC_ROUND_MAX", 3) or 3)
+
+
 # --------------------------- RESULTADO / DEMAIS ---------------------------
+
+
+@login_required
+@maybe_require_produto
+@require_consent()
+@require_guia_feedback
+@require_POST
+def reiniciar_teste(request: HttpRequest) -> HttpResponse:
+    _create_fresh_avaliacao(request.user)
+    messages.info(request, "Novo teste iniciado. Esta tentativa começa do zero.")
+    return redirect("vocacional:avaliacao_form")
 
 
 @login_required
@@ -900,9 +1120,11 @@ def resultado(request, pk):
         })
     resultados_full.sort(key=lambda x: x["media"], reverse=True)
 
-    # Se houver ranking final (Passe 3), reordena de acordo
+    # Se houver ranking final, reordena a exibicao de acordo
     ref = getattr(av, "ref_data", {}) or {}
     final_rank = ((ref.get("final") or {}).get("ranking") or [])
+    final_source = ((ref.get("final") or {}).get("source") or "").strip()
+    fc_summary = _get_latest_fc_summary(ref)
     if final_rank:
         pos = {slug: i for i, slug in enumerate(final_rank)}
         resultados_full.sort(key=lambda x: (pos.get(getattr(x["dimensao"], "slug", ""), 999), -x["media"]))
@@ -917,8 +1139,32 @@ def resultado(request, pk):
         if slug:
             means_by_slug[str(slug)] = float(r.get("media") or 0.0)
 
-    probs = probs_from_means(means_by_slug)
+    base_probs = probs_from_means(means_by_slug)
+    probs = dict(base_probs)
     ordered = sorted(probs.items(), key=lambda kv: kv[1], reverse=True)
+    use_fc_result = bool(final_source == "fc_top3" and (fc_summary.get("weighted_scores") or fc_summary.get("scores")))
+    fc_pct_map: dict[str, int] = {}
+    fc_points_map: dict[str, float] = {}
+    if use_fc_result:
+        weighted_scores = {
+            str(slug): float(value)
+            for slug, value in (fc_summary.get("weighted_scores") or fc_summary.get("scores") or {}).items()
+        }
+        ordered = sorted(weighted_scores.items(), key=lambda kv: kv[1], reverse=True)
+        total_fc = sum(max(float(value), 0.0) for _slug, value in ordered) or 1.0
+        probs = {slug: float(max(value, 0.0) / total_fc) for slug, value in ordered}
+        fc_pct_map = {slug: int(round(prob * 100)) for slug, prob in probs.items()}
+        fc_points_map = {slug: float(weighted_scores.get(slug, 0.0)) for slug, _prob in probs.items()}
+    elif final_source == "fc_top3" and final_rank:
+        fallback_display = [100, 70, 40]
+        fc_pct_map = {
+            slug: fallback_display[idx]
+            for idx, slug in enumerate(final_rank[:3])
+            if idx < len(fallback_display)
+        }
+        total_fc = float(sum(fc_pct_map.values()) or 1.0)
+        probs = {slug: float(value / total_fc) for slug, value in fc_pct_map.items()}
+        ordered = sorted(probs.items(), key=lambda kv: kv[1], reverse=True)
     top1_slug = ordered[0][0] if ordered else None
     top2_slug = ordered[1][0] if len(ordered) > 1 else None
 
@@ -938,6 +1184,17 @@ def resultado(request, pk):
         conf_label = "Baixa"
 
     ref_max_stage = _refinement_max_stage(request.user, request=request)
+    can_refine = ref_max_stage >= 1
+    can_fc = _has_forced_choice_access(request.user, request=request) or _has_forced_choice_progress(av)
+    fc_state = (ref.get("fc_top3") or {})
+    fc_rounds_done = int(fc_state.get("rounds_done", 0) or 0)
+    round_plan = (ref.get("round_plan") or {})
+    refinement_round = fc_rounds_done or len(round_plan)
+    refinement_round_max = _fc_round_max()
+    has_fc_progress = _has_forced_choice_progress(av)
+    fc_entry_url = reverse("vocacional:comparacoes_top3", args=[av.pk])
+    if not has_fc_progress:
+        fc_entry_url = reverse("vocacional:ofertas_refinamento", args=[av.pk])
 
     confidence = {
         "gap": round(gap, 4),
@@ -951,7 +1208,60 @@ def resultado(request, pk):
         "ref_max_stage": ref_max_stage,
     }
 
+    for r in resultados_full:
+        slug = getattr(r.get("dimensao"), "slug", None)
+        if slug in fc_pct_map:
+            r["fc_pct"] = fc_pct_map[slug]
+        if slug in fc_points_map:
+            r["fc_points"] = fc_points_map[slug]
+
     top3 = resultados_full[:TOP_N]
+
+    gap_13 = 0.0
+    if len(ordered) > 2:
+        top3_slug = ordered[2][0]
+        gap_13 = float(top1p - float(probs.get(top3_slug, 0.0))) if top1_slug else 0.0
+
+    top1_nome = top3[0]["dimensao_nome"] if len(top3) > 0 else "Área principal"
+    top2_nome = top3[1]["dimensao_nome"] if len(top3) > 1 else "Segunda área"
+    top3_nome = top3[2]["dimensao_nome"] if len(top3) > 2 else "Terceira área"
+
+    if gap_13 >= 0.18:
+        adjacency_profile = "dispersas"
+    elif gap_13 >= 0.10:
+        adjacency_profile = "moderadamente_proximas"
+    else:
+        adjacency_profile = "muito_proximas"
+
+    non_recommended_areas = tuple(
+        r["dimensao_nome"] for r in resultados_full[3:6]
+    )
+
+    interpretation = build_interpretation_payload(
+        InterpretationInput(
+            user_name=str(
+                request.user.first_name
+                or getattr(request.user, "nome", "")
+                or request.user.email
+            ),
+            top1_nome=top1_nome,
+            top2_nome=top2_nome,
+            top3_nome=top3_nome,
+            gap_12=gap,
+            gap_13=gap_13,
+            stable_top3=bool(stop_info.get("stop")) if (stop_info := ref.get("stop") or {}) else False,
+            round_count=refinement_round,
+            max_round_reached=refinement_round >= refinement_round_max,
+            refinement_stopped_early=bool((ref.get("stop") or {}).get("stop")) and refinement_round < refinement_round_max,
+            adjacency_profile=adjacency_profile,
+            confidence_band=(
+                "alta" if conf_label == "Alta" else
+                "moderada" if conf_label == "Média" else
+                "aberta"
+            ),
+            non_recommended_areas=non_recommended_areas,
+        )
+    )
 
     # ---- texto/links auxiliares ----
     resultado_url = request.build_absolute_uri(
@@ -967,15 +1277,24 @@ def resultado(request, pk):
         "ref": ref,
         "stop_info": ref.get("stop") or {},
         "final_info": ref.get("final") or {},
+        "fc_summary": fc_summary,
+        "refinement_round": refinement_round,
+        "refinement_round_max": refinement_round_max,
+        "refinement_round_next": min(refinement_round + 1, refinement_round_max),
 
         # sinalização de precisão (Top1 vs Top2)
         "confidence": confidence,
+        "can_refine": can_refine,
+        "can_fc": can_fc,
+        "has_fc_progress": has_fc_progress,
+        "fc_entry_url": fc_entry_url,
 
         # AGORA o template renderiza TODOS (toggle esconde/mostra)
         "resultados": resultados_full,
 
         "resultados_top3": top3,
         "resultados_all": resultados_full,
+        "interpretation": interpretation,
 
         "top_n": TOP_N,
         "wh_text": wh_text,
@@ -1016,10 +1335,7 @@ def enviar_resultado_email(request: HttpRequest, pk: int) -> HttpResponse:
 @require_consent()
 @require_guia_feedback
 def meu_resultado(request):
-    av = (Avaliacao.objects
-          .filter(usuario=request.user, status="concluida")
-          .order_by("-finalizado_em", "-pk")
-          .first())
+    av = _get_latest_result_avaliacao(request.user)
     if not av:
         messages.info(request, "Você ainda não concluiu uma avaliação.")
         return redirect("vocacional:avaliacao_form")
@@ -1070,18 +1386,12 @@ def resultado_whatsapp(request: HttpRequest, pk: int) -> HttpResponse:
 def entrada(request):
     """
     Roteamento inicial do Vocacional.
-    - Se tiver refinamento liberado (Pass 1/2/3) -> /vocacional/etapas/
-    - Senão -> Bônus 75 (avaliacao_gate)
+    - Se já existir resultado útil (concluído ou pré-visualização), retoma nele.
+    - Se houver rascunho parcial, continua a avaliação.
+    - Se tiver refinamento liberado (Pass 1/2/3), abre o hub de etapas.
+    - Senão, segue para o Bônus 75 (avaliacao_gate).
     """
-    u = request.user
-
-    has_ref = _refinement_max_stage(u, request=request) >= 1
-
-    if has_ref:
-        return redirect("vocacional:etapas")
-
-    # No seu urls.py o nome é "avaliacao_gate" (rota /vocacional/avaliacao/)
-    return redirect("vocacional:avaliacao_gate")
+    return redirect(_get_vocacional_resume_url(request.user, request=request))
 
 
 # -----------------------------------------------------------------------------
@@ -1092,7 +1402,7 @@ def entrada(request):
 @maybe_require_produto
 @require_consent()
 @require_guia_feedback
-def comparacoes_top3(request):
+def comparacoes_top3(request, pk):
     """Refinamento final por confrontos diretos (A/B/C) entre o Top 3 atual.
 
     Importante:
@@ -1103,23 +1413,28 @@ def comparacoes_top3(request):
     """
     ensure_vocacional_seeded()
 
-    # Avaliação alvo: para A/B/C, usamos a avaliação mais recente CONCLUÍDA.
-    avaliacao = (
-        Avaliacao.objects
-        .filter(usuario=request.user, status="concluida")
-        .order_by("-iniciado_em", "-pk")
-        .first()
+    # A/B/C sempre pertence a uma avaliação específica do usuário.
+    # Pode ser uma avaliação concluída ou uma pré-visualização ainda em rascunho,
+    # desde que já exista resultado calculado para ela.
+    avaliacao = get_object_or_404(
+        Avaliacao,
+        pk=pk,
+        usuario=request.user,
     )
-    if not avaliacao:
-        messages.info(request, "Você ainda não concluiu uma avaliação. Faça o Vocacional 75 primeiro.")
+    if avaliacao.status not in ("concluida", "rascunho"):
+        messages.info(request, "Esta avaliação não está disponível para refinamento.")
+        return redirect("vocacional:index")
+
+    has_resultado = Resultado.objects.filter(avaliacao=avaliacao).exists()
+    if not has_resultado:
+        messages.info(request, "Esta avaliação ainda não possui resultado calculado para refinamento.")
         return redirect("vocacional:avaliacao_gate")
 
     # Liberação do A/B/C:
     # - Premium (Passe 3) OU
     # - Vocacional 150
     has_vocacional_150 = user_has_produto(request.user, PROD_VOCACIONAL_150, request=request)
-    ref_max = _refinement_max_stage(request.user, request=request)
-    has_premium_fc = (ref_max >= 3) or (request.user.is_staff or request.user.is_superuser)
+    has_premium_fc = _has_forced_choice_access(request.user, request=request) or _has_forced_choice_progress(avaliacao)
 
     if not (has_vocacional_150 or has_premium_fc):
         messages.info(
@@ -1135,14 +1450,7 @@ def comparacoes_top3(request):
 
 
     # Top 3 base (usa respostas já existentes)
-    answered_qids = list(
-        Resposta.objects
-        .filter(avaliacao=avaliacao)
-        .values_list("pergunta_id", flat=True)
-        .distinct()
-    )
-    stats = compute_pass_stats(avaliacao, answered_qids, stage=int(getattr(avaliacao, "passe_atual", 1) or 1))
-    top3 = list((stats.get("top") or [])[:3])
+    top3 = _canonical_top3_slugs(avaliacao)
 
     if len(top3) < 3:
         messages.warning(request, "Ainda não há dados suficientes para formar um Top 3. Responda mais perguntas primeiro.")
@@ -1150,15 +1458,19 @@ def comparacoes_top3(request):
 
     ref = (avaliacao.ref_data or {})
     fc = (ref.get("fc_top3") or {})
+    rounds_done = int(fc.get("rounds_done", 0) or 0)
+    round_max = _fc_round_max()
+    expected_block_count = int(getattr(settings, "VOC_FC_BLOCKS_TOP3", 10) or 10)
 
     # Reset explícito (para testes / ajustes de banco)
     if request.GET.get("reset") == "1":
-        ref.pop("fc_top3", None)
-        fc = {}
+        rounds_done = int((ref.get("fc_top3") or {}).get("rounds_done", 0) or 0)
+        ref["fc_top3"] = {"rounds_done": rounds_done}
+        fc = ref["fc_top3"]
         avaliacao.ref_data = ref
         avaliacao.save(update_fields=["ref_data"])
         messages.info(request, "Confrontos reiniciados.")
-        return redirect("vocacional:comparacoes_top3")
+        return redirect("vocacional:comparacoes_top3", pk=avaliacao.pk)
 
     def _missing_text(blocks_list: list) -> bool:
         for b in (blocks_list or []):
@@ -1172,7 +1484,26 @@ def comparacoes_top3(request):
     # - ainda não existir
     # - top3 mudou
     # - existe bloco com texto vazio (dados antigos)
-    if (not fc.get("blocks")) or (fc.get("top3") != top3) or _missing_text(fc.get("blocks") or []):
+    current_blocks = fc.get("blocks") or []
+    actual_block_count = len(current_blocks)
+    stored_block_count = int(fc.get("block_count", actual_block_count) or 0)
+    stored_target_block_count = int(fc.get("target_block_count", expected_block_count) or expected_block_count)
+    has_answers = bool(fc.get("answers"))
+
+    if (
+        (not current_blocks)
+        or (fc.get("top3") != top3)
+        or _missing_text(current_blocks)
+        or (
+            not has_answers
+            and stored_target_block_count != expected_block_count
+        )
+        or (
+            not has_answers
+            and stored_block_count
+            and actual_block_count != stored_block_count
+        )
+    ):
         raw_blocks = build_fc_blocks_top3(avaliacao, top3)
 
         def _get_pergunta_from_qid(raw_qid):
@@ -1216,16 +1547,18 @@ def comparacoes_top3(request):
                     }
             blocks.append(bb)
 
+        active_round = min(rounds_done + 1, round_max)
         fc = {
             "top3": top3,
             "blocks": blocks,
+            "block_count": len(blocks),
+            "target_block_count": expected_block_count,
             "answers": [],
             "done": False,
+            "rounds_done": rounds_done,
+            "active_round": active_round,
         }
 
-        ref["fc_top3"] = fc
-        avaliacao.ref_data = ref
-        avaliacao.save(update_fields=["ref_data"])
         ref["fc_top3"] = fc
         avaliacao.ref_data = ref
         avaliacao.save(update_fields=["ref_data"])
@@ -1233,13 +1566,14 @@ def comparacoes_top3(request):
     blocks = fc.get("blocks") or []
     answers = list(fc.get("answers") or [])
     idx = len(answers)
+    active_round = int(fc.get("active_round", min(rounds_done + 1, round_max)) or 1)
 
     # POST: registra escolha e avança
     if request.method == "POST":
         pick = (request.POST.get("pick") or "").upper().strip()
         if pick not in ("A", "B", "C"):
             messages.error(request, "Selecione uma opção (A, B ou C).")
-            return redirect("vocacional:comparacoes_top3")
+            return redirect("vocacional:comparacoes_top3", pk=avaliacao.pk)
 
         answers.append(pick)
         fc["answers"] = answers
@@ -1250,7 +1584,7 @@ def comparacoes_top3(request):
         ref["fc_top3"] = fc
         avaliacao.ref_data = ref
         avaliacao.save(update_fields=["ref_data"])
-        return redirect("vocacional:comparacoes_top3")
+        return redirect("vocacional:comparacoes_top3", pk=avaliacao.pk)
 
     # Render
     if not blocks:
@@ -1269,16 +1603,22 @@ def comparacoes_top3(request):
                 bb[k] = FCItem(qid=int(it.get("qid")), dim_slug=str(it.get("dim")), text=str(it.get("text")))
             b2.append(bb)
         scores = score_fc_answers(b2, answers)
+        weight_map = {
+            top3[0]: float(getattr(settings, "VOC_FC_WEIGHT_TOP1", 1.2) or 1.2),
+            top3[1]: float(getattr(settings, "VOC_FC_WEIGHT_TOP2", 1.1) or 1.1),
+            top3[2]: float(getattr(settings, "VOC_FC_WEIGHT_TOP3", 1.0) or 1.0),
+        }
+        weighted_scores = {
+            slug: round(float(raw_score) * float(weight_map.get(slug, 1.0)), 4)
+            for slug, raw_score in scores.items()
+        }
         # ranking final (fc)
-        ordered_fc = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
+        ordered_fc = sorted(weighted_scores.items(), key=lambda kv: kv[1], reverse=True)
 
         # Aplica o desempate ao ranking final (sem mexer nos valores/médias):
         # - Mantém a ordem base do modelo (softmax) para o restante
         # - Reordena apenas o Top3 conforme o forced-choice
-        try:
-            base_rank = [slug for slug, _p in sorted((stats.get("probs") or {}).items(), key=lambda kv: kv[1], reverse=True)]
-        except Exception:
-            base_rank = []
+        base_rank = _canonical_top3_slugs(avaliacao)
         if not base_rank:
             base_rank = list(top3)
 
@@ -1298,8 +1638,19 @@ def comparacoes_top3(request):
         ref["final"]["ranking"] = final_rank
         ref["final"]["source"] = "fc_top3"
         # guarda também resumo do FC
+        ref.setdefault("fc_top3_history", {})
+        ref["fc_top3_history"][str(active_round)] = {
+            "round": active_round,
+            "scores": dict(scores),
+            "weighted_scores": dict(weighted_scores),
+            "final_rank_top3": list(fc_rank),
+            "top3": list(top3),
+        }
         ref.setdefault("fc_top3", {})
+        ref["fc_top3"]["rounds_done"] = max(int(ref["fc_top3"].get("rounds_done", 0) or 0), active_round)
+        ref["fc_top3"]["active_round"] = active_round
         ref["fc_top3"]["scores"] = dict(scores)
+        ref["fc_top3"]["weighted_scores"] = dict(weighted_scores)
         ref["fc_top3"]["final_rank_top3"] = fc_rank
         avaliacao.ref_data = ref
         avaliacao.save(update_fields=["ref_data"])
@@ -1318,8 +1669,13 @@ def comparacoes_top3(request):
                 "top3": top3,
                 "top3_names": top3_names,
                 "scores": scores,
+                "weighted_scores": weighted_scores,
                 "ordered_fc": ordered_fc_names,
                 "n_blocks": len(blocks),
+                "refinement_round": active_round,
+                "refinement_round_max": round_max,
+                "refinement_round_next": min(active_round + 1, round_max),
+                "refinement_round_remaining_after_next": max(round_max - min(active_round + 1, round_max), 0),
             },
         )
 
@@ -1384,7 +1740,7 @@ def comparacoes_top3(request):
 
     if needs_rebuild:
         messages.warning(request, "Confrontos estavam desatualizados. Recriando perguntas…")
-        url = reverse("vocacional:comparacoes_top3") + "?reset=1"
+        url = reverse("vocacional:comparacoes_top3", args=[avaliacao.pk]) + "?reset=1"
         return HttpResponseRedirect(url)
 
     if updated:
@@ -1414,5 +1770,6 @@ def comparacoes_top3(request):
             "top3": top3,
             "progress": progress,
             "fc_block": block,
+            "refinement_round": active_round,
         },
     )

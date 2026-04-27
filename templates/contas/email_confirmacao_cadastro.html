@@ -1,0 +1,9 @@
+Olá, {{ user.get_full_name|default:user.email }}!
+
+Sua conta na {{ site_name }} foi criada com sucesso.
+
+Para ativar o seu acesso, confirme seu e-mail clicando no link abaixo:
+
+{{ confirm_url }}
+
+Se você não reconhece este cadastro, ignore esta mensagem.

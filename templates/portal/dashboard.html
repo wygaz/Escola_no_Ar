@@ -14,6 +14,142 @@
   {% endif %}
 
   <div style="border: 1px solid rgba(0,0,0,.08); border-radius: 16px; padding: 18px; margin: 0 0 24px;">
+    <h2 style="margin: 0 0 8px;">Importação em lote</h2>
+    <p style="margin: 0 0 14px; opacity: .8;">
+      Importe um arquivo CSV com alunos de uma instituição. O sistema faz preview, valida as linhas e só grava depois da confirmação.
+    </p>
+    <form method="post" enctype="multipart/form-data" style="display:grid; gap:12px; margin:0 0 14px;">
+      {% csrf_token %}
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        <select
+          name="import_kind"
+          style="flex:0 0 240px; min-width:220px; padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;"
+        >
+          <option value="students" {% if governance_import_kind == "students" %}selected{% endif %}>Lote de alunos</option>
+          <option value="contacts" {% if governance_import_kind == "contacts" %}selected{% endif %}>Lote de contatos institucionais</option>
+        </select>
+        <select
+          name="import_institution_id"
+          style="flex:1 1 280px; min-width:220px; padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;"
+        >
+          <option value="">Selecione a instituição do lote</option>
+          {% for institution in governance_institutions %}
+            <option value="{{ institution.id }}" {% if governance_import_preview and governance_import_preview.institution_id == institution.id %}selected{% endif %}>
+              {{ institution.nome }}
+            </option>
+          {% endfor %}
+        </select>
+        <input
+          type="file"
+          name="csv_file"
+          accept=".csv,text/csv"
+          style="flex:1 1 280px; min-width:220px; padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;"
+        >
+        <button type="submit" name="action" value="import_preview" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(15,76,129,.25); background:#eff6ff; color:#0f4c81; font-weight:600;">
+          Gerar preview do CSV
+        </button>
+      </div>
+      <div style="opacity:.78;">
+        {% if governance_import_kind == "contacts" %}
+          Colunas-base esperadas: <code>nome</code>, <code>sobrenome</code>, <code>email</code>, <code>papel</code>.
+          O lote também reconhece <code>principal</code>, <code>observacao</code> e <code>instituicao</code>.
+        {% else %}
+          Colunas-base esperadas: <code>nome</code>, <code>sobrenome</code>, <code>email</code>.
+          O lote também reconhece <code>ra</code>, <code>serie</code>, <code>turma</code>, <code>mentor</code> e <code>instituicao</code>.
+        {% endif %}
+      </div>
+      <div style="opacity:.78;">
+        {% if governance_import_kind == "contacts" %}
+          As linhas importadas são tratadas como <strong>contatos institucionais</strong> da instituição selecionada, com papel definido no CSV.
+        {% else %}
+          As linhas importadas são tratadas como <strong>alunos</strong> da instituição selecionada. Contatos institucionais e representantes continuam sendo cadastrados separadamente.
+        {% endif %}
+      </div>
+    </form>
+
+    {% if governance_import_preview %}
+      <div style="border-top:1px solid rgba(0,0,0,.08); padding-top:14px;">
+        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:10px;">
+          <div>
+            <strong>Preview do lote</strong>
+            {% if governance_import_preview.institution_name %}
+              <div style="opacity:.78; margin-top:4px;">Instituição: {{ governance_import_preview.institution_name }}</div>
+            {% endif %}
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <form method="post" style="margin:0;">
+              {% csrf_token %}
+              <button type="submit" name="action" value="import_commit" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(24,121,78,.25); background:#eef8f1; color:#18794e; font-weight:600;">
+                Confirmar importação
+              </button>
+            </form>
+            <form method="post" style="margin:0;">
+              {% csrf_token %}
+              <button type="submit" name="action" value="import_clear" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(198,40,40,.22); background:#fff3f3; color:#c62828; font-weight:600;">
+                Limpar preview
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {% if governance_import_preview.errors %}
+          <div style="border:1px solid rgba(198,40,40,.22); background:#fff3f3; color:#7f1d1d; border-radius:12px; padding:12px 14px; margin:0 0 12px;">
+            <strong>Pendências encontradas</strong>
+            <ul style="margin:8px 0 0 18px;">
+              {% for item in governance_import_preview.errors %}
+                <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if governance_import_preview.rows %}
+          <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; overflow:hidden;">
+            <table style="width:100%; border-collapse:collapse;">
+              <thead style="background:rgba(15,23,42,.04);">
+                <tr>
+                  <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Linha</th>
+                  <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Nome</th>
+                  <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">E-mail</th>
+                  {% if governance_import_preview.import_kind == "contacts" %}
+                    <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Papel</th>
+                    <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Principal</th>
+                  {% endif %}
+                  <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Usuário já existe</th>
+                  <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Metadados</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in governance_import_preview.rows %}
+                  <tr>
+                    <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{{ row.line_number }}</td>
+                    <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{{ row.nome }} {{ row.sobrenome }}</td>
+                    <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{{ row.email }}</td>
+                    {% if governance_import_preview.import_kind == "contacts" %}
+                      <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{{ row.papel }}</td>
+                      <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{% if row.principal %}Sim{% else %}Não{% endif %}</td>
+                    {% endif %}
+                    <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); color:{% if row.existing_user %}#0f4c81{% else %}#18794e{% endif %}; font-weight:600;">
+                      {% if row.existing_user %}Sim{% else %}Não{% endif %}
+                    </td>
+                    <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">
+                      {% for key, value in row.extra_metadata.items %}
+                        <div><strong>{{ key }}:</strong> {{ value }}</div>
+                      {% empty %}
+                        <span style="opacity:.72;">—</span>
+                      {% endfor %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div style="border: 1px solid rgba(0,0,0,.08); border-radius: 16px; padding: 18px; margin: 0 0 24px;">
     <h2 style="margin: 0 0 8px;">Governança</h2>
     <p style="margin: 0 0 14px; opacity: .8;">
       Busque um usuário para inspecionar estado semântico, acessos ativos e pendências principais.
@@ -69,32 +205,76 @@
           {% endif %}
         </p>
 
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin:0 0 16px;">
-          <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
-            <div style="opacity:.7; margin-bottom:6px;">Termos / consentimento</div>
-            <strong style="color:{% if selected_user_status.has_legal %}#18794e{% else %}#b26a00{% endif %};">
-              {% if selected_user_status.has_legal %}OK{% else %}Pendente{% endif %}
-            </strong>
-          </div>
-          <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
-            <div style="opacity:.7; margin-bottom:6px;">Posse do Guia</div>
-            <strong style="color:{% if selected_user_status.has_valid_guia %}#18794e{% else %}#b26a00{% endif %};">
-              {% if selected_user_status.has_valid_guia %}Sim{% else %}Não{% endif %}
-            </strong>
-          </div>
-          <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
-            <div style="opacity:.7; margin-bottom:6px;">Avaliação do Guia</div>
-            <strong style="color:{% if selected_user_status.has_guia_feedback %}#18794e{% else %}#b26a00{% endif %};">
-              {% if selected_user_status.has_guia_feedback %}Concluída{% else %}Pendente{% endif %}
-            </strong>
-          </div>
-          <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
-            <div style="opacity:.7; margin-bottom:6px;">Onboarding</div>
-            <strong style="color:{% if selected_user_status.has_onboarding %}#18794e{% else %}#b26a00{% endif %};">
-              {% if selected_user_status.has_onboarding %}Completo{% else %}Incompleto{% endif %}
-            </strong>
-          </div>
+        <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; overflow:hidden; margin:0 0 16px;">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead style="background:rgba(15,23,42,.04);">
+              <tr>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Grupo</th>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Item</th>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Estado</th>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Leitura operacional</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(0,0,0,.06);">Legal</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">Termos</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); font-weight:700; color:{% if selected_user_status.has_termos %}#18794e{% else %}#b26a00{% endif %};">{% if selected_user_status.has_termos %}&#10004;{% else %}&#10067;{% endif %}</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{% if selected_user_status.has_termos %}OK{% else %}Pendente{% endif %}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(0,0,0,.06);">Legal</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">Consentimento</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); font-weight:700; color:{% if selected_user_status.has_consent %}#18794e{% else %}#b26a00{% endif %};">{% if selected_user_status.has_consent %}&#10004;{% else %}&#10067;{% endif %}</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{% if selected_user_status.has_consent %}OK{% else %}Pendente{% endif %}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(0,0,0,.06);">Apresentação</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">Apresentação inicial</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); font-weight:700; color:{% if selected_user_status.has_intro_completed %}#18794e{% else %}#b26a00{% endif %};">{% if selected_user_status.has_intro_completed %}&#10004;{% else %}&#10067;{% endif %}</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{% if selected_user_status.has_intro_completed %}Concluída{% else %}Ainda não concluída{% endif %}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(0,0,0,.06);">Guia</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">Posse do Guia</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); font-weight:700; color:{% if selected_user_status.has_valid_guia %}#18794e{% else %}#b26a00{% endif %};">{% if selected_user_status.has_valid_guia %}&#10004;{% else %}&#10067;{% endif %}</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{% if selected_user_status.has_valid_guia %}Sim{% else %}Não{% endif %}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(0,0,0,.06);">Guia</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">Avaliação do Guia</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); font-weight:700; color:{% if selected_user_status.has_guia_feedback %}#18794e{% else %}#b26a00{% endif %};">{% if selected_user_status.has_guia_feedback %}&#10004;{% else %}&#10067;{% endif %}</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{% if selected_user_status.has_guia_feedback %}Concluída{% else %}Pendente{% endif %}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(0,0,0,.06);">Fluxo</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">Onboarding</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); font-weight:700; color:{% if selected_user_status.has_onboarding %}#18794e{% else %}#b26a00{% endif %};">{% if selected_user_status.has_onboarding %}&#10004;{% else %}&#10067;{% endif %}</td>
+                <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{% if selected_user_status.has_onboarding %}Completo{% else %}Incompleto{% endif %}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px;">Exceção</td>
+                <td style="padding:6px 12px;">Demo institucional</td>
+                <td style="padding:6px 12px; font-weight:700; color:{% if governance_demo_access %}#0f4c81{% else %}#6b7280{% endif %};">{% if governance_demo_access %}&#10004;{% else %}&#10060;{% endif %}</td>
+                <td style="padding:6px 12px;">{% if governance_demo_access %}Ativa{% else %}Inativa{% endif %}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
+        {% if governance_demo_access %}
+          <div style="border:1px solid #93c5fd; background:#0f3d68; color:#eff6ff; border-radius:12px; padding:14px 16px; margin:0 0 16px;">
+            <div style="font-weight:700; margin-bottom:6px;">Demo institucional ativa</div>
+            <div style="line-height:1.4;">
+              {% if governance_demo_access.institution_name %}Instituição: {{ governance_demo_access.institution_name }} · {% endif %}
+              válida até {{ governance_demo_access.expires_at|date:"d/m/Y H:i" }}
+              {% if governance_demo_access.granted_by %} · liberada por {{ governance_demo_access.granted_by.email }}{% endif %}
+            </div>
+            <div style="line-height:1.4; margin-top:6px;">
+              Esta trilha libera a navegação de apresentação sem marcar compra, Posse do Guia ou Avaliação do Guia.
+            </div>
+          </div>
+        {% endif %}
 
         {% if governance_inconsistencies %}
           <div style="display:grid; gap:10px; margin:0 0 16px;">
@@ -107,51 +287,107 @@
           </div>
         {% endif %}
 
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin:0 0 16px;">
-          {% for product_key, product_state in selected_user_product_states.items %}
-            <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
-              <div style="font-weight:600; margin-bottom:6px;">{{ product_state.public_slug }}</div>
-              <div style="opacity:.78; margin-bottom:4px;">
-                Acesso explícito:
-                <strong style="color:{% if product_state.has_access_slug %}#18794e{% else %}#b26a00{% endif %};">
-                  {% if product_state.has_access_slug %}Sim{% else %}Não{% endif %}
-                </strong>
-              </div>
-              <div style="opacity:.78; margin-bottom:4px;">
-                Guia bloqueando:
-                <strong style="color:{% if product_state.guia_feedback_blocking %}#c62828{% else %}#18794e{% endif %};">
-                  {% if product_state.guia_feedback_blocking %}Sim{% else %}Não{% endif %}
-                </strong>
-              </div>
-              <div>
-                <strong style="color:{% if product_state.can_access %}#18794e{% else %}#c62828{% endif %};">
-                  {% if product_state.can_access %}Fluxo liberado{% else %}Fluxo bloqueado{% endif %}
-                </strong>
-              </div>
-            </div>
-          {% endfor %}
+        <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; overflow:hidden; margin:0 0 16px;">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead style="background:rgba(15,23,42,.04);">
+              <tr>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Produto</th>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Acesso explícito</th>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Avaliação bloqueando</th>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Fluxo</th>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Observação</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for product_key, product_state in selected_user_product_states.items %}
+                <tr>
+                  <td style="padding:12px; border-bottom:1px solid rgba(0,0,0,.06); font-weight:600;">{{ product_state.public_slug }}</td>
+                  <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); color:{% if product_state.has_access_slug %}#18794e{% else %}#b26a00{% endif %}; font-weight:700;">{% if product_state.has_access_slug %}&#10004; OK{% else %}&#10067; Pendente{% endif %}</td>
+                  <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); font-weight:700; color:{% if not product_state.guia_feedback_applicable %}#6b7280{% elif product_state.guia_feedback_blocking %}#c62828{% else %}#18794e{% endif %};">
+                    {% if not product_state.guia_feedback_applicable %}
+                      —
+                    {% elif product_state.guia_feedback_blocking %}
+                      &#10060; Sim
+                    {% else %}
+                      &#10004; Não
+                    {% endif %}
+                  </td>
+                  <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); color:{% if product_state.can_access %}#18794e{% else %}#c62828{% endif %}; font-weight:700;">{% if product_state.can_access %}&#10004; Liberado{% else %}&#10060; Bloqueado{% endif %}</td>
+                  <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{% if product_state.demo_override %}<span style="color:#0f4c81; font-weight:600;">Demo institucional</span>{% else %}<span style="opacity:.78;">Runtime normal</span>{% endif %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
 
-        <div>
-          <h3 style="margin:0 0 8px;">Acessos ativos</h3>
+        <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; overflow:hidden; margin:0 0 16px;">
+          <h3 style="margin:0; padding:12px 12px 8px;">Acessos ativos</h3>
           {% if selected_user_active_accesses %}
-            <div style="display:grid; gap:8px;">
-              {% for acesso in selected_user_active_accesses %}
-                <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
-                  <strong>{{ acesso.produto.slug }}</strong>
-                  <div style="opacity:.78; margin-top:4px;">Origem: {{ acesso.origem }} · Concedido em: {{ acesso.granted_at|date:"d/m/Y H:i" }}</div>
-                </div>
-              {% endfor %}
-            </div>
+            <table style="width:100%; border-collapse:collapse;">
+              <thead style="background:rgba(15,23,42,.04);">
+                <tr>
+                  <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Slug</th>
+                  <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Origem</th>
+                  <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(0,0,0,.08);">Concedido em</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for acesso in selected_user_active_accesses %}
+                  <tr>
+                    <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06); font-weight:600;">{{ acesso.produto.slug }}</td>
+                    <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{{ acesso.origem }}</td>
+                    <td style="padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.06);">{{ acesso.granted_at|date:"d/m/Y H:i" }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           {% else %}
-            <p style="margin:0; opacity:.78;">Nenhum acesso ativo encontrado para este usuário.</p>
+            <p style="margin:0; padding:0 12px 12px; opacity:.78;">Nenhum acesso ativo encontrado para este usuário.</p>
           {% endif %}
+        </div>
+
+        <div style="border-top:1px solid rgba(0,0,0,.08); margin-top:16px; padding-top:16px;">
+          <h3 style="margin:0 0 8px;">Demo institucional</h3>
+          <p style="margin:0 0 14px; opacity:.78;">
+            Use esta exceção rastreável para prospecção remota. Ela libera a navegação demonstrativa sem falsificar compra, Posse do Guia ou Avaliação do Guia.
+          </p>
+          <form method="post" style="display:grid; gap:12px; margin:0 0 16px;">
+            {% csrf_token %}
+            <input type="hidden" name="q" value="{{ governance_search_query }}">
+            <input type="hidden" name="user_id" value="{{ selected_user.id }}">
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <input
+                type="text"
+                name="demo_institution_name"
+                value="{% if governance_demo_access and governance_demo_access.institution_name %}{{ governance_demo_access.institution_name }}{% endif %}"
+                placeholder="Instituição ou contexto da demonstração"
+                style="flex:1 1 320px; min-width:240px; padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;"
+              >
+              <select
+                name="demo_days"
+                style="padding:10px 12px; border:1px solid rgba(0,0,0,.14); border-radius:10px;"
+              >
+                <option value="3">3 dias</option>
+                <option value="7" selected>7 dias</option>
+                <option value="15">15 dias</option>
+                <option value="30">30 dias</option>
+              </select>
+            </div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <button type="submit" name="action" value="grant_demo" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(15,76,129,.25); background:#eff6ff; color:#0f4c81; font-weight:600;">
+                Ativar demo institucional
+              </button>
+              <button type="submit" name="action" value="revoke_demo" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(198,40,40,.22); background:#fff3f3; color:#c62828; font-weight:600;">
+                Encerrar demo
+              </button>
+            </div>
+          </form>
         </div>
 
         <div style="border-top:1px solid rgba(0,0,0,.08); margin-top:16px; padding-top:16px;">
           <h3 style="margin:0 0 8px;">Guia</h3>
           <p style="margin:0 0 14px; opacity:.78;">
-            A posse valida do Guia nao deve ser marcada manualmente. Ela so deve vir da compra no Hotmart ou de um envio promocional realmente disparado e registrado.
+            A posse válida do Guia não deve ser marcada manualmente. Ela só deve vir da compra no Hotmart ou de um envio promocional realmente disparado e registrado.
           </p>
           <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
             <span style="font-weight:600; color:{% if governance_guia_active %}#18794e{% else %}#b26a00{% endif %};">
@@ -163,22 +399,9 @@
               <span style="color:#c62828; font-weight:600;">Nenhum produto do Guia cadastrado</span>
             {% endif %}
           </div>
-          {% if governance_guia_products %}
-            <div style="display:grid; gap:8px; margin-bottom:12px;">
-              {% for produto in governance_guia_products %}
-                <div style="border:1px solid rgba(0,0,0,.08); border-radius:10px; padding:10px 12px;">
-                  <strong>{{ produto.nome }}</strong>
-                  <span style="opacity:.78;">({{ produto.slug }})</span>
-                  {% if produto.id in selected_user_active_access_product_ids %}
-                    <span style="color:#18794e; font-weight:600;"> - ativo</span>
-                  {% endif %}
-                </div>
-              {% endfor %}
-            </div>
-          {% endif %}
           {% if governance_latest_guide_delivery %}
             <div style="border:1px solid rgba(0,0,0,.08); border-radius:10px; padding:10px 12px; margin-bottom:12px;">
-              <strong>Ultimo envio promocional</strong>
+              <strong>Último envio promocional</strong>
               <div style="opacity:.78; margin-top:4px;">
                 {{ governance_latest_guide_delivery.sent_at|date:"d/m/Y H:i" }}
                 {% if governance_latest_guide_delivery.sent_by %} · por {{ governance_latest_guide_delivery.sent_by.email }}{% endif %}
@@ -196,7 +419,7 @@
               Enviar Guia por e-mail
             </button>
             <button type="submit" name="action" value="revoke_guia" style="padding:10px 14px; border-radius:10px; border:1px solid rgba(198,40,40,.22); background:#fff3f3; color:#c62828; font-weight:600;">
-              Corrigir marcacao do Guia
+              Corrigir marcação do Guia
             </button>
           </form>
         </div>
@@ -218,6 +441,35 @@
               </a>
             </div>
             <div style="display:grid; gap:12px;">
+              <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
+                <strong>Pacotes semânticos</strong>
+                <div style="opacity:.78; margin:4px 0 8px;">O operador trabalha primeiro pelos pacotes oficiais. Os slugs técnicos ficam cobertos pelo pacote correspondente.</div>
+                <div style="display:grid; gap:4px;">
+                  {% for package in governance_access_packages %}
+                    <label style="display:flex; align-items:flex-start; gap:10px; padding:3px 0;">
+                      <input
+                        type="checkbox"
+                        name="package_keys"
+                        value="{{ package.key }}"
+                        {% if package.active %}checked{% endif %}
+                      >
+                      <span>
+                        <strong>{{ package.label }}</strong>
+                        <span style="opacity:.78;">· {{ package.description }}</span>
+                        <div style="opacity:.72; margin-top:2px;">
+                          Cobre:
+                          {% for produto in package.products %}
+                            {{ produto.slug }}{% if not forloop.last %}, {% endif %}
+                          {% empty %}
+                            nenhum produto cadastrado
+                          {% endfor %}
+                        </div>
+                      </span>
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
+
               {% for family in governance_product_groups %}
                 <div style="border:1px solid rgba(0,0,0,.08); border-radius:12px; padding:12px;">
                   <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px;">
@@ -230,9 +482,9 @@
                     </span>
                   </div>
                   {% if family.products %}
-                    <div style="display:grid; gap:8px;">
+                    <div style="display:grid; gap:4px;">
                       {% for produto in family.products %}
-                        <label style="display:flex; align-items:center; gap:10px; padding:6px 0;">
+                        <label style="display:flex; align-items:center; gap:10px; padding:3px 0;">
                           <input
                             type="checkbox"
                             name="produto_ids"
@@ -259,9 +511,9 @@
                 <div style="border:1px dashed rgba(0,0,0,.18); border-radius:12px; padding:12px;">
                   <strong>Outros produtos cadastrados</strong>
                   <div style="opacity:.78; margin:4px 0 8px;">Itens fora das 3 famílias oficiais atuais. Permanecem disponíveis para governança sem entrar na semântica canônica.</div>
-                  <div style="display:grid; gap:8px;">
+                  <div style="display:grid; gap:4px;">
                     {% for produto in governance_uncategorized_products %}
-                      <label style="display:flex; align-items:center; gap:10px; padding:6px 0;">
+                      <label style="display:flex; align-items:center; gap:10px; padding:3px 0;">
                         <input
                           type="checkbox"
                           name="produto_ids"

@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Apresentação da Plataforma | Escola no Ar{% endblock %}
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'css/core_portal.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="portal-page">
+  <div class="portal-shell">
+    <section class="portal-hero portal-demo-hero">
+      <div class="portal-hero-grid">
+        <div class="portal-hero-copy">
+          <span class="portal-eyebrow">Apresentação guiada</span>
+          <h1 class="portal-title">Guia de Decisão</h1>
+          <p class="portal-lead">
+            Esta entrada foi organizada para quem está conhecendo o projeto pela primeira vez e precisa entender, com calma, o objetivo da plataforma, a ordem pedagógica da jornada e o papel de cada trilha.
+          </p>
+          <p class="portal-lead">
+            Em vez de cair direto em telas operacionais, você começa por uma visão orientada da proposta e só no final escolhe por onde deseja entrar.
+          </p>
+          <p class="portal-lead">
+            Esta apresentação passa a fazer parte do primeiro acesso, para que toda pessoa compreenda o sentido da plataforma antes de navegar pelas trilhas.
+          </p>
+
+          <div class="portal-actions">
+            <a class="portal-btn" href="#demo-tela-1">Começar apresentação</a>
+          </div>
+
+          <div class="portal-meta">
+            {% if demo_access and demo_access.institution_name %}
+              <span class="portal-chip">Instituição: <strong>{{ demo_access.institution_name }}</strong></span>
+            {% endif %}
+            {% if demo_access %}
+              <span class="portal-chip">Demo ativa até <strong>{{ demo_access.expires_at|date:"d/m/Y H:i" }}</strong></span>
+            {% endif %}
+            <span class="portal-chip">Conta: <strong>{{ request.user.email }}</strong></span>
+          </div>
+        </div>
+        <div class="portal-hero-side portal-demo-side" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="portal-section portal-demo-deck">
+      <div class="portal-demo-toc">
+        <a class="portal-demo-toc-link" href="#demo-tela-1">1. Objetivos da plataforma</a>
+        <a class="portal-demo-toc-link" href="#demo-tela-2">2. O que é o Guia</a>
+        <a class="portal-demo-toc-link" href="#demo-tela-3">3. Sonhe + Alto</a>
+        <a class="portal-demo-toc-link" href="#demo-tela-4">4. Vocacional</a>
+        <a class="portal-demo-toc-link" href="#demo-tela-5">5. Três níveis de aprofundamento</a>
+      </div>
+    </section>
+
+    <section class="portal-section portal-demo-screen" id="demo-tela-1">
+      <div class="portal-section-header">
+        <span class="portal-card-kicker">Tela 1</span>
+        <h2 class="portal-section-title">Objetivos desta plataforma</h2>
+        <p class="portal-section-copy">
+          A plataforma foi criada para orientar o jovem em fase de escolher seu destino profissional e se preparar para decisões importantes, oferecendo recursos e incentivos para adquirir ou destacar hábitos que tornem sua personalidade mais atraente, firme e amadurecida diante das oportunidades da vida.
+        </p>
+      </div>
+      <div class="portal-grid portal-grid-2">
+        <article class="portal-card portal-demo-card">
+          <h3 class="portal-card-title">Duas trilhas principais</h3>
+          <p class="portal-card-copy">
+            A plataforma se divide em duas trilhas complementares:
+          </p>
+          <ul class="portal-demo-list">
+            <li><strong>Trilha 1:</strong> Sonhe + Alto</li>
+            <li><strong>Trilha 2:</strong> Vocacional</li>
+          </ul>
+        </article>
+        <article class="portal-card portal-demo-card">
+          <h3 class="portal-card-title">Como tudo se completa</h3>
+          <p class="portal-card-copy">
+            O Guia inicia a reflexão. O Sonhe + Alto trabalha a pessoa. O Vocacional ajuda a esclarecer a escolha. Essa é a ordem pedagógica da experiência.
+          </p>
+          <p class="portal-card-copy">
+            Primeiro, compreender a proposta. Depois, seguir a ordem pedagógica para preservar o sentido educativo e estratégico do projeto.
+          </p>
+        </article>
+      </div>
+      <div class="portal-actions">
+        <a class="portal-btn" href="#demo-tela-2">Prosseguir</a>
+      </div>
+    </section>
+
+    <section class="portal-section portal-demo-screen" id="demo-tela-2">
+      <div class="portal-section-header">
+        <span class="portal-card-kicker">Tela 2</span>
+        <h2 class="portal-section-title">O que é o Guia de Descoberta</h2>
+        <p class="portal-section-copy">
+          O livreto <strong>Como descobrir minha vocação</strong> apresenta conceitos de vocação e escolha e conduz o aluno a uma reflexão guiada sobre seus dotes pessoais, preferências e desejos profissionais.
+        </p>
+      </div>
+      <div class="portal-grid portal-grid-2">
+        <article class="portal-card portal-demo-card portal-demo-guide-card">
+          <img class="portal-demo-guide-cover" src="{% static 'core/img/capa-guia.png' %}" alt="Capa do Guia de Descoberta">
+        </article>
+        <article class="portal-card portal-demo-card">
+          <h3 class="portal-card-title">Mais do que informar, ele orienta</h3>
+          <p class="portal-card-copy">
+            O Guia ajuda o jovem a olhar para si com mais intencionalidade e a se preparar para decisões importantes. Ao final dessa leitura, ele é direcionado para a próxima etapa pedagógica da plataforma: <strong>Sonhe + Alto</strong>.
+          </p>
+        </article>
+      </div>
+      <div class="portal-actions">
+        <a class="portal-btn" href="#demo-tela-3">Prosseguir</a>
+      </div>
+    </section>
+
+    <section class="portal-section portal-demo-screen" id="demo-tela-3">
+      <div class="portal-section-header">
+        <span class="portal-card-kicker">Tela 3</span>
+        <h2 class="portal-section-title">Trilha 1: Sonhe + Alto</h2>
+        <p class="portal-section-copy">
+          O Sonhe + Alto deve ser apresentado primeiro. Ele é uma ferramenta estratégica de crescimento pessoal.
+        </p>
+      </div>
+      <div class="portal-grid portal-grid-2">
+        <article class="portal-card portal-demo-card">
+          <h3 class="portal-card-title">O que ele desenvolve</h3>
+          <p class="portal-card-copy">
+            Seu objetivo é despertar o aluno para adquirir bons hábitos, fortalecer a própria personalidade e desenvolver uma filosofia de vida de superação.
+          </p>
+          <ul class="portal-demo-list">
+            <li>Postura e conduta</li>
+            <li>Hábitos desejáveis</li>
+            <li>Disciplina, constância e estratégia pessoal</li>
+            <li>Atenção aos relacionamentos e à forma de se conduzir</li>
+          </ul>
+        </article>
+        <article class="portal-card portal-demo-card">
+          <h3 class="portal-card-title">Por que isso importa</h3>
+          <p class="portal-card-copy">
+            Quem deseja projeção na vida precisa expressar conteúdo, princípios e conduta. O Sonhe + Alto trabalha exatamente essa base e ajuda o aluno a transformar intenção em rotina.
+          </p>
+          <p class="portal-card-copy">
+            Aqui, a plataforma deixa claro que crescimento pessoal, postura e valor humano não são acessórios: fazem parte do preparo para a vida.
+          </p>
+        </article>
+      </div>
+      <div class="portal-actions">
+        <a class="portal-btn" href="#demo-tela-4">Prosseguir</a>
+      </div>
+    </section>
+
+    <section class="portal-section portal-demo-screen" id="demo-tela-4">
+      <div class="portal-section-header">
+        <span class="portal-card-kicker">Tela 4</span>
+        <h2 class="portal-section-title">Trilha 2: Vocacional</h2>
+        <p class="portal-section-copy">
+          O Vocacional tem o objetivo de aliviar a tensão da escolha pelo medo da frustração de errar nessa importante decisão e dar mais segurança para perceber a vocação pessoal.
+        </p>
+      </div>
+      <div class="portal-grid portal-grid-2">
+        <article class="portal-card portal-demo-card">
+          <h3 class="portal-card-title">Escolha guiada</h3>
+          <p class="portal-card-copy">
+            A trilha Vocacional aproveita as pistas dadas pelo Guia e aprofunda a leitura do aluno por meio de perguntas e refinamentos que ajudam a organizar preferências e possibilidades de futuro.
+          </p>
+        </article>
+        <article class="portal-card portal-demo-card">
+          <h3 class="portal-card-title">Três níveis de aprofundamento</h3>
+          <p class="portal-card-copy">
+            O Vocacional oferece três estágios: um primeiro nível como bônus, um segundo nível mais aprofundado e um terceiro nível de refinamento.
+          </p>
+          <ul class="portal-demo-list">
+            <li>Leitura inicial do perfil</li>
+            <li>Aprofundamento progressivo</li>
+            <li>Top 3 mais seguro</li>
+            <li>Validação mais próxima da prática profissional</li>
+          </ul>
+        </article>
+      </div>
+      <div class="portal-actions">
+        <a class="portal-btn" href="#demo-tela-5">Prosseguir</a>
+      </div>
+    </section>
+
+    <section class="portal-section portal-demo-screen" id="demo-tela-5">
+      <div class="portal-section-header">
+        <span class="portal-card-kicker">Tela 5</span>
+        <h2 class="portal-section-title">Três níveis de aprofundamento</h2>
+        <p class="portal-section-copy">
+          A trilha Vocacional avança em estágios progressivos para ampliar a clareza da escolha e validar melhor a direção profissional.
+        </p>
+      </div>
+      <div class="portal-grid portal-grid-3">
+        <article class="portal-card portal-demo-card">
+          <h3 class="portal-card-title">Bônus - Vocacional 75</h3>
+          <p class="portal-card-copy">
+            Esse primeiro nível é oferecido a todos os que adquirem o Guia de Descoberta e inclui uma consulta vocacional baseada em 75 questões sobre aptidões, interesses e possíveis opções profissionais.
+          </p>
+        </article>
+        <article class="portal-card portal-demo-card">
+          <h3 class="portal-card-title">Aprofundamento Vocacional</h3>
+          <p class="portal-card-copy">
+            O segundo nível amplia a investigação, aprofunda as áreas de interesse mais fortes e ajuda a diferenciar melhor as opções que aparecem com mais potencial.
+          </p>
+        </article>
+        <article class="portal-card portal-demo-card">
+          <h3 class="portal-card-title">Validação Profissional</h3>
+          <p class="portal-card-copy">
+            O terceiro nível refina a escolha principal e confronta a vocação destacada com questões ligadas à prática profissional, reduzindo o medo de frustração e aumentando a segurança da decisão.
+          </p>
+        </article>
+      </div>
+      <div class="portal-actions">
+        <a class="portal-btn" href="#demo-final">Prosseguir</a>
+      </div>
+    </section>
+
+    <section class="portal-final" id="demo-final">
+      <div class="portal-section-header">
+        <h2 class="portal-section-title">Agora sim: por onde deseja começar?</h2>
+        <p class="portal-section-copy">
+          Depois desta apresentação guiada, você pode seguir pela ordem recomendada ou ir diretamente para a trilha que deseja observar primeiro.
+        </p>
+      </div>
+      <div class="portal-actions">
+        <form method="post" action="{% url 'portal_demo' %}" class="portal-final-form">
+          {% csrf_token %}
+          <input type="hidden" name="next_product" value="{{ sonhe_product.public_slug }}">
+          <button type="submit" class="portal-btn portal-btn-submit">Concluir e começar por Sonhe + Alto</button>
+        </form>
+        <form method="post" action="{% url 'portal_demo' %}" class="portal-final-form">
+          {% csrf_token %}
+          <input type="hidden" name="next_product" value="{{ vocacional_product.public_slug }}">
+          <button type="submit" class="portal-btn-secondary portal-btn-submit">Concluir e ir para o Vocacional</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

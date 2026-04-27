@@ -1,21 +1,32 @@
 # apps/contas/forms.py
-from django import forms
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from .models import Usuario
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.contrib.auth.password_validation import validate_password
 import re
 
+from django import forms
+from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+
+from .models import Usuario
+
 User = get_user_model()
+
 
 class UsuarioCreationForm(forms.ModelForm):
     password1 = forms.CharField(label="Senha", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Confirmar senha", widget=forms.PasswordInput)
+    aceite_termos = forms.BooleanField(
+        label="Li e aceito os Termos de Uso",
+        required=True,
+    )
+    aceite_privacidade = forms.BooleanField(
+        label="Li e aceito a Política de Privacidade",
+        required=True,
+    )
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email"]  # acrescente "nome" se quiser
+        fields = ["first_name", "last_name", "email"]
 
     def clean_email(self):
         email = (self.cleaned_data.get("email") or "").strip().lower()
@@ -27,10 +38,8 @@ class UsuarioCreationForm(forms.ModelForm):
         cleaned = super().clean()
         p1, p2 = cleaned.get("password1"), cleaned.get("password2")
 
-        # 1) força da senha (usa PASSWORD_VALIDATORS do settings.py)
         if p1:
             extra_errors = []
-            # validações extras solicitadas
             if len(p1) < 8:
                 extra_errors.append("A senha deve ter pelo menos 8 caracteres.")
             if not re.search(r"[a-z]", p1):
@@ -40,7 +49,6 @@ class UsuarioCreationForm(forms.ModelForm):
             if not re.search(r"\d", p1):
                 extra_errors.append("Inclua pelo menos 1 número.")
 
-            # validações do Django (common password, numeric only etc.)
             try:
                 dummy_user = User(email=(cleaned.get("email") or "").strip().lower())
                 validate_password(p1, user=dummy_user)
@@ -51,7 +59,6 @@ class UsuarioCreationForm(forms.ModelForm):
                 for msg in extra_errors:
                     self.add_error("password1", msg)
 
-        # 2) confirmação igual
         if p1 and p2 and p1 != p2:
             self.add_error("password2", "Confirmação de senha deve ser igual à senha.")
 
@@ -63,15 +70,97 @@ class UsuarioCreationForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
+            self.persist_legal_acceptance(user)
         return user
 
+    def persist_legal_acceptance(self, user):
+        from django.utils import timezone
+        from apps.vocacional.models import AvaliacaoGuia
+        from apps.vocacional.models_consent import Consentimento
+
+        ag, _ = AvaliacaoGuia.objects.get_or_create(user=user)
+        if not ag.aceite_termos:
+            ag.aceite_termos = True
+            ag.save(update_fields=["aceite_termos"])
+
+        Consentimento.objects.update_or_create(
+            user=user,
+            defaults={
+                "nome": user.get_full_name() or user.email,
+                "email": user.email,
+                "aceito": True,
+                "revogado_em": None,
+                "aceito_em": timezone.now(),
+            },
+        )
+
+
 class LoginForm(AuthenticationForm):
-    # se seu USERNAME_FIELD é email, isso já funciona;
-    # opcionalmente personalize o label/placeholder:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["username"].label = "E-mail"
+        self.fields["username"].label = "Usuário ou e-mail"
         self.fields["password"].label = "Senha"
+        self.fields["username"].widget.attrs.update(
+            {
+                "placeholder": "Digite seu usuário ou e-mail",
+                "autocomplete": "username",
+            }
+        )
+        self.fields["password"].widget.attrs.update(
+            {
+                "placeholder": "Digite sua senha",
+                "autocomplete": "current-password",
+            }
+        )
+
+    def _normalize_identity(self, ident: str) -> str:
+        ident = (ident or "").strip().lower()
+        if ident and "@" not in ident:
+            qs = User.objects.filter(email__istartswith=ident + "@")
+            if qs.count() == 1:
+                ident = qs.first().email.lower()
+        return ident
+
+    def clean(self):
+        ident = self._normalize_identity(
+            self.cleaned_data.get("username") or self.data.get("username") or ""
+        )
+        password = self.cleaned_data.get("password") or self.data.get("password") or ""
+
+        if ident:
+            self.cleaned_data["username"] = ident
+
+        if ident and password:
+            self.user_cache = (
+                authenticate(self.request, username=ident, password=password)
+                or authenticate(self.request, email=ident, password=password)
+            )
+            if self.user_cache is None:
+                raise self.get_invalid_login_error()
+            self.confirm_login_allowed(self.user_cache)
+
+        return self.cleaned_data
+
+
+class PasswordResetIdentityForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["email"].label = "Usuário ou e-mail"
+        self.fields["email"].widget.attrs.update(
+            {
+                "placeholder": "Digite seu usuário ou e-mail",
+                "autocomplete": "username",
+            }
+        )
+
+    def clean_email(self):
+        ident = (self.cleaned_data.get("email") or "").strip().lower()
+        if ident and "@" not in ident:
+            qs = User.objects.filter(email__istartswith=ident + "@")
+            if qs.count() == 1:
+                ident = qs.first().email.lower()
+        return ident
+
 
 class UsuarioPerfilForm(forms.ModelForm):
     class Meta:
@@ -79,12 +168,13 @@ class UsuarioPerfilForm(forms.ModelForm):
         fields = ["first_name", "last_name", "email", "cep", "numero_endereco", "imagem"]
         widgets = {
             "first_name": forms.TextInput(attrs={"class": "form-control"}),
-            "last_name":  forms.TextInput(attrs={"class": "form-control"}),
-            "email":      forms.EmailInput(attrs={"class": "form-control"}),
-            "cep":        forms.TextInput(attrs={"class": "form-control"}),
+            "last_name": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "cep": forms.TextInput(attrs={"class": "form-control"}),
             "numero_endereco": forms.TextInput(attrs={"class": "form-control"}),
-            "imagem":     forms.ClearableFileInput(attrs={"class": "form-control"}),
+            "imagem": forms.ClearableFileInput(attrs={"class": "form-control"}),
         }
+
 
 class FormularioImagem(forms.ModelForm):
     class Meta:
@@ -93,8 +183,10 @@ class FormularioImagem(forms.ModelForm):
         widgets = {
             "imagem": forms.ClearableFileInput(attrs={"class": "form-control"}),
         }
-# alias para não quebrar imports antigos
+
+
 PerfilForm = UsuarioPerfilForm
+
 
 class AlterarSenhaForm(PasswordChangeForm):
     pass

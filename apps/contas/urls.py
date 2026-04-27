@@ -2,6 +2,7 @@
 from django.urls import path, reverse_lazy
 from django.contrib.auth import views as auth_views
 from . import views  # suas views (ex.: registrar, perfil etc.)
+from .forms import PasswordResetIdentityForm
 
 app_name = "contas"
 
@@ -21,6 +22,8 @@ urlpatterns = [
 
     # REGISTRO (criar conta)
     path("registrar/", views.registrar, name="registrar"),
+    path("registrar/confirmacao-enviada/", views.confirmacao_email_enviada, name="confirmacao_email_enviada"),
+    path("confirmar-email/<uidb64>/<token>/", views.confirmar_email, name="confirmar_email"),
 
     # TROCAR SENHA (usuário logado)
     path(
@@ -44,6 +47,7 @@ urlpatterns = [
         "password_reset/",
         auth_views.PasswordResetView.as_view(
             template_name="contas/recuperar_senha.html",
+            form_class=PasswordResetIdentityForm,
             email_template_name="contas/email_recuperacao.html",
             subject_template_name="contas/assunto_email.txt",
             success_url=reverse_lazy("contas:password_reset_done"),

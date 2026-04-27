@@ -95,6 +95,26 @@
           </div>
         </div>
 
+        <div class="sma-field" style="margin-top: 1.1rem;">
+          <label class="sma-help sma-inline-check" style="align-items:flex-start; gap:.7rem;">
+            {{ form.aceite_termos }}
+            <span>
+              Li e aceito os <a class="sma-link" href="{% url 'core:termos' %}" target="_blank" rel="noopener">Termos de Uso</a>.
+            </span>
+          </label>
+          {{ form.aceite_termos.errors }}
+        </div>
+
+        <div class="sma-field" style="margin-top: .55rem;">
+          <label class="sma-help sma-inline-check" style="align-items:flex-start; gap:.7rem;">
+            {{ form.aceite_privacidade }}
+            <span>
+              Li e aceito a <a class="sma-link" href="{% url 'core:privacidade' %}" target="_blank" rel="noopener">Política de Privacidade</a>.
+            </span>
+          </label>
+          {{ form.aceite_privacidade.errors }}
+        </div>
+
         <div class="sma-bottom">
           <label class="sma-help sma-inline-check">
             <input type="checkbox" id="toggle-pass">

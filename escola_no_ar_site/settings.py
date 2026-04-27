@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     # Apps internos (devem vir antes do Django Admin quando há dependência de user model)
     "apps.contas.apps.ContasConfig",  # Precisa vir antes de admin
     "apps.core.apps.CoreConfig",
+    "apps.es.apps.EscolaSabatinaConfig",
 
     # Django core
     "django.contrib.auth",
@@ -213,13 +214,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")   # destino do collectstatic
 # Se tiver pasta global de assets locais:
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # DEBUG (aceita 0/1, true/false, yes/no, on/off)
 DEBUG = os.getenv("DEBUG", "0").strip().lower() in ("1", "true", "yes", "on")
+
+RUNNING_TESTS = "test" in sys.argv
+
+if DEBUG or RUNNING_TESTS:
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+else:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 def env_bool(name: str, default: str = "0") -> bool:
     return os.getenv(name, default).strip().lower() in ("1", "true", "yes", "on")

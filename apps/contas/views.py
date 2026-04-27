@@ -4,18 +4,46 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
-from .forms import PerfilForm, AlterarSenhaForm, UsuarioCreationForm
+from .forms import PerfilForm, AlterarSenhaForm, LoginForm, UsuarioCreationForm
 from django.contrib.auth import get_user_model
 from .forms import FormularioImagem
 from django.template.loader import get_template
+from django.template.loader import render_to_string
 from django.http import HttpResponse
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils import timezone
 from urllib.parse import urlsplit
 
 
 logger = logging.getLogger(__name__)
+
+
+def _send_email_confirmation(request, user):
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    confirm_url = request.build_absolute_uri(
+        reverse("contas:confirmar_email", args=[uid, token])
+    )
+    context = {
+        "user": user,
+        "confirm_url": confirm_url,
+        "site_name": "Escola no Ar",
+    }
+    body = render_to_string("contas/email_confirmacao_cadastro.html", context)
+    send_mail(
+        subject="Confirme seu e-mail - Escola no Ar",
+        message=body,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[user.email],
+        fail_silently=False,
+    )
 
 
 def registrar(request):
@@ -25,8 +53,11 @@ def registrar(request):
     if request.method == "POST":
         form = UsuarioCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            form.persist_legal_acceptance(user)
+            _send_email_confirmation(request, user)
 
             # evita open redirect
             if not url_has_allowed_host_and_scheme(
@@ -36,10 +67,42 @@ def registrar(request):
             ):
                 next_url = default_next
 
-            return redirect(next_url)
+            request.session["registration_next_url"] = next_url
+            return redirect("contas:confirmacao_email_enviada")
     else:
         form = UsuarioCreationForm()
     return render(request, "contas/criar_conta.html", {"form": form, "next": next_url})
+
+
+def confirmacao_email_enviada(request):
+    return render(request, "contas/confirmacao_email_enviada.html")
+
+
+def confirmar_email(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except Exception:
+        user = None
+
+    if user is None or not default_token_generator.check_token(user, token):
+        messages.error(request, "O link de confirmação é inválido ou expirou.")
+        return redirect("contas:login")
+
+    update_fields = []
+    if not user.is_active:
+        user.is_active = True
+        update_fields.append("is_active")
+    if not user.email_confirmado_em:
+        user.email_confirmado_em = timezone.now()
+        update_fields.append("email_confirmado_em")
+    if update_fields:
+        user.save(update_fields=update_fields)
+
+    login(request, user)
+    messages.success(request, "E-mail confirmado com sucesso. Sua conta já está ativa.")
+    next_url = request.session.pop("registration_next_url", None) or reverse("portal")
+    return redirect(next_url)
 
 
 def testar_template(request):
@@ -80,6 +143,8 @@ def _is_restricted_redirect_path(path: str) -> bool:
 
 
 class SafeLoginView(LoginView):
+    authentication_form = LoginForm
+
     def get_success_url(self):
         redirect_to = super().get_redirect_url()
         user = self.request.user

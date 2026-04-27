@@ -112,7 +112,7 @@ def build_fc_blocks_top3(avaliacao: Avaliacao, top_slugs: Sequence[str]) -> List
     if min_len <= 0:
         return []
 
-    wanted = int(getattr(settings, "VOC_FC_BLOCKS_TOP3", 5) or 5)
+    wanted = int(getattr(settings, "VOC_FC_BLOCKS_TOP3", 10) or 10)
     wanted = max(3, min(wanted, 40))
     n_blocks = min(wanted, min_len)
 

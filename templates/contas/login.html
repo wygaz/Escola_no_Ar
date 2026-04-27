@@ -70,11 +70,14 @@
     font-weight: 500;
   }
 
+  .auth-form input[type="text"],
   .auth-form input[type="email"],
   .auth-form input[type="password"] {
     border-radius: 0.75rem;
     border: 1px solid #cbd5e1;
-    padding: 0.45rem 0.7rem;
+    padding: 0.55rem 0.8rem;
+    width: 100%;
+    max-width: 580px;
   }
 
   .auth-form button,
@@ -211,7 +214,22 @@
     <div class="auth-form-row">
       <form method="post" class="auth-form">
         {% csrf_token %}
-        {{ form.as_p }}
+        <p>
+          {{ form.username.label_tag }}
+          {{ form.username }}
+          {{ form.username.errors }}
+        </p>
+        <p>
+          {{ form.password.label_tag }}
+          {{ form.password }}
+          {{ form.password.errors }}
+        </p>
+        <p style="margin-top:-0.2rem; margin-bottom:0.8rem;">
+          <label style="display:inline-flex; align-items:center; gap:0.45rem; font-size:0.92rem; color:#475569;">
+            <input type="checkbox" id="toggle-password-visibility">
+            Mostrar a senha
+          </label>
+        </p>
 
         <div style="margin-top:0.7rem;">
           <button type="submit" class="btn btn-primary">
@@ -234,5 +252,16 @@
 
   </div>
 </div>
+
+<script>
+  (function () {
+    const toggle = document.getElementById("toggle-password-visibility");
+    const passwordField = document.getElementById("id_password");
+    if (!toggle || !passwordField) return;
+    toggle.addEventListener("change", function () {
+      passwordField.type = this.checked ? "text" : "password";
+    });
+  })();
+</script>
 
 {% endblock %}

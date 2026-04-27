@@ -2,16 +2,16 @@ from __future__ import annotations
 
 import math
 import random
-from dataclasses import dataclass
+from collections import defaultdict
 from typing import Dict, List, Tuple
 
 from django.conf import settings
 
-from .models import Avaliacao, Pergunta, Resposta
+from .models import Avaliacao, Pergunta, Resposta, Resultado
 
 
 # -----------------------------------------------------------------------------
-# Métricas (Gap + cobertura) e seleção de perguntas para Passe 1/2
+# Métricas e seleção de perguntas para refinamento
 # -----------------------------------------------------------------------------
 
 
@@ -36,115 +36,35 @@ def _rng_for(avaliacao: Avaliacao) -> random.Random:
     return random.Random(seed)
 
 
-def get_pass_qids(avaliacao: Avaliacao, stage: int, perguntas_qs) -> List[int]:
-    """Retorna (e persiste) a lista de pergunta_ids usada no passe `stage`."""
-    ref = getattr(avaliacao, "ref_data", {}) or {}
-    pass_qids = ref.get("pass_qids", {}) or {}
-
-    key = str(int(stage))
-    if key in pass_qids and pass_qids[key]:
-        return [int(x) for x in pass_qids[key]]
-
-    used = set()
-    for k, ids in pass_qids.items():
-        try:
-            used |= {int(x) for x in (ids or [])}
-        except Exception:
-            pass
-
-    stage = int(stage)
-    if stage == 1:
-        qids = select_pass1_balanced(avaliacao, perguntas_qs, used)
-    else:
-        # passa 2: foca nas top-k dimensões do passe 1
-        prev = (ref.get("passes", {}) or {}).get("1", {})
-        top = prev.get("top") or []
-        qids = select_pass2_focus(avaliacao, perguntas_qs, used, top)
-
-    pass_qids[key] = qids
-    ref["pass_qids"] = pass_qids
-    avaliacao.ref_data = ref
-    avaliacao.save(update_fields=["ref_data"])
-    return qids
-
-
-def select_pass1_balanced(avaliacao: Avaliacao, perguntas_qs, used_ids: set[int]) -> List[int]:
-    per_dim = int(getattr(settings, "VOC_REF_PASS1_PER_DIM", 2) or 2)
-    per_dim = max(1, min(per_dim, 10))
-
-    # Ordenação estável: usa a ordem_ids global (se existir) para garantir repetibilidade
+def _question_order_pos(avaliacao: Avaliacao) -> Dict[int, int]:
     ordem = []
     if getattr(avaliacao, "ordem_ids", ""):
         try:
             ordem = [int(x) for x in str(avaliacao.ordem_ids).split(",") if x.strip().isdigit()]
         except Exception:
             ordem = []
-
-    # Map id->pos para ordenar sempre igual
-    pos = {pid: i for i, pid in enumerate(ordem)}
-
-    qids: List[int] = []
-    dims = list({p.dimensao_id for p in perguntas_qs})
-    dims.sort()
-
-    for dim_id in dims:
-        cand = [p.id for p in perguntas_qs if p.dimensao_id == dim_id and p.id not in used_ids]
-        cand.sort(key=lambda pid: pos.get(pid, 10**9))
-        qids += cand[:per_dim]
-
-    # shuffle leve, mas estável, para evitar blocos por dimensão
-    rnd = _rng_for(avaliacao)
-    rnd.shuffle(qids)
-    return qids
+    return {pid: i for i, pid in enumerate(ordem)}
 
 
-def select_pass2_focus(avaliacao: Avaliacao, perguntas_qs, used_ids: set[int], top_dims_slugs: List[str]) -> List[int]:
-    per_dim = int(getattr(settings, "VOC_REF_PASS2_PER_DIM", 3) or 3)
-    per_dim = max(1, min(per_dim, 20))
-    topk = int(getattr(settings, "VOC_REF_PASS2_TOPK", 5) or 5)
+def _latest_pass_top3(ref_data: dict) -> List[str]:
+    passes = (ref_data.get("passes") or {})
+    if not passes:
+        return []
 
-    # slug->dim_id
-    slug_to_dim_id = {}
-    for p in perguntas_qs:
-        if p.dimensao and p.dimensao.slug:
-            slug_to_dim_id[p.dimensao.slug] = p.dimensao_id
+    try:
+        ordered_keys = sorted((int(k) for k in passes.keys()), reverse=True)
+    except Exception:
+        ordered_keys = []
 
-    chosen_dim_ids = []
-    for slug in (top_dims_slugs or [])[:topk]:
-        if slug in slug_to_dim_id:
-            chosen_dim_ids.append(slug_to_dim_id[slug])
-
-    # fallback: se não tiver top, pega primeiras dimensões
-    if not chosen_dim_ids:
-        chosen_dim_ids = sorted({p.dimensao_id for p in perguntas_qs})[:topk]
-
-    # mesma ordenação estável do passe 1
-    ordem = []
-    if getattr(avaliacao, "ordem_ids", ""):
-        try:
-            ordem = [int(x) for x in str(avaliacao.ordem_ids).split(",") if x.strip().isdigit()]
-        except Exception:
-            ordem = []
-    pos = {pid: i for i, pid in enumerate(ordem)}
-
-    qids: List[int] = []
-    for dim_id in chosen_dim_ids:
-        cand = [p.id for p in perguntas_qs if p.dimensao_id == dim_id and p.id not in used_ids]
-        cand.sort(key=lambda pid: pos.get(pid, 10**9))
-        qids += cand[:per_dim]
-
-    rnd = _rng_for(avaliacao)
-    rnd.shuffle(qids)
-    return qids
-
-
-# -----------------------------------------------------------------------------
-# Cálculo de score e regra de parada
-# -----------------------------------------------------------------------------
+    for key in ordered_keys:
+        top = (passes.get(str(key)) or {}).get("top") or []
+        if top:
+            return list(top[:3])
+    return []
 
 
 def compute_scores(avaliacao: Avaliacao, pergunta_ids: List[int]) -> Tuple[Dict[str, float], Dict[str, int]]:
-    """Retorna (mean por slug) e (contagem por slug) usando apenas pergunta_ids."""
+    """Retorna média por slug e contagem por slug usando apenas pergunta_ids."""
     if not pergunta_ids:
         return {}, {}
 
@@ -179,6 +99,143 @@ def compute_scores(avaliacao: Avaliacao, pergunta_ids: List[int]) -> Tuple[Dict[
     return means, cont
 
 
+def resolve_refinement_focus_slugs(avaliacao: Avaliacao, perguntas_qs, limit: int = 3) -> List[str]:
+    """
+    Resolve o Top 3 que deve orientar o refinamento.
+
+    Ordem de prioridade:
+    1. ranking final salvo em `ref_data.final`
+    2. top mais recente salvo em `ref_data.passes`
+    3. resultados persistidos da avaliação
+    4. cálculo sobre respostas já registradas
+    """
+    ref = getattr(avaliacao, "ref_data", {}) or {}
+
+    final_top3 = (ref.get("final") or {}).get("top3") or []
+    if final_top3:
+        return list(final_top3[:limit])
+
+    pass_top3 = _latest_pass_top3(ref)
+    if pass_top3:
+        return list(pass_top3[:limit])
+
+    resultados = list(
+        Resultado.objects.filter(avaliacao=avaliacao)
+        .select_related("dimensao")
+        .order_by("-pontuacao", "-percentual", "dimensao__nome")
+    )
+    if resultados:
+        return [r.dimensao.slug for r in resultados[:limit] if getattr(r.dimensao, "slug", None)]
+
+    all_qids = list(
+        Resposta.objects.filter(avaliacao=avaliacao)
+        .values_list("pergunta_id", flat=True)
+        .distinct()
+    )
+    if all_qids:
+        means, _counts = compute_scores(avaliacao, all_qids)
+        ordered = _sorted_keys(_softmax(means))
+        if ordered:
+            return list(ordered[:limit])
+
+    fallback = []
+    for p in perguntas_qs:
+        slug = getattr(getattr(p, "dimensao", None), "slug", None)
+        if slug and slug not in fallback:
+            fallback.append(slug)
+    return fallback[:limit]
+
+
+def select_refinement_round_questions(
+    avaliacao: Avaliacao,
+    perguntas_qs,
+    used_ids: set[int],
+    focus_slugs: List[str] | None = None,
+) -> List[int]:
+    """
+    Seleciona uma rodada de refinamento:
+    - foca no Top 3 em análise;
+    - exclui perguntas já usadas;
+    - distribui de forma equilibrada entre as áreas em foco;
+    - devolve no máximo `VOC_REF_ROUND_SIZE` questões.
+    """
+    round_size = int(getattr(settings, "VOC_REF_ROUND_SIZE", 5) or 5)
+    round_size = max(1, min(round_size, 20))
+
+    pos = _question_order_pos(avaliacao)
+    buckets: dict[str, list[int]] = defaultdict(list)
+
+    for p in perguntas_qs:
+        if p.id in used_ids:
+            continue
+        slug = getattr(getattr(p, "dimensao", None), "slug", None)
+        if not slug:
+            continue
+        buckets[slug].append(p.id)
+
+    for slug in buckets:
+        buckets[slug].sort(key=lambda pid: pos.get(pid, 10**9))
+
+    ordered_focus = [slug for slug in (focus_slugs or []) if slug in buckets]
+    if not ordered_focus:
+        ordered_focus = sorted(buckets.keys())[:3]
+
+    chosen: List[int] = []
+    while len(chosen) < round_size:
+        progressed = False
+        for slug in ordered_focus:
+            bucket = buckets.get(slug) or []
+            if not bucket:
+                continue
+            chosen.append(bucket.pop(0))
+            progressed = True
+            if len(chosen) >= round_size:
+                break
+        if not progressed:
+            break
+
+    rnd = _rng_for(avaliacao)
+    rnd.shuffle(chosen)
+    return chosen
+
+
+def get_pass_qids(avaliacao: Avaliacao, stage: int, perguntas_qs) -> List[int]:
+    """Retorna e persiste a lista de pergunta_ids usada no passe `stage`."""
+    ref = getattr(avaliacao, "ref_data", {}) or {}
+    pass_qids = ref.get("pass_qids", {}) or {}
+
+    key = str(int(stage))
+    if key in pass_qids and pass_qids[key]:
+        return [int(x) for x in pass_qids[key]]
+
+    used = set()
+    for _k, ids in pass_qids.items():
+        try:
+            used |= {int(x) for x in (ids or [])}
+        except Exception:
+            pass
+
+    stage = int(stage)
+    if stage == 1:
+        focus = resolve_refinement_focus_slugs(avaliacao, perguntas_qs, limit=3)
+        qids = select_refinement_round_questions(avaliacao, perguntas_qs, used, focus)
+    else:
+        prev = (ref.get("passes") or {}).get("1", {})
+        focus = list((prev.get("top") or [])[:3]) or resolve_refinement_focus_slugs(avaliacao, perguntas_qs, limit=3)
+        qids = select_refinement_round_questions(avaliacao, perguntas_qs, used, focus)
+
+    pass_qids[key] = qids
+    ref["pass_qids"] = pass_qids
+    ref.setdefault("round_plan", {})
+    ref["round_plan"][key] = {
+        "focus_top3": list(focus[:3]),
+        "size": len(qids),
+    }
+    avaliacao.ref_data = ref
+    avaliacao.save(update_fields=["ref_data"])
+    return qids
+
+
 def compute_pass_stats(avaliacao: Avaliacao, pergunta_ids: List[int], stage: int) -> dict:
     tau = float(getattr(settings, "VOC_REF_SOFTMAX_TAU", 0.8) or 0.8)
 
@@ -195,8 +252,7 @@ def compute_pass_stats(avaliacao: Avaliacao, pergunta_ids: List[int], stage: int
     elif len(ordered) == 1:
         top1p = float(probs.get(ordered[0], 0.0))
 
-    # Cobertura: quantas dimensões têm pelo menos 1 item respondido
-    covered = sum(1 for k, c in (counts or {}).items() if (c or 0) > 0)
+    covered = sum(1 for _k, c in (counts or {}).items() if (c or 0) > 0)
     total_dims = len(probs) if probs else 0
     coverage_ratio = (covered / total_dims) if total_dims else 0.0
 
@@ -214,7 +270,7 @@ def compute_pass_stats(avaliacao: Avaliacao, pergunta_ids: List[int], stage: int
 
 
 def should_stop(ref_data: dict, stage: int, stats: dict) -> Tuple[bool, str]:
-    """Decide parada usando GAP + prob do Top1 + estabilidade do Top3 (no P2)."""
+    """Decide parada usando gap, probabilidade do Top 1 e estabilidade do Top 3."""
     stage = int(stage)
     gap = float(stats.get("gap") or 0.0)
     top1p = float(stats.get("top1p") or 0.0)
@@ -242,7 +298,6 @@ def should_stop(ref_data: dict, stage: int, stats: dict) -> Tuple[bool, str]:
         answered = sum((stats.get("counts") or {}).values())
         if answered < min_q:
             return False, f"CONT_P2(min_q={answered}/{min_q})"
-
 
         passes = (ref_data.get("passes") or {})
         prev = passes.get("1", {})
@@ -282,7 +337,7 @@ SJT = [
         "opcoes": [
             ("a", "Vou direto para um projeto prático e aprendo fazendo.", ["tecnico", "criatividade"]),
             ("b", "Sigo um plano estruturado, com metas e checklist.", ["gestao"]),
-            ("c", "Procuro alguém para orientar/mentorar e pratico com feedback.", ["pessoas"]),
+            ("c", "Procuro alguém para orientar ou mentorar e pratico com feedback.", ["pessoas"]),
             ("d", "Leio, pesquiso, comparo fontes e só depois aplico.", ["analise"]),
         ],
     },
@@ -300,8 +355,6 @@ SJT = [
 ]
 
 
-# Mapeamento de tags genéricas -> slugs de dimensões (AJUSTE AQUI se quiser)
-# A ideia é você ir refinando conforme o seu leque real de dimensões.
 TAG_TO_DIM_SLUGS = {
     "tecnico": ["tecnico", "exatas", "dev", "dev_ia", "engenharia"],
     "analise": ["analise", "pesquisa", "dados", "direito", "economia"],
@@ -324,7 +377,7 @@ CONTEXT = [
     {
         "id": "ctx2",
         "titulo": "Foco principal",
-        "texto": "No dia a dia, você tende a se motivar mais por…",
+        "texto": "No dia a dia, você tende a se motivar mais por...",
         "opcoes": [
             ("a", "Dados, lógica e solução técnica", ["tecnico", "analise"]),
             ("b", "Pessoas, impacto e comunicação", ["pessoas", "criatividade"]),
@@ -334,7 +387,7 @@ CONTEXT = [
 
 
 def apply_pass3_adjustments(base_means: Dict[str, float], sjt_answers: Dict[str, str], ctx_answers: Dict[str, str]) -> Dict[str, float]:
-    """Aplica pequenos ajustes nos meios (logits simples) com base em SJT + contexto."""
+    """Aplica pequenos ajustes nas médias com base em SJT e contexto."""
     means = dict(base_means or {})
 
     def bump(tags: List[str], delta: float = 0.25):
@@ -345,7 +398,6 @@ def apply_pass3_adjustments(base_means: Dict[str, float], sjt_answers: Dict[str,
                 if slug in means:
                     means[slug] = float(means.get(slug, 0.0)) + float(delta)
 
-    # SJT
     sjt_defs = {q["id"]: q for q in SJT}
     for qid, choice in (sjt_answers or {}).items():
         q = sjt_defs.get(qid)
@@ -355,7 +407,6 @@ def apply_pass3_adjustments(base_means: Dict[str, float], sjt_answers: Dict[str,
             if key == choice:
                 bump(tags, delta=0.30)
 
-    # Contexto
     ctx_defs = {q["id"]: q for q in CONTEXT}
     for qid, choice in (ctx_answers or {}).items():
         q = ctx_defs.get(qid)

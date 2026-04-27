@@ -7,6 +7,7 @@ from django.urls import reverse
 from apps.core.permissions import (
     PROD_GUIA,
     PROD_VOCACIONAL_75,
+    onboarding_status,
     user_has_produto,
 )
 
@@ -17,12 +18,12 @@ VOCACIONAL_REQUIRE_CONSENT = getattr(settings, "VOCACIONAL_REQUIRE_CONSENT", Tru
 VOCACIONAL_REQUIRE_GUIA = getattr(settings, "VOCACIONAL_REQUIRE_GUIA", True)
 
 
-def bonus_acquired(user) -> bool:
-    return user_has_produto(user, PROD_VOCACIONAL_75)
+def bonus_acquired(user, *, request=None) -> bool:
+    return user_has_produto(user, PROD_VOCACIONAL_75, request=request, allow_demo=True)
 
 
-def guia_valid(user) -> bool:
-    return user_has_produto(user, PROD_GUIA)
+def guia_valid(user, *, request=None) -> bool:
+    return user_has_produto(user, PROD_GUIA, request=request, allow_demo=True)
 
 
 def termos_ok(user) -> bool:
@@ -50,7 +51,7 @@ def guia_done(user) -> bool:
     return AvaliacaoGuia.objects.filter(user=user, status="concluida").exists()
 
 
-def next_step(user):
+def next_step(user, *, request=None):
     """Retorna a próxima etapa do funil.
 
     Regra atual:
@@ -62,24 +63,26 @@ def next_step(user):
     Retorna None quando está tudo ok.
     """
 
+    st = onboarding_status(user, request=request, allow_demo=True)
+
     require_legal = VOCACIONAL_REQUIRE_TERMOS or VOCACIONAL_REQUIRE_CONSENT
-    if require_legal and not (termos_ok(user) and consent_ok(user)):
+    if require_legal and not st.get("has_legal"):
         return "legal"
 
-    if VOCACIONAL_REQUIRE_BONUS and not guia_valid(user):
+    if VOCACIONAL_REQUIRE_BONUS and not st.get("has_valid_guia"):
         return "bonus_acquire"
 
-    if VOCACIONAL_REQUIRE_GUIA and not guia_done(user):
+    if VOCACIONAL_REQUIRE_GUIA and not st.get("has_guia_feedback"):
         return "guia"
 
-    if VOCACIONAL_REQUIRE_BONUS and not bonus_acquired(user):
+    if VOCACIONAL_REQUIRE_BONUS and not bonus_acquired(user, request=request):
         return "bonus_acquire"
 
     return None
 
 
-def next_url(user) -> str:
-    step = next_step(user)
+def next_url(user, *, request=None) -> str:
+    step = next_step(user, request=request)
     routes = {
         "bonus_acquire": reverse("portal"),  # aqui você pode apontar para uma página de compra
         "legal": reverse("core:legal_aceite"),

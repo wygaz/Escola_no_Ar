@@ -12,6 +12,8 @@ urlpatterns = [
 
     # portal pós-login (o nome 'portal' precisa apontar aqui)
     path("portal/", core_views.portal_home, name="portal"),
+    path("portal/demo/", core_views.portal_demo, name="portal_demo"),
+    path("portal/proxima-etapa/", core_views.portal_next_step, name="portal_next_step"),
     path("produtos/<slug:produto_slug>/entrar/", core_views.produto_resolver, name="produto_resolver"),
 
     # Termos / Privacidade (módulo geral do Core)
@@ -20,6 +22,7 @@ urlpatterns = [
     path("home/", core_views.sonhe_mais_alto_landing, name="home"),
     path("admin/", admin.site.urls),
     path("contas/", include(("apps.contas.urls", "contas"), namespace="contas")),
+    path("es/", include(("apps.es.urls", "es"), namespace="es")),
     path("sonhe-mais-alto/", core_views.sonhe_mais_alto_landing, name="sonhe_mais_alto_landing"),
     path("projeto21/", include(("apps.projeto21.urls", "projeto21"), namespace="projeto21")),
     path("vocacional/", include(("apps.vocacional.urls", "vocacional"), namespace="vocacional")),

@@ -23,7 +23,7 @@ urlpatterns = [
     path("avaliacao/", views.avaliacao_form, name="avaliacao_gate"),
     path("avaliacao/form/", views.avaliacao_form, name="avaliacao_form"),
     path("passe3/", views.passe3, name="passe3"),
-    path("comparacoes/", views.comparacoes_top3, name="comparacoes_top3"),
+    path("comparacoes/<int:pk>/", views.comparacoes_top3, name="comparacoes_top3"),
     path("guia/avaliacao/", views_guia.guia_avaliacao, name="guia_avaliacao"),
     path("guia/autosave/", views_guia.guia_autosave, name="guia_autosave"),
 
@@ -31,6 +31,7 @@ urlpatterns = [
     path("ofertas/<int:pk>/", views.ofertas_refinamento, name="ofertas_refinamento"),
     # Resultado
     path("resultado/<int:pk>/", views.resultado, name="resultado"),
+    path("reiniciar/", views.reiniciar_teste, name="reiniciar_teste"),
 
     # Compartilhamento do resultado
     path("resultado/<int:pk>/email/", views.enviar_resultado_email, name="enviar_resultado_email"),

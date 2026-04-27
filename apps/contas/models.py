@@ -5,6 +5,13 @@ from .managers import UsuarioManager  # use só este manager
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
+    instituicao = models.ForeignKey(
+        "core.Instituicao",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="usuarios",
+    )
 
     first_name = models.CharField("Nome", max_length=150, blank=True)
     last_name  = models.CharField("Sobrenome", max_length=150, blank=True)
@@ -36,6 +43,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     is_active = models.BooleanField(default=True)
     is_staff  = models.BooleanField(default=False)
+    email_confirmado_em = models.DateTimeField(null=True, blank=True)
 
     objects = UsuarioManager()
 

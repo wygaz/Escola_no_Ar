@@ -1,130 +1,88 @@
 {% extends "vocacional/base_vocacional.html" %}
 {% load static %}
 
-{% block header_title %}Escolha como deseja avancar{% endblock %}
+{% block header_title %}Escolha como deseja avançar{% endblock %}
 {% block header_subtitle %}
   <p class="vocacional-subtitle">
-    Seu resultado ficou muito proximo entre as primeiras opcoes. Voce pode fazer um refinamento intermediario ou seguir para um aprofundamento mais completo.
+    Seu resultado ficou muito próximo entre as primeiras opções. Agora você pode seguir para uma rodada curta de confrontos diretos para separar melhor o seu Top 3.
   </p>
 {% endblock %}
 
 {% block vocacional_content %}
 
 <style>
-  .offers-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
-  .offer-card{grid-column:span 12;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.15);border-radius:18px;padding:16px;}
-  @media(min-width:900px){.offer-card.half{grid-column:span 6;}}
-  .muted{opacity:.82}
-  .imgbox{margin-top:12px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.10);}
-  .imgbox img{width:100%;display:block;}
-  .btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;align-items:center;}
-  .pill{display:inline-block;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:.25rem .65rem;font-size:.85rem;opacity:.95;}
-  .pill.ok{background:rgba(46,204,113,.12);border-color:rgba(46,204,113,.35);}
-  .pill.no{background:rgba(231,76,60,.10);border-color:rgba(231,76,60,.35);}
-  .pill.neutral{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);}
-  .card-info{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);border-radius:18px;padding:16px;}
-  .benefits{margin-top:12px;display:grid;gap:8px;}
-  .benefits div{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
+  .offers-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+  .offer-card { grid-column: span 12; border: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.15); border-radius: 18px; padding: 16px; }
+  .muted { opacity: .82; }
+  .btnrow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; align-items: center; }
+  .pill { display: inline-block; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; padding: .25rem .65rem; font-size: .85rem; opacity: .95; }
+  .pill.ok { background: rgba(46,204,113,.12); border-color: rgba(46,204,113,.35); }
+  .pill.no { background: rgba(231,76,60,.10); border-color: rgba(231,76,60,.35); }
+  .pill.neutral { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.18); }
+  .card-info { border: 1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.04); border-radius: 18px; padding: 16px; }
+  .benefits { margin-top: 12px; display: grid; gap: 8px; }
+  .benefits div { padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); }
+  .round-badge { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; padding: 8px 12px; border-radius: 12px; background: rgba(99,179,237,.10); border: 1px solid rgba(99,179,237,.25); }
+  .cta-primary { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .cta-primary .btn { font-size: 1.05rem; padding: .9rem 1.3rem; }
 </style>
 
 <div class="card-info" style="margin-bottom:1rem">
   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
     <div>
-      <strong>Seu resultado ate aqui</strong>
-      {% if top1_nome and top2_nome %}
-        <div class="muted" style="margin-top:4px">
-          Primeira opcao: <strong>{{ top1_nome }}</strong> - Segunda opcao: <strong>{{ top2_nome }}</strong>
-        </div>
-      {% else %}
-        <div class="muted" style="margin-top:4px">
-          Voce ja pode escolher o proximo passo para ganhar mais clareza no resultado.
-        </div>
-      {% endif %}
-    </div>
-    <div class="btnrow" style="margin-top:0">
-      <a class="btn ghost" href="{% url 'vocacional:resultado' avaliacao.pk %}">Voltar ao resultado</a>
-      <a class="btn ghost" href="{% url 'portal' %}">Voltar ao portal</a>
+      <div class="round-badge">
+        <strong>Etapa atual:</strong>
+        <span>Rodada {{ refinement_round_next }}</span>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="offers-grid">
-
-  <div class="offer-card half">
-    <div class="pill neutral">Opcao intermediaria</div>
-    <h3 style="margin-top:10px">Vocacional 150</h3>
+  <div class="offer-card">
+    <div class="pill neutral">Etapa atual</div>
+    <h3 style="margin-top:10px">Confrontos diretos em {{ refinement_question_count }} comparações</h3>
     <div class="muted">
-      Um refinamento intermediario para organizar melhor seu Top 3 quando as primeiras opcoes ficam muito proximas.
+      Esta é a etapa certa para o seu momento atual. Ela apresenta comparações objetivas entre as áreas mais próximas do seu Top 3 para aumentar a clareza do resultado sem reabrir todo o questionário.
     </div>
 
-    <div class="benefits">
-      <div><strong>Ideal para:</strong> quem quer uma definicao mais clara sem entrar no aprofundamento completo.</div>
-      <div><strong>Como funciona:</strong> voce avanca no refinamento intermediario e ganha mais distancia entre as opcoes mais proximas.</div>
-      <div><strong>O que voce recebe:</strong> uma leitura mais clara do resultado antes de seguir para o nivel premium.</div>
-    </div>
-
-    <div class="btnrow">
-      {% if has_vocacional_150 %}
-        <span class="pill ok">Ja disponivel</span>
-        <a class="btn btn-primary" href="{% url 'vocacional:comparacoes_top3' %}?reset=1">
-          Continuar refinamento
+    <div class="cta-primary">
+      {% if can_start_fc %}
+        <a class="btn btn-primary" href="{{ fc_entry_url }}">
+          {% if has_fc_progress %}Continuar{% else %}Iniciar{% endif %} rodada {{ refinement_round_next }}
         </a>
+        <span class="pill ok">Já disponível</span>
       {% else %}
-        <span class="pill no">Ainda nao liberado</span>
         <a class="btn btn-primary" href="{% url 'portal' %}">
           Ver como liberar
         </a>
+        <span class="pill no">Ainda não liberado</span>
       {% endif %}
-    </div>
-
-    <div class="imgbox">
-      <a href="{% url 'portal' %}">
-        <img src="{% static 'vocacional/img/oferta_vocacional75plus.png' %}" alt="Vocacional 150" onerror="this.style.display='none'">
-      </a>
-    </div>
-  </div>
-
-  <div class="offer-card half">
-    <div class="pill neutral">Opcao completa</div>
-    <h3 style="margin-top:10px">Vocacional Premium</h3>
-    <div class="muted">
-      Um caminho mais completo para confirmar e ajustar seu Top 3 com etapas sucessivas de aprofundamento.
     </div>
 
     <div class="benefits">
-      <div><strong>Ideal para:</strong> quem quer avancar com mais contexto, seguranca e profundidade.</div>
-      <div><strong>Como funciona:</strong> voce passa pelas etapas adicionais de aprofundamento e pode chegar a uma validacao mais completa.</div>
-      <div><strong>O que voce recebe:</strong> um Top 3 mais amadurecido, com ajustes finais baseados em escolhas e situacoes mais proximas da vida real.</div>
-    </div>
-
-    <div class="btnrow">
-      {% if has_premium %}
-        <span class="pill ok">Ja disponivel{% if ref_max_stage|default:0 >= 1 %} - {{ ref_max_stage }}/3{% endif %}</span>
-        <a class="btn btn-primary" href="{% url 'vocacional:etapas' %}">
-          Ir para meu progresso
-        </a>
+      <div><strong>Rodada atual:</strong> {{ refinement_round_next }}.</div>
+      <div><strong>Como funciona:</strong> você escolhe, em {{ refinement_question_count }} comparações, a alternativa que mais combina com você.</div>
+      <div><strong>O que o sistema faz:</strong> registra a rodada, reorganiza a ordem do seu Top 3 e preserva o histórico das rodadas anteriores.</div>
+      {% if refinement_round_remaining_after_next > 0 %}
+        <div><strong>Depois desta etapa:</strong> se ainda for necessário, você poderá passar por mais {{ refinement_round_remaining_after_next }} rodada{% if refinement_round_remaining_after_next > 1 %}s{% endif %} de refinamento.</div>
       {% else %}
-        <span class="pill no">Ainda nao liberado</span>
-        <a class="btn btn-primary" href="{% url 'portal' %}">
-          Ver como liberar
-        </a>
+        <div><strong>Depois desta etapa:</strong> esta já será a última rodada prevista para esse refinamento.</div>
       {% endif %}
     </div>
-
-    <div class="imgbox">
-      <a href="{% url 'portal' %}">
-        <img src="{% static 'vocacional/img/oferta_premium_passes.png' %}" alt="Vocacional Premium" onerror="this.style.display='none'">
-      </a>
-    </div>
   </div>
-
 </div>
 
 <div class="card-info" style="margin-top:16px">
-  <strong>Qual caminho escolher?</strong>
+  <strong>Próxima lógica do fluxo</strong>
   <div class="muted" style="margin-top:8px">
-    Se voce quer um refinamento intermediario, siga pelo <strong>Vocacional 150</strong>.
-    Se deseja um processo mais completo de confirmacao e aprofundamento, siga pelo <strong>Vocacional Premium</strong>.
+    Neste momento, o sistema conduz você por uma única trilha curta de desempate.
+    Etapas mais profundas só devem aparecer depois que esta rodada terminar e o fluxo realmente indicar necessidade de avançar.
+  </div>
+
+  <div class="btnrow" style="margin-top:14px">
+    <a class="btn ghost" href="{% url 'vocacional:resultado' avaliacao.pk %}">Voltar ao resultado</a>
+    <a class="btn ghost" href="{% url 'portal' %}">Voltar ao portal</a>
   </div>
 </div>
 

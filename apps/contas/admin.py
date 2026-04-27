@@ -19,7 +19,7 @@ class UsuarioCreationForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ("email", "first_name", "last_name", "nome", "perfil", "is_active", "is_staff")
+        fields = ("email", "instituicao", "first_name", "last_name", "nome", "perfil", "is_active", "is_staff")
 
     def clean_password2(self):
         p1 = self.cleaned_data.get("password1")
@@ -42,7 +42,7 @@ class UsuarioChangeForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = (
-            "email", "password", "first_name", "last_name", "nome",
+            "email", "instituicao", "password", "first_name", "last_name", "nome",
             "perfil", "is_active", "is_staff", "is_superuser",
             "groups", "user_permissions",
         )
@@ -57,13 +57,13 @@ class UsuarioAdmin(DjangoUserAdmin):
     add_form = UsuarioCreationForm
 
     ordering = ("email",)
-    list_display = ("email", "first_name", "last_name", "perfil", "is_active", "is_staff")
-    search_fields = ("email", "first_name", "last_name", "nome")
-    list_filter = ("perfil", "is_active", "is_staff")
+    list_display = ("email", "instituicao", "first_name", "last_name", "perfil", "is_active", "is_staff")
+    search_fields = ("email", "first_name", "last_name", "nome", "instituicao__nome")
+    list_filter = ("perfil", "is_active", "is_staff", "instituicao")
 
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Informações pessoais"), {"fields": ("first_name", "last_name", "nome", "imagem")}),
+        (_("Informações pessoais"), {"fields": ("instituicao", "first_name", "last_name", "nome", "imagem")}),
         (_("Permissões"), {"fields": ("perfil", "is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
         (_("Importante"), {"fields": ("last_login",)}),
     )
@@ -71,7 +71,7 @@ class UsuarioAdmin(DjangoUserAdmin):
     add_fieldsets = (
         (None, {
             "classes": ("wide",),
-            "fields": ("email", "first_name", "last_name", "nome", "perfil", "is_active", "is_staff", "password1", "password2"),
+            "fields": ("email", "instituicao", "first_name", "last_name", "nome", "perfil", "is_active", "is_staff", "password1", "password2"),
         }),
     )
 

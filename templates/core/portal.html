@@ -13,13 +13,13 @@
     <section class="portal-hero">
       <div class="portal-hero-grid">
         <div class="portal-hero-copy">
-          <span class="portal-eyebrow">Sua jornada comeca aqui</span>
-          <h1 class="portal-title">Sua jornada comeca aqui</h1>
+          <span class="portal-eyebrow">{{ portal_hero.eyebrow }}</span>
+          <h1 class="portal-title">{{ portal_hero.title }}</h1>
           <p class="portal-lead">
-            Conheca os caminhos disponiveis na plataforma e descubra o proximo passo mais adequado para voce.
+            {{ portal_hero.lead_primary }}
           </p>
           <p class="portal-lead">
-            Aqui voce encontrara recursos pensados para apoiar seu crescimento, ampliar sua compreensao sobre si mesmo e ajudar na construcao do seu proposito.
+            {{ portal_hero.lead_secondary }}
           </p>
 
           <div class="portal-actions">
@@ -45,10 +45,29 @@
       </div>
     </section>
 
+    <section class="portal-section">
+      <div class="portal-section-header">
+        <h2 class="portal-section-title">{{ portal_hero.status_title }}</h2>
+        <p class="portal-section-copy">{{ portal_hero.status_copy }}</p>
+      </div>
+
+      <div class="portal-step-list">
+        {% for item in portal_readiness %}
+          <div class="portal-step">
+            <div class="portal-step-number">{% if item.done %}✓{% else %}{{ forloop.counter }}{% endif %}</div>
+            <div>
+              <div class="portal-step-title">{{ item.title }}</div>
+              <div class="portal-step-copy">{{ item.description }}</div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
     {% if request.user.is_authenticated and show_attention %}
       <div class="portal-attention">
         <div class="portal-attention-title">Antes de seguir</div>
-        <div class="portal-attention-copy">A plataforma mostra apenas o que ainda falta para liberar a sua proxima etapa.</div>
+        <div class="portal-attention-copy">O portal agora destaca apenas as pendencias que ainda impactam a sua proxima etapa.</div>
         <ol class="portal-steps">
           {% if not has_legal %}
             <li>
@@ -91,30 +110,30 @@
 
     <section class="portal-section">
       <div class="portal-section-header">
-        <h2 class="portal-section-title">Bem-vindo ao Guia de Descoberta</h2>
+        <h2 class="portal-section-title">Leitura do seu momento na plataforma</h2>
         <p class="portal-section-copy">
-          Cada pessoa chega aqui de um jeito diferente. Algumas vem por meio do Guia, outras recebem acesso especial a conteudos e bonus. Por isso, sua navegacao pode variar conforme seu momento e seu tipo de acesso.
+          Depois da apresentacao inicial, o portal deixa de ser recepcao e passa a mostrar o que ja foi concluido, o que ainda falta e quais trilhas estao prontas para uso.
         </p>
       </div>
       <p class="portal-section-copy">
-        Antes de seguir, conheca rapidamente o que voce vai encontrar aqui.
+        Isso evita que voce tenha de descobrir sozinho onde clicar ou em que etapa realmente esta.
       </p>
     </section>
 
     <section class="portal-section" id="produtos">
       <div class="portal-section-header">
-        <h2 class="portal-section-title">O que voce vai encontrar aqui?</h2>
+        <h2 class="portal-section-title">Trilhas disponiveis para voce agora</h2>
         <p class="portal-section-copy">
-          Os produtos continuam entrando pelo resolvedor central do core, mas agora a leitura do portal fica mais clara para quem esta chegando.
+          As trilhas continuam entrando pelo resolvedor central do core, mas agora o portal mostra a prontidao de cada uma conforme o seu estado atual.
         </p>
       </div>
 
       <div class="portal-grid portal-grid-3">
         <article class="portal-card">
-          <span class="portal-card-kicker">Produto</span>
-          <h3 class="portal-card-title">Teste Vocacional</h3>
+          <span class="portal-card-kicker">Trilha</span>
+          <h3 class="portal-card-title">Vocacional</h3>
           <p class="portal-card-copy">
-            Um espaco para ajudar voce a refletir sobre talentos, interesses, habilidades e possibilidades de futuro.
+            Ajuda a esclarecer a escolha, refinar preferencias e reduzir a tensao do medo de errar em uma decisao importante.
           </p>
           {% if request.user.is_authenticated and not can_vocacional %}
             <div class="portal-card-note alert alert-warning py-2 mb-0" title="{{ voc_tooltip }}">
@@ -136,10 +155,10 @@
         </article>
 
         <article class="portal-card">
-          <span class="portal-card-kicker">Produto</span>
+          <span class="portal-card-kicker">Trilha</span>
           <h3 class="portal-card-title">Sonhe + Alto</h3>
           <p class="portal-card-copy">
-            Uma jornada de crescimento pessoal, visao de futuro e fortalecimento de proposito.
+            Trabalha postura, habitos, visao de futuro e crescimento pessoal como base para uma jornada mais consistente.
           </p>
           {% if request.user.is_authenticated and not can_sonhemaisalto %}
             <div class="portal-card-note alert alert-warning py-2 mb-0" title="{{ sonhe_tooltip }}">
@@ -161,10 +180,10 @@
         </article>
 
         <article class="portal-card">
-          <span class="portal-card-kicker">Jornada</span>
-          <h3 class="portal-card-title">Seu proximo passo</h3>
+          <span class="portal-card-kicker">Distribuicao</span>
+          <h3 class="portal-card-title">Seu proximo passo real</h3>
           <p class="portal-card-copy">
-            A plataforma pode indicar caminhos diferentes conforme sua etapa atual, seu acesso e o que ja foi concluido.
+            O portal resume sua etapa atual e envia voce para a acao que faz sentido agora, sem repetir a recepcao inicial.
           </p>
           <div class="portal-card-actions">
             <a class="portal-link-btn" href="#como-funciona">Saiba mais</a>
@@ -180,9 +199,9 @@
 
     <section class="portal-section" id="como-funciona">
       <div class="portal-section-header">
-        <h2 class="portal-section-title">Como sera sua navegacao</h2>
+        <h2 class="portal-section-title">Como o portal decide sua navegacao agora</h2>
         <p class="portal-section-copy">
-          Voce nao precisa entender tudo agora. A plataforma foi organizada para mostrar o que faz sentido para o seu momento.
+          Depois da apresentacao inicial, a logica fica simples: o portal le o seu estado e mostra apenas o proximo movimento coerente.
         </p>
       </div>
 
@@ -191,21 +210,21 @@
           <div class="portal-step-number">1</div>
           <div>
             <div class="portal-step-title">Conheca os recursos disponiveis</div>
-            <div class="portal-step-copy">Veja o que existe na plataforma e entenda para que serve cada area.</div>
+            <div class="portal-step-copy">O portal resume as trilhas e o que cada uma representa para sua jornada.</div>
           </div>
         </div>
         <div class="portal-step">
           <div class="portal-step-number">2</div>
           <div>
-            <div class="portal-step-title">Identifique sua etapa atual</div>
-            <div class="portal-step-copy">Dependendo do seu acesso, alguns caminhos podem aparecer primeiro para voce.</div>
+            <div class="portal-step-title">Leia sua etapa atual</div>
+            <div class="portal-step-copy">Base legal, Guia, Avaliacao do Guia e liberacao das trilhas aparecem em ordem clara.</div>
           </div>
         </div>
         <div class="portal-step">
           <div class="portal-step-number">3</div>
           <div>
-            <div class="portal-step-title">Siga o proximo passo indicado</div>
-            <div class="portal-step-copy">O core continua direcionando a experiencia inicial mais adequada dentro da sua jornada.</div>
+            <div class="portal-step-title">Siga a acao certa</div>
+            <div class="portal-step-copy">O core continua centralizando a decisao e leva voce para a etapa ou trilha que realmente se aplica.</div>
           </div>
         </div>
       </div>
@@ -214,15 +233,15 @@
     <section class="portal-section">
       <div class="portal-grid portal-grid-2">
         <div>
-          <h2 class="portal-section-title">Cada pessoa pode ter um caminho diferente</h2>
+          <h2 class="portal-section-title">Cada usuario pode estar em um ponto diferente</h2>
           <p class="portal-section-copy">
-            Alguns usuarios iniciam pela apresentacao da plataforma. Outros seguem diretamente para uma etapa especifica. Em certos casos, pode haver acessos liberados diretamente pela administracao, sem necessidade de passar por todas as etapas anteriores.
+            Alguns usuarios ainda estao na preparacao. Outros ja concluiram o onboarding. Em certos casos, pode haver pacotes liberados por administracao ou por contexto institucional.
           </p>
         </div>
         <div>
-          <h2 class="portal-section-title">Leveza com clareza</h2>
+          <h2 class="portal-section-title">Menos recepcao, mais distribuicao</h2>
           <p class="portal-section-copy">
-            O objetivo deste portal e tornar a navegacao mais clara, leve e intuitiva, sem quebrar a logica centralizada de acesso e de resolucao dos produtos.
+            O objetivo agora e tornar a navegacao mais clara sem repetir mensagens de chegada. O portal mostra status, prioridade e entrada nas trilhas.
           </p>
         </div>
       </div>

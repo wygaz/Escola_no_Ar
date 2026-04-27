@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} | Escola no Ar{% endblock %}
+
+{% block content %}
+<section class="card" style="margin-top: 1.5rem; padding: 2rem;">
+  <span style="display:inline-block;padding:.35rem .7rem;border-radius:999px;background:#eef4ff;color:#1c4f8c;font-weight:700;font-size:.82rem;letter-spacing:.03em;text-transform:uppercase;">
+    Nova área pública
+  </span>
+
+  <h1 style="margin:1rem 0 .75rem 0;">Escola Sabatina</h1>
+  <p style="max-width: 60ch; line-height: 1.7; margin: 0 0 1rem 0;">
+    Esta área foi preparada para publicar as páginas da Escola Sabatina dentro da estrutura do
+    site principal, sem trazer para produção o diretório operacional local.
+  </p>
+  <p style="max-width: 60ch; line-height: 1.7; margin: 0;">
+    O espaço em <code>/es/</code> já está pronto para evoluir com conteúdo público, rotas adicionais
+    e integração controlada apenas do material final que precisar ser publicado.
+  </p>
+</section>
+{% endblock %}

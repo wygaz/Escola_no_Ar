@@ -93,6 +93,8 @@ class Avaliacao(models.Model):
 
     class Meta:
         ordering = ["-iniciado_em"]
+        verbose_name = "Avaliação"
+        verbose_name_plural = "Avaliações"
 
     def __str__(self):
         return f"Avaliação #{self.pk} de {self.usuario} ({self.get_status_display()})"
@@ -173,4 +175,3 @@ class RespostaGuia(models.Model):
 
     class Meta:
         unique_together = [("avaliacao", "questao")]
-
