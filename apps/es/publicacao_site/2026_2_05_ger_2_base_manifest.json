@@ -1,0 +1,18 @@
+{
+    "ano":  2026,
+    "trimestre":  2,
+    "licao":  5,
+    "dia":  2,
+    "dia_nome":  "Segunda-feira",
+    "trunk":  "2026_2_05_ger_2",
+    "source_posts":  "C:\\Users\\Wanderley\\Apps\\Pr_Albino_Marks_restaurado\\Apenas_Local\\Escola_Sabatina\\posts_facebook_2026_2_05.md",
+    "output_html":  "C:\\Users\\Wanderley\\Apps\\Pr_Albino_Marks_restaurado\\Apenas_Local\\Escola_Sabatina\\2026\\T2\\L05\\publicacao_site\\2026_2_05_ger_2_base.html",
+    "counter_php":  "C:\\Users\\Wanderley\\Apps\\Pr_Albino_Marks_restaurado\\Apenas_Local\\Escola_Sabatina\\2026\\T2\\L05\\publicacao_site\\counter.php",
+    "counter_store":  "C:\\Users\\Wanderley\\Apps\\Pr_Albino_Marks_restaurado\\Apenas_Local\\Escola_Sabatina\\2026\\T2\\L05\\publicacao_site\\visit_counter.json",
+    "generated_at":  "2026-04-27T17:06:55-03:00",
+    "assets":  {
+                   "audio_base":  "C:\\Users\\Wanderley\\Apps\\Pr_Albino_Marks_restaurado\\Apenas_Local\\Escola_Sabatina\\2026\\T2\\L05\\2026_2_05_ger_2_lic_base.D.wav",
+                   "audio_reel":  "C:\\Users\\Wanderley\\Apps\\Pr_Albino_Marks_restaurado\\Apenas_Local\\Escola_Sabatina\\2026\\T2\\L05\\2026_2_05_ger_2_lic_reel.D.wav",
+                   "video_reel":  "C:\\Users\\Wanderley\\Apps\\Pr_Albino_Marks_restaurado\\Apenas_Local\\Escola_Sabatina\\2026\\T2\\L05\\2026_2_05_ger_2_vid.mp4"
+               }
+}
