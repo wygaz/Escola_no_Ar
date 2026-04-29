@@ -26,7 +26,7 @@ DEFAULT_SEARCH = {
     "year": 2026,
     "quarter": 2,
     "week": 5,
-    "day": "0",
+    "day": "1",
 }
 
 
