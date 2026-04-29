@@ -1,497 +1,270 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block title %}{{ page_title }} | Escola no Ar{% endblock %}
-
-{% block content %}
-<style>
-  .es-home {
-    --bg: #f4f7fb;
-    --card: #ffffff;
-    --line: #dce6f1;
-    --text: #142030;
-    --muted: #5c6c7d;
-    --brand: #174b86;
-    --brand-2: #1e7f67;
-    --pill: #eff7f4;
-    --shadow: 0 18px 48px rgba(20, 37, 58, 0.08);
-    background:
-      radial-gradient(circle at top left, rgba(23, 75, 134, 0.10), transparent 35%),
-      radial-gradient(circle at top right, rgba(30, 127, 103, 0.08), transparent 30%);
-    padding: 1.5rem 0 2.5rem;
-  }
-
-  .es-shell { display: grid; gap: 1.25rem; }
-
-  .es-hero {
-    background: linear-gradient(135deg, rgba(23, 75, 134, 0.98), rgba(18, 42, 74, 0.97));
-    color: #fff;
-    border-radius: 28px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .es-hero-grid {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    min-height: 420px;
-  }
-
-  .es-hero-copy {
-    padding: 2.25rem 2.25rem 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .es-brandline {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.7rem;
-    margin-bottom: 1rem;
-  }
-
-  .es-logo {
-    width: 58px;
-    height: 58px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    flex: 0 0 auto;
-  }
-
-  .es-logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 0.35rem;
-  }
-
-  .es-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.45rem 0.8rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12);
-    color: rgba(255, 255, 255, 0.95);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    font-size: 0.74rem;
-  }
-
-  .es-hero h1 {
-    margin: 0.2rem 0 0.9rem;
-    font-size: clamp(2.1rem, 1.4rem + 2vw, 3.7rem);
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-  }
-
-  .es-lead {
-    font-size: 1.08rem;
-    line-height: 1.8;
-    max-width: 62ch;
-    color: rgba(255, 255, 255, 0.90);
-    margin: 0 0 1.2rem;
-  }
-
-  .es-actions {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-top: 0.4rem;
-  }
-
-  .es-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.9rem 1.15rem;
-    border-radius: 999px;
-    font-weight: 700;
-    text-decoration: none;
-    border: 1px solid transparent;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-  }
-
-  .es-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
-  }
-
-  .es-btn.primary {
-    background: #fff;
-    color: var(--brand);
-  }
-
-  .es-btn.secondary {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.16);
-    color: #fff;
-  }
-
-  .es-hero-meta {
-    display: flex;
-    gap: 0.7rem;
-    flex-wrap: wrap;
-    margin-top: 1.25rem;
-  }
-
-  .es-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.55rem 0.85rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.10);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.88rem;
-  }
-
-  .es-hero-visual {
-    position: relative;
-    min-height: 420px;
-    background:
-      linear-gradient(180deg, rgba(5, 13, 24, 0.08), rgba(5, 13, 24, 0.48)),
-      url("{% static 'es/img/escola-sabatina-hero.jpg' %}") center/cover no-repeat;
-  }
-
-  .es-hero-visual::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(180deg, transparent 0%, rgba(5, 13, 24, 0.18) 35%, rgba(5, 13, 24, 0.50) 100%);
-  }
-
-  .es-overlay {
-    position: absolute;
-    inset: auto 1.25rem 1.25rem 1.25rem;
-    z-index: 1;
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .es-overlay-card {
-    backdrop-filter: blur(10px);
-    background: rgba(10, 24, 40, 0.62);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    color: #fff;
-    border-radius: 18px;
-    padding: 1rem 1rem 0.95rem;
-    box-shadow: var(--shadow);
-  }
-
-  .es-overlay-card h2 {
-    margin: 0 0 0.3rem;
-    font-size: 1.45rem;
-  }
-
-  .es-overlay-card p {
-    margin: 0;
-    color: rgba(255, 255, 255, 0.88);
-    line-height: 1.55;
-  }
-
-  .es-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 1rem;
-  }
-
-  .es-card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 24px;
-    box-shadow: var(--shadow);
-    padding: 1.25rem;
-  }
-
-  .es-card h2 {
-    margin: 0 0 0.9rem;
-    font-size: 1.2rem;
-    color: var(--text);
-  }
-
-  .es-body p {
-    margin: 0 0 0.85rem;
-    line-height: 1.75;
-    color: var(--text);
-  }
-
-  .es-body p.muted {
-    color: var(--muted);
-  }
-
-  .es-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.65rem;
-  }
-
-  .es-quick {
-    display: grid;
-    gap: 0.8rem;
-  }
-
-  .es-quick-item {
-    display: block;
-    padding: 0.95rem 1rem;
-    border-radius: 18px;
-    border: 1px solid var(--line);
-    background: linear-gradient(180deg, #fff, #f8fbff);
-    color: var(--text);
-    text-decoration: none;
-    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  .es-quick-item:hover {
-    transform: translateY(-1px);
-    border-color: #b9cce0;
-    box-shadow: 0 10px 24px rgba(20, 37, 58, 0.08);
-  }
-
-  .es-quick-item strong {
-    display: block;
-    margin-bottom: 0.25rem;
-    font-size: 1rem;
-  }
-
-  .es-quick-item span {
-    color: var(--muted);
-    line-height: 1.5;
-    display: block;
-  }
-
-  .es-pulse {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 0.8rem;
-    border-radius: 999px;
-    background: var(--pill);
-    color: var(--brand-2);
-    font-weight: 700;
-    font-size: 0.84rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-  }
-
-  .es-note {
-    margin-top: 0.9rem;
-    color: var(--muted);
-    font-size: 0.92rem;
-    line-height: 1.55;
-  }
-
-  .es-search {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .es-form-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.8rem;
-  }
-
-  .es-field {
-    display: grid;
-    gap: 0.35rem;
-  }
-
-  .es-field label {
-    font-weight: 700;
-    color: var(--text);
-    font-size: 0.92rem;
-  }
-
-  .es-field input,
-  .es-field select {
-    width: 100%;
-    border-radius: 14px;
-    border: 1px solid var(--line);
-    padding: 0.9rem 1rem;
-    font: inherit;
-    background: #fff;
-    color: var(--text);
-  }
-
-  .es-daybar {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 0.55rem;
-  }
-
-  .es-daybar button {
-    border: 1px solid var(--line);
-    background: linear-gradient(180deg, #fff, #f7faff);
-    border-radius: 14px;
-    padding: 0.85rem 0.65rem;
-    font-weight: 700;
-    color: var(--text);
-    cursor: pointer;
-  }
-
-  .es-daybar button.active {
-    background: linear-gradient(180deg, var(--brand), #12406f);
-    color: #fff;
-    border-color: rgba(23, 75, 134, 0.1);
-  }
-
-  .es-result {
-    border: 1px dashed var(--line);
-    background: #fbfdff;
-    border-radius: 18px;
-    padding: 1rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  @media (max-width: 1080px) {
-    .es-hero-grid,
-    .es-grid {
-      grid-template-columns: 1fr;
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page_title }} | Escola no Ar</title>
+  <style>
+    :root {
+      --bg: #f3f7fb;
+      --card: #ffffff;
+      --line: #d7e2ec;
+      --text: #132231;
+      --muted: #627486;
+      --brand: #184d87;
+      --brand-2: #1e7d66;
+      --shadow: 0 16px 38px rgba(19, 34, 49, 0.08);
     }
-    .es-hero-visual {
-      min-height: 320px;
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font: 16px/1.65 "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(24, 77, 135, 0.10), transparent 34%),
+        radial-gradient(circle at top right, rgba(30, 125, 102, 0.08), transparent 28%),
+        linear-gradient(180deg, #f8fbfd, #edf3f8);
     }
-  }
-
-  @media (max-width: 720px) {
-    .es-home {
-      padding-top: 1rem;
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 26px 18px 44px;
+      display: grid;
+      gap: 16px;
     }
-    .es-hero-copy {
-      padding: 1.4rem 1.2rem 1.25rem;
+    .hero,
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
     }
-    .es-hero h1 {
-      font-size: 2rem;
+    .hero { padding: 26px; }
+    .kicker {
+      display: inline-flex;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #e8f1fb;
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
     }
-    .es-overlay {
-      inset: auto 0.9rem 0.9rem 0.9rem;
+    h1 {
+      margin: 14px 0 10px;
+      font-size: clamp(2rem, 1.4rem + 2vw, 3.5rem);
+      line-height: 1.03;
+      letter-spacing: -0.03em;
     }
-  }
-</style>
-
-<section class="es-home">
-  <div class="container es-shell">
-    <section class="es-hero">
-      <div class="es-hero-grid">
-        <div class="es-hero-copy">
-          <div class="es-brandline">
-            <div class="es-logo" aria-hidden="true">
-              <img src="{% static 'es/img/logo-escola-no-ar.png' %}" alt="Escola no Ar">
-            </div>
-            <span class="es-kicker">Escola no Ar</span>
-          </div>
-
-          <h1>Lição em Diálogo</h1>
-          <p class="es-lead">
-            A Escola Sabatina em Diálogo chegou à sua área pública oficial. Aqui você encontra a lição
-            em formato de leitura fluida, com acesso direto ao material completo e às publicações da semana.
-          </p>
-
-          <div class="es-actions">
-            <a class="es-btn primary" href="/es/publicacao_site/2026_2_05_ger_1_base.html">Abrir lição da semana</a>
-            <a class="es-btn secondary" href="/es/publicacao_site/">Ver arquivo publicado</a>
-          </div>
-
-          <div class="es-hero-meta">
-            <span class="es-pill">Estudo em família</span>
-            <span class="es-pill">Material completo</span>
-            <span class="es-pill">Publicação semanal</span>
-          </div>
-        </div>
-
-        <div class="es-hero-visual" aria-label="Grupo estudando a lição da Escola Sabatina">
-          <div class="es-overlay">
-            <div class="es-overlay-card">
-              <h2>Uma sala de aula viva</h2>
-              <p>
-                Imagine um grupo em torno do quadro branco, com um casal conduzindo o estudo e a conversa
-                acontecendo de forma natural, reverente e acolhedora.
-              </p>
-            </div>
-            <div class="es-overlay-card">
-              <p>
-                O espaço em <strong>/es/</strong> é o ponto de entrada do conteúdo público. O material
-                completo da semana fica organizado em páginas próprias e pode ser acompanhado com um clique.
-              </p>
-            </div>
-          </div>
-        </div>
+    .lead {
+      margin: 0 0 18px;
+      max-width: 70ch;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+    .actions,
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .actions { margin: 18px 0 16px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+    .btn.primary { background: var(--brand); color: #fff; }
+    .btn.secondary { background: #fff; color: var(--brand); border-color: var(--brand); }
+    .pill {
+      display: inline-flex;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: #eef8f3;
+      color: var(--brand-2);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+    }
+    .card { padding: 20px; }
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.18rem;
+    }
+    .card p {
+      margin: 0 0 12px;
+      color: var(--text);
+    }
+    .muted { color: var(--muted); }
+    .quick {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .quick a {
+      display: block;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff, #f9fbfd);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .quick strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .search {
+      display: grid;
+      gap: 14px;
+    }
+    .form {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+    .field label {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .field input,
+    .field select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+    .daybar {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .daybar button {
+      padding: 12px 8px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .daybar button.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+    .result {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px dashed var(--line);
+      background: #fbfdff;
+      color: var(--muted);
+    }
+    @media (max-width: 960px) {
+      .grid,
+      .form {
+        grid-template-columns: 1fr;
+      }
+      .daybar {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 640px) {
+      .daybar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <span class="kicker">Escola Sabatina em Dialogo</span>
+      <h1>Licao em Dialogo</h1>
+      <p class="lead">
+        A area publica da Escola Sabatina esta pronta para abrir a licao completa, acompanhar as
+        publicacoes da semana e localizar outras semanas ja publicadas.
+      </p>
+      <div class="actions">
+        <a class="btn primary" href="/es/publicacao_site/2026_2_05_ger_1_base.html">Abrir licao da semana</a>
+        <a class="btn secondary" href="/es/publicacao_site/">Ver arquivo publicado</a>
+      </div>
+      <div class="pills">
+        <span class="pill">Estudo em familia</span>
+        <span class="pill">Material completo</span>
+        <span class="pill">Publicacao semanal</span>
       </div>
     </section>
 
-    <section class="es-grid">
-      <article class="es-card">
-        <div class="es-pulse">Nova área pública</div>
-        <h2>Como esta área funciona</h2>
-        <div class="es-body">
-          <p>
-            Este espaço foi preparado para publicar as páginas da Escola Sabatina dentro da estrutura do
-            site principal, sem trazer para produção o diretório operacional local.
-          </p>
-          <p class="muted">
-            O conteúdo público é gerado localmente, sincronizado para o repositório do site e entregue ao
-            visitante como uma página limpa, direta e pronta para leitura ou compartilhamento.
-          </p>
-        </div>
-
-        <div class="es-pills" style="margin-top: 1rem;">
-          <span class="es-pill" style="background: #eef4ff; color: var(--brand); border-color: rgba(23,75,134,.10);">Lição dos Adultos</span>
-          <span class="es-pill" style="background: #eefbf7; color: var(--brand-2); border-color: rgba(30,127,103,.12);">Publicação semanal</span>
-          <span class="es-pill" style="background: #fff4ea; color: #a25512; border-color: rgba(162,85,18,.12);">Link canônico</span>
-        </div>
-
-        <p class="es-note">
-          A estrutura já está pronta para crescer sem precisar misturar arquivos operacionais, scripts de
-          geração ou rascunhos internos com a área pública.
+    <section class="grid">
+      <article class="card">
+        <h2>Como esta area funciona</h2>
+        <p>
+          Este espaco foi preparado para publicar as paginas da Escola Sabatina dentro da estrutura do
+          site principal, sem trazer para producao o diretorio operacional local.
         </p>
+        <p class="muted">
+          O conteudo publico e gerado localmente, sincronizado para o repositorio do site e entregue ao
+          visitante como uma pagina limpa, direta e pronta para leitura ou compartilhamento.
+        </p>
+        <div class="pills" style="margin-top: 14px;">
+          <span class="pill">Licao dos Adultos</span>
+          <span class="pill">Link canonico</span>
+          <span class="pill">Publicacao semanal</span>
+        </div>
       </article>
 
-      <aside class="es-card">
+      <aside class="card">
         <h2>Recursos relacionados</h2>
-        <div class="es-quick">
-          <a class="es-quick-item" href="/es/publicacao_site/2026_2_05_ger_1_base.html">
-            <strong>Lição desta semana</strong>
-            <span>Abra a página completa publicada para a Lição 5, Domingo, com o conteúdo em destaque.</span>
+        <div class="quick">
+          <a href="/es/publicacao_site/2026_2_05_ger_1_base.html">
+            <strong>Licao desta semana</strong>
+            <span>Abra a pagina completa publicada para a Licao 5, Domingo.</span>
           </a>
-          <a class="es-quick-item" href="/es/publicacao_site/">
+          <a href="/es/publicacao_site/">
             <strong>Arquivo publicado</strong>
-            <span>Veja as páginas já sincronizadas para o site e retorne às semanas anteriores.</span>
+            <span>Veja as paginas ja sincronizadas para o site.</span>
           </a>
-          <a class="es-quick-item" href="/es/">
-            <strong>Área pública da Escola</strong>
-            <span>Esta pílula leva de volta à entrada principal da Escola Sabatina em Diálogo.</span>
+          <a href="/es/">
+            <strong>Area publica da Escola</strong>
+            <span>Voltar para a entrada principal da Escola Sabatina em Dialogo.</span>
           </a>
         </div>
       </aside>
     </section>
 
-    <section class="es-card es-search">
+    <section class="card search">
       <div>
-        <div class="es-pulse">Busca por lições</div>
-        <h2 style="margin-top: .65rem;">Localize outra semana publicada</h2>
-        <p class="es-note" style="margin-top: 0;">
-          Selecione o ano, o trimestre, a semana e o dia desejado. A régua abaixo permite escolher a
+        <h2>Busca por licoes</h2>
+        <p class="muted">
+          Escolha o ano, o trimestre, a semana e o dia desejado. A regua abaixo permite selecionar a
           etapa da semana com um clique.
         </p>
       </div>
 
-      <div class="es-form-grid">
-        <div class="es-field">
+      <div class="form">
+        <div class="field">
           <label for="searchYear">Ano</label>
           <input id="searchYear" type="number" min="2020" max="2100" value="2026">
         </div>
-        <div class="es-field">
+        <div class="field">
           <label for="searchQuarter">Trimestre</label>
           <select id="searchQuarter">
             <option value="1">1</option>
@@ -500,14 +273,14 @@
             <option value="4">4</option>
           </select>
         </div>
-        <div class="es-field">
+        <div class="field">
           <label for="searchWeek">Semana</label>
           <input id="searchWeek" type="number" min="1" max="13" value="5">
         </div>
       </div>
 
-      <div class="es-daybar" id="daybar">
-        <button type="button" data-day="0">Sáb</button>
+      <div class="daybar" id="daybar">
+        <button type="button" data-day="0">Sab</button>
         <button type="button" data-day="1" class="active">Dom</button>
         <button type="button" data-day="2">Seg</button>
         <button type="button" data-day="3">Ter</button>
@@ -516,68 +289,66 @@
         <button type="button" data-day="6">Sex</button>
       </div>
 
-      <div class="es-actions">
-        <a class="es-btn primary" id="searchGo" href="/es/publicacao_site/2026_2_05_ger_1_base.html">Abrir publicação</a>
-        <a class="es-btn secondary" href="/es/publicacao_site/">Ver arquivo</a>
+      <div class="actions">
+        <a class="btn primary" id="searchGo" href="/es/publicacao_site/2026_2_05_ger_1_base.html">Abrir publicacao</a>
+        <a class="btn secondary" href="/es/publicacao_site/">Ver arquivo</a>
       </div>
 
-      <div class="es-result" id="searchResult">
-        Resultado atual: 2026 / T2 / L5 / Domingo. O link será montado a partir do dia, do trimestre e da semana escolhidos.
+      <div class="result" id="searchResult">
+        Resultado atual: 2026 / T2 / L5 / Domingo.
       </div>
     </section>
-  </div>
-</section>
+  </main>
 
-<script>
-  (function () {
-    const year = document.getElementById("searchYear");
-    const quarter = document.getElementById("searchQuarter");
-    const week = document.getElementById("searchWeek");
-    const result = document.getElementById("searchResult");
-    const go = document.getElementById("searchGo");
-    const daybar = document.getElementById("daybar");
-    const dayNames = {
-      "0": "Sábado",
-      "1": "Domingo",
-      "2": "Segunda",
-      "3": "Terça",
-      "4": "Quarta",
-      "5": "Quinta",
-      "6": "Sexta"
-    };
-    let selectedDay = "1";
+  <script>
+    (function () {
+      const year = document.getElementById("searchYear");
+      const quarter = document.getElementById("searchQuarter");
+      const week = document.getElementById("searchWeek");
+      const result = document.getElementById("searchResult");
+      const go = document.getElementById("searchGo");
+      const daybar = document.getElementById("daybar");
+      const dayNames = {
+        "0": "Sabado",
+        "1": "Domingo",
+        "2": "Segunda",
+        "3": "Terca",
+        "4": "Quarta",
+        "5": "Quinta",
+        "6": "Sexta"
+      };
+      let selectedDay = "1";
 
-    function normalizeWeek(value) {
-      const n = Math.min(Math.max(parseInt(value || "1", 10) || 1, 1), 13);
-      return String(n).padStart(2, "0");
-    }
+      function normalizeWeek(value) {
+        const n = Math.min(Math.max(parseInt(value || "1", 10) || 1, 1), 13);
+        return String(n).padStart(2, "0");
+      }
 
-    function buildUrl() {
-      const y = parseInt(year.value || "2026", 10) || 2026;
-      const t = parseInt(quarter.value || "2", 10) || 2;
-      const w = normalizeWeek(week.value);
-      return `/es/publicacao_site/${y}_${t}_${w}_ger_${selectedDay}_base.html`;
-    }
+      function sync() {
+        const y = parseInt(year.value || "2026", 10) || 2026;
+        const t = parseInt(quarter.value || "2", 10) || 2;
+        const w = normalizeWeek(week.value);
+        const dName = dayNames[selectedDay] || "Domingo";
+        go.href = `/es/publicacao_site/${y}_${t}_${w}_ger_${selectedDay}_base.html`;
+        result.textContent = `Resultado atual: ${y} / T${t} / L${parseInt(w, 10)} / ${dName}.`;
+      }
 
-    function sync() {
-      const y = parseInt(year.value || "2026", 10) || 2026;
-      const t = parseInt(quarter.value || "2", 10) || 2;
-      const w = normalizeWeek(week.value);
-      const dName = dayNames[selectedDay] || "Domingo";
-      go.href = buildUrl();
-      result.textContent = `Resultado atual: ${y} / T${t} / L${parseInt(w, 10)} / ${dName}.`;
-    }
+      daybar.addEventListener("click", function (ev) {
+        const btn = ev.target.closest("button[data-day]");
+        if (!btn) return;
+        selectedDay = btn.dataset.day;
+        daybar.querySelectorAll("button").forEach(function (b) {
+          b.classList.toggle("active", b === btn);
+        });
+        sync();
+      });
 
-    daybar.addEventListener("click", (ev) => {
-      const btn = ev.target.closest("button[data-day]");
-      if (!btn) return;
-      selectedDay = btn.dataset.day;
-      daybar.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b === btn));
+      [year, quarter, week].forEach(function (el) {
+        el.addEventListener("input", sync);
+      });
+
       sync();
-    });
-
-    [year, quarter, week].forEach((el) => el.addEventListener("input", sync));
-    sync();
-  })();
-</script>
-{% endblock %}
+    })();
+  </script>
+</body>
+</html>

@@ -13,10 +13,10 @@ PUBLICACAO_DIR = (Path(settings.BASE_DIR) / "apps" / "es" / "publicacao_site").r
 VISIT_COUNTER_FILE = PUBLICACAO_DIR / "visit_counter.json"
 
 DAY_CHOICES = [
-    {"code": "0", "label": "Sábado"},
+    {"code": "0", "label": "Sabado"},
     {"code": "1", "label": "Domingo"},
     {"code": "2", "label": "Segunda"},
-    {"code": "3", "label": "Terça"},
+    {"code": "3", "label": "Terca"},
     {"code": "4", "label": "Quarta"},
     {"code": "5", "label": "Quinta"},
     {"code": "6", "label": "Sexta"},
@@ -36,8 +36,6 @@ def home(request: HttpRequest) -> HttpResponse:
         "es/home.html",
         {
             "page_title": "Escola Sabatina",
-            "hide_global_header": False,
-            "hide_global_footer": False,
             "search_defaults": DEFAULT_SEARCH,
             "day_choices": DAY_CHOICES,
         },
@@ -62,6 +60,7 @@ def _resolve_publicacao_file(relative_path: str) -> Path:
 def publicacao_site(request: HttpRequest, path: str) -> HttpResponse:
     file_path = _resolve_publicacao_file(path)
     suffix = file_path.suffix.lower()
+
     if suffix in {".html", ".htm"}:
         content_type = "text/html; charset=utf-8"
     elif suffix == ".json":
